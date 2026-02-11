@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>Example Frame</title>
+        <title>Sanity Test External Page</title>
         <style>
             body {
                 font-family: Arial, Helvetica, sans-serif;
@@ -9,10 +9,10 @@
             #main-table td {
                 padding: 20px 20px 20px 20px;
             }
-            #example-external-table {
+            #sanitytest-external-table {
                 border: 1px solid #000000;
             }
-            #example-external-table td {
+            #sanitytest-external-table td {
                 border: 1px solid #c0c0c0;
                 padding: 2px 5px 2px 5px;
             } 
@@ -27,7 +27,7 @@
                             TextBox
                         </td>
                         <td class="element-content">
-                            <input type="text" id="example-external-textbox" value="external textbox text"/>
+                            <input type="text" id="sanitytest-external-textbox" value="external textbox text"/>
                         </td>
                     </tr>
                     <tr>
@@ -35,7 +35,7 @@
                             Table
                         </td>
                         <td class="element-content">
-                            <table id="example-external-table">
+                            <table id="sanitytest-external-table">
                                 <thead>
                                     <tr class="header">
                                         <th class="product-name">Product Name</th>
@@ -47,21 +47,21 @@
                                 </thead>
                                 <tbody>
                                     <tr class="data">
-                                        <td class="product-name">External Example 1</td>
+                                        <td class="product-name">External SanityTest 1</td>
                                         <td class="serial-number">#EX-TDD987</td>
                                         <td class="product-type">Type 1</td>
                                         <td class="built-date">11/4/2014</td>
                                         <td class="price">$199.99</td>
                                     </tr>
                                     <tr class="data">
-                                        <td class="product-name">External Example 2</td>
+                                        <td class="product-name">External SanityTest 2</td>
                                         <td class="serial-number">#EX-AEV974</td>
                                         <td class="product-type">Type 2</td>
                                         <td class="built-date">9/20/2011</td>
                                         <td class="price">$15.92</td>
                                     </tr>
                                     <tr class="data">
-                                        <td class="product-name">External Example 3</td>
+                                        <td class="product-name">External SanityTest 3</td>
                                         <td class="serial-number">#EX-CCA106</td>
                                         <td class="product-type">Type 1</td>
                                         <td class="built-date">5/5/2001</td>
@@ -69,6 +69,22 @@
                                     </tr>
                                 </tbody>
                             </table>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="element-name">
+                            External Window
+                        </td>
+                        <td class="element-content">
+                            <a id="sanitytest-external-window-link" href="sanitytest-external.htm" target="_blank">Open External Window</a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="element-name">
+                            Close Current Window
+                        </td>
+                        <td class="element-content">
+                            <button id="sanitytest-external-close-window-button" onclick="self.close()">Close This Window</button>
                         </td>
                     </tr>
                 </tbody>

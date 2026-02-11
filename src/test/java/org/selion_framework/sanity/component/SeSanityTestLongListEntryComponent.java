@@ -1,8 +1,8 @@
-package org.selion_framework.example.component;
+package org.selion_framework.sanity.component;
 
 import org.selion_framework.lib.*;
 
-public class SeExampleLongListEntryComponent extends SeComponent {
+public class SeSanityTestLongListEntryComponent extends SeComponent {
     private static final SeLocatorNode TITLE_TEXT = _xpath.descendant("span", _cssClasses("title"));
     private static final SeLocatorNode CHECKBOX = _xpath.descendant("input", _type().is("checkbox"));
     private static final SeLocatorNode TEXTBOX = _xpath.descendant("input", _type().is("text"));

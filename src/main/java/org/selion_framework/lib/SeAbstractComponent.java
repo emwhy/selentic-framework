@@ -220,14 +220,11 @@ public abstract class SeAbstractComponent {
     protected <T extends SeDialog> void $dialog(SeLocatorNode locator, Class<T> componentType, SeAbstractComponent containingObject, SeDialogAction<T> predicate) {
         final T $dialog = containingObject == null ? this.$component(locator, componentType) : this.$component(locator, componentType, containingObject);
 
-        try {
-            $dialog.waitForDisplayed();
-            LOG.debug("Open dialog: {}", $dialog.getClass().getSimpleName());
-            predicate.in($dialog);
-        } finally {
-            LOG.debug("Close dialog: {}", $dialog.getClass().getSimpleName());
-            $dialog.waitForHidden();
-        }
+        $dialog.waitForDisplayed();
+        LOG.debug("Open dialog: {}", $dialog.getClass().getSimpleName());
+        predicate.in($dialog);
+        LOG.debug("Close dialog: {}", $dialog.getClass().getSimpleName());
+        $dialog.waitForHidden();
     }
 
 }

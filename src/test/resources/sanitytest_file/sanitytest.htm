@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html dir="ltr">
     <head>
-        <title>Example Page</title>
+        <title>Sanity Test Page</title>
         <style>
             body {
                 font-family: Arial, Helvetica, sans-serif;
@@ -9,14 +9,14 @@
             #main-table td {
                 padding: 20px 20px 20px 20px;
             }
-            #example-table {
+            #sanitytest-table {
                 border: 1px solid #000000;
             }
-            #example-table td {
+            #sanitytest-table td {
                 border: 1px solid #c0c0c0;
                 padding: 2px 5px 2px 5px;
             } 
-            #example-iframe {
+            #sanitytest-iframe {
                 width: 400px;
                 height: 200px;
             }
@@ -30,14 +30,14 @@
             #long-component-list span {
                 padding-left: 10px;
             }
-            #example-between-elements-table td {
+            #sanitytest-between-elements-table td {
                 border: 1px solid #000000;
                 padding: 1px 10px 1px 10px;
             }
-            #example-dialog {
+            #sanitytest-dialog {
                 display: none;
             }
-            #example-dialog .dialog-bg {
+            #sanitytest-dialog .dialog-bg {
                 position: fixed;
                 left: 0;
                 top: 0;
@@ -46,7 +46,7 @@
                 background-color: #909090;
                 opacity: 0.8;
             }
-            #example-dialog .dialog-content{
+            #sanitytest-dialog .dialog-content{
                 position: fixed;
                 left: 100px;
                 top: 100px;
@@ -56,7 +56,7 @@
                 padding: 10px 10px 10px 10px;
                 border: 1px solid #000000;
             }
-            #example-dialog .footer {
+            #sanitytest-dialog .footer {
                 text-align: center;
                 margin-top: 100px;
             }
@@ -67,14 +67,13 @@
 
                 document.getElementById(id + '-indicator').innerHTML = 'Clicked!'
             }
-            function openExampleDialog() {
-                document.getElementById('example-dialog').style.display = 'inline';
+            function openSanityTestDialog() {
+                document.getElementById('sanitytest-dialog').style.display = 'inline';
             }
-            function closeExampleDialog() {
-                document.getElementById('example-dialog').style.display = 'none';
+            function closeSanityTestDialog() {
+                document.getElementById('sanitytest-dialog').style.display = 'none';
             }
         </script>
-        <script src="../../../../../../../Downloads/prefs-new.js"></script>
     </head>
     <body>
         <form id="main-form" onsubmit="return false">
@@ -85,7 +84,7 @@
                             Textbox
                         </td>
                         <td class="element-content">
-                            <input type="text" id="example-textbox" value="textbox text"/>
+                            <input type="text" id="sanitytest-textbox" value="textbox text"/>
                         </td>
                     </tr>
                     <tr>
@@ -93,7 +92,7 @@
                             Textarea
                         </td>
                         <td class="element-content">
-                            <textarea id="example-textarea">textarea text</textarea>
+                            <textarea id="sanitytest-textarea">textarea text</textarea>
                         </td>
                     </tr>
                     <tr>
@@ -101,7 +100,7 @@
                             Date Textbox
                         </td>
                         <td class="element-content">
-                            <input type="date" id="example-date-textbox" value=""/>
+                            <input type="date" id="sanitytest-date-textbox" value=""/>
                         </td>
                     </tr>
                     <tr>
@@ -109,7 +108,7 @@
                             Dropdown (single)
                         </td>
                         <td class="element-content">
-                            <select id="example-dropdown">
+                            <select id="sanitytest-dropdown">
                                 <option value="test 1">TEST 1</option>
                                 <option value="test 2">TEST 2</option>
                                 <option value="test 3">TEST 3</option>
@@ -158,7 +157,7 @@
                             Multi-Select
                         </td>
                         <td class="element-content">
-                            <select id="example-multi-select" multiple>
+                            <select id="sanitytest-multi-select" multiple>
                                 <option value="test 1">TEST 1</option>
                                 <option value="test 2">TEST 2</option>
                                 <option value="test 3">TEST 3</option>
@@ -207,7 +206,7 @@
                             Checkbox
                         </td>
                         <td class="element-content">
-                            <input type="checkbox" id="example-checkbox" value="test" checked/> <label for="example-checkbox">Test CheckBox</label>
+                            <input type="checkbox" id="sanitytest-checkbox" value="test" checked/> <label for="sanitytest-checkbox">Test CheckBox</label>
                         </td>
                     </tr>
                     <tr>
@@ -215,11 +214,11 @@
                             Radio Buttons
                         </td>
                         <td class="element-content">
-                            <div><input type="radio" id="radio-1" name="example-radio-buttons" value="Radio 1"/> <label for="radio-1">Test Radio 1</label></div>
-                            <div><input type="radio" id="radio-2" name="example-radio-buttons" value="Radio 2" checked/> <label for="radio-2">Test Radio 2</label></div>
-                            <div><input type="radio" id="radio-3" name="example-radio-buttons" value="Radio 3"/> <label for="radio-3">Test Radio 3</label></div>
-                            <div><input type="radio" id="radio-4" name="example-radio-buttons" value="Radio 4"/> <label for="radio-4">Test Radio 4</label></div>
-                            <div><input type="radio" id="radio-5" name="example-radio-buttons" value="Radio 5"/> <label for="radio-5">Test Radio 5</label></div>
+                            <div><input type="radio" id="radio-1" name="sanitytest-radio-buttons" value="Radio 1"/> <label for="radio-1">Test Radio 1</label></div>
+                            <div><input type="radio" id="radio-2" name="sanitytest-radio-buttons" value="Radio 2" checked/> <label for="radio-2">Test Radio 2</label></div>
+                            <div><input type="radio" id="radio-3" name="sanitytest-radio-buttons" value="Radio 3"/> <label for="radio-3">Test Radio 3</label></div>
+                            <div><input type="radio" id="radio-4" name="sanitytest-radio-buttons" value="Radio 4"/> <label for="radio-4">Test Radio 4</label></div>
+                            <div><input type="radio" id="radio-5" name="sanitytest-radio-buttons" value="Radio 5"/> <label for="radio-5">Test Radio 5</label></div>
                         </td>
                     </tr>
                     <tr>
@@ -227,7 +226,7 @@
                             Button (Input)
                         </td>
                         <td class="element-content">
-                            <input type="button" id="example-input-button" value="Example Input Button" onclick="clickButton(this)"/> <span id="example-input-button-indicator"></span>
+                            <input type="button" id="sanitytest-input-button" value="SanityTest Input Button" onclick="clickButton(this)"/> <span id="sanitytest-input-button-indicator"></span>
                         </td>
                     </tr>
                     <tr>
@@ -235,7 +234,7 @@
                             Button (&lt;button&gt; tag)
                         </td>
                         <td class="element-content">
-                            <button id="example-button" onclick="clickButton(this)">Example Button</button> <span id="example-button-indicator"></span>
+                            <button id="sanitytest-button" onclick="clickButton(this)">SanityTest Button</button> <span id="sanitytest-button-indicator"></span>
                         </td>
                     </tr>
                     <tr>
@@ -243,7 +242,7 @@
                             Table
                         </td>
                         <td class="element-content">
-                            <table id="example-table">
+                            <table id="sanitytest-table">
                                 <thead>
                                     <tr class="header">
                                         <th class="product-name">Product Name</th>
@@ -255,21 +254,21 @@
                                 </thead>
                                 <tbody>
                                     <tr class="data">
-                                        <td class="product-name">Example 1</td>
+                                        <td class="product-name">SanityTest 1</td>
                                         <td class="serial-number">#TDD987</td>
                                         <td class="product-type">Type 1</td>
                                         <td class="built-date">1/4/2024</td>
                                         <td class="price">$99.99</td>
                                     </tr>
                                     <tr class="data">
-                                        <td class="product-name">Example 2</td>
+                                        <td class="product-name">SanityTest 2</td>
                                         <td class="serial-number">#AEV974</td>
                                         <td class="product-type">Type 2</td>
                                         <td class="built-date">9/23/2021</td>
                                         <td class="price">$10.98</td>
                                     </tr>
                                     <tr class="data">
-                                        <td class="product-name">Example 3</td>
+                                        <td class="product-name">SanityTest 3</td>
                                         <td class="serial-number">#CCA106</td>
                                         <td class="product-type">Type 1</td>
                                         <td class="built-date">10/5/2011</td>
@@ -284,7 +283,7 @@
                             Custom Dialog
                         </td>
                         <td class="element-content">
-                            <button id="open-example-dialog-button" onclick="openExampleDialog()">Open Dialog</button>
+                            <button id="open-sanitytest-dialog-button" onclick="openSanityTestDialog()">Open Dialog</button>
                         </td>
                     </tr>
                     <tr>
@@ -292,7 +291,7 @@
                             Dialog with &lt;dialog&gt; Tag
                         </td>
                         <td class="element-content">
-                            <button id="open-example-modal-dialog-button" onclick="document.getElementById('example-modal-dialog').showModal()">Modal Dialog</button>
+                            <button id="open-sanitytest-modal-dialog-button" onclick="document.getElementById('sanitytest-modal-dialog').showModal()">Modal Dialog</button>
                         </td>
                     </tr>
                     <tr>
@@ -300,7 +299,7 @@
                             Inner Frame
                         </td>
                         <td class="element-content">
-                            <iframe id="example-iframe" src="example-frame.htm"></iframe>
+                            <iframe id="sanitytest-iframe" src="sanitytest-frame.htm"></iframe>
                         </td>
                     </tr>
                     <tr>
@@ -308,7 +307,7 @@
                             External Window
                         </td>
                         <td class="element-content">
-                            <a id="example-external-window-link" href="example-external.htm" target="_blank">Open External Window</a>
+                            <a id="sanitytest-external-window-link" href="sanitytest-external.htm" target="_blank">Open External Window</a>
                         </td>
                     </tr>
                     <tr>
@@ -826,7 +825,7 @@
                             CSV Download
                         </td>
                         <td class="element-content">
-                            <a id="example-csv-download-link" href="example.csv">Example CSV File</a>
+                            <a id="sanitytest-csv-download-link" href="sanitytest.csv">SanityTest CSV File</a>
                         </td>
                     </tr>
                     <tr>
@@ -834,12 +833,12 @@
                             Page Scope
                         </td>
                         <td class="element-content">
-                            <div id="example-page-scope-panel">
-                                <button id="example-page-scope-button" onclick="document.getElementById('example-page-scope-outside-component').innerText = 'Clicked'">Page Scope Test</button>
+                            <div id="sanitytest-page-scope-panel">
+                                <button id="sanitytest-page-scope-button" onclick="document.getElementById('sanitytest-page-scope-outside-component').innerText = 'Clicked'">Page Scope Test</button>
                             </div>
                             <div>
                                 <div>
-                                    <div id="example-page-scope-outside-component"></div>
+                                    <div id="sanitytest-page-scope-outside-component"></div>
                                 </div>
                             </div>
                         </td>
@@ -849,10 +848,10 @@
                             Between Elements
                         </td>
                         <td class="element-content">
-                            <table id="example-between-elements-table">
+                            <table id="sanitytest-between-elements-table">
                                 <tbody>
-                                    <tr id="example-between-elements-title-row1" class="title-row">
-                                        <td id="example-between-elements-title1" colspan="2">
+                                    <tr id="sanitytest-between-elements-title-row1" class="title-row">
+                                        <td id="sanitytest-between-elements-title1" colspan="2">
                                             Title 1
                                         </td>
                                     </tr>
@@ -876,8 +875,8 @@
                                         <td>C1-5</td>
                                         <td>Content 1-5</td>
                                     </tr>
-                                    <tr id="example-between-elements-title-row2" class="title-row">
-                                        <td id="example-between-elements-title2" colspan="2">
+                                    <tr id="sanitytest-between-elements-title-row2" class="title-row">
+                                        <td id="sanitytest-between-elements-title2" colspan="2">
                                             Title 2
                                         </td>
                                     </tr>
@@ -901,8 +900,8 @@
                                         <td>C2-5</td>
                                         <td>Content 2-5</td>
                                     </tr>
-                                    <tr id="example-between-elements-title-row3" class="title-row">
-                                        <td id="example-between-elements-title3" colspan="2">
+                                    <tr id="sanitytest-between-elements-title-row3" class="title-row">
+                                        <td id="sanitytest-between-elements-title3" colspan="2">
                                             Title 3
                                         </td>
                                     </tr>
@@ -926,8 +925,8 @@
                                         <td>C3-5</td>
                                         <td>Content 3-5</td>
                                     </tr>
-                                    <tr id="example-between-elements-title-end" class="end-row">
-                                        <td id="example-between-elements-end" colspan="2">
+                                    <tr id="sanitytest-between-elements-title-end" class="end-row">
+                                        <td id="sanitytest-between-elements-end" colspan="2">
                                             End
                                         </td>
                                     </tr>
@@ -939,22 +938,22 @@
 
                 </tbody>
             </table>    
-            <div id="example-dialog">
+            <div id="sanitytest-dialog">
                 <div class="dialog-bg"></div>
                 <div class="dialog-content">
-                    <div class="header">Example Dialog</div>
+                    <div class="header">SanityTest Dialog</div>
                     <div class="body">
-                        <input type="text" id="example-dialog-textbox" value="example dialog text" />
+                        <input type="text" id="sanitytest-dialog-textbox" value="sanitytest dialog text" />
                     </div>
-                    <div class="footer"><button class="close" onclick="closeExampleDialog()">Close</button></div>
+                    <div class="footer"><button class="close" onclick="closeSanityTestDialog()">Close</button></div>
                 </div>
             </div>
-            <dialog id="example-modal-dialog">
+            <dialog id="sanitytest-modal-dialog">
                 <p>The modal dialog</p>
                 <p>
-                    <input type="text" id="example-modal-dialog-textbox" value="example modal dialog text" />
+                    <input type="text" id="sanitytest-modal-dialog-textbox" value="sanitytest modal dialog text" />
                 </p>
-                <button class="close" onclick="document.getElementById('example-modal-dialog').close()" autofocus>Close</button>
+                <button class="close" onclick="document.getElementById('sanitytest-modal-dialog').close()" autofocus>Close</button>
             </dialog>
         </form>
     </body>
