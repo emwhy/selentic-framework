@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Example Frame</title>
+        <style>
+            body {
+                font-family: Arial, Helvetica, sans-serif;
+            }
+            #main-table td {
+                padding: 20px 20px 20px 20px;
+            }
+            #example-external-table {
+                border: 1px solid #000000;
+            }
+            #example-external-table td {
+                border: 1px solid #c0c0c0;
+                padding: 2px 5px 2px 5px;
+            } 
+        </style>
+    </head>
+    <body>
+        <form id="main-form" onsubmit="return false">
+            <table id="main-table">
+                <tbody>
+                    <tr>
+                        <td class="element-name">
+                            TextBox
+                        </td>
+                        <td class="element-content">
+                            <input type="text" id="example-external-textbox" value="external textbox text"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="element-name">
+                            Table
+                        </td>
+                        <td class="element-content">
+                            <table id="example-external-table">
+                                <thead>
+                                    <tr class="header">
+                                        <th class="product-name">Product Name</th>
+                                        <th class="serial-number">Serial Number</th>
+                                        <th class="product-type">Product Type</th>
+                                        <th class="built-date">Built Date</th>
+                                        <th class="price">Price</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr class="data">
+                                        <td class="product-name">External Example 1</td>
+                                        <td class="serial-number">#EX-TDD987</td>
+                                        <td class="product-type">Type 1</td>
+                                        <td class="built-date">11/4/2014</td>
+                                        <td class="price">$199.99</td>
+                                    </tr>
+                                    <tr class="data">
+                                        <td class="product-name">External Example 2</td>
+                                        <td class="serial-number">#EX-AEV974</td>
+                                        <td class="product-type">Type 2</td>
+                                        <td class="built-date">9/20/2011</td>
+                                        <td class="price">$15.92</td>
+                                    </tr>
+                                    <tr class="data">
+                                        <td class="product-name">External Example 3</td>
+                                        <td class="serial-number">#EX-CCA106</td>
+                                        <td class="product-type">Type 1</td>
+                                        <td class="built-date">5/5/2001</td>
+                                        <td class="price">$4,002.89</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>    
+        </form>
+    </body>
+</html>
