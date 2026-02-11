@@ -1,4 +1,4 @@
-Selion Framework
+**Selion Framework**
 
 Selion Framework is a wrapper library for Selenium WebDriver.
 
