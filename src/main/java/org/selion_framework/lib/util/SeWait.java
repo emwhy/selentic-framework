@@ -3,8 +3,6 @@ package org.selion_framework.lib.util;
 import org.selion_framework.lib.config.SelionConfig;
 import org.selion_framework.lib.exception.SeWaitTimeoutException;
 
-import java.util.concurrent.TimeUnit;
-
 public class SeWait {
     private final long startTimestamp;
     private final long durationMilliseconds;
