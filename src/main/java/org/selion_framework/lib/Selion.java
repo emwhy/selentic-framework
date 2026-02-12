@@ -23,24 +23,24 @@ import java.util.Optional;
  */
 public class Selion {
     private static final HashMap<Long, WebDriver> DRIVERS = new HashMap<>();
-    private static final SeWebDriverOptions WEBDRIVER_OPTIONS = new SeWebDriverOptions();
+    private static final SnWebDriverOptions WEBDRIVER_OPTIONS = new SnWebDriverOptions();
     private static Optional<WebDriverListener> webDriverListener = Optional.empty();
 
     public static synchronized WebDriver driver() {
         return driver(SelionConfig.config().browser());
     }
 
-    public static synchronized WebDriver driver(SeBrowser browser) {
+    public static synchronized WebDriver driver(SnBrowser browser) {
         final long threadId = Thread.currentThread().threadId();
 
         if (!DRIVERS.containsKey(threadId)) {
             WebDriver driver = null;
 
             switch (browser) {
-                case SeBrowser.Chrome -> driver = new ChromeDriver(WEBDRIVER_OPTIONS.chromeOptions());
-                case SeBrowser.Firefox -> driver = new FirefoxDriver(WEBDRIVER_OPTIONS.firefoxOptions());
-                case SeBrowser.Safari -> driver = new SafariDriver();
-                case SeBrowser.Edge -> driver = new EdgeDriver(WEBDRIVER_OPTIONS.edgeOptions());
+                case SnBrowser.Chrome -> driver = new ChromeDriver(WEBDRIVER_OPTIONS.chromeOptions());
+                case SnBrowser.Firefox -> driver = new FirefoxDriver(WEBDRIVER_OPTIONS.firefoxOptions());
+                case SnBrowser.Safari -> driver = new SafariDriver();
+                case SnBrowser.Edge -> driver = new EdgeDriver(WEBDRIVER_OPTIONS.edgeOptions());
             }
 
             // Add listener class, if available.
@@ -53,23 +53,23 @@ public class Selion {
         return DRIVERS.get(threadId);
     }
 
-    public static synchronized void withChromeOptions(SeWebDriverOptions.ChromeOptionSetup optionSetup) {
+    public static synchronized void withChromeOptions(SnWebDriverOptions.ChromeOptionSetup optionSetup) {
         optionSetup.options(WEBDRIVER_OPTIONS.chromeOptions(), WEBDRIVER_OPTIONS.chromePrefs());
 
         WEBDRIVER_OPTIONS.chromeOptions().setExperimentalOption("pref", WEBDRIVER_OPTIONS.chromePrefs());
     }
 
-    public static synchronized void withFirefoxOptions(SeWebDriverOptions.FirefoxOptionSetup optionSetup) {
+    public static synchronized void withFirefoxOptions(SnWebDriverOptions.FirefoxOptionSetup optionSetup) {
         optionSetup.options(WEBDRIVER_OPTIONS.firefoxOptions());
     }
 
-    public static synchronized void withEdgeOptions(SeWebDriverOptions.EdgeOptionSetup optionSetup) {
+    public static synchronized void withEdgeOptions(SnWebDriverOptions.EdgeOptionSetup optionSetup) {
         optionSetup.options(WEBDRIVER_OPTIONS.edgeOptions(), WEBDRIVER_OPTIONS.edgePrefs());
 
         WEBDRIVER_OPTIONS.edgeOptions().setExperimentalOption("pref", WEBDRIVER_OPTIONS.edgeOptions());
     }
 
-    public static synchronized void withSafariOptions(SeWebDriverOptions.SafariOptionSetup optionSetup) {
+    public static synchronized void withSafariOptions(SnWebDriverOptions.SafariOptionSetup optionSetup) {
         optionSetup.options(WEBDRIVER_OPTIONS.safariOptions());
     }
 
@@ -96,14 +96,14 @@ public class Selion {
 
     public static Object executeScript(String script, Object... params) {
         final JavascriptExecutor executor = (JavascriptExecutor) driver();
-        final Object[] objects = Arrays.stream(params).map(o -> o instanceof SeComponent ? ((SeComponent) o).existing() : o).toArray();
+        final Object[] objects = Arrays.stream(params).map(o -> o instanceof SnComponent ? ((SnComponent) o).existing() : o).toArray();
 
         return executor.executeScript(script, objects);
     }
 
     public static String executeAsyncScript(String script, Object... params) {
         final JavascriptExecutor executor = (JavascriptExecutor) driver();
-        final List<Object> objects = Arrays.stream(params).map(o -> o instanceof SeComponent ? ((SeComponent) o).existing() : o).toList();
+        final List<Object> objects = Arrays.stream(params).map(o -> o instanceof SnComponent ? ((SnComponent) o).existing() : o).toList();
 
         return String.valueOf(executor.executeAsyncScript(script, objects));
     }
