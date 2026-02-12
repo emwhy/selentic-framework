@@ -69,6 +69,10 @@ public class Selion {
         WEBDRIVER_OPTIONS.edgeOptions().setExperimentalOption("pref", WEBDRIVER_OPTIONS.edgeOptions());
     }
 
+    public static synchronized void withSafariOptions(SeWebDriverOptions.SafariOptionSetup optionSetup) {
+        optionSetup.options(WEBDRIVER_OPTIONS.safariOptions());
+    }
+
     public static void setListener(WebDriverListener listener) {
         webDriverListener = Optional.of(listener);
     }

@@ -5,10 +5,15 @@ import org.openqa.selenium.StaleElementReferenceException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 import org.selion_framework.lib.exception.SeElementNotFoundException;
+import org.selion_framework.lib.exception.SeInvalidHtmlException;
 import org.selion_framework.lib.exception.SeWaitTimeoutException;
 import org.selion_framework.lib.util.SeWait;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public abstract class SeComponent extends SeAbstractComponent {
     private Optional<SeLocatorNode> locator = Optional.empty();
@@ -176,7 +181,7 @@ public abstract class SeComponent extends SeAbstractComponent {
     }
 
     public final String ownText() {
-        return "";
+        return SeOwnText.removeHtml(this.innerHtml());
     }
 
     public final String innerText() {
@@ -191,5 +196,36 @@ public abstract class SeComponent extends SeAbstractComponent {
         String a;
 
         return (a = this.webElement().getDomAttribute(name)) == null ? Optional.empty() : Optional.of(a);
+    }
+
+    private static class SeOwnText {
+        private static final Set<String> VOIDED_TAGS = Set.of("br", "img", "hr", "input", "meta", "link", "source", "area", "base", "col", "embed", "param", "track", "wbr");
+        private static final Pattern TAG_PATTERN = Pattern.compile("<(\\w+)[^>]*?>([^<^>]*?)</\\s*?\\1\\s*?>", Pattern.CASE_INSENSITIVE | Pattern.DOTALL);
+        private static final Pattern ANY_TAG = Pattern.compile("<(\\w+)[^>]*?>|</\\s*?\\w+\\s*?>|<\\w+\\s*?/>", Pattern.CASE_INSENSITIVE | Pattern.DOTALL);
+
+
+        private static String removeHtml(String originalHtmlText) {
+            Matcher matcher;
+            String resultText = originalHtmlText.replaceAll("\\s+", " ");
+
+            for (String voidedPattern : voidedPatterns()) {
+                resultText = resultText.replaceAll(voidedPattern, "");
+            }
+
+            while ((matcher = TAG_PATTERN.matcher(resultText)).find()) {
+                resultText = matcher.replaceFirst("");
+            }
+
+            if (ANY_TAG.matcher(resultText).find()) {
+                throw new SeInvalidHtmlException("Cannot parse HTML text: \n\n" + originalHtmlText);
+            }
+
+            return resultText.trim();
+        }
+
+        private static List<String> voidedPatterns() {
+            return VOIDED_TAGS.stream().map(s -> "<" + s + "[^>]*?>|<\" + s + \"[^>]*?/>").toList();
+        }
+
     }
 }

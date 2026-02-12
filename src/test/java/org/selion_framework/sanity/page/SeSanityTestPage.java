@@ -24,6 +24,7 @@ public class SeSanityTestPage extends SePage {
     private static final SeLocatorNode OPEN_EXTERNAL_WINDOW_LINK = _xpath.descendant("a", _id().is("sanitytest-external-window-link"));
     private static final SeLocatorNode SANITYTEST_LONG_COMPONENT_LIST = _xpath.descendant("div", _id().is("long-component-list")).child("div", _cssClasses("long-component-list-entry"));
     private static final SeLocatorNode SANITYTEST_CSV_DOWNLOAD_LINK = _xpath.descendant("a", _id().is("sanitytest-csv-download-link"));
+    private static final SeLocatorNode SANITYTEST_OWN_TEXT = _xpath.descendant("div", _id().is("sanitytest-own-text"));
 
     private static final SeLocatorNode OPEN_SANITYTEST_DIALOG_BUTTON = _xpath.descendant("button", _id().is("open-sanitytest-dialog-button"));
     private static final SeLocatorNode OPEN_SANITYTEST_MODAL_DIALOG_BUTTON = _xpath.descendant("button", _id().is("open-sanitytest-modal-dialog-button"));
@@ -53,6 +54,7 @@ public class SeSanityTestPage extends SePage {
     public final SeLink openExternalWindowLink = $component(OPEN_EXTERNAL_WINDOW_LINK, SeLink.class);
     public final SeComponentCollection<SeSanityTestLongListEntryComponent> longComponentEntries = $$components(SANITYTEST_LONG_COMPONENT_LIST, SeSanityTestLongListEntryComponent.class);
     public final SeLink sanitytestCsvDownloadLink = $component(SANITYTEST_CSV_DOWNLOAD_LINK, SeLink.class);
+    public final SeGenericComponent sanitytestOwnText = $genericComponent(SANITYTEST_OWN_TEXT);
 
     public void inSanityTestInnerFrame(SeFrameAction<SeSanityTestFrameContent> predicate) {
         $frame(SANITYTEST_IFRAME, SeSanityTestFrameContent.class, predicate);

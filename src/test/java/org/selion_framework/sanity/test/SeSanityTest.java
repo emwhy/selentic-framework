@@ -398,4 +398,11 @@ public class SeSanityTest {
         });
     }
 
+    @Test
+    public void testOwnText() {
+        sanitytestPage.inPage(p -> {
+            Assert.assertEquals(p.sanitytestOwnText.ownText(), "This is the own text.");
+        });
+    }
+
 }

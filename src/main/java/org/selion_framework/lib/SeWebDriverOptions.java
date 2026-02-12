@@ -4,6 +4,7 @@ import org.apache.commons.io.FileUtils;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.edge.EdgeOptions;
 import org.openqa.selenium.firefox.FirefoxOptions;
+import org.openqa.selenium.safari.SafariOptions;
 import org.selion_framework.lib.exception.SeInitializationException;
 import org.selion_framework.lib.util.SeLogHandler;
 
@@ -18,6 +19,7 @@ public final class SeWebDriverOptions {
     private final FirefoxOptions firefoxOptions = new FirefoxOptions();
     private final EdgeOptions edgeOptions = new EdgeOptions();
     private final Map<String, Object> edgePrefs = new HashMap<>();
+    private final SafariOptions safariOptions = new SafariOptions();
 
     SeWebDriverOptions() {
         final File downloadDirectory = SeLogHandler.downloadDirectory();
@@ -97,6 +99,10 @@ public final class SeWebDriverOptions {
         return firefoxOptions;
     }
 
+    SafariOptions safariOptions() {
+        return safariOptions;
+    }
+
     EdgeOptions edgeOptions() {
         return edgeOptions;
     }
@@ -115,5 +121,9 @@ public final class SeWebDriverOptions {
 
     public interface EdgeOptionSetup {
         void options(EdgeOptions options, Map<String, Object> prefs);
+    }
+
+    public interface SafariOptionSetup {
+        void options(SafariOptions options);
     }
 }
