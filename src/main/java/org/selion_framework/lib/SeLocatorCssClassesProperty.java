@@ -1,6 +1,6 @@
 package org.selion_framework.lib;
 
-public class SeLocatorCssClassesProperty extends SeLocatorProperty {
+public final class SeLocatorCssClassesProperty extends SeLocatorProperty {
     private final String[] cssClasses;
 
     SeLocatorCssClassesProperty(String... cssClasses) {

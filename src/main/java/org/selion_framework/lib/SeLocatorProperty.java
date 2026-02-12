@@ -1,6 +1,6 @@
 package org.selion_framework.lib;
 
-public abstract class SeLocatorProperty {
+public abstract sealed class SeLocatorProperty permits SeLocatorAttributeProperty, SeLocatorCssClassesProperty, SeLocatorIndexProperty, SeLocatorNotProperty {
     private boolean negate = false;
 
     abstract protected String build();

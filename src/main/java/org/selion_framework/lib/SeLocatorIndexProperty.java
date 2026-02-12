@@ -1,6 +1,6 @@
 package org.selion_framework.lib;
 
-public class SeLocatorIndexProperty extends SeLocatorProperty {
+public final class SeLocatorIndexProperty extends SeLocatorProperty {
     private final Conditions condition;
     private final int index;
 

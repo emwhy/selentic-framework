@@ -1,6 +1,6 @@
 package org.selion_framework.lib;
 
-public class SeLocatorNotProperty extends SeLocatorProperty {
+public final class SeLocatorNotProperty extends SeLocatorProperty {
     private final SeLocatorProperty locatorProperty;
 
     SeLocatorNotProperty(SeLocatorProperty locatorProperty) {

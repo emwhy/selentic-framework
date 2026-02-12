@@ -1,7 +1,7 @@
 package org.selion_framework.lib;
 
 
-public class SeLocatorAttributeProperty extends SeLocatorProperty {
+public final class SeLocatorAttributeProperty extends SeLocatorProperty {
     private final String property;
     private final Conditions condition;
     private final String text;
