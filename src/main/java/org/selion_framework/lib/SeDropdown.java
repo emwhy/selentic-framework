@@ -5,6 +5,7 @@ import org.selion_framework.lib.exception.SeEntryNotFoundException;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.regex.Pattern;
 
 public class SeDropdown extends SeFormComponent {
 
@@ -19,35 +20,16 @@ public class SeDropdown extends SeFormComponent {
         select.selectByVisibleText(text);
     }
 
-    public void selectStartsWith(String text) {
-        final Optional<String> matchedOption = optionTexts().stream().filter(p -> p.startsWith(text)).findFirst();
+    public void select(Pattern pattern) {
+        final Optional<String> matchedOption = optionTexts().stream().filter(option -> pattern.matcher(option).matches()).findFirst();
 
         if (matchedOption.isPresent()) {
             select(matchedOption.get());
         } else {
-            throw new SeEntryNotFoundException("Cannot find option that starts with: " + text);
+            throw new SeEntryNotFoundException("Cannot find option with pattern: " + pattern.pattern());
         }
     }
 
-    public void selectEndsWith(String text) {
-        final Optional<String> matchedOption = optionTexts().stream().filter(p -> p.endsWith(text)).findFirst();
-
-        if (matchedOption.isPresent()) {
-            select(matchedOption.get());
-        } else {
-            throw new SeEntryNotFoundException("Cannot find option that ends with: " + text);
-        }
-    }
-
-    public void selectContains(String text) {
-        final Optional<String> matchedOption = optionTexts().stream().filter(p -> p.contains(text)).findFirst();
-
-        if (matchedOption.isPresent()) {
-            select(matchedOption.get());
-        } else {
-            throw new SeEntryNotFoundException("Cannot find option that contains: " + text);
-        }
-    }
 
     public String selectedText() {
         final Select select = new Select(this.existing());

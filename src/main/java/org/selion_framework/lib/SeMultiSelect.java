@@ -6,6 +6,7 @@ import org.selion_framework.lib.exception.SeEntryNotFoundException;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Pattern;
 
 public class SeMultiSelect extends SeFormComponent {
     @Override
@@ -31,31 +32,11 @@ public class SeMultiSelect extends SeFormComponent {
         }
     }
 
-    public void selectStartWith(String text) {
-        final List<String> matchedOptions = optionTexts().stream().filter(p -> p.startsWith(text)).toList();
+    public void select(Pattern pattern) {
+        final List<String> matchedOptions = optionTexts().stream().filter(option -> pattern.matcher(option).matches()).toList();
 
         if (matchedOptions.isEmpty()) {
-            throw new SeEntryNotFoundException("Cannot find options that start with: " + text);
-        } else {
-            select(matchedOptions.toArray(new String[0]));
-        }
-    }
-
-    public void selectEndWith(String text) {
-        final List<String> matchedOptions = optionTexts().stream().filter(p -> p.endsWith(text)).toList();
-
-        if (matchedOptions.isEmpty()) {
-            throw new SeEntryNotFoundException("Cannot find options that end with: " + text);
-        } else {
-            select(matchedOptions.toArray(new String[0]));
-        }
-    }
-
-    public void selectContain(String text) {
-        final List<String> matchedOptions = optionTexts().stream().filter(p -> p.contains(text)).toList();
-
-        if (matchedOptions.isEmpty()) {
-            throw new SeEntryNotFoundException("Cannot find options that contain: " + text);
+            throw new SeEntryNotFoundException("Cannot find options that match with pattern: " + pattern.pattern());
         } else {
             select(matchedOptions.toArray(new String[0]));
         }
@@ -78,31 +59,11 @@ public class SeMultiSelect extends SeFormComponent {
         }
     }
 
-    public void deselectStartWith(String text) {
-        final List<String> matchedOptions = optionTexts().stream().filter(p -> p.startsWith(text)).toList();
+    public void deselect(Pattern pattern) {
+        final List<String> matchedOptions = optionTexts().stream().filter(option -> pattern.matcher(option).matches()).toList();
 
         if (matchedOptions.isEmpty()) {
-            throw new SeEntryNotFoundException("Cannot find options that start with: " + text);
-        } else {
-            deselect(matchedOptions.toArray(new String[0]));
-        }
-    }
-
-    public void deselectEndWith(String text) {
-        final List<String> matchedOptions = optionTexts().stream().filter(p -> p.endsWith(text)).toList();
-
-        if (matchedOptions.isEmpty()) {
-            throw new SeEntryNotFoundException("Cannot find options that end with: " + text);
-        } else {
-            deselect(matchedOptions.toArray(new String[0]));
-        }
-    }
-
-    public void deselectContain(String text) {
-        final List<String> matchedOptions = optionTexts().stream().filter(p -> p.contains(text)).toList();
-
-        if (matchedOptions.isEmpty()) {
-            throw new SeEntryNotFoundException("Cannot find options that contain: " + text);
+            throw new SeEntryNotFoundException("Cannot find options that match with pattern: " + pattern.pattern());
         } else {
             deselect(matchedOptions.toArray(new String[0]));
         }

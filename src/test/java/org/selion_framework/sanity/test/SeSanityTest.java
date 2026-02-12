@@ -18,6 +18,7 @@ import org.testng.annotations.Test;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.regex.Pattern;
 
 import static org.testng.AssertJUnit.assertTrue;
 import static org.testng.AssertJUnit.fail;
@@ -92,7 +93,7 @@ public class SeSanityTest {
 
             Assert.assertEquals(p.sanitytestDropdown.selectedText(), "TEST 35");
 
-            p.sanitytestDropdown.selectEndsWith("23");
+            p.sanitytestDropdown.select(Pattern.compile(".*23$"));
 
             Assert.assertEquals(p.sanitytestDropdown.selectedText(), "TEST 23");
         });
@@ -132,12 +133,12 @@ public class SeSanityTest {
 
             assertTrue(p.sanitytestMultiSelect.selectedTexts().isEmpty());
 
-            p.sanitytestMultiSelect.selectStartWith("TEST 4");
+            p.sanitytestMultiSelect.select(Pattern.compile("^TEST 4.*"));
 
             Assert.assertListContainsObject(p.sanitytestMultiSelect.selectedTexts(), "TEST 4", "");
             Assert.assertListContainsObject(p.sanitytestMultiSelect.selectedTexts(), "TEST 40", "");
 
-            p.sanitytestMultiSelect.deselectEndWith("4");
+            p.sanitytestMultiSelect.deselect(Pattern.compile(".*4$"));
 
             Assert.assertListContainsObject(p.sanitytestMultiSelect.selectedTexts(), "TEST 40", "");
             Assert.assertListNotContainsObject(p.sanitytestMultiSelect.selectedTexts(), "TEST 4", "");
