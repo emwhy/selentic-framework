@@ -6,7 +6,7 @@ import org.slf4j.Logger;
 
 import java.util.Arrays;
 
-public sealed abstract class SnCssSelector extends SnSelector permits SnCssSelectorChild, SnCssSelectorDescendant, SnCssSelectorSibling, SnCssSelectorNextSibling, SnCssSelectorPage {
+public sealed abstract class SnCssSelector extends SnSelector permits SnCssSelectorChild, SnCssSelectorDescendant, SnCssSelectorSibling, SnCssSelectorNextSibling, SnCssSelectorPage, SnCssSelectorRaw {
     private static final Logger LOG = SnLogHandler.logger(SnCssSelector.class);
     private final SnCssSelectorPropertyType[] selectorProperties;
 

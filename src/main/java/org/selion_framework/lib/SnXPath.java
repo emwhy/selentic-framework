@@ -6,7 +6,7 @@ import org.slf4j.Logger;
 
 import java.util.Arrays;
 
-public sealed abstract class SnXPath extends SnSelector permits SnXPathParent, SnXPathDescendant, SnXPathChild, SnXPathSibling, SnXPathPrecedingSibling, SnXPathPage {
+public sealed abstract class SnXPath extends SnSelector permits SnXPathParent, SnXPathDescendant, SnXPathChild, SnXPathSibling, SnXPathPrecedingSibling, SnXPathPage, SnXPathRaw {
     private static final Logger LOG = SnLogHandler.logger(SnXPath.class);
     private final String tag;
     private final SnXpathPropertyType[] selectorProperties;
@@ -38,7 +38,7 @@ public sealed abstract class SnXPath extends SnSelector permits SnXPathParent, S
         return build("");
     }
 
-    By build(String prefix) {
+    protected By build(String prefix) {
         final String s = prefix + toString();
 
         LOG.debug("Selector XPath: {}", s);
