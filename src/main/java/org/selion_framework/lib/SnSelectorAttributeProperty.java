@@ -1,12 +1,12 @@
 package org.selion_framework.lib;
 
 
-public final class SnLocatorAttributeProperty extends SnLocatorProperty {
+public final class SnSelectorAttributeProperty extends SnSelectorProperty {
     private final String property;
     private final Conditions condition;
     private final String text;
 
-    SnLocatorAttributeProperty(String property, Conditions condition, String text) {
+    SnSelectorAttributeProperty(String property, Conditions condition, String text) {
         this.property = property;
         this.condition = condition;
         this.text = text;

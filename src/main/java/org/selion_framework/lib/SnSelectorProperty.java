@@ -1,6 +1,6 @@
 package org.selion_framework.lib;
 
-public abstract sealed class SnLocatorProperty permits SnLocatorAttributeProperty, SnLocatorCssClassesProperty, SnLocatorIndexProperty, SnLocatorNotProperty {
+public abstract sealed class SnSelectorProperty permits SnSelectorAttributeProperty, SnSelectorCssClassesProperty, SnSelectorIndexProperty, SnSelectorNotProperty {
     private boolean negate = false;
 
     abstract protected String build();

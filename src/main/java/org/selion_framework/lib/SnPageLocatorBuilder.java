@@ -1,8 +1,8 @@
 package org.selion_framework.lib;
 
-public final class SnPageLocatorBuilder extends SnLocatorBuilder {
-    public SnXPathSelector descendant(String tag, SnLocatorProperty... locatorProperties) {
+public final class SnPageLocatorBuilder extends SnSelectorBuilder {
+    public SnXPathSelector descendant(String tag, SnSelectorProperty... locatorProperties) {
         this.setLocator(new SnXPathSelectorPage(tag, locatorProperties));
-        return this.locator();
+        return this.selector();
     }
 }

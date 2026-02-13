@@ -1,9 +1,9 @@
 package org.selion_framework.lib;
 
-public final class SnLocatorCssClassesProperty extends SnLocatorProperty {
+public final class SnSelectorCssClassesProperty extends SnSelectorProperty {
     private final String[] cssClasses;
 
-    SnLocatorCssClassesProperty(String... cssClasses) {
+    SnSelectorCssClassesProperty(String... cssClasses) {
         this.cssClasses = cssClasses;
     }
 

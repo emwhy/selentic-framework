@@ -1,15 +1,15 @@
 package org.selion_framework.lib;
 
-public final class SnLocatorIndexProperty extends SnLocatorProperty {
+public final class SnSelectorIndexProperty extends SnSelectorProperty {
     private final Conditions condition;
     private final int index;
 
-    SnLocatorIndexProperty(SnLocatorIndexProperty.Conditions condition, int index) {
+    SnSelectorIndexProperty(SnSelectorIndexProperty.Conditions condition, int index) {
         this.condition = condition;
         this.index = index + 1;
     }
 
-    SnLocatorIndexProperty(SnLocatorIndexProperty.Conditions condition) {
+    SnSelectorIndexProperty(SnSelectorIndexProperty.Conditions condition) {
         this.condition = condition;
         this.index = -1;
     }

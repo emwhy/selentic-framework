@@ -10,52 +10,52 @@ import java.util.Optional;
 public abstract class SnAbstractComponent {
     private static final Logger LOG = SnLogHandler.logger(SnAbstractComponent.class);
 
-    protected SnLocatorProperty _not(SnLocatorProperty locatorProperty) {
-        return new SnLocatorNotProperty(locatorProperty);
+    protected SnSelectorProperty _not(SnSelectorProperty locatorProperty) {
+        return new SnSelectorNotProperty(locatorProperty);
     }
 
-    protected static SnLocatorPropertyCondition _attr(String attribute) {
-        return new SnLocatorPropertyCondition("@" + attribute);
+    protected static SnSelectorPropertyCondition _attr(String attribute) {
+        return new SnSelectorPropertyCondition("@" + attribute);
     }
 
-    protected static SnLocatorCssClassesProperty _cssClasses(String... cssClasses) {
-        return new SnLocatorCssClassesProperty(cssClasses);
+    protected static SnSelectorCssClassesProperty _cssClasses(String... cssClasses) {
+        return new SnSelectorCssClassesProperty(cssClasses);
     }
 
-    protected static SnLocatorPropertyCondition _id() {
+    protected static SnSelectorPropertyCondition _id() {
         return _attr("id");
     }
 
-    protected static SnLocatorPropertyCondition _name() {
+    protected static SnSelectorPropertyCondition _name() {
         return _attr("name");
     }
 
-    protected static SnLocatorPropertyCondition _type() {
+    protected static SnSelectorPropertyCondition _type() {
         return _attr("type");
     }
 
-    protected static SnLocatorPropertyCondition _text() {
-        return new SnLocatorPropertyCondition("text()");
+    protected static SnSelectorPropertyCondition _text() {
+        return new SnSelectorPropertyCondition("text()");
     }
 
-    protected static SnLocatorIndexProperty _indexFrom(int startIndex) {
-        return new SnLocatorIndexProperty(SnLocatorIndexProperty.Conditions.From, startIndex);
+    protected static SnSelectorIndexProperty _indexFrom(int startIndex) {
+        return new SnSelectorIndexProperty(SnSelectorIndexProperty.Conditions.From, startIndex);
     }
 
-    protected static SnLocatorIndexProperty _indexTo(int endIndex) {
-        return new SnLocatorIndexProperty(SnLocatorIndexProperty.Conditions.To, endIndex);
+    protected static SnSelectorIndexProperty _indexTo(int endIndex) {
+        return new SnSelectorIndexProperty(SnSelectorIndexProperty.Conditions.To, endIndex);
     }
 
-    protected static SnLocatorIndexProperty _indexAt(int index) {
-        return new SnLocatorIndexProperty(SnLocatorIndexProperty.Conditions.At, index);
+    protected static SnSelectorIndexProperty _indexAt(int index) {
+        return new SnSelectorIndexProperty(SnSelectorIndexProperty.Conditions.At, index);
     }
 
-    protected static SnLocatorIndexProperty _first() {
+    protected static SnSelectorIndexProperty _first() {
         return _indexAt(0);
     }
 
-    protected static SnLocatorIndexProperty _last() {
-        return new SnLocatorIndexProperty(SnLocatorIndexProperty.Conditions.Last);
+    protected static SnSelectorIndexProperty _last() {
+        return new SnSelectorIndexProperty(SnSelectorIndexProperty.Conditions.Last);
     }
 
     protected SnGenericComponent $genericComponent(SnXPathSelector locator) {

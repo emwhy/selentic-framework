@@ -1,9 +1,9 @@
 package org.selion_framework.lib;
 
-public final class SnLocatorNotProperty extends SnLocatorProperty {
-    private final SnLocatorProperty locatorProperty;
+public final class SnSelectorNotProperty extends SnSelectorProperty {
+    private final SnSelectorProperty locatorProperty;
 
-    SnLocatorNotProperty(SnLocatorProperty locatorProperty) {
+    SnSelectorNotProperty(SnSelectorProperty locatorProperty) {
         this.locatorProperty = locatorProperty;
     }
 
