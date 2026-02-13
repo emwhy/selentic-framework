@@ -25,7 +25,7 @@ public final class SnSelectorIndexProperty extends SnSelectorProperty {
             case Last -> xpath = "last()";
         }
 
-        if (this.isNegated()) {
+        if (this.negated()) {
             xpath = "not(" + xpath + ")";
         }
         return "[" + xpath + "]";

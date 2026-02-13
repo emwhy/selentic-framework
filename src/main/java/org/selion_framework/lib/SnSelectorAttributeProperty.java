@@ -23,7 +23,7 @@ public final class SnSelectorAttributeProperty extends SnSelectorProperty {
             case EndsWith -> xpath = "substring(" + this.property + ", string-length(" + this.property + ") - string-length('" + this.text + "')+1) = '" + this.text + "'";
         }
 
-        if (this.isNegated()) {
+        if (this.negated()) {
             xpath = "not(" + xpath + ")";
         }
         return "[" + xpath + "]";

@@ -13,11 +13,11 @@ public final class SnSelectorCssClassesProperty extends SnSelectorProperty {
 
         for (String cssClass : this.cssClasses) {
             xpath.append("[");
-            if (isNegated()) {
+            if (negated()) {
                 xpath.append("not(");
             }
             xpath.append("contains(@class,'").append(cssClass).append("')");
-            if (isNegated()) {
+            if (negated()) {
                 xpath.append(")");
             }
             xpath.append("]");

@@ -9,7 +9,7 @@ public abstract sealed class SnSelectorProperty permits SnSelectorAttributePrope
         this.negate = true;
     }
 
-    protected boolean isNegated() {
+    protected boolean negated() {
         return negate;
     }
 }
