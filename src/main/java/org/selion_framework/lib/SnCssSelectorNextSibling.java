@@ -1,16 +1,16 @@
 package org.selion_framework.lib;
 
 public final class SnCssSelectorNextSibling extends SnCssSelector {
-    SnCssSelectorNextSibling(SnSelectorProperty... selectorProperties) {
+    SnCssSelectorNextSibling(SnCssSelectorPropertyType... selectorProperties) {
         super(selectorProperties);
     }
 
-    SnCssSelectorNextSibling(SnCssSelector priorSelectorNode, SnSelectorProperty... selectorProperties) {
+    SnCssSelectorNextSibling(SnCssSelector priorSelectorNode, SnCssSelectorPropertyType... selectorProperties) {
         super(priorSelectorNode, selectorProperties);
     }
 
     @Override
     protected String nodeText() {
-        return "";
+        return " + ";
     }
 }

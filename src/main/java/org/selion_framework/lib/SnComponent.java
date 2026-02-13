@@ -16,17 +16,18 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public abstract class SnComponent extends SnAbstractComponent {
-    private Optional<SnXPathSelector> selector = Optional.empty();
+    private Optional<SnSelector> selector = Optional.empty();
     private Optional<SnComponent> $callerComponent = Optional.empty();
     private SnAbstractPage $ownerPage;
     private WebElement webElement;
-    final static protected SnComponentSelectorBuilder _xpath = new SnComponentSelectorBuilder();
+    final static protected SnComponentXPathBuilder _xpath = new SnComponentXPathBuilder();
+    final static protected SnComponentCssSelectorBuilder _cssSelector = new SnComponentCssSelectorBuilder();
     private boolean ruleVerified = false;
 
     protected SnComponent() {
     }
 
-    final void setSelector(SnXPathSelector selector) {
+    final void setSelector(SnSelector selector) {
         this.selector = Optional.of(selector);
     }
 
@@ -57,10 +58,10 @@ public abstract class SnComponent extends SnAbstractComponent {
             }
         }
         if (this.webElement == null) {
-            if (this.selector.isPresent() && (this.$callerComponent.isEmpty() || this.selector.get() instanceof SnXPathSelectorPage)) {
+            if (this.selector.isPresent() && (this.$callerComponent.isEmpty() || this.selector.get() instanceof SnXPathPage)) {
                 this.webElement = Selion.driver().findElement(selector.get().build());
             } else if (this.selector.isPresent()) {
-                this.webElement = this.$callerComponent.get().existing().findElement(selector.get().build("."));
+                this.webElement = selector.get() instanceof SnXPath ? this.$callerComponent.get().existing().findElement(((SnXPath) selector.get()).build(".")) : this.$callerComponent.get().existing().findElement(selector.get().build());
             } else {
                 throw new SnElementNotFoundException("Selector is not present.");
             }

@@ -14,28 +14,36 @@ public abstract class SnAbstractComponent {
         return new SnSelectorNotProperty(selectorProperty);
     }
 
-    protected static SnSelectorPropertyCondition _attr(String attribute) {
-        return new SnSelectorPropertyCondition("@" + attribute);
+    protected static SnSelectorAttributeCondition _attr(String attribute) {
+        return new SnSelectorAttributeCondition("@", attribute);
     }
 
     protected static SnSelectorCssClassesProperty _cssClasses(String... cssClasses) {
         return new SnSelectorCssClassesProperty(cssClasses);
     }
 
-    protected static SnSelectorPropertyCondition _id() {
+    protected static SnSelectorTagProperty _tag(String tag) {
+        return new SnSelectorTagProperty(tag);
+    }
+
+    protected static SnSelectorAttributeCondition _id() {
         return _attr("id");
     }
 
-    protected static SnSelectorPropertyCondition _name() {
+    protected static SnSelectorIdProperty _id(String id) {
+        return new SnSelectorIdProperty(id);
+    }
+
+    protected static SnSelectorAttributeCondition _name() {
         return _attr("name");
     }
 
-    protected static SnSelectorPropertyCondition _type() {
+    protected static SnSelectorAttributeCondition _type() {
         return _attr("type");
     }
 
-    protected static SnSelectorPropertyCondition _text() {
-        return new SnSelectorPropertyCondition("text()");
+    protected static SnSelectorTextCondition _text() {
+        return new SnSelectorTextCondition();
     }
 
     protected static SnSelectorIndexProperty _indexFrom(int startIndex) {
@@ -58,11 +66,15 @@ public abstract class SnAbstractComponent {
         return new SnSelectorIndexProperty(SnSelectorIndexProperty.Conditions.Last);
     }
 
-    protected SnGenericComponent $genericComponent(SnXPathSelector selector) {
+    protected static SnSelectorNthOfTypeProperty _nthOfType(int index) {
+        return new SnSelectorNthOfTypeProperty(index);
+    }
+
+    protected SnGenericComponent $genericComponent(SnSelector selector) {
         return $component(selector, SnGenericComponent.class);
     }
 
-    protected SnRadioButtonGroup $radioButtons(SnXPathSelector selector) {
+    protected SnRadioButtonGroup $radioButtons(SnSelector selector) {
         return $$components(selector, SnRadioButton.class, SnRadioButtonGroup.class);
     }
 
@@ -74,7 +86,7 @@ public abstract class SnAbstractComponent {
      * @return
      * @param <T>
      */
-    protected <T extends SnComponent> T $component(SnXPathSelector selector, Class<T> componentType) {
+    protected <T extends SnComponent> T $component(SnSelector selector, Class<T> componentType) {
         return $component(selector, componentType, null);
     }
 
@@ -87,7 +99,7 @@ public abstract class SnAbstractComponent {
      * @return
      * @param <T>
      */
-    protected <T extends SnComponent> T $component(SnXPathSelector selector, Class<T> componentType, SnAbstractComponent containingObject) {
+    protected <T extends SnComponent> T $component(SnSelector selector, Class<T> componentType, SnAbstractComponent containingObject) {
         try {
             T $component;
 
@@ -106,7 +118,7 @@ public abstract class SnAbstractComponent {
     }
 
 
-    protected <T extends SnComponent> SnComponentCollection<T> $$components(SnXPathSelector selector, Class<T> componentType) {
+    protected <T extends SnComponent> SnComponentCollection<T> $$components(SnSelector selector, Class<T> componentType) {
         SnComponentCollection<T> $$components = new SnComponentCollection<>();
 
         $$components.setSelector(selector);
@@ -126,7 +138,7 @@ public abstract class SnAbstractComponent {
      * @return
      * @param <T>
      */
-    protected <T extends SnComponent> SnComponentCollection<T> $$components(SnXPathSelector selector, Class<T> componentType, SnAbstractComponent containingObject) {
+    protected <T extends SnComponent> SnComponentCollection<T> $$components(SnSelector selector, Class<T> componentType, SnAbstractComponent containingObject) {
         SnComponentCollection<T> $$components = new SnComponentCollection<>();
 
         $$components.setSelector(selector);
@@ -137,7 +149,7 @@ public abstract class SnAbstractComponent {
         return $$components;
     }
 
-    protected <T extends SnComponent, R extends SnComponentCollection<T>> R $$components(SnXPathSelector selector, Class<T> componentType, Class<R> componentCollectionType) {
+    protected <T extends SnComponent, R extends SnComponentCollection<T>> R $$components(SnSelector selector, Class<T> componentType, Class<R> componentCollectionType) {
         try {
             R $$components;
 
@@ -159,7 +171,7 @@ public abstract class SnAbstractComponent {
      * @param predicate
      * @param <T>
      */
-    protected <T extends SnFrameContent> void $frame(SnXPathSelector frameSelector, Class<T> frameContentType, SnFrameAction<T> predicate) {
+    protected <T extends SnFrameContent> void $frame(SnSelector frameSelector, Class<T> frameContentType, SnFrameAction<T> predicate) {
         $frame(frameSelector, frameContentType, null, predicate);
     }
 
@@ -171,7 +183,7 @@ public abstract class SnAbstractComponent {
      * @param predicate
      * @param <T>
      */
-    protected <T extends SnFrameContent> void $frame(SnXPathSelector frameSelector, Class<T> frameContentType, Object containingObject, SnFrameAction<T> predicate) {
+    protected <T extends SnFrameContent> void $frame(SnSelector frameSelector, Class<T> frameContentType, Object containingObject, SnFrameAction<T> predicate) {
         final WebDriver webDriver = Selion.driver();
         final SnFrame $frame = this.$component(frameSelector, SnFrame.class);
         T $frameContent;
@@ -205,7 +217,7 @@ public abstract class SnAbstractComponent {
      * @param predicate
      * @param <T>
      */
-    protected <T extends SnDialog> void $dialog(SnXPathSelector selector, Class<T> componentType, SnDialogAction<T> predicate) {
+    protected <T extends SnDialog> void $dialog(SnSelector selector, Class<T> componentType, SnDialogAction<T> predicate) {
         $dialog(selector, componentType, null, predicate);
     }
 
@@ -217,7 +229,7 @@ public abstract class SnAbstractComponent {
      * @param predicate
      * @param <T>
      */
-    protected <T extends SnDialog> void $dialog(SnXPathSelector selector, Class<T> componentType, SnAbstractComponent containingObject, SnDialogAction<T> predicate) {
+    protected <T extends SnDialog> void $dialog(SnSelector selector, Class<T> componentType, SnAbstractComponent containingObject, SnDialogAction<T> predicate) {
         final T $dialog = containingObject == null ? this.$component(selector, componentType) : this.$component(selector, componentType, containingObject);
 
         $dialog.waitForDisplayed();

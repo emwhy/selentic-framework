@@ -1,7 +1,7 @@
 package org.selion_framework.lib;
 
-public final class SnXPathSelectorPage extends SnXPathSelector {
-    SnXPathSelectorPage(String tag, SnSelectorProperty... selectorProperties) {
+public final class SnXPathPage extends SnXPath {
+    SnXPathPage(String tag, SnXpathPropertyType... selectorProperties) {
         super(tag, selectorProperties);
     }
 

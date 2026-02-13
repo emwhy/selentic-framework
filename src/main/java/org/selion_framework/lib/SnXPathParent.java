@@ -1,11 +1,11 @@
 package org.selion_framework.lib;
 
-public final class SnXPathSelectorParent extends SnXPathSelector {
-    SnXPathSelectorParent() {
+public final class SnXPathParent extends SnXPath {
+    SnXPathParent() {
         super("*");
     }
 
-    SnXPathSelectorParent(SnXPathSelector priorSelectorNode) {
+    SnXPathParent(SnXPath priorSelectorNode) {
         super(priorSelectorNode, "*");
     }
 

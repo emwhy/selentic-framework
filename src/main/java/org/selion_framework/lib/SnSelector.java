@@ -4,7 +4,7 @@ import org.openqa.selenium.By;
 
 import java.util.Optional;
 
-public abstract sealed class SnSelector permits SnCssSelector, SnXPathSelector {
+public abstract sealed class SnSelector permits SnCssSelector, SnXPath {
     private final Optional<SnSelector> priorSelectorNode;
 
     protected SnSelector() {

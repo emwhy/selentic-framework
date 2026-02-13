@@ -1,7 +1,7 @@
 package org.selion_framework.lib;
 
 public abstract class SnPage extends SnAbstractPage {
-    private static final SnXPathSelector PAGE_TITLE = _xpath.descendant("title");
+    private static final SnXPath PAGE_TITLE = _xpath.descendant("title");
 
     public static <T extends SnPage> SnWithPage<T> with(Class<T> pageType) {
         return new SnWithPage<>(pageType);

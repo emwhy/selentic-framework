@@ -1,6 +1,6 @@
 package org.selion_framework.lib;
 
-public final class SnSelectorIndexProperty extends SnSelectorProperty {
+public final class SnSelectorIndexProperty extends SnSelectorProperty implements SnXpathPropertyType {
     private final Conditions condition;
     private final int index;
 
@@ -15,20 +15,20 @@ public final class SnSelectorIndexProperty extends SnSelectorProperty {
     }
 
     @Override
-    protected String build() {
-        String xpath = "";
+    public String build(Types type) {
+        String selector = "";
 
         switch (this.condition) {
-            case At -> xpath = "position() = " + this.index;
-            case From -> xpath = "position() >= " + this.index;
-            case To -> xpath =  "position() <= " + this.index;
-            case Last -> xpath = "last()";
+            case At -> selector = "position() = " + this.index;
+            case From -> selector = "position() >= " + this.index;
+            case To -> selector =  "position() <= " + this.index;
+            case Last -> selector = "last()";
         }
 
         if (this.negated()) {
-            xpath = "not(" + xpath + ")";
+            selector = "not(" + selector + ")";
         }
-        return "[" + xpath + "]";
+        return "[" + selector + "]";
     }
 
     enum Conditions {

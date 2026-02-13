@@ -4,10 +4,10 @@ import org.selion_framework.lib.*;
 import org.selion_framework.sanity.component.SnSanityTestTableRow;
 
 public class SnSanityTestExternalPage extends SnPage {
-    private static final SnXPathSelector SANITYTEST_EXTERNAL_TEXTBOX = _xpath.descendant("input", _id().is("sanitytest-external-textbox"));
-    private static final SnXPathSelector SANITYTEST_EXTERNAL_ROWS = _xpath.descendant("table", _id().is("sanitytest-external-table")).descendant("tr", _cssClasses("data"));
-    private static final SnXPathSelector SANITYTEST_EXTERNAL_WINDOW_LINK = _xpath.descendant("a", _id().is("sanitytest-external-window-link"));
-    private static final SnXPathSelector SANITYTEST_CLOSE_CURRENT_WINDOW_BUTTON = _xpath.descendant("button", _id().is("sanitytest-external-close-window-button"));
+    private static final SnXPath SANITYTEST_EXTERNAL_TEXTBOX = _xpath.descendant("input", _id().is("sanitytest-external-textbox"));
+    private static final SnXPath SANITYTEST_EXTERNAL_ROWS = _xpath.descendant("table", _id().is("sanitytest-external-table")).descendant("tr", _cssClasses("data"));
+    private static final SnXPath SANITYTEST_EXTERNAL_WINDOW_LINK = _xpath.descendant("a", _id().is("sanitytest-external-window-link"));
+    private static final SnXPath SANITYTEST_CLOSE_CURRENT_WINDOW_BUTTON = _xpath.descendant("button", _id().is("sanitytest-external-close-window-button"));
 
     @Override
     protected void additionalWait() {

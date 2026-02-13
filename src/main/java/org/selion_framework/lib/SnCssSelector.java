@@ -8,21 +8,21 @@ import java.util.Arrays;
 
 public sealed abstract class SnCssSelector extends SnSelector permits SnCssSelectorChild, SnCssSelectorDescendant, SnCssSelectorSibling, SnCssSelectorNextSibling, SnCssSelectorPage {
     private static final Logger LOG = SnLogHandler.logger(SnCssSelector.class);
-    private final SnSelectorProperty[] selectorProperties;
+    private final SnCssSelectorPropertyType[] selectorProperties;
 
-    SnCssSelector(SnSelectorProperty... selectorProperties) {
+    SnCssSelector(SnCssSelectorPropertyType... selectorProperties) {
         super();
         this.selectorProperties = selectorProperties;
     }
 
-    SnCssSelector(SnCssSelector priorSelectorNode, SnSelectorProperty... selectorProperties) {
+    SnCssSelector(SnCssSelector priorSelectorNode, SnCssSelectorPropertyType... selectorProperties) {
         super(priorSelectorNode);
         this.selectorProperties = selectorProperties;
     }
 
     @Override
     public String toString() {
-        return (priorSelectorNode().map(Object::toString).orElse("")) + nodeText() + String.join("", Arrays.stream(selectorProperties).map(SnSelectorProperty::build).toList());
+        return (priorSelectorNode().map(Object::toString).orElse("")) + nodeText() + String.join("", Arrays.stream(selectorProperties).map(p -> p.build(SnSelectorPropertyType.Types.CssSelector)).toList());
     }
 
     @Override
@@ -32,32 +32,28 @@ public sealed abstract class SnCssSelector extends SnSelector permits SnCssSelec
 
     @Override
     protected By build() {
-        return build("");
+        final String s = toString();
+
+        LOG.debug("Selector CSS Selector: {}", s);
+        return By.cssSelector(s);
     }
 
-    By build(String prefix) {
-        final String s = prefix + toString();
-
-        LOG.debug("Selector XPath: {}", s);
-        return By.xpath(s);
-    }
-
-    public SnCssSelector descendant(SnSelectorProperty... selectorProperties) {
+    public SnCssSelector descendant(SnCssSelectorPropertyType... selectorProperties) {
         return new SnCssSelectorDescendant(this, selectorProperties);
     }
 
-    public SnCssSelector child(SnSelectorProperty... selectorProperties) {
+    public SnCssSelector child(SnCssSelectorPropertyType... selectorProperties) {
         return new SnCssSelectorChild(this, selectorProperties);
     }
 
-    public SnCssSelector sibling(SnSelectorProperty... selectorProperties) {
+    public SnCssSelector sibling(SnCssSelectorPropertyType... selectorProperties) {
         return new SnCssSelectorSibling(this, selectorProperties);
     }
 
-    public SnCssSelector nextSibling(SnSelectorProperty... selectorProperties) {
+    public SnCssSelector nextSibling(SnCssSelectorPropertyType... selectorProperties) {
         return new SnCssSelectorNextSibling(this, selectorProperties);
     }
 
-    public SnCssSelector page(SnSelectorProperty... selectorProperties) {
+    public SnCssSelector page(SnCssSelectorPropertyType... selectorProperties) {
         return new SnCssSelectorPage(selectorProperties);
     }}

@@ -1,6 +1,6 @@
 package org.selion_framework.lib;
 
-public final class SnSelectorCssClassesProperty extends SnSelectorProperty {
+public final class SnSelectorCssClassesProperty extends SnSelectorProperty implements SnXpathPropertyType, SnCssSelectorPropertyType {
     private final String[] cssClasses;
 
     SnSelectorCssClassesProperty(String... cssClasses) {
@@ -8,21 +8,35 @@ public final class SnSelectorCssClassesProperty extends SnSelectorProperty {
     }
 
     @Override
-    protected String build() {
-        final StringBuilder xpath = new StringBuilder();
+    public String build(Types type) {
+        final StringBuilder selector = new StringBuilder();
 
-        for (String cssClass : this.cssClasses) {
-            xpath.append("[");
-            if (negated()) {
-                xpath.append("not(");
+        if (type == Types.XPath) {
+            for (String cssClass : this.cssClasses) {
+                selector.append("[");
+                if (negated()) {
+                    selector.append("not(");
+                }
+                selector.append("contains(@class,'").append(cssClass).append("')");
+                if (negated()) {
+                    selector.append(")");
+                }
+                selector.append("]");
             }
-            xpath.append("contains(@class,'").append(cssClass).append("')");
+        } else if (type == Types.CssSelector) {
             if (negated()) {
-                xpath.append(")");
+                selector.append(":not(");
             }
-            xpath.append("]");
+            for (String cssClass : this.cssClasses) {
+                selector.append(".").append(cssClass);
+            }
+            if (negated()) {
+                selector.append(")");
+            }
+        } else {
+            return "";
         }
 
-        return xpath.toString();
+        return selector.toString();
     }
 }

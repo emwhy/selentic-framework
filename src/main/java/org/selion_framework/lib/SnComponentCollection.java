@@ -10,7 +10,7 @@ import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
 public class SnComponentCollection<T extends SnComponent> implements Iterable<T> {
-    private SnXPathSelector selector;
+    private SnSelector selector;
     private Class<T> componentType;
     private Optional<SnComponent> $callerComponent = Optional.empty();
     private Optional<SnAbstractComponent> containingObject = Optional.empty();
@@ -19,7 +19,7 @@ public class SnComponentCollection<T extends SnComponent> implements Iterable<T>
     protected SnComponentCollection() {}
 
 
-    final void setSelector(SnXPathSelector selector) {
+    final void setSelector(SnSelector selector) {
         this.selector = selector;
     }
 
@@ -44,10 +44,10 @@ public class SnComponentCollection<T extends SnComponent> implements Iterable<T>
     }
 
     private List<WebElement> webElements() {
-        if (this.$callerComponent.isEmpty() || this.selector instanceof SnXPathSelectorPage) {
+        if (this.$callerComponent.isEmpty() || this.selector instanceof SnXPathPage) {
             return Selion.driver().findElements(this.selector.build());
         } else {
-            return this.$callerComponent.get().existing().findElements(this.selector.build("."));
+            return this.$callerComponent.get().existing().findElements(this.selector instanceof SnXPath ? ((SnXPath) this.selector).build(".") : this.selector.build());
         }
     }
 

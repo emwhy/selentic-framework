@@ -1,32 +1,51 @@
 package org.selion_framework.lib;
 
 
-public final class SnSelectorAttributeProperty extends SnSelectorProperty {
-    private final String property;
+public final class SnSelectorAttributeProperty extends SnSelectorProperty implements SnXpathPropertyType, SnCssSelectorPropertyType {
+    private final String prefix;
+    private final String attribute;
     private final Conditions condition;
     private final String text;
 
-    SnSelectorAttributeProperty(String property, Conditions condition, String text) {
-        this.property = property;
+    SnSelectorAttributeProperty(String prefix, String attribute, Conditions condition, String text) {
+        this.prefix = prefix;
+        this.attribute = attribute;
         this.condition = condition;
         this.text = text;
     }
 
     @Override
-    protected String build() {
-        String xpath = "";
+    public String build(Types type) {
+        String selector = "";
 
-        switch (this.condition) {
-            case Is -> xpath = this.property + "='" + this.text + "'";
-            case Contains -> xpath = "contains(" + this.property + ", '" + this.text + "'";
-            case StartsWith -> xpath =  "starts-width(" + this.property + "='" + this.text + "'";
-            case EndsWith -> xpath = "substring(" + this.property + ", string-length(" + this.property + ") - string-length('" + this.text + "')+1) = '" + this.text + "'";
-        }
+        if (type == Types.XPath) {
+            switch (this.condition) {
+                case Is -> selector = this.prefix + this.attribute + "='" + this.text + "'";
+                case Contains -> selector = "contains(" + this.prefix + this.attribute + ", '" + this.text + "'";
+                case StartsWith -> selector = "starts-width(" + this.prefix + this.attribute + "='" + this.text + "'";
+                case EndsWith -> selector = "substring(" + this.prefix + this.attribute + ", string-length(" + this.prefix + this.attribute + ") - string-length('" + this.text + "')+1) = '" + this.text + "'";
+            }
 
-        if (this.negated()) {
-            xpath = "not(" + xpath + ")";
+            if (this.negated()) {
+                selector = "not(" + selector + ")";
+            }
+            return "[" + selector + "]";
+        } else if (type == Types.CssSelector) {
+            switch (this.condition) {
+                case Is -> selector = this.attribute + "='" + this.text + "'";
+                case Contains -> selector = this.attribute + "*='" + this.text + "'";
+                case StartsWith -> selector = this.attribute + "^='" + this.text + "'";
+                case EndsWith -> selector = this.attribute + "$='" + this.text + "'";
+            }
+
+            if (this.negated()) {
+                return ":not([" + selector + "])";
+            } else {
+                return "[" + selector + "]";
+            }
+        } else {
+            return "";
         }
-        return "[" + xpath + "]";
     }
 
     enum Conditions {

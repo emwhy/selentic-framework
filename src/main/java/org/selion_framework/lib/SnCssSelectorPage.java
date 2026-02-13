@@ -1,11 +1,11 @@
 package org.selion_framework.lib;
 
 public final class SnCssSelectorPage extends SnCssSelector {
-    SnCssSelectorPage(SnSelectorProperty... selectorProperties) {
+    SnCssSelectorPage(SnCssSelectorPropertyType... selectorProperties) {
         super(selectorProperties);
     }
 
-    SnCssSelectorPage(SnCssSelector priorSelectorNode, SnSelectorProperty... selectorProperties) {
+    SnCssSelectorPage(SnCssSelector priorSelectorNode, SnCssSelectorPropertyType... selectorProperties) {
         super(priorSelectorNode, selectorProperties);
     }
 

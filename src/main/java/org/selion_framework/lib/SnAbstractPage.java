@@ -9,7 +9,8 @@ import static org.selion_framework.lib.util.SnWait.waitUntil;
 public abstract class SnAbstractPage extends SnAbstractComponent {
     private static final Logger LOGGER = SnLogHandler.logger(SnAbstractPage.class);
 
-    protected static final SnPageSelectorBuilder _xpath = new SnPageSelectorBuilder();
+    protected static final SnPageXPathBuilder _xpath = new SnPageXPathBuilder();
+    protected static final SnPageCssSelectorBuilder _cssSelector = new SnPageCssSelectorBuilder();
 
     protected abstract void additionalWait();
 

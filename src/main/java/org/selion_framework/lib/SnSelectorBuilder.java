@@ -1,17 +1,17 @@
 package org.selion_framework.lib;
 
-public sealed class SnSelectorBuilder permits SnComponentSelectorBuilder, SnPageSelectorBuilder, SnComponentCssSelectorBuilder {
-    private SnXPathSelector selector;
+public sealed class SnSelectorBuilder permits SnComponentXPathBuilder, SnPageXPathBuilder, SnComponentCssSelectorBuilder, SnPageCssSelectorBuilder {
+    private SnSelector selector;
 
-    protected SnXPathSelector selector() {
+    protected SnSelector selector() {
         return this.selector;
     }
 
-    public SnXPathSelector raw(String selectorText) {
+    public SnSelector raw(String selectorText) {
         return null;
     }
 
-    protected void setSelector(SnXPathSelector selector) {
+    protected void setSelector(SnSelector selector) {
         this.selector = selector;
     }
 }

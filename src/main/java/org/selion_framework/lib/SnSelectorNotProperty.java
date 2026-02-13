@@ -1,6 +1,6 @@
 package org.selion_framework.lib;
 
-public final class SnSelectorNotProperty extends SnSelectorProperty {
+public final class SnSelectorNotProperty extends SnSelectorProperty implements SnXpathPropertyType, SnCssSelectorPropertyType {
     private final SnSelectorProperty selectorProperty;
 
     SnSelectorNotProperty(SnSelectorProperty selectorProperty) {
@@ -8,7 +8,7 @@ public final class SnSelectorNotProperty extends SnSelectorProperty {
     }
 
     @Override
-    protected String build() {
-        return selectorProperty.build();
+    public String build(Types type) {
+        return selectorProperty.build(type);
     }
 }
