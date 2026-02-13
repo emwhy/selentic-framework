@@ -149,7 +149,6 @@ public abstract class SnAbstractComponent {
 
         $$components.setSelector(selector);
         $$components.setComponentType(componentType);
-        $$components.setContainingObject(Optional.empty());
         $$components.setOwnerPage(this);
 
         return $$components;
@@ -169,7 +168,7 @@ public abstract class SnAbstractComponent {
 
         $$components.setSelector(selector);
         $$components.setComponentType(componentType);
-        $$components.setContainingObject(Optional.of(containingObject));
+        $$components.setContainingObject(containingObject);
         $$components.setOwnerPage(this);
 
         return $$components;

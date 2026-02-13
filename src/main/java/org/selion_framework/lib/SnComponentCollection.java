@@ -27,8 +27,8 @@ public class SnComponentCollection<T extends SnComponent> implements Iterable<T>
         this.componentType = componentType;
     }
 
-    final void setContainingObject(Optional<SnAbstractComponent> containingObject) {
-        this.containingObject = containingObject;
+    final void setContainingObject(SnAbstractComponent containingObject) {
+        this.containingObject = Optional.ofNullable(containingObject);
     }
 
     final void setOwnerPage(SnAbstractComponent abstractComponent) {
