@@ -33,7 +33,7 @@ public class SnSanityTestCssSelectorPage extends SnPage {
     private static final SnCssSelector SANITYTEST_MODAL_DIALOG = _cssSelector.descendant(_id("sanitytest-modal-dialog"));
 
     @Override
-    protected void additionalWait() {
+    protected void waitForDisplayed() {
         waitForComponent(sanitytestTextbox);
     }
 

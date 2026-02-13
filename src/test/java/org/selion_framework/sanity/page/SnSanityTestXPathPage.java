@@ -33,7 +33,7 @@ public class SnSanityTestXPathPage extends SnPage {
     private static final SnXPath SANITYTEST_MODAL_DIALOG = _xpath.descendant("dialog", _id().is("sanitytest-modal-dialog"));
 
     @Override
-    protected void additionalWait() {
+    protected void waitForDisplayed() {
         waitForComponent(sanitytestTextbox);
     }
 

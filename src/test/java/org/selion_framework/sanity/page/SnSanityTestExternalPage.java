@@ -10,7 +10,8 @@ public class SnSanityTestExternalPage extends SnPage {
     private static final SnXPath SANITYTEST_CLOSE_CURRENT_WINDOW_BUTTON = _xpath.descendant("button", _id().is("sanitytest-external-close-window-button"));
 
     @Override
-    protected void additionalWait() {
+    protected void waitForDisplayed() {
+        waitForComponent(sanitytestExternalTextbox);
     }
 
     public final SnTextbox sanitytestExternalTextbox = $component(SANITYTEST_EXTERNAL_TEXTBOX, SnTextbox.class);

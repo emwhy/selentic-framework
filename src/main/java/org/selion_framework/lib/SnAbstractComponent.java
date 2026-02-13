@@ -74,9 +74,35 @@ public abstract class SnAbstractComponent {
         return $component(selector, SnGenericComponent.class);
     }
 
+    protected SnTextbox $textbox(SnSelector selector) {
+        return $component(selector, SnTextbox.class);
+    }
+
+    protected SnCheckbox $checkbox(SnSelector selector) {
+        return $component(selector, SnCheckbox.class);
+    }
+
+    protected SnDropdown $dropdown(SnSelector selector) {
+        return $component(selector, SnDropdown.class);
+    }
+
+    protected SnMultiSelect $multiSelect(SnSelector selector) {
+        return $component(selector, SnMultiSelect.class);
+    }
+
+    protected SnLink $link(SnSelector selector) {
+        return $component(selector, SnLink.class);
+    }
+
+    protected SnImage $image(SnSelector selector) {
+        return $component(selector, SnImage.class);
+    }
+
     protected SnRadioButtonGroup $radioButtons(SnSelector selector) {
         return $$components(selector, SnRadioButton.class, SnRadioButtonGroup.class);
     }
+
+    protected void waitForDisplayed() {}
 
     /**
      * Returns a component of specified type with the selector when the component is defined as
@@ -183,7 +209,7 @@ public abstract class SnAbstractComponent {
      * @param predicate
      * @param <T>
      */
-    protected <T extends SnFrameContent> void $frame(SnSelector frameSelector, Class<T> frameContentType, Object containingObject, SnFrameAction<T> predicate) {
+    protected <T extends SnFrameContent> void $frame(SnSelector frameSelector, Class<T> frameContentType, SnAbstractComponent containingObject, SnFrameAction<T> predicate) {
         final WebDriver webDriver = Selion.driver();
         final SnFrame $frame = this.$component(frameSelector, SnFrame.class);
         T $frameContent;

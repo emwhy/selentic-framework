@@ -12,8 +12,6 @@ public abstract class SnAbstractPage extends SnAbstractComponent {
     protected static final SnPageXPathBuilder _xpath = new SnPageXPathBuilder();
     protected static final SnPageCssSelectorBuilder _cssSelector = new SnPageCssSelectorBuilder();
 
-    protected abstract void additionalWait();
-
     protected void waitForComponent(SnComponent c) {
         c.waitForDisplayed();
     }
@@ -25,7 +23,7 @@ public abstract class SnAbstractPage extends SnAbstractComponent {
 
                 return readyState != null && readyState.equals("complete");
             });
-            this.additionalWait();
+            this.waitForDisplayed();
             LOGGER.debug("Page URL: {}", Selion.driver().getCurrentUrl());
         } catch (Throwable th) {
             throw new SnUnexpectedPageException(this.getClass().getCanonicalName(), th);

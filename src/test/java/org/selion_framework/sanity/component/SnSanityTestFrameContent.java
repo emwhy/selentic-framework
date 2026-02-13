@@ -10,7 +10,7 @@ public class SnSanityTestFrameContent extends SnFrameContent {
     private static final SnXPath SANITYTEST_EXTERNAL_ROWS = _xpath.descendant("table", _id().is("sanitytest-external-table")).descendant("tr", _cssClasses("data"));
 
     @Override
-    protected void additionalWait() {
+    protected void waitForDisplayed() {
         waitForComponent(sanitytestExternalTextbox);
     }
 

@@ -13,6 +13,11 @@ public class SnLink extends SnClickableComponent {
         rule.tag().is("a");
     }
 
+    @Override
+    public boolean isEnabled() {
+        return true;
+    }
+
     public String href() {
         return this.attr("href").orElse("");
     }

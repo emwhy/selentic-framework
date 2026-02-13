@@ -3,9 +3,9 @@ package org.selion_framework.sanity.component;
 import org.selion_framework.lib.*;
 
 public class SnSanityTestLongListEntryComponent extends SnComponent {
-    private static final SnXPath TITLE_TEXT = _xpath.descendant("span", _cssClasses("title"));
-    private static final SnXPath CHECKBOX = _xpath.descendant("input", _type().is("checkbox"));
-    private static final SnXPath TEXTBOX = _xpath.descendant("input", _type().is("text"));
+    private static final SnCssSelector TITLE_TEXT = _cssSelector.descendant(_cssClasses("title"));
+    private static final SnCssSelector CHECKBOX = _cssSelector.descendant(_type().is("checkbox"));
+    private static final SnCssSelector TEXTBOX = _cssSelector.descendant(_type().is("text"));
 
     @Override
     protected void rules(SnComponentRule rule) {

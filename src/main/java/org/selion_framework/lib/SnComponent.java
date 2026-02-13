@@ -97,7 +97,7 @@ public abstract class SnComponent extends SnAbstractComponent {
 
     protected final WebElement displayed() {
         try {
-            SnWait.waitUntil(this::isDisplayed);
+            this.waitForDisplayed();
             return webElement();
         } catch (SnWaitTimeoutException ex) {
             throw new SnElementNotFoundException("Element is not displayed.", ex);

@@ -1,10 +1,10 @@
 # Selion Framework
 
-Selion Framework utilizes Component-Object Model design (COM) and aims to help producing test automation codes that are easy to maintain, easy to read while allowing ramping up the development speed. 
+Selion Framework is a test automation framework based on Component-Object Model design (COM). It aims to help producing test automation codes that are easy to maintain and read while ramping up the test automation development speed. 
 
-The ease to read and maintain the test automation code is crucial to success of any projects. Projects incorporates test automation to cut down on the technical debt. Adding more technical debt by having to maintain complex, illegible code is exactly what we want to avoid.
+The ease to read and maintain the test automation code is crucial to success of any test automation projects. Software development projects incorporate test automation to cut down on the technical debt. Adding more technical debt by having to maintain complex, illegible code is exactly what we want to avoid.
 
-Selion Framework is a wrapper framework for Selenium and is written in Java. 
+Selion Framework utilizes ***Selenium*** and is written in ***Java*** (Developed on Java 21). 
 
 ## Feature Highlights
 
@@ -14,7 +14,7 @@ Selion Framework is a wrapper framework for Selenium and is written in Java.
 - It forces indentations for actions on page, frame, external windows, dialog, etc. making it easy to spot where actions are happening.
 - It includes selector builder. This allows both CSS selector and XPath to be implemented in consistent manner while utilizing code highlighting of IDE. 
 
-## Component-Object Model
+## Component Object Model
 
 The Component Object Model (COM) in test automation is a design pattern that structures tests around specific, reusable UI components rather than entire pages. It is an evolution of the traditional Page Object Model (POM), allowing for more modular, maintainable, and scalable test frameworks, especially for modern applications with dynamic user interfaces.
 
@@ -39,3 +39,4 @@ The Component Object Model (COM) in test automation is a design pattern that str
 ### Implementation
 
 The Component Object Model design pattern is often implemented using a Page Object Model, where a page object acts as a holder for various component objects. This allows test automation engineers to access component-specific action methods via the page object, creating a clear separation of concerns between test logic, page structure, and individual component behavior.  
+
