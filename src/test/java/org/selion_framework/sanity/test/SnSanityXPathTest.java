@@ -8,7 +8,7 @@ import org.selion_framework.lib.util.SnDownloadCsvFileParser;
 import org.selion_framework.sanity.component.SnSanityTestLongListEntryComponent;
 import org.selion_framework.sanity.component.SnSanityTestTableRow;
 import org.selion_framework.sanity.page.SnSanityTestExternalPage;
-import org.selion_framework.sanity.page.SnSanityTestPage;
+import org.selion_framework.sanity.page.SnSanityTestXPathPage;
 import org.testng.Assert;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.AfterMethod;
@@ -23,8 +23,8 @@ import java.util.regex.Pattern;
 import static org.testng.AssertJUnit.assertTrue;
 import static org.testng.AssertJUnit.fail;
 
-public class SnSanityTest {
-    private final SnWithPage<SnSanityTestPage> sanitytestPage = SnPage.with(SnSanityTestPage.class);
+public class SnSanityXPathTest {
+    private final SnWithPage<SnSanityTestXPathPage> sanitytestPage = SnPage.with(SnSanityTestXPathPage.class);
     private final SnWithPage<SnSanityTestExternalPage> sanitytestExternalPage = SnPage.with(SnSanityTestExternalPage.class);
 
     @BeforeClass 

@@ -7,30 +7,30 @@ import org.selion_framework.sanity.component.SnSanityTestTableRow;
 import org.selion_framework.sanity.component.dialog.SnSanityTestDialog;
 import org.selion_framework.sanity.component.dialog.SnSanityTestModalDialog;
 
-public class SnSanityTestPage extends SnPage {
-    private static final SnXPath SANITYTEST_TEXTBOX = _xpath.descendant("input", _id().is("sanitytest-textbox"));
-    private static final SnXPath SANITYTEST_TEXTAREA_TEXTBOX = _xpath.descendant("textarea", _id().is("sanitytest-textarea"));
-    private static final SnXPath SANITYTEST_DATE_TEXTBOX = _xpath.descendant("input", _id().is("sanitytest-date-textbox"));
-    private static final SnXPath SANITYTEST_DROPDOWN = _xpath.descendant("select", _id().is("sanitytest-dropdown"));
-    private static final SnXPath SANITYTEST_MULTI_SELECT = _xpath.descendant("select", _id().is("sanitytest-multi-select"));
-    private static final SnXPath SANITYTEST_CHECKBOX = _xpath.descendant("input", _id().is("sanitytest-checkbox"));
-    private static final SnXPath SANITYTEST_RADIO_BUTTONS = _xpath.descendant("input", _name().is("sanitytest-radio-buttons"));
-    private static final SnXPath SANITYTEST_INPUT_BUTTON = _xpath.descendant("input", _id().is("sanitytest-input-button"));
-    private static final SnXPath SANITYTEST_INPUT_BUTTON_INDICATOR_TEXT = _xpath.descendant("span", _id().is("sanitytest-input-button-indicator"));
-    private static final SnXPath SANITYTEST_BUTTON = _xpath.descendant("button", _id().is("sanitytest-button"));
-    private static final SnXPath SANITYTEST_BUTTON_INDICATOR_TEXT = _xpath.descendant("span", _id().is("sanitytest-button-indicator"));
-    private static final SnXPath SANITYTEST_IFRAME = _xpath.descendant("iframe", _id().is("sanitytest-iframe"));
-    private static final SnXPath SANITYTEST_TABLE_ROWS = _xpath.descendant("table", _id().is("sanitytest-table")).descendant("tr", _cssClasses("data"));
-    private static final SnXPath OPEN_EXTERNAL_WINDOW_LINK = _xpath.descendant("a", _id().is("sanitytest-external-window-link"));
-    private static final SnXPath SANITYTEST_LONG_COMPONENT_LIST = _xpath.descendant("div", _id().is("long-component-list")).child("div", _cssClasses("long-component-list-entry"));
-    private static final SnXPath SANITYTEST_CSV_DOWNLOAD_LINK = _xpath.descendant("a", _id().is("sanitytest-csv-download-link"));
-    private static final SnXPath SANITYTEST_OWN_TEXT = _xpath.descendant("div", _id().is("sanitytest-own-text"));
+public class SnSanityTestCssSelectorPage extends SnPage {
+    private static final SnCssSelector SANITYTEST_TEXTBOX = _cssSelector.descendant(_id("sanitytest-textbox"));
+    private static final SnCssSelector SANITYTEST_TEXTAREA_TEXTBOX = _cssSelector.descendant(_id("sanitytest-textarea"));
+    private static final SnCssSelector SANITYTEST_DATE_TEXTBOX = _cssSelector.descendant(_id("sanitytest-date-textbox"));
+    private static final SnCssSelector SANITYTEST_DROPDOWN = _cssSelector.descendant(_id("sanitytest-dropdown"));
+    private static final SnCssSelector SANITYTEST_MULTI_SELECT = _cssSelector.descendant(_id("sanitytest-multi-select"));
+    private static final SnCssSelector SANITYTEST_CHECKBOX = _cssSelector.descendant(_id("sanitytest-checkbox"));
+    private static final SnCssSelector SANITYTEST_RADIO_BUTTONS = _cssSelector.descendant(_name().is("sanitytest-radio-buttons"));
+    private static final SnCssSelector SANITYTEST_INPUT_BUTTON = _cssSelector.descendant(_id("sanitytest-input-button"));
+    private static final SnCssSelector SANITYTEST_INPUT_BUTTON_INDICATOR_TEXT = _cssSelector.descendant(_id("sanitytest-input-button-indicator"));
+    private static final SnCssSelector SANITYTEST_BUTTON = _cssSelector.descendant(_id("sanitytest-button"));
+    private static final SnCssSelector SANITYTEST_BUTTON_INDICATOR_TEXT = _cssSelector.descendant(_id("sanitytest-button-indicator"));
+    private static final SnCssSelector SANITYTEST_IFRAME = _cssSelector.descendant(_id("sanitytest-iframe"));
+    private static final SnCssSelector SANITYTEST_TABLE_ROWS = _cssSelector.descendant(_id("sanitytest-table")).descendant(_tag("tr"), _cssClasses("data"));
+    private static final SnCssSelector OPEN_EXTERNAL_WINDOW_LINK = _cssSelector.descendant(_id("sanitytest-external-window-link"));
+    private static final SnCssSelector SANITYTEST_LONG_COMPONENT_LIST = _cssSelector.descendant(_id("long-component-list")).child(_tag("div"), _cssClasses("long-component-list-entry"));
+    private static final SnCssSelector SANITYTEST_CSV_DOWNLOAD_LINK = _cssSelector.descendant(_id("sanitytest-csv-download-link"));
+    private static final SnCssSelector SANITYTEST_OWN_TEXT = _cssSelector.descendant(_id("sanitytest-own-text"));
 
-    private static final SnXPath OPEN_SANITYTEST_DIALOG_BUTTON = _xpath.descendant("button", _id().is("open-sanitytest-dialog-button"));
-    private static final SnXPath OPEN_SANITYTEST_MODAL_DIALOG_BUTTON = _xpath.descendant("button", _id().is("open-sanitytest-modal-dialog-button"));
+    private static final SnCssSelector OPEN_SANITYTEST_DIALOG_BUTTON = _cssSelector.descendant(_id("open-sanitytest-dialog-button"));
+    private static final SnCssSelector OPEN_SANITYTEST_MODAL_DIALOG_BUTTON = _cssSelector.descendant(_id("open-sanitytest-modal-dialog-button"));
 
-    private static final SnXPath SANITYTEST_DIALOG = _xpath.descendant("div", _id().is("sanitytest-dialog"));
-    private static final SnXPath SANITYTEST_MODAL_DIALOG = _xpath.descendant("dialog", _id().is("sanitytest-modal-dialog"));
+    private static final SnCssSelector SANITYTEST_DIALOG = _cssSelector.descendant(_id("sanitytest-dialog"));
+    private static final SnCssSelector SANITYTEST_MODAL_DIALOG = _cssSelector.descendant(_id("sanitytest-modal-dialog"));
 
     @Override
     protected void additionalWait() {
