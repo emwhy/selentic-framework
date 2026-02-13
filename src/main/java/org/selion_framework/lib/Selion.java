@@ -21,7 +21,7 @@ import java.util.Optional;
  * Why it works: It evokes a clear, defined path or "strip." In a modular web component architecture,
  * you are testing individual "strips" (components) that make up the whole field (the page).
  */
-public class Selion {
+public final class Selion {
     private static final HashMap<Long, WebDriver> DRIVERS = new HashMap<>();
     private static final SnWebDriverOptions WEBDRIVER_OPTIONS = new SnWebDriverOptions();
     private static Optional<WebDriverListener> webDriverListener = Optional.empty();

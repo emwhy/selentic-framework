@@ -12,7 +12,7 @@ Selion Framework utilizes ***Selenium*** and is written in ***Java*** (Developed
 - It was designed to provides library to code in strongly pattern based design that are consistent throughout. It making the codes more predictable, legible, and easy to maintain while making it easier to spot any abnormality that could cause unexpected behaviors.
 - It implements automatic wait allows the code to focus on actions and assertions rather than timing, while allowing custom waits for those more difficult cases.
 - It forces indentations for actions on page, frame, external windows, dialog, etc. making it easy to spot where actions are happening.
-- It includes selector builder. This allows both CSS selector and XPath to be implemented in consistent manner while utilizing code highlighting of IDE. 
+- It includes selector builder. This allows both CSS selector and XPath to be implemented in consistent manner while utilizing code highlighting and code suggestions of IDE. 
 
 ## Component Object Model
 

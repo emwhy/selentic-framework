@@ -13,8 +13,8 @@ public abstract class SnSelectableComponent extends SnFormComponent {
 
         if ($parentComponent.tag().equals("label")) {
             return $parentComponent.key();
-        } else {
-            final SnGenericComponent $label = $component(_xpath.page("label", _attr("for").is(this.id())), SnGenericComponent.class);
+        } else if (this.id().isPresent()){
+            final SnGenericComponent $label = $component(_xpath.page("label", _attr("for").is(this.id().get())), SnGenericComponent.class);
 
             if ($label.exists()) {
                 return $label.key();
