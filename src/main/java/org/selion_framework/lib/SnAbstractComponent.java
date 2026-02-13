@@ -10,8 +10,8 @@ import java.util.Optional;
 public abstract class SnAbstractComponent {
     private static final Logger LOG = SnLogHandler.logger(SnAbstractComponent.class);
 
-    protected SnSelectorProperty _not(SnSelectorProperty locatorProperty) {
-        return new SnSelectorNotProperty(locatorProperty);
+    protected SnSelectorProperty _not(SnSelectorProperty selectorProperty) {
+        return new SnSelectorNotProperty(selectorProperty);
     }
 
     protected static SnSelectorPropertyCondition _attr(String attribute) {
@@ -58,41 +58,41 @@ public abstract class SnAbstractComponent {
         return new SnSelectorIndexProperty(SnSelectorIndexProperty.Conditions.Last);
     }
 
-    protected SnGenericComponent $genericComponent(SnXPathSelector locator) {
-        return $component(locator, SnGenericComponent.class);
+    protected SnGenericComponent $genericComponent(SnXPathSelector selector) {
+        return $component(selector, SnGenericComponent.class);
     }
 
-    protected SnRadioButtonGroup $radioButtons(SnXPathSelector locator) {
-        return $$components(locator, SnRadioButton.class, SnRadioButtonGroup.class);
+    protected SnRadioButtonGroup $radioButtons(SnXPathSelector selector) {
+        return $$components(selector, SnRadioButton.class, SnRadioButtonGroup.class);
     }
 
     /**
-     * Returns a component of specified type with the locator when the component is defined as
+     * Returns a component of specified type with the selector when the component is defined as
      * inner class to containing object.
-     * @param locator
+     * @param selector
      * @param componentType
      * @return
      * @param <T>
      */
-    protected <T extends SnComponent> T $component(SnXPathSelector locator, Class<T> componentType) {
-        return $component(locator, componentType, null);
+    protected <T extends SnComponent> T $component(SnXPathSelector selector, Class<T> componentType) {
+        return $component(selector, componentType, null);
     }
 
     /**
-     * Returns a component of specified type with the locator when the component is defined as
+     * Returns a component of specified type with the selector when the component is defined as
      * inner class to containing object.
-     * @param locator
+     * @param selector
      * @param componentType
      * @param containingObject
      * @return
      * @param <T>
      */
-    protected <T extends SnComponent> T $component(SnXPathSelector locator, Class<T> componentType, SnAbstractComponent containingObject) {
+    protected <T extends SnComponent> T $component(SnXPathSelector selector, Class<T> componentType, SnAbstractComponent containingObject) {
         try {
             T $component;
 
             $component = containingObject == null ? componentType.getDeclaredConstructor().newInstance() : componentType.getDeclaredConstructor(containingObject.getClass()).newInstance(containingObject);
-            $component.setLocator(locator);
+            $component.setSelector(selector);
             if (this instanceof SnComponent $this) {
                 $component.setCallerComponent(Optional.of($this));
                 $component.setOwnerPage($this.ownerPage());
@@ -106,10 +106,10 @@ public abstract class SnAbstractComponent {
     }
 
 
-    protected <T extends SnComponent> SnComponentCollection<T> $$components(SnXPathSelector locator, Class<T> componentType) {
+    protected <T extends SnComponent> SnComponentCollection<T> $$components(SnXPathSelector selector, Class<T> componentType) {
         SnComponentCollection<T> $$components = new SnComponentCollection<>();
 
-        $$components.setLocator(locator);
+        $$components.setSelector(selector);
         $$components.setComponentType(componentType);
         $$components.setContainingObject(Optional.empty());
         $$components.setOwnerPage(this);
@@ -118,18 +118,18 @@ public abstract class SnAbstractComponent {
     }
 
     /**
-     * Returns a collection of components of specified type with the locator when the component is defined as
+     * Returns a collection of components of specified type with the selector when the component is defined as
      * inner class to containing object.
-     * @param locator
+     * @param selector
      * @param componentType
      * @param containingObject
      * @return
      * @param <T>
      */
-    protected <T extends SnComponent> SnComponentCollection<T> $$components(SnXPathSelector locator, Class<T> componentType, SnAbstractComponent containingObject) {
+    protected <T extends SnComponent> SnComponentCollection<T> $$components(SnXPathSelector selector, Class<T> componentType, SnAbstractComponent containingObject) {
         SnComponentCollection<T> $$components = new SnComponentCollection<>();
 
-        $$components.setLocator(locator);
+        $$components.setSelector(selector);
         $$components.setComponentType(componentType);
         $$components.setContainingObject(Optional.of(containingObject));
         $$components.setOwnerPage(this);
@@ -137,12 +137,12 @@ public abstract class SnAbstractComponent {
         return $$components;
     }
 
-    protected <T extends SnComponent, R extends SnComponentCollection<T>> R $$components(SnXPathSelector locator, Class<T> componentType, Class<R> componentCollectionType) {
+    protected <T extends SnComponent, R extends SnComponentCollection<T>> R $$components(SnXPathSelector selector, Class<T> componentType, Class<R> componentCollectionType) {
         try {
             R $$components;
 
             $$components = componentCollectionType.getDeclaredConstructor().newInstance();
-            $$components.setLocator(locator);
+            $$components.setSelector(selector);
             $$components.setComponentType(componentType);
             $$components.setOwnerPage(this);
             return $$components;
@@ -154,26 +154,26 @@ public abstract class SnAbstractComponent {
 
     /**
      * Handles frame content.
-     * @param frameLocator
+     * @param frameSelector
      * @param frameContentType
      * @param predicate
      * @param <T>
      */
-    protected <T extends SnFrameContent> void $frame(SnXPathSelector frameLocator, Class<T> frameContentType, SnFrameAction<T> predicate) {
-        $frame(frameLocator, frameContentType, null, predicate);
+    protected <T extends SnFrameContent> void $frame(SnXPathSelector frameSelector, Class<T> frameContentType, SnFrameAction<T> predicate) {
+        $frame(frameSelector, frameContentType, null, predicate);
     }
 
     /**
      * Handles frame content.
-     * @param frameLocator
+     * @param frameSelector
      * @param frameContentType
      * @param containingObject
      * @param predicate
      * @param <T>
      */
-    protected <T extends SnFrameContent> void $frame(SnXPathSelector frameLocator, Class<T> frameContentType, Object containingObject, SnFrameAction<T> predicate) {
+    protected <T extends SnFrameContent> void $frame(SnXPathSelector frameSelector, Class<T> frameContentType, Object containingObject, SnFrameAction<T> predicate) {
         final WebDriver webDriver = Selion.driver();
-        final SnFrame $frame = this.$component(frameLocator, SnFrame.class);
+        final SnFrame $frame = this.$component(frameSelector, SnFrame.class);
         T $frameContent;
 
         try {
@@ -200,25 +200,25 @@ public abstract class SnAbstractComponent {
 
     /**
      * Handles any dialog component in legible coding pattern.
-     * @param locator
+     * @param selector
      * @param componentType
      * @param predicate
      * @param <T>
      */
-    protected <T extends SnDialog> void $dialog(SnXPathSelector locator, Class<T> componentType, SnDialogAction<T> predicate) {
-        $dialog(locator, componentType, null, predicate);
+    protected <T extends SnDialog> void $dialog(SnXPathSelector selector, Class<T> componentType, SnDialogAction<T> predicate) {
+        $dialog(selector, componentType, null, predicate);
     }
 
     /**
      * Handles any dialog component in legible coding pattern.
-     * @param locator
+     * @param selector
      * @param componentType
      * @param containingObject
      * @param predicate
      * @param <T>
      */
-    protected <T extends SnDialog> void $dialog(SnXPathSelector locator, Class<T> componentType, SnAbstractComponent containingObject, SnDialogAction<T> predicate) {
-        final T $dialog = containingObject == null ? this.$component(locator, componentType) : this.$component(locator, componentType, containingObject);
+    protected <T extends SnDialog> void $dialog(SnXPathSelector selector, Class<T> componentType, SnAbstractComponent containingObject, SnDialogAction<T> predicate) {
+        final T $dialog = containingObject == null ? this.$component(selector, componentType) : this.$component(selector, componentType, containingObject);
 
         $dialog.waitForDisplayed();
         LOG.debug("Open dialog: {}", $dialog.getClass().getSimpleName());

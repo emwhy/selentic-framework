@@ -1,8 +1,8 @@
 package org.selion_framework.lib;
 
 public class SnSelectorPropertyBuilder {
-    public SnSelectorProperty not(SnSelectorProperty locatorProperty) {
-        return new SnSelectorNotProperty(locatorProperty);
+    public SnSelectorProperty not(SnSelectorProperty selectorProperty) {
+        return new SnSelectorNotProperty(selectorProperty);
     }
 
     public SnSelectorPropertyCondition attr(String attribute) {
@@ -29,19 +29,19 @@ public class SnSelectorPropertyBuilder {
         return new SnSelectorPropertyCondition("text()");
     }
 //
-//    public LocatorIndexProperty indexFrom(int startIndex) {
-//        return new LocatorIndexProperty();
+//    public SelectorIndexProperty indexFrom(int startIndex) {
+//        return new SelectorIndexProperty();
 //    }
 //
-//    public LocatorIndexProperty indexTo(int endIndex) {
-//        return new LocatorIndexProperty();
+//    public SelectorIndexProperty indexTo(int endIndex) {
+//        return new SelectorIndexProperty();
 //    }
 //
-//    public LocatorIndexProperty indexAt(int index) {
-//        return new LocatorIndexProperty();
+//    public SelectorIndexProperty indexAt(int index) {
+//        return new SelectorIndexProperty();
 //    }
 //
-//    public LocatorAttributeProperty endsBefore(LocatorNode endsBeforeLocator) {
-//        return new LocatorAttributeProperty();
+//    public SelectorAttributeProperty endsBefore(SelectorNode endsBeforeSelector) {
+//        return new SelectorAttributeProperty();
 //    }
 }

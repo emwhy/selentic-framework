@@ -38,26 +38,26 @@ public sealed abstract class SnCssSelector extends SnSelector permits SnCssSelec
     By build(String prefix) {
         final String s = prefix + toString();
 
-        LOG.debug("Locator XPath: {}", s);
+        LOG.debug("Selector XPath: {}", s);
         return By.xpath(s);
     }
 
-    public SnCssSelector descendant(SnSelectorProperty... locatorProperties) {
-        return new SnCssSelectorDescendant(this, locatorProperties);
+    public SnCssSelector descendant(SnSelectorProperty... selectorProperties) {
+        return new SnCssSelectorDescendant(this, selectorProperties);
     }
 
-    public SnCssSelector child(SnSelectorProperty... locatorProperties) {
-        return new SnCssSelectorChild(this, locatorProperties);
+    public SnCssSelector child(SnSelectorProperty... selectorProperties) {
+        return new SnCssSelectorChild(this, selectorProperties);
     }
 
-    public SnCssSelector sibling(SnSelectorProperty... locatorProperties) {
-        return new SnCssSelectorSibling(this, locatorProperties);
+    public SnCssSelector sibling(SnSelectorProperty... selectorProperties) {
+        return new SnCssSelectorSibling(this, selectorProperties);
     }
 
-    public SnCssSelector nextSibling(SnSelectorProperty... locatorProperties) {
-        return new SnCssSelectorNextSibling(this, locatorProperties);
+    public SnCssSelector nextSibling(SnSelectorProperty... selectorProperties) {
+        return new SnCssSelectorNextSibling(this, selectorProperties);
     }
 
-    public SnCssSelector page(SnSelectorProperty... locatorProperties) {
-        return new SnCssSelectorPage(locatorProperties);
+    public SnCssSelector page(SnSelectorProperty... selectorProperties) {
+        return new SnCssSelectorPage(selectorProperties);
     }}

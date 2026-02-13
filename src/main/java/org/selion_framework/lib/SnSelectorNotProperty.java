@@ -1,15 +1,15 @@
 package org.selion_framework.lib;
 
 public final class SnSelectorNotProperty extends SnSelectorProperty {
-    private final SnSelectorProperty locatorProperty;
+    private final SnSelectorProperty selectorProperty;
 
-    SnSelectorNotProperty(SnSelectorProperty locatorProperty) {
-        this.locatorProperty = locatorProperty;
+    SnSelectorNotProperty(SnSelectorProperty selectorProperty) {
+        this.selectorProperty = selectorProperty;
     }
 
     @Override
     protected String build() {
-        locatorProperty.setNegate();
-        return locatorProperty.build();
+        selectorProperty.setNegate();
+        return selectorProperty.build();
     }
 }

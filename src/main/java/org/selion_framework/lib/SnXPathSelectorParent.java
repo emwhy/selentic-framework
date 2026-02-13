@@ -5,8 +5,8 @@ public final class SnXPathSelectorParent extends SnXPathSelector {
         super("*");
     }
 
-    SnXPathSelectorParent(SnXPathSelector priorLocatorNode) {
-        super(priorLocatorNode, "*");
+    SnXPathSelectorParent(SnXPathSelector priorSelectorNode) {
+        super(priorSelectorNode, "*");
     }
 
     @Override

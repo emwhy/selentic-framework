@@ -16,18 +16,18 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public abstract class SnComponent extends SnAbstractComponent {
-    private Optional<SnXPathSelector> locator = Optional.empty();
+    private Optional<SnXPathSelector> selector = Optional.empty();
     private Optional<SnComponent> $callerComponent = Optional.empty();
     private SnAbstractPage $ownerPage;
     private WebElement webElement;
-    final static protected SnComponentLocatorBuilder _xpath = new SnComponentLocatorBuilder();
+    final static protected SnComponentSelectorBuilder _xpath = new SnComponentSelectorBuilder();
     private boolean ruleVerified = false;
 
     protected SnComponent() {
     }
 
-    final void setLocator(SnXPathSelector locator) {
-        this.locator = Optional.of(locator);
+    final void setSelector(SnXPathSelector selector) {
+        this.selector = Optional.of(selector);
     }
 
     final void setOwnerPage(SnAbstractPage $page) {
@@ -57,12 +57,12 @@ public abstract class SnComponent extends SnAbstractComponent {
             }
         }
         if (this.webElement == null) {
-            if (this.locator.isPresent() && (this.$callerComponent.isEmpty() || this.locator.get() instanceof SnXPathSelectorPage)) {
-                this.webElement = Selion.driver().findElement(locator.get().build());
-            } else if (this.locator.isPresent()) {
-                this.webElement = this.$callerComponent.get().existing().findElement(locator.get().build("."));
+            if (this.selector.isPresent() && (this.$callerComponent.isEmpty() || this.selector.get() instanceof SnXPathSelectorPage)) {
+                this.webElement = Selion.driver().findElement(selector.get().build());
+            } else if (this.selector.isPresent()) {
+                this.webElement = this.$callerComponent.get().existing().findElement(selector.get().build("."));
             } else {
-                throw new SnElementNotFoundException("Locator is not present.");
+                throw new SnElementNotFoundException("Selector is not present.");
             }
         }
 

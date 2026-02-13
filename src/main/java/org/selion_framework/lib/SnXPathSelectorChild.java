@@ -1,12 +1,12 @@
 package org.selion_framework.lib;
 
 public final class SnXPathSelectorChild extends SnXPathSelector {
-    SnXPathSelectorChild(String tag, SnSelectorProperty... locatorProperties) {
-        super(tag, locatorProperties);
+    SnXPathSelectorChild(String tag, SnSelectorProperty... selectorProperties) {
+        super(tag, selectorProperties);
     }
 
-    SnXPathSelectorChild(SnXPathSelector priorLocatorNode, String tag, SnSelectorProperty... locatorProperties) {
-        super(priorLocatorNode, tag, locatorProperties);
+    SnXPathSelectorChild(SnXPathSelector priorSelectorNode, String tag, SnSelectorProperty... selectorProperties) {
+        super(priorSelectorNode, tag, selectorProperties);
     }
 
     @Override

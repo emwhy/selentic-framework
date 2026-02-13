@@ -10,7 +10,7 @@ import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
 public class SnComponentCollection<T extends SnComponent> implements Iterable<T> {
-    private SnXPathSelector locator;
+    private SnXPathSelector selector;
     private Class<T> componentType;
     private Optional<SnComponent> $callerComponent = Optional.empty();
     private Optional<SnAbstractComponent> containingObject = Optional.empty();
@@ -19,8 +19,8 @@ public class SnComponentCollection<T extends SnComponent> implements Iterable<T>
     protected SnComponentCollection() {}
 
 
-    final void setLocator(SnXPathSelector locator) {
-        this.locator = locator;
+    final void setSelector(SnXPathSelector selector) {
+        this.selector = selector;
     }
 
     final void setComponentType(Class<T> componentType) {
@@ -44,10 +44,10 @@ public class SnComponentCollection<T extends SnComponent> implements Iterable<T>
     }
 
     private List<WebElement> webElements() {
-        if (this.$callerComponent.isEmpty() || this.locator instanceof SnXPathSelectorPage) {
-            return Selion.driver().findElements(this.locator.build());
+        if (this.$callerComponent.isEmpty() || this.selector instanceof SnXPathSelectorPage) {
+            return Selion.driver().findElements(this.selector.build());
         } else {
-            return this.$callerComponent.get().existing().findElements(this.locator.build("."));
+            return this.$callerComponent.get().existing().findElements(this.selector.build("."));
         }
     }
 
@@ -62,7 +62,7 @@ public class SnComponentCollection<T extends SnComponent> implements Iterable<T>
             }
             component.setWebElement(webElement);
             component.setCallerComponent(this.$callerComponent);
-            component.setLocator(this.locator);
+            component.setSelector(this.selector);
             component.setOwnerPage(this.$ownerPage);
             return component;
         } catch (Exception ex) {
