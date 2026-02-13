@@ -5,8 +5,9 @@ public abstract sealed class SnSelectorProperty permits SnSelectorAttributePrope
 
     abstract protected String build();
 
-    protected void setNegate() {
+    protected SnSelectorProperty setNegate() {
         this.negate = true;
+        return this;
     }
 
     protected boolean negated() {
