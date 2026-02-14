@@ -240,9 +240,9 @@ public abstract class SnComponent extends SnAbstractComponent {
         if (!this.ruleVerified) {
             final SnComponentRule componentRule = new SnComponentRule(element);
 
+            this.ruleVerified = true;
             this.rules(componentRule);
             componentRule.verifyRules(this.getClass());
-            this.ruleVerified = true;
         }
     }
 
@@ -355,7 +355,7 @@ public abstract class SnComponent extends SnAbstractComponent {
      * @return true if the element is displayed; false otherwise
      */
     public boolean isDisplayed() {
-        return webElement().isDisplayed();
+        return this.exists() && webElement().isDisplayed();
     }
 
     /**
@@ -496,7 +496,7 @@ public abstract class SnComponent extends SnAbstractComponent {
      * @return a unique key identifying this component instance
      */
     public String key() {
-        return this.webElement().getText().trim();
+        return this.existing().getText().trim();
     }
 
     /**
@@ -507,7 +507,7 @@ public abstract class SnComponent extends SnAbstractComponent {
     public final Optional<String> id() {
         String id;
 
-        return (id = this.webElement().getAttribute("id")) == null ? Optional.empty() : Optional.of(id);
+        return (id = this.existing().getAttribute("id")) == null ? Optional.empty() : Optional.of(id);
     }
 
     /**
@@ -520,7 +520,7 @@ public abstract class SnComponent extends SnAbstractComponent {
      * @return the inner HTML content of this component
      */
     public final String innerHtml() {
-        return this.webElement().getAttribute("innerHTML");
+        return this.existing().getAttribute("innerHTML");
     }
 
     /**
@@ -548,7 +548,7 @@ public abstract class SnComponent extends SnAbstractComponent {
      * @return the inner text content of this component
      */
     public final String innerText() {
-        return this.webElement().getAttribute("innerText");
+        return this.existing().getAttribute("innerText");
     }
 
     /**
@@ -557,7 +557,7 @@ public abstract class SnComponent extends SnAbstractComponent {
      * @return the tag name (e.g., "div", "button", "input") in lowercase
      */
     public String tag() {
-        return this.webElement().getTagName();
+        return this.existing().getTagName();
     }
 
     /**
@@ -569,7 +569,7 @@ public abstract class SnComponent extends SnAbstractComponent {
     public Optional<String> attr(String name) {
         String a;
 
-        return (a = this.webElement().getDomAttribute(name)) == null ? Optional.empty() : Optional.of(a);
+        return (a = this.existing().getDomAttribute(name)) == null ? Optional.empty() : Optional.of(a);
     }
 
     /**

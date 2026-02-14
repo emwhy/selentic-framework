@@ -678,6 +678,7 @@ public class SnComponentRule {
             this.actualValue = Optional.empty();
             this.ruleType = ruleType;
             this.expectedValues = new String[] {};
+            this.setResult(ruleType == SnRuleType.Any);
         }
 
         /**
@@ -736,7 +737,9 @@ public class SnComponentRule {
         String errorText() {
             String errorText = "Expected that " + this.valueType;
 
-            if (actualValue.isEmpty()) {
+            if (this.ruleType == SnRuleType.Any) {
+              return "";
+            } else if (actualValue.isEmpty()) {
                 switch (this.ruleType) {
                     case IsPresent -> errorText += " is present, but it is absent.";
                     case IsAbsent -> errorText = "";

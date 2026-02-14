@@ -15,31 +15,41 @@ public class SnWait {
         wait.doWaitTrue(() -> true);
     }
 
-    public static void waitUntil(WaitTrueCondition waitTrueCondition) {
+    public static void waitUntil(SnWaitTrueCondition waitTrueCondition) {
         waitUntil(SelionConfig.config().waitTimeoutMilliseconds, waitTrueCondition);
     }
 
-    public static void waitUntil(long maxWaitMilliseconds, WaitTrueCondition waitTrueCondition) {
+    public static void waitUntil(SnWaitTrueCondition waitTrueCondition, SnOnTimeout onTimeout) {
+        waitUntil(SelionConfig.config().waitTimeoutMilliseconds, waitTrueCondition, onTimeout);
+    }
+
+    public static void waitUntil(long maxWaitMilliseconds, SnWaitTrueCondition waitTrueCondition) {
         final SnWait wait = new SnWait(maxWaitMilliseconds, true);
 
         wait.doWaitTrue(waitTrueCondition);
     }
 
-    public static void waitUpTo(WaitTrueCondition waitTrueCondition) {
+    public static void waitUntil(long maxWaitMilliseconds, SnWaitTrueCondition waitTrueCondition, SnOnTimeout onTimeout) {
+        final SnWait wait = new SnWait(maxWaitMilliseconds, true);
+
+        wait.doWaitTrue(waitTrueCondition, onTimeout);
+    }
+
+    public static void waitUpTo(SnWaitTrueCondition waitTrueCondition) {
         waitUpTo(SelionConfig.config().waitTimeoutMilliseconds, waitTrueCondition);
     }
 
-    public static void waitUpTo(long maxWaitMilliseconds, WaitTrueCondition waitTrueCondition) {
+    public static void waitUpTo(long maxWaitMilliseconds, SnWaitTrueCondition waitTrueCondition) {
         final SnWait wait = new SnWait(maxWaitMilliseconds, false);
 
         wait.doWaitTrue(waitTrueCondition);
     }
 
-    public static <T> T waitUntilNonNull(WaitPresenceCondition waitPresenceCondition) {
+    public static <T> T waitUntilNonNull(SnWaitPresenceCondition waitPresenceCondition) {
         return SnWait.waitUntilNonNull(SelionConfig.config().waitTimeoutMilliseconds, waitPresenceCondition);
     }
 
-    public static <T> T waitUntilNonNull(long maxWaitMilliseconds, WaitPresenceCondition waitPresenceCondition) {
+    public static <T> T waitUntilNonNull(long maxWaitMilliseconds, SnWaitPresenceCondition waitPresenceCondition) {
         final SnWait wait = new SnWait(maxWaitMilliseconds, true);
 
         return wait.doWaitPresence(waitPresenceCondition);
@@ -56,11 +66,18 @@ public class SnWait {
         return System.currentTimeMillis() > this.startTimestamp + this.durationMilliseconds;
     }
 
-    private void doWaitTrue(WaitTrueCondition waitTrueCondition) {
+    private void doWaitTrue(SnWaitTrueCondition waitTrueCondition) {
+        this.doWaitTrue(waitTrueCondition, null);
+    }
+
+    private void doWaitTrue(SnWaitTrueCondition waitTrueCondition, SnOnTimeout onTimeout) {
         while (!waitTrueCondition.waitTrue()) {
             if (isTimedOut()) {
-                if (this.throwExceptionAtTimeout) {
+                if (this.throwExceptionAtTimeout && onTimeout == null) {
                     throw new SnWaitTimeoutException(this.durationMilliseconds);
+                } else if (this.throwExceptionAtTimeout) {
+                    onTimeout.doOnTimeout(new SnWaitTimeoutException(this.durationMilliseconds));
+                    return;
                 } else {
                     return;
                 }
@@ -69,7 +86,7 @@ public class SnWait {
         }
     }
 
-    private <T> T doWaitPresence(WaitPresenceCondition waitNonNullCondition) {
+    private <T> T doWaitPresence(SnWaitPresenceCondition waitNonNullCondition) {
         Object value = null;
 
         while ((value = waitNonNullCondition.waitNonNull()) == null) {
@@ -92,11 +109,15 @@ public class SnWait {
     /**
      * Interface sets up the predicate.
      */
-    public interface WaitTrueCondition {
+    public interface SnWaitTrueCondition {
         boolean waitTrue();
     }
 
-    public interface WaitPresenceCondition<T> {
+    public interface SnWaitPresenceCondition<T> {
         T waitNonNull();
+    }
+
+    public interface SnOnTimeout {
+        void doOnTimeout(SnWaitTimeoutException timeoutException);
     }
 }

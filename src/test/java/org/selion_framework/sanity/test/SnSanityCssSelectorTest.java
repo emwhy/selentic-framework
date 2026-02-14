@@ -3,8 +3,11 @@ package org.selion_framework.sanity.test;
 import org.selion_framework.lib.Selion;
 import org.selion_framework.lib.SnPage;
 import org.selion_framework.lib.SnWithPage;
+import org.selion_framework.lib.exception.SnElementNotFoundException;
+import org.selion_framework.lib.exception.SnWaitTimeoutException;
 import org.selion_framework.lib.exception.SnWindowException;
 import org.selion_framework.lib.util.SnDownloadCsvFileParser;
+import org.selion_framework.lib.util.SnWait;
 import org.selion_framework.sanity.component.SnSanityTestLongListEntryComponent;
 import org.selion_framework.sanity.component.SnSanityTestTableRow;
 import org.selion_framework.sanity.page.SnSanityTestCssSelectorPage;
@@ -407,4 +410,43 @@ public class SnSanityCssSelectorTest {
         });
     }
 
+    @Test
+    public void testWaitObject() {
+        sanitytestPage.inPage(p -> {
+            Assert.assertFalse(p.sanitytestNonExistingText.exists());
+            Assert.assertFalse(p.sanitytestNonExistingText.isDisplayed());
+
+            try {
+                p.sanitytestNonExistingText.text();
+            } catch (SnElementNotFoundException ex) {
+                // Expected.
+            }
+
+            try {
+                SnWait.waitUntil(10, p.sanitytestNonExistingText::exists);
+            } catch (SnWaitTimeoutException ex) {
+                // Expected.
+            }
+
+            try {
+                SnWait.waitUntil(10, p.sanitytestNonExistingText::exists, ex -> {
+                    throw new SnSanityTestException(ex);
+                });
+            } catch (SnSanityTestException ex) {
+                // Expected.
+            }
+
+            try {
+                SnWait.waitUntil(10, p.sanitytestNonExistingText::exists, (ex) -> {});
+            } catch (SnWaitTimeoutException ex) {
+                Assert.fail("Unexpected exception were thrown.");
+            }
+        });
+    }
+
+    public class SnSanityTestException extends RuntimeException {
+        SnSanityTestException(Throwable ex) {
+            super("Sanity Test", ex);
+        }
+    }
 }

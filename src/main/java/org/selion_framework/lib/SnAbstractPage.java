@@ -1,6 +1,7 @@
 package org.selion_framework.lib;
 
 import org.selion_framework.lib.exception.SnUnexpectedPageException;
+import org.selion_framework.lib.exception.SnWaitTimeoutException;
 import org.selion_framework.lib.util.SnLogHandler;
 import org.slf4j.Logger;
 

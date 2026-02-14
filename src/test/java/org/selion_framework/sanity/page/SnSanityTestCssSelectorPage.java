@@ -32,6 +32,8 @@ public class SnSanityTestCssSelectorPage extends SnPage {
     private static final SnCssSelector SANITYTEST_DIALOG = _cssSelector.descendant(_id("sanitytest-dialog"));
     private static final SnCssSelector SANITYTEST_MODAL_DIALOG = _cssSelector.descendant(_id("sanitytest-modal-dialog"));
 
+    private static final SnCssSelector SANITYTEST_NON_EXISTING_COMPONENT = _cssSelector.descendant(_id("does-not-exist"));
+
     @Override
     protected void waitForDisplayed() {
         waitForComponent(sanitytestTextbox);
@@ -55,6 +57,7 @@ public class SnSanityTestCssSelectorPage extends SnPage {
     public final SnComponentCollection<SnSanityTestLongListEntryComponent> longComponentEntries = $$components(SANITYTEST_LONG_COMPONENT_LIST, SnSanityTestLongListEntryComponent.class);
     public final SnLink sanitytestCsvDownloadLink = $component(SANITYTEST_CSV_DOWNLOAD_LINK, SnLink.class);
     public final SnGenericComponent sanitytestOwnText = $genericComponent(SANITYTEST_OWN_TEXT);
+    public final SnGenericComponent sanitytestNonExistingText = $genericComponent(SANITYTEST_NON_EXISTING_COMPONENT);
 
     public void inSanityTestInnerFrame(SnFrameAction<SnSanityTestFrameContent> predicate) {
         $frame(SANITYTEST_IFRAME, SnSanityTestFrameContent.class, predicate);
