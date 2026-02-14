@@ -17,39 +17,48 @@ import java.util.regex.Pattern;
 
 /**
  * <p>
- *     SnComponent is the base class for all component classes. All component class must extend from SnComponent or its
- *     subclass when defined.
+ * {@code SnComponent} is the abstract base class for all component classes in the Selion Framework.
+ * All component classes must extend from {@code SnComponent} or one of its subclasses when defined.
  * </p>
+ *
  * <p>
+ * This class serves as a wrapper around Selenium's {@link WebElement}, providing enhanced
+ * functionality for interacting with UI components including:
+ * <ul>
+ *   <li>Element existence and visibility checking</li>
+ *   <li>Automatic element re-initialization on stale references</li>
+ *   <li>Component rule verification for type safety</li>
+ *   <li>Scrolling and focus management</li>
+ *   <li>Click and interaction methods</li>
+ *   <li>Text extraction with various options (full text, own text, inner HTML, etc.)</li>
+ *   <li>Attribute and property access</li>
+ * </ul>
+ * </p>
  *
- * The basic class structure look like this.
- *
+ * <p>
+ * <strong>Component Structure:</strong> A typical component class looks like this:
  * <pre>{@code
- * // Must extend from SnComponent.
+ * // Must extend from SnComponent
  * public class SnSanityTestLongListEntryComponent extends SnComponent {
- *     // Selectors are defined at the top.
+ *     // Selectors are defined at the top
  *     private static final SnCssSelector TITLE_TEXT = _cssSelector.descendant(_cssClasses("title"));
  *     private static final SnCssSelector CHECKBOX = _cssSelector.descendant(_type().is("checkbox"));
  *     private static final SnCssSelector TEXTBOX = _cssSelector.descendant(_type().is("text"));
  *
- *     // Requires this override. This defines what web element properties are required (tag, ID, CSS class, attributes, etc)
- *     // are required to be this component. Trying to assign a different web element to this component class would
- *     // throw exception.
- *     // This is also useful in searching for existing component, ensuring that there is no duplicates.
+ *     // Requires this override to define component validation rules
  *     @Override
  *     protected void rules(SnComponentRule rule) {
  *         rule.tag().is("div");
  *         rule.cssClasses().has("long-component-list-entry");
  *     }
  *
- *     // "key()" value is important when used in SnComponentCollection, as it would allow finding the particular
- *     // instance of the component from list quickly.
+ *     // key() enables quick lookup in SnComponentCollection
  *     @Override
  *     public String key() {
  *         return titleText.key();
  *     }
  *
- *     // A list of components within this component.
+ *     // Child components within this component
  *     public final SnGenericComponent titleText = $genericComponent(TITLE_TEXT);
  *     public final SnCheckbox checkbox = $component(CHECKBOX, SnCheckbox.class);
  *     public final SnTextbox textbox = $component(TEXTBOX, SnTextbox.class);
@@ -57,48 +66,119 @@ import java.util.regex.Pattern;
  * }</pre>
  * </p>
  *
+ * <p>
+ * <strong>Key Features:</strong>
+ * <ul>
+ *   <li><strong>Component Rules:</strong> The {@link #rules(SnComponentRule)} method must be overridden
+ *       to define validation rules for the web element. This ensures type safety and helps prevent duplicate
+ *       component implementations.</li>
+ *   <li><strong>Key:</strong> Override {@link #key()} to provide a unique identifier for the component,
+ *       especially useful when working with {@link SnComponentCollection}.</li>
+ *   <li><strong>Lazy Initialization:</strong> Web elements are lazily initialized and automatically re-fetched
+ *       if they become stale.</li>
+ *   <li><strong>Hierarchy Support:</strong> Components can contain other components through child selectors,
+ *       supporting complex nested structures.</li>
+ * </ul>
+ * </p>
  *
+ * <p>
+ * <strong>Usage:</strong> Components are not directly instantiated via the constructor. Instead, use
+ * the {@code $component(selector, type)} factory method to create instances.
+ * </p>
+ *
+ * @see SnAbstractComponent
+ * @see SnComponentRule
+ * @see SnComponentCollection
+ * @see SnClickableComponent
  */
 public abstract class SnComponent extends SnAbstractComponent {
     private Optional<SnSelector> selector = Optional.empty();
     private Optional<SnComponent> $callerComponent = Optional.empty();
     private SnAbstractPage $ownerPage;
     private WebElement webElement;
-    final static protected SnComponentXPathBuilder _xpath = new SnComponentXPathBuilder();
-    final static protected SnComponentCssSelectorBuilder _cssSelector = new SnComponentCssSelectorBuilder();
     private boolean ruleVerified = false;
 
     /**
-     * The components are not directly instantiated through calling the constructor. Use $component(selector, type) to
-     * create the instance of a component.
+     * Provides access to the builder which provides methods to build XPath selector objects.
+     *
+     * @see SnXPath
+     */
+    final static protected SnComponentXPathBuilder _xpath = new SnComponentXPathBuilder();
+
+    /**
+     * Provides access to the builder which provides methods to build CSS selector objects.
+     *
+     * @see SnCssSelector
+     */
+    final static protected SnComponentCssSelectorBuilder _cssSelector = new SnComponentCssSelectorBuilder();
+
+    /**
+     * Protected constructor. Components are not directly instantiated through calling the constructor.
+     * Use {@code $component(selector, type)} to create instances of a component.
      */
     protected SnComponent() {
     }
 
+    /**
+     * Internal method to set the selector for this component.
+     *
+     * @param selector the {@link SnSelector} to use for locating the web element
+     */
     final void setSelector(SnSelector selector) {
         this.selector = Optional.of(selector);
     }
 
+    /**
+     * Internal method to set the owner page of this component.
+     *
+     * @param $page the {@link SnAbstractPage} that contains this component
+     */
     final void setOwnerPage(SnAbstractPage $page) {
         this.$ownerPage = $page;
     }
 
     /**
-     * The page class that contained this instance of component.
-     * @return
+     * Returns the page class that contains this instance of the component.
+     *
+     * @return the {@link SnAbstractPage} that owns this component
      */
     final protected SnAbstractPage ownerPage() {
         return $ownerPage;
     }
 
+    /**
+     * Internal method to set the underlying web element for this component.
+     *
+     * @param webElement the {@link WebElement} to be wrapped by this component
+     */
     final void setWebElement(WebElement webElement) {
         this.webElement = webElement;
     }
 
+    /**
+     * Internal method to set the parent component that called this component.
+     *
+     * @param $component an {@link Optional} containing the parent component, or empty if this is a page-level component
+     */
     final void setCallerComponent(Optional<SnComponent> $component) {
         this.$callerComponent = $component;
     }
 
+    /**
+     * Returns the underlying Selenium {@link WebElement} wrapped by this component.
+     *
+     * <p>
+     * This method performs the following operations:
+     * <ul>
+     *   <li>Validates the cached web element is still valid (not stale)</li>
+     *   <li>Re-fetches the element if it has become stale or null</li>
+     *   <li>Searches for the element from the page or parent component based on the selector</li>
+     * </ul>
+     * </p>
+     *
+     * @return the {@link WebElement} represented by this component
+     * @throws SnElementNotFoundException if the selector is not present or element cannot be found
+     */
     private WebElement webElement() {
         if (this.webElement != null) {
             // Check if the stored web element is still valid. If not, set it to null, so it
@@ -123,13 +203,39 @@ public abstract class SnComponent extends SnAbstractComponent {
     }
 
     /**
-     * Set property rules for the component to be referred with a web element. This is important in ensuring that
-     * intended web element type gets referred to by this component, and for help ensuring that no duplicate
-     * component classes are implemented, allowing searching by web element properties like class and attributes.
-     * @param rule
+     * Sets property rules for the component to be associated with a web element.
+     *
+     * <p>
+     * This abstract method must be implemented by all subclasses to define the validation rules
+     * that ensure the intended web element type is referred to by this component.
+     * </p>
+     * <p>
+     * This is important for:
+     * <ul>
+     *   <li>Type safety - ensuring that only the correct type of element is used with this component</li>
+     *   <li>Preventing duplicate implementations - allowing searching by web element properties</li>
+     *   <li>Validation - verifying that the element has the expected tag, classes, and attributes</li>
+     * </ul>
+     * At least one rule must be provided in the method. If there is no special properties that can be defined,
+     * rule.
+     * </p>
+     *
+     * @param rule the {@link SnComponentRule} used to define validation rules for this component
+     * @see SnComponentRule
      */
     protected abstract void rules(SnComponentRule rule);
 
+    /**
+     * Verifies that the web element matches all rules defined for this component.
+     *
+     * <p>
+     * This method is called during element initialization to ensure the element matches the expected
+     * properties. The verification is performed only once and then cached.
+     * </p>
+     *
+     * @param element the {@link WebElement} to verify
+     * @throws AssertionError if the element does not match the defined rules
+     */
     private void verifyRules(WebElement element) {
         if (!this.ruleVerified) {
             final SnComponentRule componentRule = new SnComponentRule(element);
@@ -141,8 +247,15 @@ public abstract class SnComponent extends SnAbstractComponent {
     }
 
     /**
-     * Returns a instance of WebElement after ensuring that it exists in DOM.
-     * @return
+     * Returns an instance of {@link WebElement} after ensuring that it exists in the DOM.
+     *
+     * <p>
+     * This method waits for the component to exist and verifies it matches the defined rules.
+     * </p>
+     *
+     * @return the {@link WebElement} that exists in the DOM
+     * @throws SnElementNotFoundException if the element does not exist or becomes stale
+     * @throws SnWaitTimeoutException if the element does not appear within the timeout period
      */
     protected final WebElement existing() {
         try {
@@ -158,8 +271,15 @@ public abstract class SnComponent extends SnAbstractComponent {
     }
 
     /**
-     * Returns an instance of WebElement after ensuring that the web element is displayed.
-     * @return
+     * Returns an instance of {@link WebElement} after ensuring that the web element is displayed.
+     *
+     * <p>
+     * This method waits for the component to be visible on the page before returning the element.
+     * </p>
+     *
+     * @return the {@link WebElement} that is currently displayed
+     * @throws SnElementNotFoundException if the element is not displayed or becomes stale
+     * @throws SnWaitTimeoutException if the element does not become displayed within the timeout period
      */
     protected final WebElement displayed() {
         try {
@@ -171,17 +291,29 @@ public abstract class SnComponent extends SnAbstractComponent {
     }
 
     /**
-     * Returns an instance of WebElement after scrolling to the web element, often used before interacting with it.
-     * @return
+     * Returns an instance of {@link WebElement} after scrolling to the web element.
+     *
+     * <p>
+     * This method is commonly used before interacting with an element to ensure it is visible
+     * and in the viewport. It uses default scroll options.
+     * </p>
+     *
+     * @return the {@link WebElement} after scrolling it into view
      */
     protected final WebElement scrolled() {
         return this.scrolled(scrollOptions());
     }
 
     /**
-     * Returns an instance of WebElement after scrolling to the web element, often used before interacting with it.
-     * @param options Specify scroll option.
-     * @return
+     * Returns an instance of {@link WebElement} after scrolling to the web element with specified options.
+     *
+     * <p>
+     * This method is commonly used before interacting with an element to ensure it is visible
+     * and in the viewport. The scroll behavior can be customized using {@link SnScrollOptions}.
+     * </p>
+     *
+     * @param options the {@link SnScrollOptions} specifying scroll behavior
+     * @return the {@link WebElement} after scrolling it into view
      */
     protected final WebElement scrolled(SnScrollOptions options) {
         final WebElement e = displayed();
@@ -191,8 +323,15 @@ public abstract class SnComponent extends SnAbstractComponent {
     }
 
     /**
-     * Returns true if the component exists in DOM by default.
-     * @return
+     * Returns true if the component exists in the DOM.
+     *
+     * <p>
+     * This method checks whether the element currently exists in the DOM by attempting to access
+     * its tag name. It handles stale element references gracefully by catching the exception
+     * and returning false.
+     * </p>
+     *
+     * @return true if the element exists in the DOM; false otherwise
      */
     public final boolean exists() {
         try {
@@ -205,41 +344,69 @@ public abstract class SnComponent extends SnAbstractComponent {
     }
 
     /**
-     * Returns true if the component is displayed. This method can be overridden as needed, as sometimes, the status
-     * of "isDisplayed" may depend on another properties. This method is used in {@link #waitForDisplayed()} and
-     * {@link #displayed()}, so it would affect their waiting behavior.
-     * @return
+     * Returns true if the component is displayed on the page.
+     *
+     * <p>
+     * This method can be overridden in subclasses as needed, as sometimes the "isDisplayed" status
+     * may depend on other component properties or visibility rules. This method is used in
+     * {@link #waitForDisplayed()} and {@link #displayed()}, affecting their waiting behavior.
+     * </p>
+     *
+     * @return true if the element is displayed; false otherwise
      */
     public boolean isDisplayed() {
         return webElement().isDisplayed();
     }
 
     /**
-     * Waits for a component to be displayed, as defined by {@link #isDisplayed()}.
+     * Waits for the component to be displayed, as defined by {@link #isDisplayed()}.
+     *
+     * <p>
+     * This method blocks until the component becomes visible or a timeout occurs.
+     * </p>
+     *
+     * @throws SnWaitTimeoutException if the element does not become displayed within the timeout period
      */
     protected void waitForDisplayed() {
         SnWait.waitUntil(this::isDisplayed);
     }
 
     /**
-     * Scroll options can be passed to {@link #scrolled(SnScrollOptions)} to change scrolling behavior.
-     * @return
+     * Returns the scroll options to be used when scrolling this component into view.
+     *
+     * <p>
+     * Override this method in subclasses to customize scrolling behavior for specific components.
+     * </p>
+     *
+     * @return the {@link SnScrollOptions} for this component, defaults to new instance with default options
      */
     protected SnScrollOptions scrollOptions() {
         return new SnScrollOptions();
     }
 
     /**
-     * Clicks this component. This is protected, so it can be used within the extended component class as needed. If
-     * click needs to be public, extend from {@link SnClickableComponent} instead.
+     * Clicks this component after scrolling it into view.
+     *
+     * <p>
+     * This is a protected method, so it can be used within the extended component class as needed.
+     * If click needs to be public, extend from {@link SnClickableComponent} instead.
+     * </p>
+     *
+     * @throws SnElementNotFoundException if the element is not displayed
      */
     protected void click() {
         this.scrolled().click();
     }
 
     /**
-     * Double-clicks this component. This is protected, so it can be used within the extended component class as needed. If
-     * click needs to be public, extend from {@link SnClickableComponent} instead.
+     * Double-clicks this component after scrolling it into view.
+     *
+     * <p>
+     * This is a protected method, so it can be used within the extended component class as needed.
+     * If double-click needs to be public, extend from {@link SnClickableComponent} instead.
+     * </p>
+     *
+     * @throws SnElementNotFoundException if the element is not displayed
      */
     protected void doubleClick() {
         final Actions actions = new Actions(Selion.driver());
@@ -248,10 +415,17 @@ public abstract class SnComponent extends SnAbstractComponent {
     }
 
     /**
-     * Clicks this component. This is protected, so it can be used within the extended component class as needed. If
-     * click needs to be public, extend from {@link SnClickableComponent} instead.
-     * @param x
-     * @param y
+     * Clicks this component at the specified coordinates relative to the component's top-left corner,
+     * after scrolling it into view.
+     *
+     * <p>
+     * This is a protected method, so it can be used within the extended component class as needed.
+     * If click needs to be public, extend from {@link SnClickableComponent} instead.
+     * </p>
+     *
+     * @param x the x-coordinate offset from the component's top-left corner
+     * @param y the y-coordinate offset from the component's top-left corner
+     * @throws SnElementNotFoundException if the element is not displayed
      */
     protected void clickAt(int x, int y) {
         final Actions actions = new Actions(Selion.driver());
@@ -260,10 +434,17 @@ public abstract class SnComponent extends SnAbstractComponent {
     }
 
     /**
-     * Double-clicks this component. This is protected, so it can be used within the extended component class as needed. If
-     * click needs to be public, extend from {@link SnClickableComponent} instead.
-     * @param x
-     * @param y
+     * Double-clicks this component at the specified coordinates relative to the component's top-left corner,
+     * after scrolling it into view.
+     *
+     * <p>
+     * This is a protected method, so it can be used within the extended component class as needed.
+     * If double-click needs to be public, extend from {@link SnClickableComponent} instead.
+     * </p>
+     *
+     * @param x the x-coordinate offset from the component's top-left corner
+     * @param y the y-coordinate offset from the component's top-left corner
+     * @throws SnElementNotFoundException if the element is not displayed
      */
     protected void doubleClickAt(int x, int y) {
         final Actions actions = new Actions(Selion.driver());
@@ -272,7 +453,12 @@ public abstract class SnComponent extends SnAbstractComponent {
     }
 
     /**
-     * Move focus to this component.
+     * Moves focus to this component after scrolling it into view.
+     *
+     * <p>
+     * This method can be used to focus on a component before performing keyboard interactions or
+     * to ensure the component is visible on the page.
+     * </p>
      */
     protected void focus() {
         new Actions(Selion.driver())
@@ -281,31 +467,42 @@ public abstract class SnComponent extends SnAbstractComponent {
     }
 
     /**
-     * Returns the text from this component. By default, it returns the same value as {@link #key()}. It should be
-     * overridden to provide proper text value as needed.
-     * @return
+     * Returns the text from this component.
+     *
+     * <p>
+     * By default, this method returns the same value as {@link #key()}. Override this method to provide
+     * a custom text representation for specific component types.
+     * </p>
+     *
+     * @return the text content of this component
      */
     public String text() {
         return this.key();
     }
 
     /**
+     * Returns a unique key or identifier for this component.
+     *
      * <p>
-     *     By default, it returns getText() text. It should be overridden as needed.
+     * By default, this method returns the text content of the element (trimmed).
+     * Override this method in subclasses to provide a unique identifier suitable for your component.
      * </p>
+     *
      * <p>
-     *     In particular, the string returned by key() is used as a key value in {@link SnComponentCollection}, so overriding
-     *     it to return proper string value would make searching within the list simpler.
+     * The string returned by {@code key()} is used as a key value in {@link SnComponentCollection},
+     * so overriding it to return a proper unique value would make searching within the collection much simpler.
      * </p>
-     * @return
+     *
+     * @return a unique key identifying this component instance
      */
     public String key() {
         return this.webElement().getText().trim();
     }
 
     /**
-     * Returns id of the component, if it exists.
-     * @return
+     * Returns the ID attribute of the component, if it exists.
+     *
+     * @return an {@link Optional} containing the ID attribute value, or empty if not present
      */
     public final Optional<String> id() {
         String id;
@@ -314,41 +511,60 @@ public abstract class SnComponent extends SnAbstractComponent {
     }
 
     /**
-     * Returns inner HTML text.
-     * @return
+     * Returns the inner HTML text of the component.
+     *
+     * <p>
+     * This includes all HTML markup and text of all child elements.
+     * </p>
+     *
+     * @return the inner HTML content of this component
      */
     public final String innerHtml() {
         return this.webElement().getAttribute("innerHTML");
     }
 
     /**
-     * Returns own text from this node only. It strips out all texts in sub nodes.
-     * @return
+     * Returns the text content of this component node only, excluding all texts in sub-nodes.
+     *
+     * <p>
+     * This method parses the HTML and removes all nested HTML tags, returning only the direct text
+     * content of this element.
+     * </p>
+     *
+     * @return the text content of this component excluding child elements
+     * @throws SnInvalidHtmlException if the HTML cannot be properly parsed
      */
     public final String ownText() {
         return SeOwnText.removeHtml(this.innerHtml());
     }
 
     /**
-     * Returns inner text.
-     * @return
+     * Returns the inner text of the component.
+     *
+     * <p>
+     * This is the text visible to the user, excluding hidden elements and excluding HTML markup.
+     * </p>
+     *
+     * @return the inner text content of this component
      */
     public final String innerText() {
         return this.webElement().getAttribute("innerText");
     }
 
     /**
-     * Returns tag.
-     * @return
+     * Returns the HTML tag name of the component.
+     *
+     * @return the tag name (e.g., "div", "button", "input") in lowercase
      */
     public String tag() {
         return this.webElement().getTagName();
     }
 
     /**
-     * Returns specified attribute, if one exists.
-     * @param name
-     * @return
+     * Returns the specified HTML attribute value of the component, if it exists.
+     *
+     * @param name the name of the attribute to retrieve
+     * @return an {@link Optional} containing the attribute value, or empty if not present
      */
     public Optional<String> attr(String name) {
         String a;
@@ -357,14 +573,36 @@ public abstract class SnComponent extends SnAbstractComponent {
     }
 
     /**
-     * A static class that computes "own text".
+     * A static utility class that computes and extracts "own text" from HTML content.
+     *
+     * <p>
+     * This class provides functionality to remove HTML tags and markup from inner HTML content,
+     * returning only the direct text content of an element while handling self-closing and
+     * void tags appropriately.
+     * </p>
      */
     private static class SeOwnText {
         private static final Set<String> VOIDED_TAGS = Set.of("br", "img", "hr", "input", "meta", "link", "source", "area", "base", "col", "embed", "param", "track", "wbr");
         private static final Pattern TAG_PATTERN = Pattern.compile("<(\\w+)[^>]*?>([^<^>]*?)</\\s*?\\1\\s*?>", Pattern.CASE_INSENSITIVE | Pattern.DOTALL);
         private static final Pattern ANY_TAG = Pattern.compile("<(\\w+)[^>]*?>|</\\s*?\\w+\\s*?>|<\\w+\\s*?/>", Pattern.CASE_INSENSITIVE | Pattern.DOTALL);
 
-
+        /**
+         * Removes HTML tags and markup from the provided HTML text, returning only the text content.
+         *
+         * <p>
+         * This method:
+         * <ul>
+         *   <li>Normalizes whitespace</li>
+         *   <li>Removes void/self-closing tags</li>
+         *   <li>Recursively removes paired HTML tags</li>
+         *   <li>Validates that all HTML is properly removed</li>
+         * </ul>
+         * </p>
+         *
+         * @param originalHtmlText the HTML text to process
+         * @return the extracted text content without HTML markup
+         * @throws SnInvalidHtmlException if the HTML cannot be properly parsed
+         */
         private static String removeHtml(String originalHtmlText) {
             Matcher matcher;
             String resultText = originalHtmlText.replaceAll("\\s+", " ");
@@ -384,9 +622,13 @@ public abstract class SnComponent extends SnAbstractComponent {
             return resultText.trim();
         }
 
+        /**
+         * Generates regex patterns for void/self-closing HTML tags.
+         *
+         * @return a list of regex patterns matching void tag patterns
+         */
         private static List<String> voidedPatterns() {
             return VOIDED_TAGS.stream().map(s -> "<" + s + "[^>]*?>|<\" + s + \"[^>]*?/>").toList();
         }
-
     }
 }

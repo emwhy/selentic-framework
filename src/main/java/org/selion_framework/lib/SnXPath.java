@@ -6,7 +6,7 @@ import org.slf4j.Logger;
 
 import java.util.Arrays;
 
-public sealed abstract class SnXPath extends SnSelector permits SnXPathParent, SnXPathDescendant, SnXPathChild, SnXPathSibling, SnXPathPrecedingSibling, SnXPathPage, SnXPathRaw {
+public sealed abstract class SnXPath extends SnSelector permits SnXPathChild, SnXPathDescendant, SnXPathFollowing, SnXPathPage, SnXPathParent, SnXPathPreceding, SnXPathPrecedingSibling, SnXPathRaw, SnXPathSibling {
     private static final Logger LOG = SnLogHandler.logger(SnXPath.class);
     private final String tag;
     private final SnXpathPropertyType[] selectorProperties;
