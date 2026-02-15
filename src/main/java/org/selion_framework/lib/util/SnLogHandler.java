@@ -5,14 +5,11 @@ import ch.qos.logback.classic.LoggerContext;
 import ch.qos.logback.classic.encoder.PatternLayoutEncoder;
 import ch.qos.logback.classic.spi.ILoggingEvent;
 import ch.qos.logback.core.FileAppender;
-import org.apache.commons.io.FileUtils;
 import org.selion_framework.lib.config.SelionConfig;
-import org.selion_framework.lib.exception.SnLoggerException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
-import java.io.IOException;
 
 public final class SnLogHandler {
     private static File logDirectory;
@@ -88,17 +85,8 @@ public final class SnLogHandler {
         return new File(System.getProperty("user.dir"));
     }
 
-    public static File artifactDirectory() {
-        File artifactDirectory = new File(logDirectory().getAbsolutePath() + "/artifact");
-
-        try {
-            if (!artifactDirectory.exists()) {
-                FileUtils.forceMkdir(artifactDirectory);
-            }
-            return artifactDirectory;
-        } catch (IOException ex) {
-            throw new SnLoggerException("Failed to create artifact directory: " + artifactDirectory.getAbsolutePath(), ex);
-        }
+    public static File screenshotDirectory() {
+        return new File(logDirectory(), "screenshot");
     }
 
 }

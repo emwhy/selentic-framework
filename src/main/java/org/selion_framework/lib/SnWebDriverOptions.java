@@ -1,15 +1,12 @@
 package org.selion_framework.lib;
 
-import org.apache.commons.io.FileUtils;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.edge.EdgeOptions;
 import org.openqa.selenium.firefox.FirefoxOptions;
 import org.openqa.selenium.safari.SafariOptions;
-import org.selion_framework.lib.exception.SnInitializationException;
 import org.selion_framework.lib.util.SnLogHandler;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -23,14 +20,6 @@ public final class SnWebDriverOptions {
 
     SnWebDriverOptions() {
         final File downloadDirectory = SnLogHandler.downloadDirectory();
-
-        try {
-            if (!downloadDirectory.exists()) {
-                FileUtils.forceMkdir(downloadDirectory);
-            }
-        } catch (IOException ex) {
-            throw new SnInitializationException("Error while initializing.", ex);
-        }
 
         initializeChromeOptions(downloadDirectory);
         initializeFirefoxOptions(downloadDirectory);

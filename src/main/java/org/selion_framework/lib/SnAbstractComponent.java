@@ -771,7 +771,7 @@ public abstract class SnAbstractComponent {
      * @param selector the {@link SnSelector} for locating the radio buttons
      * @return a {@link SnRadioButtonGroup} for managing radio button groups
      */
-    protected SnRadioButtonGroup $radioButtons(SnSelector selector) {
+    protected SnRadioButtonGroup<SnRadioButton> $radioButtons(SnSelector selector) {
         return $$components(selector, SnRadioButton.class, SnRadioButtonGroup.class);
     }
 
