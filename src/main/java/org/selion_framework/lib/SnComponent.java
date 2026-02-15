@@ -192,7 +192,7 @@ public abstract class SnComponent extends SnAbstractComponent {
             if (this.selector.isPresent() && (this.$callerComponent.isEmpty() || this.selector.get() instanceof SnXPathPage)) {
                 this.webElement = Selion.driver().findElement(selector.get().build());
             } else if (this.selector.isPresent()) {
-                this.webElement = selector.get() instanceof SnXPath ? this.$callerComponent.get().existing().findElement(((SnXPath) selector.get()).build(".")) : this.$callerComponent.get().existing().findElement(selector.get().build());
+                this.webElement = selector.get() instanceof SnXPath ? this.$callerComponent.get().existing().findElement(((SnXPath) selector.get()).build(true)) : this.$callerComponent.get().existing().findElement(selector.get().build());
             } else {
                 throw new SnElementNotFoundException("Selector is not present.");
             }
@@ -215,6 +215,8 @@ public abstract class SnComponent extends SnAbstractComponent {
      *   <li>Preventing duplicate implementations - allowing searching by web element properties</li>
      *   <li>Validation - verifying that the element has the expected tag, classes, and attributes</li>
      * </ul>
+     * </p>
+     * <p>
      * At least one rule must be provided in the method. If there is no special properties that can be defined,
      * rule.
      * </p>

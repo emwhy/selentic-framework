@@ -20,12 +20,12 @@ public final class SnXPathRaw extends SnXPath {
 
     @Override
     protected By build() {
-        return this.build("");
+        return this.build(false);
     }
 
     @Override
-    protected By build(String prefix) {
-        final String s = prefix + this.selectorText;
+    protected By build(boolean withPrefix) {
+        final String s = (withPrefix ? "." : "") + this.selectorText;
 
         LOG.debug("Selector XPath: {}", s);
         return By.xpath(s);

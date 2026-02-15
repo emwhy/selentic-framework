@@ -1,6 +1,6 @@
 package org.selion_framework.lib;
 
-public abstract sealed class SnSelectorProperty implements SnSelectorPropertyType permits SnSelectorAttributeProperty, SnSelectorCssClassesProperty, SnSelectorIndexProperty, SnSelectorNotProperty, SnSelectorNthOfTypeProperty, SnSelectorNthChildProperty, SnSelectorTextProperty, SnSelectorIdProperty, SnSelectorTagProperty {
+public abstract sealed class SnSelectorProperty implements SnSelectorPropertyType permits SnSelectorAttributeProperty, SnSelectorCssClassesProperty, SnSelectorIndexProperty, SnSelectorNotProperty, SnSelectorNthOfTypeProperty, SnSelectorNthChildProperty, SnSelectorTextProperty, SnSelectorIdProperty, SnSelectorTagProperty, SnSelectorNthLastOfTypeProperty, SnSelectorFirstOfTypeProperty, SnSelectorLastOfTypeProperty, SnSelectorNthLastChildProperty, SnSelectorFirstChildProperty, SnSelectorLastChildProperty {
     private boolean negate = false;
 
     @Override

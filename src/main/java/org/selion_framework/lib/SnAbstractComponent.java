@@ -374,9 +374,79 @@ public abstract class SnAbstractComponent {
      *
      * @param index the nth-of-type position (0-based)
      * @return a {@link SnSelectorNthOfTypeProperty} for building nth-of-type selectors
+     * @see SnSelectorNthOfTypeProperty
      */
     protected static SnSelectorNthOfTypeProperty _nthOfType(int index) {
         return new SnSelectorNthOfTypeProperty(index);
+    }
+
+    /**
+     * Creates a selector property for matching an element by its nth-last-of-type position. This method is only valid for CSS selector.
+     *
+     * <p>
+     * This method builds a selector property that matches elements based on their position
+     * among siblings of the same type, counting from the last element backwards. This is useful
+     * for selecting specific elements within a group of the same tag type from the end.
+     * </p>
+     *
+     * <p>
+     * <strong>Example:</strong>
+     * <pre>{@code
+     * _nthLastOfType(0)   // Matches the last element of its type
+     * _nthLastOfType(1)   // Matches the second-to-last element of its type
+     * }</pre>
+     * </p>
+     *
+     * @param index the nth-last-of-type position counting from the end (0-based)
+     * @return a {@link SnSelectorNthLastOfTypeProperty} for building nth-last-of-type selectors
+     * @see SnSelectorNthLastOfTypeProperty
+     */
+    protected static SnSelectorNthLastOfTypeProperty _nthLastOfType(int index) {
+        return new SnSelectorNthLastOfTypeProperty(index);
+    }
+
+    /**
+     * Creates a selector property for matching the first element of its type. This method is only valid for CSS selector.
+     *
+     * <p>
+     * This method builds a selector property that matches the first element among siblings
+     * of the same type (tag name). This is equivalent to {@code _nthOfType(0)}.
+     * </p>
+     *
+     * <p>
+     * <strong>Example:</strong>
+     * <pre>{@code
+     * _firstOfType()   // Matches the first div, first p, etc.
+     * }</pre>
+     * </p>
+     *
+     * @return a {@link SnSelectorFirstOfTypeProperty} for building first-of-type selectors
+     * @see SnSelectorFirstOfTypeProperty
+     */
+    protected static SnSelectorFirstOfTypeProperty _firstOfType() {
+        return new SnSelectorFirstOfTypeProperty();
+    }
+
+    /**
+     * Creates a selector property for matching the last element of its type. This method is only valid for CSS selector.
+     *
+     * <p>
+     * This method builds a selector property that matches the last element among siblings
+     * of the same type (tag name). This is equivalent to {@code _nthLastOfType(0)}.
+     * </p>
+     *
+     * <p>
+     * <strong>Example:</strong>
+     * <pre>{@code
+     * _lastOfType()   // Matches the last div, last p, etc.
+     * }</pre>
+     * </p>
+     *
+     * @return a {@link SnSelectorLastOfTypeProperty} for building last-of-type selectors
+     * @see SnSelectorLastOfTypeProperty
+     */
+    protected static SnSelectorLastOfTypeProperty _lastOfType() {
+        return new SnSelectorLastOfTypeProperty();
     }
 
     /**
@@ -384,22 +454,93 @@ public abstract class SnAbstractComponent {
      *
      * <p>
      * This method builds a selector property that matches elements based on their position
-     * among siblings.
+     * among all siblings (regardless of tag type). This is useful for selecting specific
+     * elements by their order in the parent element.
      * </p>
      *
      * <p>
      * <strong>Example:</strong>
      * <pre>{@code
-     * _nthChild(0)   // Matches the first element of its type
-     * _nthChild(2)   // Matches the third element of its type
+     * _nthChild(0)   // Matches the first child element
+     * _nthChild(2)   // Matches the third child element
      * }</pre>
      * </p>
      *
      * @param index the nth-child position (0-based)
-     * @return a {@link SnSelectorNthOfTypeProperty} for building nth-of-type selectors
+     * @return a {@link SnSelectorNthChildProperty} for building nth-child selectors
+     * @see SnSelectorNthChildProperty
      */
     protected static SnSelectorNthChildProperty _nthChild(int index) {
         return new SnSelectorNthChildProperty(index);
+    }
+
+    /**
+     * Creates a selector property for matching an element by its nth-last-child position. This method is only valid for CSS selector.
+     *
+     * <p>
+     * This method builds a selector property that matches elements based on their position
+     * among all siblings, counting from the last element backwards (regardless of tag type).
+     * This is useful for selecting specific elements by their reverse order in the parent element.
+     * </p>
+     *
+     * <p>
+     * <strong>Example:</strong>
+     * <pre>{@code
+     * _nthLastChild(0)   // Matches the last child element
+     * _nthLastChild(1)   // Matches the second-to-last child element
+     * }</pre>
+     * </p>
+     *
+     * @param index the nth-last-child position counting from the end (0-based)
+     * @return a {@link SnSelectorNthLastChildProperty} for building nth-last-child selectors
+     * @see SnSelectorNthLastChildProperty
+     */
+    protected static SnSelectorNthLastChildProperty _nthLastChild(int index) {
+        return new SnSelectorNthLastChildProperty(index);
+    }
+
+    /**
+     * Creates a selector property for matching the first child element. This method is only valid for CSS selector.
+     *
+     * <p>
+     * This method builds a selector property that matches the first element among all siblings
+     * (regardless of tag type). This is equivalent to {@code _nthChild(0)}.
+     * </p>
+     *
+     * <p>
+     * <strong>Example:</strong>
+     * <pre>{@code
+     * _firstChild()   // Matches the first child in a parent element
+     * }</pre>
+     * </p>
+     *
+     * @return a {@link SnSelectorFirstChildProperty} for building first-child selectors
+     * @see SnSelectorFirstChildProperty
+     */
+    protected static SnSelectorFirstChildProperty _firstChild() {
+        return new SnSelectorFirstChildProperty();
+    }
+
+    /**
+     * Creates a selector property for matching the last child element. This method is only valid for CSS selector.
+     *
+     * <p>
+     * This method builds a selector property that matches the last element among all siblings
+     * (regardless of tag type). This is equivalent to {@code _nthLastChild(0)}.
+     * </p>
+     *
+     * <p>
+     * <strong>Example:</strong>
+     * <pre>{@code
+     * _lastChild()   // Matches the last child in a parent element
+     * }</pre>
+     * </p>
+     *
+     * @return a {@link SnSelectorLastChildProperty} for building last-child selectors
+     * @see SnSelectorLastChildProperty
+     */
+    protected static SnSelectorLastChildProperty _lastChild() {
+        return new SnSelectorLastChildProperty();
     }
 
     /**

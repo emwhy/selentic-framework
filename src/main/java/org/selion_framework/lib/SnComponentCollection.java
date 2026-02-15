@@ -94,7 +94,7 @@ public class SnComponentCollection<T extends SnComponent> implements Iterable<T>
             return Selion.driver().findElements(this.selector.build());
         } else {
             return this.$callerComponent.get().existing().findElements(
-                    this.selector instanceof SnXPath ? ((SnXPath) this.selector).build(".") : this.selector.build());
+                    this.selector instanceof SnXPath ? ((SnXPath) this.selector).build(true) : this.selector.build());
         }
     }
 
