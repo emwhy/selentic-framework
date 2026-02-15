@@ -9,6 +9,11 @@ public class SnSanityTestAnimatedBox extends SnComponent {
         rule.id().is("animated-box");
     }
 
+    @Override
+    protected long waitTimeout() {
+        return 5000;
+    }
+
     /**
      * Exposing {@link #waitForAnimation()} for testing the method.
      */
