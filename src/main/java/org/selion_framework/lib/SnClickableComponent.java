@@ -42,7 +42,8 @@ import org.selion_framework.lib.util.SnWait;
  * </p>
  *
  * @see SnComponent
- * @see SnComponentNotEnabledException
+ * @see SnButton
+ * @see SnLink
  */
 public abstract class SnClickableComponent extends SnComponent {
 
@@ -78,7 +79,6 @@ public abstract class SnClickableComponent extends SnComponent {
      *
      * @return the scrolled {@link WebElement} that is ready for interaction
      * @throws SnComponentNotEnabledException if the component does not become enabled within the timeout period
-     * @see SnWait#waitUntil(SnWait.SnWaitTrueCondition, SnWait.SnOnTimeout)
      */
     protected final WebElement enabled() {
         SnWait.waitUntil(this::isEnabled, SnComponentNotEnabledException::new);
@@ -95,7 +95,6 @@ public abstract class SnClickableComponent extends SnComponent {
      * </p>
      *
      * @throws SnComponentNotEnabledException if the component does not become enabled within the timeout
-     * @see #enabled()
      */
     public void click() {
         enabled();
@@ -112,7 +111,6 @@ public abstract class SnClickableComponent extends SnComponent {
      * </p>
      *
      * @throws SnComponentNotEnabledException if the component does not become enabled within the timeout
-     * @see #enabled()
      */
     public void doubleClick() {
         enabled();
@@ -131,7 +129,6 @@ public abstract class SnClickableComponent extends SnComponent {
      * @param x the x-coordinate offset from the element's top-left corner
      * @param y the y-coordinate offset from the element's top-left corner
      * @throws SnComponentNotEnabledException if the component does not become enabled within the timeout
-     * @see #enabled()
      */
     public void clickAt(int x, int y) {
         enabled();
@@ -150,7 +147,6 @@ public abstract class SnClickableComponent extends SnComponent {
      * @param x the x-coordinate offset from the element's top-left corner
      * @param y the y-coordinate offset from the element's top-left corner
      * @throws SnComponentNotEnabledException if the component does not become enabled within the timeout
-     * @see #enabled()
      */
     public void doubleClickAt(int x, int y) {
         enabled();

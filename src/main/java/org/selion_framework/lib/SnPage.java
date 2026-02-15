@@ -78,7 +78,7 @@ public abstract class SnPage extends SnAbstractPage {
      * <pre>{@code
      * // Create and initialize page.
      * HomePage home = SnPage.with(HomePage.class);
-     *</pre>
+     * </pre>
      * </p>
      *
      * @param <T> the page type to create
