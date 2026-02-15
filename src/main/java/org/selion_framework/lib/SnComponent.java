@@ -376,6 +376,12 @@ public abstract class SnComponent extends SnAbstractComponent {
      * This method blocks until the component is no longer animated or a timeout occurs.
      * </p>
      *
+     * <p>
+     * <strong>Limitation</strong>: This method only recognizes animations that are created using {@code element.animate()}
+     * JavaScript function, which can be recognized by {@code document.getAnimations()}. CSS based manual animations (often
+     * implemented by using {@code setInterval()} function) is not recognized by this method.
+     * </p>
+     *
      * @throws SnComponentAnimatingException if the element does not stop animating within the timeout period
      */
     protected final void waitForAnimation() {
