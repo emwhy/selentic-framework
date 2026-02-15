@@ -4,9 +4,7 @@ import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.StaleElementReferenceException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
-import org.selion_framework.lib.exception.SnElementNotFoundException;
-import org.selion_framework.lib.exception.SnInvalidHtmlException;
-import org.selion_framework.lib.exception.SnWaitTimeoutException;
+import org.selion_framework.lib.exception.*;
 import org.selion_framework.lib.util.SnWait;
 
 import java.util.List;
@@ -96,7 +94,7 @@ public abstract class SnComponent extends SnAbstractComponent {
     private Optional<SnComponent> $callerComponent = Optional.empty();
     private SnAbstractPage $ownerPage;
     private WebElement webElement;
-    private boolean ruleVerified = false;
+    private Optional<SnComponentRule> rule = Optional.empty();
 
     /**
      * Provides access to the builder which provides methods to build XPath selector objects.
@@ -237,10 +235,10 @@ public abstract class SnComponent extends SnAbstractComponent {
      * @throws AssertionError if the element does not match the defined rules
      */
     private void verifyRules(WebElement element) {
-        if (!this.ruleVerified) {
+        if (this.rule.isEmpty()) {
             final SnComponentRule componentRule = new SnComponentRule(element);
 
-            this.ruleVerified = true;
+            this.rule = Optional.of(componentRule);
             this.rules(componentRule);
             componentRule.verifyRules(this.getClass());
         }
@@ -368,7 +366,7 @@ public abstract class SnComponent extends SnAbstractComponent {
      * @throws SnWaitTimeoutException if the element does not become displayed within the timeout period
      */
     protected void waitForDisplayed() {
-        SnWait.waitUntil(this::isDisplayed);
+        SnWait.waitUntil(this::isDisplayed, SnComponentNotDisplayedException::new);
     }
 
     /**

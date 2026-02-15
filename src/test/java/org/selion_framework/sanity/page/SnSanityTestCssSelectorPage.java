@@ -57,7 +57,7 @@ public class SnSanityTestCssSelectorPage extends SnPage {
     public final SnComponentCollection<SnSanityTestLongListEntryComponent> longComponentEntries = $$components(SANITYTEST_LONG_COMPONENT_LIST, SnSanityTestLongListEntryComponent.class);
     public final SnLink sanitytestCsvDownloadLink = $component(SANITYTEST_CSV_DOWNLOAD_LINK, SnLink.class);
     public final SnGenericComponent sanitytestOwnText = $genericComponent(SANITYTEST_OWN_TEXT);
-    public final SnGenericComponent sanitytestNonExistingText = $genericComponent(SANITYTEST_NON_EXISTING_COMPONENT);
+    public final SnLink sanitytestNonExistingLink = $link(SANITYTEST_NON_EXISTING_COMPONENT);
 
     public void inSanityTestInnerFrame(SnFrameAction<SnSanityTestFrameContent> predicate) {
         $frame(SANITYTEST_IFRAME, SnSanityTestFrameContent.class, predicate);
