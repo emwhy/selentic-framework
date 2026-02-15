@@ -12,6 +12,7 @@ public class SnDropdown extends SnFormComponent {
     @Override
     protected void rules(SnComponentRule rule) {
         rule.tag().is("select");
+        rule.attr("multiple").isAbsent();
     }
 
     public void select(String text) {
@@ -29,7 +30,6 @@ public class SnDropdown extends SnFormComponent {
             throw new SnEntryNotFoundException("Cannot find option with pattern: " + pattern.pattern());
         }
     }
-
 
     public String selectedText() {
         final Select select = new Select(this.existing());

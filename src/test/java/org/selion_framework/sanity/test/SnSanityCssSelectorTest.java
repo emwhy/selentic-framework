@@ -1,18 +1,20 @@
 package org.selion_framework.sanity.test;
 
+import org.openqa.selenium.By;
 import org.selion_framework.lib.Selion;
+import org.selion_framework.lib.SnButton;
 import org.selion_framework.lib.SnPage;
 import org.selion_framework.lib.SnWithPage;
-import org.selion_framework.lib.exception.SnComponentNotDisplayedException;
-import org.selion_framework.lib.exception.SnElementNotFoundException;
-import org.selion_framework.lib.exception.SnWaitTimeoutException;
-import org.selion_framework.lib.exception.SnWindowException;
+import org.selion_framework.lib.exception.*;
 import org.selion_framework.lib.util.SnDownloadCsvFileParser;
+import org.selion_framework.lib.util.SnLogHandler;
 import org.selion_framework.lib.util.SnWait;
+import org.selion_framework.sanity.component.SnSanityTestAnimatedBox;
 import org.selion_framework.sanity.component.SnSanityTestLongListEntryComponent;
 import org.selion_framework.sanity.component.SnSanityTestTableRow;
 import org.selion_framework.sanity.page.SnSanityTestCssSelectorPage;
 import org.selion_framework.sanity.page.SnSanityTestExternalPage;
+import org.slf4j.Logger;
 import org.testng.Assert;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.AfterMethod;
@@ -28,6 +30,8 @@ import static org.testng.AssertJUnit.assertTrue;
 import static org.testng.AssertJUnit.fail;
 
 public class SnSanityCssSelectorTest {
+    private static final Logger LOG = SnLogHandler.logger(SnSanityCssSelectorTest.class);
+
     private final SnWithPage<SnSanityTestCssSelectorPage> sanitytestPage = SnPage.with(SnSanityTestCssSelectorPage.class);
     private final SnWithPage<SnSanityTestExternalPage> sanitytestExternalPage = SnPage.with(SnSanityTestExternalPage.class);
 
@@ -449,9 +453,40 @@ public class SnSanityCssSelectorTest {
         });
     }
 
+    @Test
+    public void testWaitForAnimation() {
+        sanitytestPage.inPage(p -> {
+            testAnimation(p.animatedBox, p.animateMoveButton);
+            testAnimation(p.animatedBox, p.animateRotateButton);
+            testAnimation(p.animatedBox, p.animateOpacityButton);
+            testAnimation(p.animatedBox, p.animateSizeButton);
+
+            try {
+                testAnimation(p.animatedBox, p.animateLongButton);
+                fail("Should not get here because it should throw exception.");
+            } catch (SnComponentAnimatingException ex) {
+
+            }
+        });
+    }
+
+    private void testAnimation(SnSanityTestAnimatedBox animatedBox, SnButton button) {
+        long startTimestamp, endTimestamp;
+
+        button.click();
+        startTimestamp = System.currentTimeMillis();
+        animatedBox.exposedWaitForAnimation();
+        endTimestamp = System.currentTimeMillis();
+
+        LOG.debug("Waited Time: {}", endTimestamp - startTimestamp);
+        Assert.assertTrue(endTimestamp - startTimestamp > 1900);
+        Assert.assertTrue(endTimestamp - startTimestamp < 2500);
+        SnWait.sleep(500);
+    }
+
     public class SnSanityTestException extends RuntimeException {
         SnSanityTestException(Throwable ex) {
-            super("Sanity Test", ex);
+            super("Sanity Test Failure", ex);
         }
     }
 }

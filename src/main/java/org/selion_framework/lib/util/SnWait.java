@@ -40,9 +40,6 @@ import org.selion_framework.lib.exception.SnWaitTimeoutException;
  * // Wait until value is non-null with custom timeout
  * String value = SnWait.waitUntilNonNull(3000, () -> component.text());
  * </pre>
- *
- * @since 1.0
- * @author SelionFramework
  */
 public class SnWait {
     private final long startTimestamp;
@@ -267,8 +264,6 @@ public class SnWait {
      * Implementations should return true when the desired condition is met, and false otherwise.
      * The condition is evaluated at regular polling intervals until it returns true or timeout occurs.
      * </p>
-     *
-     * @since 1.0
      */
     public interface SnWaitTrueCondition {
         /**
@@ -288,7 +283,6 @@ public class SnWait {
      * </p>
      *
      * @param <T> the type of the value returned by this condition
-     * @since 1.0
      */
     public interface SnWaitNonNullCondition<T> {
         /**
@@ -306,8 +300,6 @@ public class SnWait {
      * custom exception handling. If this method returns null, a default {@link SnWaitTimeoutException}
      * is thrown. If it returns an exception, that exception is thrown instead.
      * </p>
-     *
-     * @since 1.0
      */
     public interface SnOnTimeout {
         /**

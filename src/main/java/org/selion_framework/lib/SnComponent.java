@@ -30,6 +30,7 @@ import java.util.regex.Pattern;
  *   <li>Click and interaction methods</li>
  *   <li>Text extraction with various options (full text, own text, inner HTML, etc.)</li>
  *   <li>Attribute and property access</li>
+ *   <li>Extensibility</li>
  * </ul>
  * </p>
  *
@@ -58,8 +59,8 @@ import java.util.regex.Pattern;
  *
  *     // Child components within this component
  *     public final SnGenericComponent titleText = $genericComponent(TITLE_TEXT);
- *     public final SnCheckbox checkbox = $component(CHECKBOX, SnCheckbox.class);
- *     public final SnTextbox textbox = $component(TEXTBOX, SnTextbox.class);
+ *     public final SnCheckbox checkbox = $checkbox(CHECKBOX);
+ *     public final SnTextbox textbox = $textbox(TEXTBOX);
  * }
  * }</pre>
  * </p>
@@ -81,13 +82,13 @@ import java.util.regex.Pattern;
  *
  * <p>
  * <strong>Usage:</strong> Components are not directly instantiated via the constructor. Instead, use
- * the {@code $component(selector, type)} factory method to create instances.
+ * the {@code $component(selector, type)} factory method to create instances which are accessible within subclasses of
+ * {@link SnPage} and {@link SnComponent}.
  * </p>
  *
  * @see SnAbstractComponent
  * @see SnComponentRule
  * @see SnComponentCollection
- * @see SnClickableComponent
  */
 public abstract class SnComponent extends SnAbstractComponent {
     private Optional<SnSelector> selector = Optional.empty();
@@ -232,7 +233,7 @@ public abstract class SnComponent extends SnAbstractComponent {
      * </p>
      *
      * @param element the {@link WebElement} to verify
-     * @throws AssertionError if the element does not match the defined rules
+     * @throws SnComponentRulesException if the element does not match the defined rules
      */
     private void verifyRules(WebElement element) {
         if (this.rule.isEmpty()) {
@@ -253,7 +254,6 @@ public abstract class SnComponent extends SnAbstractComponent {
      *
      * @return the {@link WebElement} that exists in the DOM
      * @throws SnElementNotFoundException if the element does not exist or becomes stale
-     * @throws SnWaitTimeoutException if the element does not appear within the timeout period
      */
     protected final WebElement existing() {
         try {
@@ -277,7 +277,6 @@ public abstract class SnComponent extends SnAbstractComponent {
      *
      * @return the {@link WebElement} that is currently displayed
      * @throws SnElementNotFoundException if the element is not displayed or becomes stale
-     * @throws SnWaitTimeoutException if the element does not become displayed within the timeout period
      */
     protected final WebElement displayed() {
         try {
@@ -307,7 +306,8 @@ public abstract class SnComponent extends SnAbstractComponent {
      *
      * <p>
      * This method is commonly used before interacting with an element to ensure it is visible
-     * and in the viewport. The scroll behavior can be customized using {@link SnScrollOptions}.
+     * and in the viewport. The scroll behavior can be customized using {@link SnScrollOptions} which can be
+     * acquired by calling {@link #scrollOptions()} method.
      * </p>
      *
      * @param options the {@link SnScrollOptions} specifying scroll behavior
@@ -363,10 +363,31 @@ public abstract class SnComponent extends SnAbstractComponent {
      * This method blocks until the component becomes visible or a timeout occurs.
      * </p>
      *
-     * @throws SnWaitTimeoutException if the element does not become displayed within the timeout period
+     * @throws SnComponentNotDisplayedException if the element does not become displayed within the timeout period
      */
     protected void waitForDisplayed() {
         SnWait.waitUntil(this::isDisplayed, SnComponentNotDisplayedException::new);
+    }
+
+    /**
+     * Waits for the component to finish animating.
+     *
+     * <p>
+     * This method blocks until the component is no longer animated or a timeout occurs.
+     * </p>
+     *
+     * @throws SnComponentAnimatingException if the element does not stop animating within the timeout period
+     */
+    protected final void waitForAnimation() {
+        SnWait.waitUntil(() -> (Boolean) Selion.executeScript(
+                        """
+                            let e = arguments[0];
+                            return !e.getAnimations().some(a => a.playState === 'running' || a.playState === 'pending');
+                        """,
+                        this
+                ),
+                SnComponentAnimatingException::new
+        );
     }
 
     /**
@@ -378,7 +399,7 @@ public abstract class SnComponent extends SnAbstractComponent {
      *
      * @return the {@link SnScrollOptions} for this component, defaults to new instance with default options
      */
-    protected SnScrollOptions scrollOptions() {
+    protected final SnScrollOptions scrollOptions() {
         return new SnScrollOptions();
     }
 

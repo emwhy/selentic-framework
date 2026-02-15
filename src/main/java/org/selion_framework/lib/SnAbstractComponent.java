@@ -1066,7 +1066,7 @@ public abstract class SnAbstractComponent {
         $dialog.waitForDisplayed();
         LOG.debug("Open dialog: {}", $dialog.getClass().getSimpleName());
         predicate.in($dialog);
-        LOG.debug("Close dialog: {}", $dialog.getClass().getSimpleName());
         $dialog.waitForHidden();
+        LOG.debug("Close dialog: {}", $dialog.getClass().getSimpleName());
     }
 }

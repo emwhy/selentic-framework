@@ -1,6 +1,7 @@
 package org.selion_framework.sanity.page;
 
 import org.selion_framework.lib.*;
+import org.selion_framework.sanity.component.SnSanityTestAnimatedBox;
 import org.selion_framework.sanity.component.SnSanityTestFrameContent;
 import org.selion_framework.sanity.component.SnSanityTestLongListEntryComponent;
 import org.selion_framework.sanity.component.SnSanityTestTableRow;
@@ -34,6 +35,13 @@ public class SnSanityTestCssSelectorPage extends SnPage {
 
     private static final SnCssSelector SANITYTEST_NON_EXISTING_COMPONENT = _cssSelector.descendant(_id("does-not-exist"));
 
+    private static final SnCssSelector ANIMATED_BOX = _cssSelector.descendant(_id("animated-box"));
+    private static final SnCssSelector ANIMATE_MOVE_BUTTON = _cssSelector.descendant(_id("animate-move-button"));
+    private static final SnCssSelector ANIMATE_ROTATE_BUTTON = _cssSelector.descendant(_id("animate-rotate-button"));
+    private static final SnCssSelector ANIMATE_OPACITY_BUTTON = _cssSelector.descendant(_id("animate-opacity-button"));
+    private static final SnCssSelector ANIMATE_SIZE_BUTTON = _cssSelector.descendant(_id("animate-size-button"));
+    private static final SnCssSelector ANIMATE_LONG_BUTTON = _cssSelector.descendant(_id("animate-long-button"));
+
     @Override
     protected void waitForDisplayed() {
         waitForComponent(sanitytestTextbox);
@@ -58,6 +66,13 @@ public class SnSanityTestCssSelectorPage extends SnPage {
     public final SnLink sanitytestCsvDownloadLink = $component(SANITYTEST_CSV_DOWNLOAD_LINK, SnLink.class);
     public final SnGenericComponent sanitytestOwnText = $genericComponent(SANITYTEST_OWN_TEXT);
     public final SnLink sanitytestNonExistingLink = $link(SANITYTEST_NON_EXISTING_COMPONENT);
+
+    public final SnSanityTestAnimatedBox animatedBox = $component(ANIMATED_BOX, SnSanityTestAnimatedBox.class);
+    public final SnButton animateMoveButton = $button(ANIMATE_MOVE_BUTTON);
+    public final SnButton animateRotateButton = $button(ANIMATE_ROTATE_BUTTON);
+    public final SnButton animateOpacityButton = $button(ANIMATE_OPACITY_BUTTON);
+    public final SnButton animateSizeButton = $button(ANIMATE_SIZE_BUTTON);
+    public final SnButton animateLongButton = $button(ANIMATE_LONG_BUTTON);
 
     public void inSanityTestInnerFrame(SnFrameAction<SnSanityTestFrameContent> predicate) {
         $frame(SANITYTEST_IFRAME, SnSanityTestFrameContent.class, predicate);

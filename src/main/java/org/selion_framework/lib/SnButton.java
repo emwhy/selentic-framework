@@ -1,11 +1,6 @@
 package org.selion_framework.lib;
 
-import java.util.Arrays;
-import java.util.List;
-
 public class SnButton extends SnFormComponent {
-    private static final List<String> VALID_TYPE_ATTRIBUTES = Arrays.stream(new String[] { "submit", "button" }).toList();
-
     @Override
     protected void rules(SnComponentRule rule) {
         // Needs to do extra IF because button can be both input and button.

@@ -41,7 +41,6 @@ import org.selion_framework.lib.util.SnWait;
  * is thrown immediately, preventing invalid interactions with disabled elements.
  * </p>
  *
- * @since 1.0
  * @see SnComponent
  * @see SnComponentNotEnabledException
  */
