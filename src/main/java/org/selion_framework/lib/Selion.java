@@ -1,6 +1,8 @@
 package org.selion_framework.lib;
 
 import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.OutputType;
+import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.edge.EdgeDriver;
@@ -9,7 +11,12 @@ import org.openqa.selenium.safari.SafariDriver;
 import org.openqa.selenium.support.events.EventFiringDecorator;
 import org.openqa.selenium.support.events.WebDriverListener;
 import org.selion_framework.lib.config.SelionConfig;
+import org.selion_framework.lib.util.SnLogHandler;
+import org.slf4j.Logger;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -22,6 +29,7 @@ import java.util.Optional;
  * you are testing individual "strips" (components) that make up the whole field (the page).
  */
 public final class Selion {
+    private static final Logger LOG = SnLogHandler.logger(Selion.class);
     private static final HashMap<Long, WebDriver> DRIVERS = new HashMap<>();
     private static final SnWebDriverOptions WEBDRIVER_OPTIONS = new SnWebDriverOptions();
     private static Optional<WebDriverListener> webDriverListener = Optional.empty();
@@ -106,5 +114,26 @@ public final class Selion {
         final List<Object> objects = Arrays.stream(params).map(o -> o instanceof SnComponent ? ((SnComponent) o).existing() : o).toList();
 
         return String.valueOf(executor.executeAsyncScript(script, objects));
+    }
+
+    public static void screenshot() {
+        screenshot("");
+    }
+
+    public static void screenshot(String screenshotName) {
+        if (!screenshotName.isEmpty()) {
+            screenshotName = "-" + screenshotName;
+        }
+
+        try {
+            final byte[] screenshotData = ((TakesScreenshot) driver()).getScreenshotAs(OutputType.BYTES);
+            final Path screenshotPath = Path.of(SnLogHandler.screenshotDirectory().getAbsolutePath(), System.currentTimeMillis() + screenshotName + ".png");
+
+            // Write the byte array to the file
+            Files.write(screenshotPath, screenshotData);
+            LOG.debug("Screenshot: file:///{}", screenshotPath.toFile().getAbsolutePath().replace("\\", "/"));
+        } catch (IOException ex) {
+            LOG.error("Error while taking screenshot." , ex);
+        }
     }
 }

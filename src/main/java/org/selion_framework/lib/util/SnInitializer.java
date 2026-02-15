@@ -2,7 +2,7 @@ package org.selion_framework.lib.util;
 
 import org.apache.commons.io.FileUtils;
 import org.selion_framework.lib.config.SelionConfig;
-import org.selion_framework.lib.exception.SnLoggerException;
+import org.selion_framework.lib.exception.SnInitializationException;
 import org.slf4j.Logger;
 
 import java.io.File;
@@ -25,6 +25,7 @@ final class SnInitializer {
 
             if (directories != null) {
                 for (File directory : directories) {
+                    // Clean up old log directories.
                     if (directory.lastModified() + keepLogDuration < System.currentTimeMillis()) {
                         try {
                             FileUtils.forceDelete(directory);
@@ -35,14 +36,24 @@ final class SnInitializer {
                 }
             }
         } else if (!logsDir.mkdirs()) {
-            throw new SnLoggerException("Failed to create log directory " + logsDir.getAbsolutePath());
+            throw new SnInitializationException("Failed to create log directory " + logsDir.getAbsolutePath());
         }
+
         if (!currentLogDir.mkdirs()) {
-            throw new SnLoggerException("Failed to create log directory " + currentLogDir.getAbsolutePath());
+            throw new SnInitializationException("Failed to create log directory " + currentLogDir.getAbsolutePath());
         }
         SnLogHandler.setLogDirectory(currentLogDir);
+
         LOG.info("Created log directory: {}", currentLogDir.getAbsolutePath());
         SnLogHandler.configureLogger();
+
+        if (!SnLogHandler.downloadDirectory().mkdirs()) {
+            throw new SnInitializationException("Failed to create download directory " + SnLogHandler.downloadDirectory().getAbsolutePath());
+        }
+        if (!SnLogHandler.screenshotDirectory().mkdirs()) {
+            throw new SnInitializationException("Failed to create screenshot directory " + SnLogHandler.screenshotDirectory().getAbsolutePath());
+        }
+
         LOG.info("Timezone: \"{}\"", ZoneId.systemDefault().getId());
     }
 }
