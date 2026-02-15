@@ -81,7 +81,7 @@ public final class Selion {
         optionSetup.options(WEBDRIVER_OPTIONS.safariOptions());
     }
 
-    public static void setListener(WebDriverListener listener) {
+    public static void setWebDriverListener(WebDriverListener listener) {
         webDriverListener = Optional.of(listener);
     }
 
