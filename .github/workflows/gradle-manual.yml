@@ -41,10 +41,33 @@ jobs:
       - name: Build with Gradle
         run: ./gradlew build -x test
 
-      # The USERNAME and TOKEN need to correspond to the credentials environment variables used in
-      # the publishing section of your build.gradle
-      - name: Publish to GitHub Packages
-        run: ./gradlew publish
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1
         env:
-          USERNAME: ${{ github.actor }}
-          TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # Use the default GITHUB_TOKEN secret
+        with:
+          tag_name: ${{ github.ref }}
+          release_name: Release ${{ github.ref }}
+          draft: false
+          prerelease: false
+
+      - name: Upload JAR asset
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./build/libs/selion-framework-release.jar
+          asset_name: selion-framework.jar
+          asset_content_type: application/java-archive
+
+      - name: Upload Javadoc JAR asset
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./build/libs/selion-framework-release-javadoc.jar
+          asset_name: selion-framework-javadoc.jar
+          asset_content_type: application/java-archive

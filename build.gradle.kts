@@ -3,7 +3,7 @@ plugins {
 }
 
 group = "seliion-framework"
-version = "1.0rc"
+version = "release"
 
 repositories {
     mavenCentral()
