@@ -181,20 +181,11 @@ public abstract class SnComponent extends SnAbstractComponent {
      * @throws SnElementNotFoundException if the selector is not present or element cannot be found
      */
     private WebElement webElement() {
-        if (this.webElement != null) {
-            // Check if the stored web element is still valid. If not, set it to null, so it
-            // can be reinitialized.
-            try {
-                this.webElement.getTagName();
-            } catch (NoSuchElementException | StaleElementReferenceException ex) {
-                this.webElement = null;
-            }
-        }
         if (this.webElement == null) {
             if (this.selector.isPresent() && (this.$callerComponent.isEmpty() || this.selector.get() instanceof SnXPathPage)) {
-                this.webElement = Selion.driver().findElement(selector.get().build());
+                return Selion.driver().findElement(selector.get().build());
             } else if (this.selector.isPresent()) {
-                this.webElement = selector.get() instanceof SnXPath ? this.$callerComponent.get().existing().findElement(((SnXPath) selector.get()).build(true)) : this.$callerComponent.get().existing().findElement(selector.get().build());
+                return selector.get() instanceof SnXPath ? this.$callerComponent.get().existing().findElement(((SnXPath) selector.get()).build(true)) : this.$callerComponent.get().existing().findElement(selector.get().build());
             } else {
                 throw new SnElementNotFoundException("Selector is not present.");
             }
@@ -617,6 +608,15 @@ public abstract class SnComponent extends SnAbstractComponent {
      */
     protected long waitTimeout() {
         return SelionConfig.config().waitTimeoutMilliseconds();
+    }
+
+    /**
+     * Returns {@link Actions}.
+     *
+     * @return {@link Actions} object.
+     */
+    protected final Actions actions() {
+        return new Actions(Selion.driver());
     }
 
     /**

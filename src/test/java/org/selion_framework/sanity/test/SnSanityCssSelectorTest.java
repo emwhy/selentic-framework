@@ -1,6 +1,6 @@
 package org.selion_framework.sanity.test;
 
-import org.openqa.selenium.By;
+import com.sun.source.tree.AssertTree;
 import org.selion_framework.lib.Selion;
 import org.selion_framework.lib.SnButton;
 import org.selion_framework.lib.SnPage;
@@ -12,6 +12,7 @@ import org.selion_framework.lib.util.SnWait;
 import org.selion_framework.sanity.component.SnSanityTestAnimatedBox;
 import org.selion_framework.sanity.component.SnSanityTestLongListEntryComponent;
 import org.selion_framework.sanity.component.SnSanityTestTableRow;
+import org.selion_framework.sanity.page.SnDragAndDropTestPage;
 import org.selion_framework.sanity.page.SnSanityTestCssSelectorPage;
 import org.selion_framework.sanity.page.SnSanityTestExternalPage;
 import org.slf4j.Logger;
@@ -34,6 +35,7 @@ public class SnSanityCssSelectorTest {
 
     private final SnWithPage<SnSanityTestCssSelectorPage> sanitytestPage = SnPage.with(SnSanityTestCssSelectorPage.class);
     private final SnWithPage<SnSanityTestExternalPage> sanitytestExternalPage = SnPage.with(SnSanityTestExternalPage.class);
+    private final SnWithPage<SnDragAndDropTestPage> dragAndDropTestPage = SnPage.with(SnDragAndDropTestPage.class);
 
     @BeforeClass 
     public void setup() {
@@ -488,6 +490,28 @@ public class SnSanityCssSelectorTest {
 
                 a.sendKeys("This is a new text");
                 a.accept();
+            });
+        });
+    }
+
+    @Test
+    public void testDragAndDrop() {
+        sanitytestPage.inPage(p -> {
+
+            p.openDragAndDropPageLink.click();
+            p.inWindow(dragAndDropTestPage, p1 -> {
+                Assert.assertTrue(p1.dropZone1.draggedItem.isDisplayed());
+                Assert.assertFalse(p1.dropZone2.draggedItem.isDisplayed());
+
+                p1.draggedItem.drag().to(p1.dropZone2);
+
+                Assert.assertFalse(p1.dropZone1.draggedItem.isDisplayed());
+                Assert.assertTrue(p1.dropZone2.draggedItem.isDisplayed());
+
+                p1.draggedItem.drag().to(p1.dropZone1);
+
+                Assert.assertTrue(p1.dropZone1.draggedItem.isDisplayed());
+                Assert.assertFalse(p1.dropZone2.draggedItem.isDisplayed());
             });
         });
     }

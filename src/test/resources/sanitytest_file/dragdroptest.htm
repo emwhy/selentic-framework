@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html dir="ltr">
+<head>
+    <title>Drag And Drop Test</title>
+    <style>
+        :root {
+            --bg-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --glass-bg: rgba(255, 255, 255, 0.1);
+            --glass-border: rgba(255, 255, 255, 0.2);
+        }
+
+        body {
+            background: var(--bg-gradient);
+            font-family: 'Segoe UI', sans-serif;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 40px;
+        }
+
+        .drop-zone {
+            width: 300px;
+            height: 300px;
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            border: 2px dashed var(--glass-border);
+            border-radius: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Slick highlight when item is over the zone */
+        .drop-zone.dragover {
+            background: rgba(255, 255, 255, 0.2);
+            border-color: #fff;
+            transform: scale(1.02);
+        }
+
+        .draggable-item {
+            width: 120px;
+            padding: 15px;
+            background: #fff;
+            color: #764ba2;
+            font-weight: bold;
+            text-align: center;
+            border-radius: 12px;
+            cursor: grab;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            transition: transform 0.2s;
+        }
+
+        .draggable-item:active {
+            cursor: grabbing;
+        }
+
+        .dragging {
+            opacity: 0.5;
+            transform: scale(0.95);
+        }
+
+    </style>
+</head>
+<body>
+<div class="drop-zone" id="target-zone1">
+    <p style="color: white; opacity: 0.6;">Drop Zone 1</p>
+    <div id="dragged-item" class="draggable-item" draggable="true">
+        Drag me!
+    </div>
+</div>
+
+<div class="drop-zone" id="target-zone2">
+    <p style="color: white; opacity: 0.6;">Drop Zone 2</p>
+</div>
+<script type="text/javascript">
+    const item = document.getElementById('dragged-item');
+    const zones = document.querySelectorAll('.drop-zone');
+
+    item.addEventListener('dragstart', (e) => {
+        e.dataTransfer.setData('text/plain', e.target.id);
+        item.classList.add('dragging');
+    });
+
+    item.addEventListener('dragend', () => {
+        item.classList.remove('dragging');
+    });
+
+    zones.forEach(zone => {
+        zone.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            zone.classList.add('dragover'); // Slick hover effect
+        });
+
+        zone.addEventListener('dragleave', () => {
+            zone.classList.remove('dragover');
+        });
+
+        zone.addEventListener('drop', (e) => {
+            e.preventDefault();
+            zone.classList.remove('dragover');
+            const id = e.dataTransfer.getData('text/plain');
+            const draggedElement = document.getElementById(id);
+            zone.appendChild(draggedElement);
+        });
+    });
+</script>
+
+</body>
+</html>

@@ -46,6 +46,8 @@ public class SnSanityTestCssSelectorPage extends SnPage {
     private static final SnCssSelector SHOW_CONFIRM_BUTTON = _cssSelector.descendant(_id("show-confirm"));
     private static final SnCssSelector SHOW_PROMPT_BUTTON = _cssSelector.descendant(_id("show-prompt"));
 
+    private static final SnCssSelector OPEN_DRAG_AND_DROP_PAGE_LINK = _cssSelector.descendant(_id("open-drag-and-drop-page"));
+
     @Override
     protected void waitForDisplayed() {
         waitForComponent(sanitytestTextbox);
@@ -81,6 +83,8 @@ public class SnSanityTestCssSelectorPage extends SnPage {
     public final SnButton showAlertButton = $button(SHOW_ALERT_BUTTON);
     public final SnButton showConfirmButton = $button(SHOW_CONFIRM_BUTTON);
     public final SnButton showPromptButton = $button(SHOW_PROMPT_BUTTON);
+
+    public final SnLink openDragAndDropPageLink = $link(OPEN_DRAG_AND_DROP_PAGE_LINK);
 
     public void inSanityTestInnerFrame(SnFrameAction<SnSanityTestFrameContent> predicate) {
         $frame(SANITYTEST_IFRAME, SnSanityTestFrameContent.class, predicate);
