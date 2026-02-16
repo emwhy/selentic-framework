@@ -14,6 +14,10 @@ on:
         description: 'Manually run Gradle.'
         required: true
         default: 'main'
+
+permissions:
+  contents: write # Grants write access for pushing code, creating releases, etc.
+
 jobs:
   build:
 
