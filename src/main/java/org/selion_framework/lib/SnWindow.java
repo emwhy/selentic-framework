@@ -46,15 +46,20 @@ public final class SnWindow {
         final String newWindowHandle = switchToTopWindow(driver, windowHandles);
         int beforeCloseAttemptCount;
 
-        if (predicate != null) {
-            withPage.inPage(p -> predicate.inWindow(p));
-        } else if (controllerPredicate != null) {
-            withPage.inPage(p -> controllerPredicate.inWindow(p, new SnWindowController(driver, newWindowHandle)));
-        } else {
-            // This should never happen.
-            throw new SnWindowException("No predicate defined.");
+        try {
+            if (predicate != null) {
+                withPage.inPage(p -> predicate.inWindow(p));
+            } else if (controllerPredicate != null) {
+                withPage.inPage(p -> controllerPredicate.inWindow(p, new SnWindowController(driver, newWindowHandle)));
+            } else {
+                // This should never happen.
+                throw new SnWindowException("No predicate defined.");
+            }
+        } catch (Throwable th) {
+            driver.switchTo().window(mainWindowHandle);
+            SnWait.waitUntil(() -> driver.getWindowHandle().equals(mainWindowHandle));
+            throw new SnWindowException("Error while in external window.", th);
         }
-
         beforeCloseAttemptCount = windowHandles.size();
 
         // Make sure that the actual window count matches expected count.
@@ -91,30 +96,6 @@ public final class SnWindow {
             LOG.warn("Encountered NoSuchWindowException: count = {} [{}]", driver.getWindowHandles().size(), String.join(", ", driver.getWindowHandles()));
             LOG.warn("Exception", ex);
         }
-    }
-
-    /**
-     * Close all of currently opened windows except for the default one.
-     */
-    public static void closeOtherWindows() {
-        try {
-            final WebDriver driver = Selion.driver();
-            final List<String> handles = new ArrayList<>(driver.getWindowHandles());
-
-            LOG.debug("Detected {} windows", handles.size());
-            for (int i = handles.size() - 1; i > 0; i--) {
-                String handle = handles.get(i);
-
-                driver.switchTo().window(handle);
-                driver.close();
-                LOG.debug("Closed window: [{}]", handle);
-            }
-            driver.switchTo().window(handles.getFirst());
-
-            if (driver.getWindowHandles().size() > 1) {
-                throw new SnWindowException("Failed to close all but one window. Detected windows count: " + driver.getWindowHandles().size());
-            }
-        } catch (IllegalStateException ex) {}
     }
 
     /**
