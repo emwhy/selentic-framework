@@ -66,8 +66,8 @@ import java.time.Duration;
  *   <li><strong>Page Reload:</strong> Reload the current page and wait for it to fully load
  *       using {@link #reload()}.</li>
  *   <li><strong>Window Management:</strong> Control browser windows and perform window-specific
- *       operations through {@link #inWindow(SnWindow.WindowActionEmpty)} and
- *       {@link #inWindow(SnWindow.WindowActionController)}.</li>
+ *       operations through {@link #inWindow(SnWithPage, SnWindow.SnWindowAction)} and
+ *       {@link #inWindow(SnWithPage, SnWindow.SnWindowActionWithController)}.</li>
  * </ul>
  * </p>
  *
@@ -220,13 +220,14 @@ public abstract class SnPage extends SnAbstractPage {
      * <strong>Usage Example:</strong>
      * <pre>{@code
      *  final SnWithPage<HomePage> homePage = SnPage.with(HomePage.class);
+     *  final SnWithPage<ExternalPage> exPage = SnPage.with(ExternalPage.class);
      *
      *  homePage.inPage(p -> {
      *      // Click a link that opens a new window
      *      p.externalLink.click();
      *
      *      // Perform actions in the new window
-     *      p.inWindow(() -> {
+     *      p.inWindow(exPage, p1 -> {
      *          String currentUrl = Selion.driver().getCurrentUrl();
      *          System.out.println("New window URL: " + currentUrl);
      *
@@ -241,14 +242,14 @@ public abstract class SnPage extends SnAbstractPage {
      * }</pre>
      * </p>
      *
-     * @param predicate a {@link SnWindow.WindowActionEmpty} functional interface containing
+     * @param predicate a {@link SnWindow.SnWindowAction} functional interface containing
      *                  the action to perform within the window context
      *
      * @see SnWindow
-     * @see SnWindow.WindowActionEmpty
+     * @see SnWindow.SnWindowAction
      */
-    public void inWindow(SnWindow.WindowActionEmpty predicate) {
-        new SnWindow().inWindow(predicate);
+    public <T extends SnPage> void inWindow(SnWithPage<T> withPage, SnWindow.SnWindowAction<T> predicate) {
+        new SnWindow().inWindow(withPage, predicate);
     }
 
     /**
@@ -256,7 +257,7 @@ public abstract class SnPage extends SnAbstractPage {
      *
      * <p>
      * This method allows executing test code within a different browser window with access to
-     * a {@link SnWindow.WindowActionController} that provides methods for controlling window behavior.
+     * a {@link SnWindow.SnWindowActionWithController} that provides methods for controlling window behavior.
      * The framework automatically handles window switching and cleanup, ensuring that the
      * original window is restored after the action completes.
      * </p>
@@ -271,6 +272,7 @@ public abstract class SnPage extends SnAbstractPage {
      * <strong>Usage Example:</strong>
      * <pre>{@code
      *  final SnWithPage<HomePage> homePage = SnPage.with(HomePage.class);
+     *  final SnWithPage<ExternalPage> exPage = SnPage.with(ExternalPage.class);
      *
      *  homePage.inPage(p -> {
      *      // Click a link that opens a new window
@@ -278,7 +280,7 @@ public abstract class SnPage extends SnAbstractPage {
      *
      *      // Perform actions in the new window with controller access. Controller gives access to switch to previous
      *      // windows without closing.
-     *      p.inWindow(controller -> {
+     *      p.inWindow(exPage, (p1, controller) -> {
      *          String currentUrl = Selion.driver().getCurrentUrl();
      *          System.out.println("New window URL: " + currentUrl);
      *
@@ -293,16 +295,15 @@ public abstract class SnPage extends SnAbstractPage {
      * }</pre>
      * </p>
      *
-     * @param predicate a {@link SnWindow.WindowActionController} functional interface containing
+     * @param predicate a {@link SnWindow.SnWindowActionWithController} functional interface containing
      *                  the action to perform within the window context with access to window control methods
      *
      * @see SnWindow
-     * @see SnWindow.WindowActionController
+     * @see SnWindow.SnWindowActionWithController
      */
-    public void inWindow(SnWindow.WindowActionController predicate) {
-        new SnWindow().inWindow(predicate);
+    public <T extends SnPage> void inWindow(SnWithPage<T> withPage, SnWindow.SnWindowActionWithController<T> predicate) {
+        new SnWindow().inWindow(withPage, predicate);
     }
-
 
     /**
      * Performs an action within the context of a browser alert dialog.

@@ -296,7 +296,7 @@ public class SnSanityCssSelectorTest {
             // Ensure that calling "inWindow()" without having a window open would cause
             // exception.
             try {
-                p.inWindow(() -> {
+                p.inWindow(sanitytestExternalPage, p1 -> {
                     fail("Should have thrown an exception");
                 });
                 fail("Should have thrown an exception");
@@ -306,60 +306,57 @@ public class SnSanityCssSelectorTest {
 
             // Open a new window.
             p.openExternalWindowLink.click();
-            p.inWindow(() -> {
-                sanitytestExternalPage.inPage(externalPage -> {
+            p.inWindow(sanitytestExternalPage, p1 -> {
+                // Open another new window.
+                p1.openExternalWindowLink.click();
+                p1.inWindow(sanitytestExternalPage, (p2, controller) -> {
 
-                    // Open another new window.
-                    externalPage.openExternalWindowLink.click();
-                    externalPage.inWindow(controller -> {
+                    // Controller allows temporary switching control to other windows
+                    // without closing them, then return the control back to the original
+                    // window.
+                    controller.inOtherWindow(sanitytestPage, 0, p3 -> {
+                        // Ensure that the focused window is the root one.
+                        Assert.assertEquals(p3.sanitytestTableRows.entry("SanityTest 1").serialNumberText.text(), "#TDD987");
+                        Assert.assertEquals(p3.sanitytestTableRows.entry("SanityTest 2").serialNumberText.text(), "#AEV974");
+                        Assert.assertEquals(p3.sanitytestTableRows.entry("SanityTest 3").serialNumberText.text(), "#CCA106");
 
-                        // Controller allows temporary switching control to other windows
-                        // without closing them, then return the control back to the original
-                        // window.
-                        controller.inOtherWindow(0, () -> {
-                            // Ensure that the focused window is the root one.
-                            Assert.assertEquals(p.sanitytestTableRows.entry("SanityTest 1").serialNumberText.text(), "#TDD987");
-                            Assert.assertEquals(p.sanitytestTableRows.entry("SanityTest 2").serialNumberText.text(), "#AEV974");
-                            Assert.assertEquals(p.sanitytestTableRows.entry("SanityTest 3").serialNumberText.text(), "#CCA106");
-
-                            Assert.assertEquals(controller.windowCount(), 3);
-                        });
                         Assert.assertEquals(controller.windowCount(), 3);
-
-                        // Assertion on the external window after the control is returned from
-                        // "the other window".
-                        Assert.assertEquals(externalPage.sanitytestExternalTextbox.text(), "external textbox text");
-
-                        Assert.assertEquals(externalPage.sanitytestExternalTableRows.size(), 3);
-
-                        Assert.assertEquals(externalPage.sanitytestExternalTableRows.at(0).text(), "External SanityTest 1");
-                        Assert.assertEquals(externalPage.sanitytestExternalTableRows.at(1).text(), "External SanityTest 2");
-                        Assert.assertEquals(externalPage.sanitytestExternalTableRows.at(2).text(), "External SanityTest 3");
-
-                        Assert.assertEquals(externalPage.sanitytestExternalTableRows.entry("External SanityTest 1").serialNumberText.text(), "#EX-TDD987");
-                        Assert.assertEquals(externalPage.sanitytestExternalTableRows.entry("External SanityTest 2").serialNumberText.text(), "#EX-AEV974");
-                        Assert.assertEquals(externalPage.sanitytestExternalTableRows.entry("External SanityTest 3").serialNumberText.text(), "#EX-CCA106");
-
-                        // Close the current window.
-                        externalPage.closeCurrentWindowButton.click();
                     });
+                    Assert.assertEquals(controller.windowCount(), 3);
 
-                    // Ensure that "inWindow" predicate ended properly despite that the window was
-                    // closed before its end.
-                    Assert.assertEquals(Selion.driver().getWindowHandles().size(), 2);
+                    // Assertion on the external window after the control is returned from
+                    // "the other window".
+                    Assert.assertEquals(p2.sanitytestExternalTextbox.text(), "external textbox text");
 
-                    Assert.assertEquals(externalPage.sanitytestExternalTextbox.text(), "external textbox text");
+                    Assert.assertEquals(p2.sanitytestExternalTableRows.size(), 3);
 
-                    Assert.assertEquals(externalPage.sanitytestExternalTableRows.size(), 3);
+                    Assert.assertEquals(p2.sanitytestExternalTableRows.at(0).text(), "External SanityTest 1");
+                    Assert.assertEquals(p2.sanitytestExternalTableRows.at(1).text(), "External SanityTest 2");
+                    Assert.assertEquals(p2.sanitytestExternalTableRows.at(2).text(), "External SanityTest 3");
 
-                    Assert.assertEquals(externalPage.sanitytestExternalTableRows.at(0).text(), "External SanityTest 1");
-                    Assert.assertEquals(externalPage.sanitytestExternalTableRows.at(1).text(), "External SanityTest 2");
-                    Assert.assertEquals(externalPage.sanitytestExternalTableRows.at(2).text(), "External SanityTest 3");
+                    Assert.assertEquals(p2.sanitytestExternalTableRows.entry("External SanityTest 1").serialNumberText.text(), "#EX-TDD987");
+                    Assert.assertEquals(p2.sanitytestExternalTableRows.entry("External SanityTest 2").serialNumberText.text(), "#EX-AEV974");
+                    Assert.assertEquals(p2.sanitytestExternalTableRows.entry("External SanityTest 3").serialNumberText.text(), "#EX-CCA106");
 
-                    Assert.assertEquals(externalPage.sanitytestExternalTableRows.entry("External SanityTest 1").serialNumberText.text(), "#EX-TDD987");
-                    Assert.assertEquals(externalPage.sanitytestExternalTableRows.entry("External SanityTest 2").serialNumberText.text(), "#EX-AEV974");
-                    Assert.assertEquals(externalPage.sanitytestExternalTableRows.entry("External SanityTest 3").serialNumberText.text(), "#EX-CCA106");
+                    // Close the current window.
+                    p2.closeCurrentWindowButton.click();
                 });
+
+                // Ensure that "inWindow" predicate ended properly despite that the window was
+                // closed before its end.
+                Assert.assertEquals(Selion.driver().getWindowHandles().size(), 2);
+
+                Assert.assertEquals(p1.sanitytestExternalTextbox.text(), "external textbox text");
+
+                Assert.assertEquals(p1.sanitytestExternalTableRows.size(), 3);
+
+                Assert.assertEquals(p1.sanitytestExternalTableRows.at(0).text(), "External SanityTest 1");
+                Assert.assertEquals(p1.sanitytestExternalTableRows.at(1).text(), "External SanityTest 2");
+                Assert.assertEquals(p1.sanitytestExternalTableRows.at(2).text(), "External SanityTest 3");
+
+                Assert.assertEquals(p1.sanitytestExternalTableRows.entry("External SanityTest 1").serialNumberText.text(), "#EX-TDD987");
+                Assert.assertEquals(p1.sanitytestExternalTableRows.entry("External SanityTest 2").serialNumberText.text(), "#EX-AEV974");
+                Assert.assertEquals(p1.sanitytestExternalTableRows.entry("External SanityTest 3").serialNumberText.text(), "#EX-CCA106");
             });
 
         });

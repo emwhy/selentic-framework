@@ -21,8 +21,8 @@ public final class SnWindow {
      * Switch the control to the top window, and perform the actions in predicate.
      * @param predicate
      */
-    public void inWindow(WindowActionEmpty predicate) {
-        inWindow(predicate, null);
+    public <T extends SnPage> void inWindow(SnWithPage<T> withPage, SnWindowAction<T> predicate) {
+        inWindow(withPage, predicate, null);
     }
 
     /**
@@ -30,26 +30,26 @@ public final class SnWindow {
      * "controller" is provided as parameter.
      * @param predicate
      */
-    public void inWindow(WindowActionController predicate) {
-        inWindow(null, predicate);
+    public <T extends SnPage> void inWindow(SnWithPage<T> withPage, SnWindowActionWithController<T> predicate) {
+        inWindow(withPage, null, predicate);
     }
 
     /**
      * Switch the control to the top window, and perform the actions in predicate.
-     * @param emptyPredicate
+     * @param predicate
      * @param controllerPredicate
      */
-    private void inWindow(WindowActionEmpty emptyPredicate, WindowActionController controllerPredicate) {
+    private <T extends SnPage> void inWindow(SnWithPage<T> withPage, SnWindowAction<T> predicate, SnWindowActionWithController<T> controllerPredicate) {
         final WebDriver driver = Selion.driver();
         final String mainWindowHandle = driver.getWindowHandle();
         final List<String> windowHandles = getWindowHandles(driver);
         final String newWindowHandle = switchToTopWindow(driver, windowHandles);
         int beforeCloseAttemptCount;
 
-        if (emptyPredicate != null) {
-            emptyPredicate.inWindow();
+        if (predicate != null) {
+            withPage.inPage(p -> predicate.inWindow(p));
         } else if (controllerPredicate != null) {
-            controllerPredicate.inWindow(new WindowController(driver, newWindowHandle));
+            withPage.inPage(p -> controllerPredicate.inWindow(p, new SnWindowController(driver, newWindowHandle)));
         } else {
             // This should never happen.
             throw new SnWindowException("No predicate defined.");
@@ -165,11 +165,11 @@ public final class SnWindow {
         }
     }
 
-    public final class WindowController {
+    public final class SnWindowController {
         private final WebDriver webDriver;
         private final String currentHandle;
 
-        private WindowController(WebDriver webDriver, String currentHandle) {
+        private SnWindowController(WebDriver webDriver, String currentHandle) {
             this.webDriver = webDriver;
             this.currentHandle = currentHandle;
         }
@@ -179,7 +179,7 @@ public final class SnWindow {
          * @param index
          * @param predicate
          */
-        public void inOtherWindow(int index, WindowActionEmpty predicate) {
+        public <T extends SnPage> void inOtherWindow(SnWithPage<T> withPage, int index, SnWindowAction<T> predicate) {
             final List<String> handles = webDriver.getWindowHandles().stream().toList();
 
             try {
@@ -187,7 +187,7 @@ public final class SnWindow {
                 Selion.executeScript("window.focus()");
                 LOG.debug("Temporary switch to window: {} '{}' [{}]", index, webDriver.getTitle(), handles.get(index));
 
-                predicate.inWindow();
+                withPage.inPage(p -> predicate.inWindow(p));
 
             } finally {
                 webDriver.switchTo().window(currentHandle);
@@ -206,11 +206,11 @@ public final class SnWindow {
         }
     }
 
-    public interface WindowActionEmpty {
-        void inWindow();
+    public interface SnWindowAction<T extends SnPage> {
+        void inWindow(T page);
     }
 
-    public interface WindowActionController {
-        void inWindow(WindowController controller);
+    public interface SnWindowActionWithController<T extends SnPage> {
+        void inWindow(T page, SnWindowController controller);
     }
 }
