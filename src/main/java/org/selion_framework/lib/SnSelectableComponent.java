@@ -41,7 +41,7 @@ public abstract class SnSelectableComponent extends SnFormComponent {
      * Checks whether this selectable element is currently selected.
      *
      * <p>This method queries the underlying Selenium element to determine its selection state.
-     * It is applicable to elements such as checkboxes and radio buttons.</p>
+     * It is applicable to elements such as checkboxes and radio buttons.
      *
      * <p><strong>Example:</strong>
      * <pre>{@code
@@ -50,7 +50,7 @@ public abstract class SnSelectableComponent extends SnFormComponent {
      * } else {
      *     checkbox.select();  // Select it if not already selected
      * }
-     * }</pre></p>
+     * }</pre>
      *
      * @return {@code true} if the element is currently selected; {@code false} otherwise
      */
@@ -61,7 +61,7 @@ public abstract class SnSelectableComponent extends SnFormComponent {
     /**
      * Selects this element if it is not already selected.
      *
-     * <p>This method performs a smart selection operation:</p>
+     * <p>This method performs a smart selection operation:
      * <ol>
      *   <li>First checks if the element is already selected via {@link #isSelected()}.</li>
      *   <li>If not selected, scrolls the element into view and clicks it to select it.</li>
@@ -69,14 +69,14 @@ public abstract class SnSelectableComponent extends SnFormComponent {
      * </ol>
      *
      * <p>The automatic scrolling ensures that the element is visible on the screen before attempting
-     * to click it, which helps prevent issues with elements that are not in the viewport.</p>
+     * to click it, which helps prevent issues with elements that are not in the viewport.
      *
      * <p><strong>Example:</strong>
      * <pre>{@code
      * checkbox.select();  // Selects the checkbox if not already selected
      *
      * checkbox.select();  // Second call does nothing (already selected)
-     * }</pre></p>
+     * }</pre>
      *
      * @see #isSelected()
      * @see SnFormComponent#scrolled()

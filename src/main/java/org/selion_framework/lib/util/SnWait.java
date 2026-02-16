@@ -13,13 +13,13 @@ import org.selion_framework.lib.exception.SnWaitTimeoutException;
  *   <li><strong>Wait Until True</strong>: Waits until a boolean condition becomes true or timeout occurs</li>
  *   <li><strong>Wait Until Non-Null</strong>: Waits until a value becomes non-null or timeout occurs</li>
  * </ul>
- * </p>
- * <p>
- * All wait operations poll at regular intervals (5ms for durations < 20 seconds, 10ms otherwise)
- * and throw {@link SnWaitTimeoutException} if the condition is not met within the specified timeout.
- * </p>
  *
- * <h3>Usage Examples:</h3>
+ * <p>
+ * All wait operations poll at regular intervals (5ms for durations &lt; 20 seconds, 10ms otherwise)
+ * and throw {@link SnWaitTimeoutException} if the condition is not met within the specified timeout.
+ * 
+ *
+ * <h2>Usage Examples:</h2>
  * <pre>
  * // Simple sleep
  * SnWait.sleep(1000);
@@ -64,7 +64,7 @@ public class SnWait {
      * The default timeout is retrieved from {@link SelionConfig#waitTimeoutMilliseconds()}.
      * If the condition is not satisfied within the timeout period, a {@link SnWaitTimeoutException}
      * is thrown.
-     * </p>
+     * 
      *
      * @param waitTrueCondition the condition to evaluate, must not be null
      * @throws SnWaitTimeoutException if the condition does not become true within the default timeout
@@ -79,7 +79,7 @@ public class SnWait {
      * <p>
      * The default timeout is retrieved from {@link SelionConfig#waitTimeoutMilliseconds()}.
      * If the timeout is exceeded, the {@code onTimeout} handler is invoked to determine the exception to throw.
-     * </p>
+     * 
      *
      * @param waitTrueCondition the condition to evaluate, must not be null
      * @param onTimeout the timeout handler that processes the timeout exception, may be null
@@ -94,7 +94,7 @@ public class SnWait {
      * Waits until the specified condition becomes true or the maximum wait time is exceeded.
      * <p>
      * If the condition is not satisfied within the specified timeout, a {@link SnWaitTimeoutException} is thrown.
-     * </p>
+     * 
      *
      * @param maxWaitMilliseconds the maximum time to wait in milliseconds
      * @param waitTrueCondition the condition to evaluate, must not be null
@@ -112,7 +112,7 @@ public class SnWait {
      * <p>
      * If the timeout is exceeded, the {@code onTimeout} handler is invoked to determine the exception to throw.
      * If the handler returns null, a default {@link SnWaitTimeoutException} is thrown.
-     * </p>
+     * 
      *
      * @param maxWaitMilliseconds the maximum time to wait in milliseconds
      * @param waitTrueCondition the condition to evaluate, must not be null
@@ -131,7 +131,7 @@ public class SnWait {
      * <p>
      * The default timeout is retrieved from {@link SelionConfig#waitTimeoutMilliseconds()}.
      * This method is useful for waiting until an element or object is available before proceeding.
-     * </p>
+     * 
      *
      * @param <T> the type of the value to be returned
      * @param waitPresenceCondition the condition that returns the value to check, must not be null
@@ -147,7 +147,7 @@ public class SnWait {
      * Waits until a non-null value is returned from the specified condition or the maximum wait time is exceeded.
      * <p>
      * This method is useful for waiting until an element or object becomes available before proceeding.
-     * </p>
+     * 
      *
      * @param <T> the type of the value to be returned
      * @param maxWaitMilliseconds the maximum time to wait in milliseconds
@@ -197,7 +197,7 @@ public class SnWait {
      * If a timeout occurs and an onTimeout handler is provided, the handler is invoked to determine
      * which exception should be thrown. If no handler is provided or if the handler returns null,
      * a {@link SnWaitTimeoutException} is thrown.
-     * </p>
+     * 
      *
      * @param waitTrueCondition the condition to evaluate
      * @param onTimeout the optional timeout handler
@@ -246,7 +246,7 @@ public class SnWait {
      * Sleeps the current thread for the specified interval while handling interruptions.
      * <p>
      * If the thread is interrupted during sleep, the interrupt status is restored on the current thread.
-     * </p>
+     * 
      *
      * @param intervalMilliseconds the duration to sleep in milliseconds
      */
@@ -263,7 +263,7 @@ public class SnWait {
      * <p>
      * Implementations should return true when the desired condition is met, and false otherwise.
      * The condition is evaluated at regular polling intervals until it returns true or timeout occurs.
-     * </p>
+     * 
      */
     public interface SnWaitTrueCondition {
         /**
@@ -280,7 +280,7 @@ public class SnWait {
      * Implementations should return a non-null value when the desired object/element is available,
      * or null if it's not yet available. The condition is evaluated at regular polling intervals
      * until it returns a non-null value or timeout occurs.
-     * </p>
+     * 
      *
      * @param <T> the type of the value returned by this condition
      */
@@ -299,7 +299,7 @@ public class SnWait {
      * When a wait operation times out, the {@code doOnTimeout} method is invoked to allow
      * custom exception handling. If this method returns null, a default {@link SnWaitTimeoutException}
      * is thrown. If it returns an exception, that exception is thrown instead.
-     * </p>
+     * 
      */
     public interface SnOnTimeout {
         /**

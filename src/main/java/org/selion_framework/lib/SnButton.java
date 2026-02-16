@@ -7,12 +7,12 @@ package org.selion_framework.lib;
  * This class handles both HTML button elements ({@code <button>}) and input elements with button-like types
  * ({@code <input type="button">}, {@code <input type="submit">}, {@code <input type="reset">}).
  * It provides a unified interface for interacting with buttons regardless of their underlying HTML structure.
- * </p>
+ * 
  *
  * <h2>Supported Button Types</h2>
  * <p>
  * This component recognizes and validates the following button implementations:
- * </p>
+ * 
  * <ul>
  *   <li><strong>{@code <button>}</strong> - Standard HTML button elements</li>
  *   <li><strong>{@code <input type="button">}</strong> - Generic input button</li>
@@ -68,8 +68,6 @@ package org.selion_framework.lib;
  *   <li>The tag name is either "button" or "input"</li>
  *   <li>If it's an "input" element, the type attribute must be one of: "button", "submit", or "reset"</li>
  * </ul>
- * </p>
- *
  *
  * @see SnFormComponent
  * @see SnComponent
@@ -85,7 +83,7 @@ public class SnButton extends SnFormComponent {
      *   <li>HTML {@code <button>} elements</li>
      *   <li>HTML {@code <input>} elements with type "button", "submit", or "reset"</li>
      * </ul>
-     * </p>
+     * 
      *
      * <p>
      * <strong>Validation Logic:</strong>
@@ -94,7 +92,7 @@ public class SnButton extends SnFormComponent {
      *   <li>If it's an input element, additionally verifies the type is one of: "button", "submit", or "reset"</li>
      *   <li>For button elements, no additional type validation is required</li>
      * </ol>
-     * </p>
+     * 
      *
      * <p>
      * <strong>Implementation Example:</strong>
@@ -109,7 +107,7 @@ public class SnButton extends SnFormComponent {
      * <input type="text" value="Text Field" />                   // Invalid - wrong input type
      * <span class="button">Click Me</span>                       // Invalid - not a button element
      * }</pre>
-     * </p>
+     * 
      *
      * @param rule the {@link SnComponentRule} object used to define and verify button validation rules
      * @see SnComponentRule#tag()
@@ -130,7 +128,7 @@ public class SnButton extends SnFormComponent {
      * <p>
      * This method returns the user-visible label of the button, handling both {@code <button>} and
      * {@code <input>} element implementations appropriately.
-     * </p>
+     * 
      *
      * @return the text content for {@code <button>} elements or the value attribute for {@code <input>}
      *         button elements

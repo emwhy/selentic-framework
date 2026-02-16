@@ -5,7 +5,7 @@ package org.selion_framework.lib;
  * <p>
  * This class provides methods to create XPath selectors starting from the root or
  * using literal strings, ensuring specific page-level targeting.
- * </p>
+ * 
  * @see SnXPath
  */
 public final class SnPageXPathBuilder extends SnSelectorBuilder {
@@ -26,7 +26,7 @@ public final class SnPageXPathBuilder extends SnSelectorBuilder {
      * <p>
      * Note: This method internally instantiates {@link SnXPathPage} to ensure the
      * selector is rooted correctly for page-level scope.
-     * </p>
+     * 
      *
      * @param tag The HTML/XML tag to target.
      * @param selectorProperties Optional properties or attributes used to filter the tag.

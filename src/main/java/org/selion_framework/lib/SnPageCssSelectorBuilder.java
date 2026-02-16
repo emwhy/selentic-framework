@@ -5,7 +5,7 @@ package org.selion_framework.lib;
  * <p>
  * This class provides methods to initialize CSS selectors either from raw strings or
  * by defining hierarchical descendant relationships.
- * </p>
+ * 
  * @see SnCssSelector
  */
 public final class SnPageCssSelectorBuilder extends SnSelectorBuilder {

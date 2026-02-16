@@ -19,13 +19,13 @@ import java.time.Duration;
  *   <li>Page reload functionality with automatic wait for page load</li>
  *   <li>Window management and control</li>
  * </ul>
- * </p>
+ *
  *
  * <p>
  * <strong>Page Creation Pattern:</strong> {@code SnPage} provides a method for creating
  * and initializing page instances using the {@code with(Class)} factory method. This allows
  * for clean, readable page creation in test code.
- * </p>
+ * 
  *
  * <p>
  * <strong>Typical Usage:</strong>
@@ -54,7 +54,7 @@ import java.time.Duration;
  *      p.searchButton.click();
  * });
  * }</pre>
- * </p>
+ *
  *
  * <p>
  * <strong>Key Features:</strong>
@@ -69,7 +69,7 @@ import java.time.Duration;
  *       operations through {@link #inWindow(SnWithPage, SnWindow.SnWindowAction)} and
  *       {@link #inWindow(SnWithPage, SnWindow.SnWindowActionWithController)}.</li>
  * </ul>
- * </p>
+ *
  *
  * @see SnAbstractPage
  * @see SnWithPage
@@ -88,7 +88,7 @@ public abstract class SnPage extends SnAbstractPage {
      * // Create and initialize page.
      * final SnWithPage<HomePage> homePage = SnPage.with(HomePage.class);
      * }</pre>
-     * </p>
+     * 
      *
      * @param <T> the page type to create
      * @param pageType the class of the page to create; must extend from {@code SnPage}
@@ -106,7 +106,7 @@ public abstract class SnPage extends SnAbstractPage {
      * <p>
      * Page instances should not be created directly through the constructor.
      * Instead, use the {@link #with(Class)} factory method to create and initialize page instances.
-     * </p>
+     * 
      */
     protected SnPage() {
     }
@@ -118,12 +118,12 @@ public abstract class SnPage extends SnAbstractPage {
      * This method provides convenient access to the {@code <title>} element of the HTML page.
      * The title element is typically used to verify that the correct page has loaded or to
      * validate page-specific information.
-     * </p>
+     * 
      *
      * <p>
      * The returned component is a {@link SnGenericComponent} that wraps the title element
      * and allows access to its properties like text content, attributes, etc.
-     * </p>
+     * 
      *
      * <p>
      * <strong>Usage Example:</strong>
@@ -139,7 +139,7 @@ public abstract class SnPage extends SnAbstractPage {
      *      assert titleText.contains("Home") : "Expected 'Home' in page title";
      * });
      * }</pre>
-     * </p>
+     * 
      *
      * @return a {@link SnGenericComponent} representing the page title element
      */
@@ -153,7 +153,7 @@ public abstract class SnPage extends SnAbstractPage {
      * <p>
      * This method performs a browser navigation refresh on the current page and then calls
      * {@link #waitForPage()} to ensure the page is fully loaded before returning.
-     * </p>
+     * 
      *
      * <p>
      * The reload operation:
@@ -162,7 +162,7 @@ public abstract class SnPage extends SnAbstractPage {
      *   <li>Waits for the document ready state to be "complete"</li>
      *   <li>Waits for page-specific components to be displayed (as defined in {@link #waitForDisplayed()})</li>
      * </ul>
-     * </p>
+     * 
      *
      * <p>
      * <strong>Use Cases:</strong>
@@ -172,7 +172,7 @@ public abstract class SnPage extends SnAbstractPage {
      *   <li>Verifying that pages load correctly from scratch</li>
      *   <li>Recovering from transient errors by reloading the page</li>
      * </ul>
-     * </p>
+     * 
      *
      * <p>
      * <strong>Usage Example:</strong>
@@ -190,7 +190,7 @@ public abstract class SnPage extends SnAbstractPage {
      *      assert p.searchBox.text().isEmpty() : "Search box should be empty after reload";
      * });
      * }</pre>
-     * </p>
+     * 
      *
      * @throws SnUnexpectedPageException If unexpected page is loaded.
      *
@@ -208,13 +208,13 @@ public abstract class SnPage extends SnAbstractPage {
      * This method allows executing test code within a different browser window without parameters.
      * The framework automatically handles window switching and cleanup, ensuring that the
      * original window is restored after the action completes.
-     * </p>
+     * 
      *
      * <p>
      * This overload is used when the window action does not require any parameters or
      * return values. It is typically used for window operations that don't need to interact
      * with specific window properties.
-     * </p>
+     * 
      *
      * <p>
      * <strong>Usage Example:</strong>
@@ -240,7 +240,7 @@ public abstract class SnPage extends SnAbstractPage {
      *
      * // Control is automatically returned to the original window
      * }</pre>
-     * </p>
+     * 
      *
      * @param predicate a {@link SnWindow.SnWindowAction} functional interface containing
      *                  the action to perform within the window context
@@ -260,13 +260,13 @@ public abstract class SnPage extends SnAbstractPage {
      * a {@link SnWindow.SnWindowActionWithController} that provides methods for controlling window behavior.
      * The framework automatically handles window switching and cleanup, ensuring that the
      * original window is restored after the action completes.
-     * </p>
+     * 
      *
      * <p>
      * This overload is used when the window action needs to access the controller to manage
      * window-specific operations such as switching between windows, closing windows, or
      * accessing window properties.
-     * </p>
+     * 
      *
      * <p>
      * <strong>Usage Example:</strong>
@@ -293,7 +293,7 @@ public abstract class SnPage extends SnAbstractPage {
      *
      * // Control is automatically returned to the original window
      * }</pre>
-     * </p>
+     * 
      *
      * @param predicate a {@link SnWindow.SnWindowActionWithController} functional interface containing
      *                  the action to perform within the window context with access to window control methods
@@ -312,7 +312,7 @@ public abstract class SnPage extends SnAbstractPage {
      * This method allows executing test code that interacts with JavaScript alert, confirm, or
      * prompt dialogs. The framework automatically switches to the alert and provides it to the
      * provided action for interaction.
-     * </p>
+     * 
      *
      * <p>
      * The alert object provides methods to:
@@ -322,7 +322,7 @@ public abstract class SnPage extends SnAbstractPage {
      *   <li>Dismiss (click Cancel) the alert via {@link Alert#dismiss()}</li>
      *   <li>Send text to a prompt dialog via {@link Alert#sendKeys(String)}</li>
      * </ul>
-     * </p>
+     * 
      *
      * <p>
      * <strong>Usage Example:</strong>
@@ -347,7 +347,7 @@ public abstract class SnPage extends SnAbstractPage {
      *   });
      * // Continue with test after alert is handled
      * }</pre>
-     * </p>
+     * 
      *
      * @param action a {@link SnAlertAction} functional interface containing the action to perform
      *               with the alert dialog
@@ -369,7 +369,7 @@ public abstract class SnPage extends SnAbstractPage {
      * <p>
      * This interface is used with the {@link #inAlert(SnAlertAction)} method to handle
      * JavaScript alert, confirm, and prompt dialogs in a functional programming style.
-     * </p>
+     * 
      *
      * <p>
      * <strong>Typical Implementation:</strong>
@@ -380,7 +380,7 @@ public abstract class SnPage extends SnAbstractPage {
      *     alert.accept();
      * });
      * }</pre>
-     * </p>
+     *
      *
      * @see #inAlert(SnAlertAction)
      * @see Alert
@@ -393,7 +393,7 @@ public abstract class SnPage extends SnAbstractPage {
          * This method is called by the framework with an {@link Alert} object representing
          * the current browser alert. The implementation should perform the desired interactions
          * with the alert such as reading its text, accepting it, dismissing it, or sending keys.
-         * </p>
+         * 
          *
          * @param alert the {@link Alert} object representing the browser alert dialog
          * @see Alert#getText()

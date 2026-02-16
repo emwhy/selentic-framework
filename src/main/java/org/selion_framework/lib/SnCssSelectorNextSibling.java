@@ -6,7 +6,7 @@ package org.selion_framework.lib;
  * <p>
  * This class selects the immediately following sibling element that matches the selector.
  * It differs from the general sibling combinator ({@code ~}) which matches any following sibling.
- * </p>
+ * 
  *
  * <h2>Sibling Combinators</h2>
  * <ul>
@@ -36,7 +36,7 @@ public final class SnCssSelectorNextSibling extends SnCssSelector {
      * <p>
      * This constructor is package-private and called internally by the framework. Use the fluent API
      * method {@link SnCssSelector#nextSibling(SnCssSelectorPropertyType...)} instead.
-     * </p>
+     * 
      *
      * @param priorSelectorNode the preceding element selector in the chain
      * @param selectorProperties optional properties to filter the next sibling element
@@ -51,7 +51,7 @@ public final class SnCssSelectorNextSibling extends SnCssSelector {
      * <p>
      * This symbol is placed between the element and its immediately following sibling.
      * Called internally during selector string construction.
-     * </p>
+     * 
      *
      * @return the CSS adjacent sibling combinator: {@code " + "}
      */

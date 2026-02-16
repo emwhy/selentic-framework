@@ -27,7 +27,7 @@ import java.util.Optional;
  * <strong>Etymology:</strong> "Selion" is a medieval term for a strip of land between two furrows.
  * Why it works: It evokes a clear, defined path or "strip." In a modular web component architecture,
  * you are testing individual "strips" (components) that make up the whole field (the page).
- * </p>
+ * 
  *
  * <h2>Core Responsibilities</h2>
  * <ul>
@@ -51,7 +51,7 @@ import java.util.Optional;
  * <p>
  * All driver management methods are synchronized to ensure thread-safe access. Each thread maintains its own
  * WebDriver instance, allowing for parallel test execution without interference.
- * </p>
+ * 
  *
  * @see SnBrowser
  * @see SnWebDriverOptions
@@ -78,17 +78,17 @@ public final class Selion {
      * This method retrieves or creates a WebDriver instance for the calling thread. If no driver exists
      * for the current thread, a new one is created using the browser configured in {@link SelionConfig}.
      * The WebDriver instance is reused for subsequent calls from the same thread.
-     * </p>
+     * 
      *
      * <p>
      * <strong>Thread Safety:</strong> This method is synchronized to ensure thread-safe access. Each thread
      * maintains its own WebDriver instance, enabling parallel test execution.
-     * </p>
+     * 
      *
      * <p>
      * <strong>Browser Selection:</strong> The browser type is determined by the configuration setting
      * {@code browser} in the {@code selion.conf} file. The default is Chrome.
-     * </p>
+     * 
      *     *
      * @return the {@link WebDriver} instance for the current thread
      * @see #driver(SnBrowser)
@@ -106,18 +106,18 @@ public final class Selion {
      * browser type. If a driver already exists for the current thread and browser combination, it is
      * reused. Otherwise, a new WebDriver instance is created and initialized with the appropriate
      * browser options.
-     * </p>
+     * 
      *
      * <p>
      * <strong>Thread Safety:</strong> This method is synchronized to ensure thread-safe access.
      * Multiple threads can safely call this method concurrently, each receiving their own driver instance.
-     * </p>
+     * 
      *
      * <p>
      * <strong>WebDriver Listener Support:</strong> If a custom {@link WebDriverListener} has been set via
      * {@link #setWebDriverListener(WebDriverListener)}, the WebDriver will be wrapped with an
      * {@link EventFiringDecorator} to capture WebDriver events.
-     * </p>
+     * 
      *
      * <p>
      * <strong>Browser Options:</strong> Each browser is initialized with default options. These can be
@@ -128,7 +128,7 @@ public final class Selion {
      *   <li>{@link #withEdgeOptions(SnWebDriverOptions.EdgeOptionSetup)}</li>
      *   <li>{@link #withSafariOptions(SnWebDriverOptions.SafariOptionSetup)}</li>
      * </ul>
-     * </p>
+     *
      *
      * @param browser the {@link SnBrowser} type to use for creating the WebDriver
      * @return the {@link WebDriver} instance for the current thread with the specified browser
@@ -165,12 +165,12 @@ public final class Selion {
      * This method provides a fluent API for customizing Chrome browser options before the WebDriver
      * instance is created. The provided lambda receives the Chrome options object and preferences map,
      * allowing you to add arguments, set preferences, and configure other Chrome-specific settings.
-     * </p>
+     * 
      *
      * <p>
      * <strong>Important:</strong> This method must be called BEFORE calling {@link #driver()} or
      * {@link #driver(SnBrowser)} to ensure the options are applied to the new ChromeDriver instance.
-     * </p>
+     * 
      *
      * <p>
      * <strong>Common Chrome Options:</strong>
@@ -185,7 +185,7 @@ public final class Selion {
      *     prefs.put("profile.default_content_settings.popups", 0);     // Block popups
      * });
      * }</pre>
-     * </p>
+     *
      *
      * @param optionSetup a {@link SnWebDriverOptions.ChromeOptionSetup} functional interface that receives
      *                   the Chrome options and preferences for configuration
@@ -206,12 +206,12 @@ public final class Selion {
      * This method provides a fluent API for customizing Firefox browser options before the WebDriver
      * instance is created. The provided lambda receives the Firefox options object, allowing you to
      * add arguments, set preferences, and configure other Firefox-specific settings.
-     * </p>
+     * 
      *
      * <p>
      * <strong>Important:</strong> This method must be called BEFORE calling {@link #driver()} or
      * {@link #driver(SnBrowser)} to ensure the options are applied to the new FirefoxDriver instance.
-     * </p>
+     * 
      *
      * <p>
      * <strong>Common Firefox Options:</strong>
@@ -222,7 +222,7 @@ public final class Selion {
      *     options.addPreference("browser.helperApps.neverAsk.saveToDisk", "application/pdf");
      * });
      * }</pre>
-     * </p>
+     *
      *
      * @param optionSetup a {@link SnWebDriverOptions.FirefoxOptionSetup} functional interface that receives
      *                   the Firefox options for configuration
@@ -241,12 +241,12 @@ public final class Selion {
      * This method provides a fluent API for customizing Edge browser options before the WebDriver
      * instance is created. The provided lambda receives the Edge options object and preferences map,
      * allowing you to add arguments, set preferences, and configure other Edge-specific settings.
-     * </p>
+     * 
      *
      * <p>
      * <strong>Important:</strong> This method must be called BEFORE calling {@link #driver()} or
      * {@link #driver(SnBrowser)} to ensure the options are applied to the new EdgeDriver instance.
-     * </p>
+     * 
      *
      * <p>
      * <strong>Common Edge Options:</strong>
@@ -258,7 +258,7 @@ public final class Selion {
      *     prefs.put("download.prompt_for_download", false);            // Auto-download files
      * });
      * }</pre>
-     * </p>
+     *
      *
      * @param optionSetup a {@link SnWebDriverOptions.EdgeOptionSetup} functional interface that receives
      *                   the Edge options and preferences for configuration
@@ -279,17 +279,17 @@ public final class Selion {
      * This method provides a fluent API for customizing Safari browser options before the WebDriver
      * instance is created. The provided lambda receives the Safari options object, allowing you to
      * configure Safari-specific settings.
-     * </p>
+     * 
      *
      * <p>
      * <strong>Important:</strong> This method must be called BEFORE calling {@link #driver()} or
      * {@link #driver(SnBrowser)} to ensure the options are applied to the new SafariDriver instance.
-     * </p>
+     * 
      *
      * <p>
      * <strong>Note:</strong> Safari driver support is more limited compared to Chrome and Firefox.
      * Some options available in other browsers may not be supported in Safari.
-     * </p>
+     * 
      *
      * @param optionSetup a {@link SnWebDriverOptions.SafariOptionSetup} functional interface that receives
      *                   the Safari options for configuration
@@ -308,12 +308,12 @@ public final class Selion {
      * This method allows you to register a custom {@link WebDriverListener} that will receive callbacks
      * for WebDriver events such as navigation, element location, and JavaScript execution. This is useful
      * for logging, custom assertions, or performance monitoring.
-     * </p>
+     * 
      *
      * <p>
      * <strong>Important:</strong> This method must be called BEFORE calling {@link #driver()} to ensure
      * the listener is attached to the WebDriver instance.
-     * </p>
+     * 
      *
      * <p>
      * <strong>Usage Example:</strong>
@@ -330,7 +330,7 @@ public final class Selion {
      *     }
      * });
      * }</pre>
-     * </p>
+     *
      *
      * @param listener the {@link WebDriverListener} to set for event notifications
      * @see WebDriverListener
@@ -346,14 +346,14 @@ public final class Selion {
      * <p>
      * This method is a convenience wrapper around {@link WebDriver#get(String)} that navigates the
      * current browser to the specified URL.
-     * </p>
+     * 
      *
      * <p>
      * <strong>Usage Example:</strong>
      * <pre>{@code
      * Selion.open("https://example.com");
      * }</pre>
-     * </p>
+     *
      *
      * @param url the URL to navigate to
      * @see #open()
@@ -369,14 +369,14 @@ public final class Selion {
      * <p>
      * This method navigates the current browser to about:blank, which is useful for clearing the browser
      * state or initializing a clean slate before test execution.
-     * </p>
+     * 
      *
      * <p>
      * <strong>Usage Example:</strong>
      * <pre>{@code
      * Selion.open();  // Navigate to blank page
      * }</pre>
-     * </p>
+     *
      *
      * @see #open(String)
      * @see #driver()
@@ -392,12 +392,12 @@ public final class Selion {
      * This method terminates the WebDriver session for the calling thread, closes all associated browser
      * windows and tabs, and removes the driver from the thread-local storage. After calling this method,
      * a new WebDriver instance will be created the next time {@link #driver()} is called.
-     * </p>
+     * 
      *
      * <p>
      * <strong>Thread Safety:</strong> This method is synchronized to ensure thread-safe access to the
      * driver map.
-     * </p>
+     * 
      *
      * @see #driver()
      */
@@ -417,12 +417,12 @@ public final class Selion {
      * This method executes the provided JavaScript string in the context of the current page loaded in the
      * WebDriver. It automatically converts {@link SnComponent} parameters to their underlying {@link WebElement}
      * objects, allowing for seamless integration with the framework's component model.
-     * </p>
+     * 
      *
      * <p>
      * <strong>Parameter Conversion:</strong> If any parameter is an instance of {@link SnComponent}, it is
      * automatically converted to its wrapped {@link WebElement}. All other parameters are passed as-is.
-     * </p>
+     * 
      *
      * <p>
      * <strong>Return Value:</strong> The return value depends on the JavaScript code executed. Common return
@@ -432,7 +432,7 @@ public final class Selion {
      *   <li>Collections: List, Map</li>
      *   <li>WebElements: org.openqa.selenium.WebElement</li>
      * </ul>
-     * </p>
+     *
      **
      * @param script the JavaScript code to execute
      * @param params variable number of parameters to pass to the script;
@@ -455,17 +455,17 @@ public final class Selion {
      * This method executes the provided JavaScript string asynchronously in the context of the current page.
      * The script is expected to handle its own callback mechanism, typically by calling the provided callback
      * function when the asynchronous operation completes.
-     * </p>
+     * 
      *
      * <p>
      * <strong>Parameter Conversion:</strong> If any parameter is an instance of {@link SnComponent}, it is
      * automatically converted to its underlying {@link WebElement}. All other parameters are passed as-is.
-     * </p>
+     * 
      *
      * <p>
      * <strong>Timeout:</strong> The script execution times out after the WebDriver's configured timeout period
      * if the callback is not invoked.
-     * </p>
+     * 
      *
      * @param script the asynchronous JavaScript code to execute
      * @param params variable number of parameters to pass to the script;
@@ -487,24 +487,24 @@ public final class Selion {
      * <p>
      * This method captures the current state of the browser and saves it as a PNG file in the screenshot
      * directory. The filename includes a timestamp but no additional descriptive name.
-     * </p>
+     * 
      *
      * <p>
      * <strong>File Naming:</strong> Screenshots are named using the current system timestamp in milliseconds.
      * Example: {@code 1697234567890.png}
-     * </p>
+     * 
      *
      * <p>
      * <strong>Storage Location:</strong> Screenshots are stored in the directory returned by
      * {@link SnLogHandler#screenshotDirectory()}.
-     * </p>
+     * 
      *
      * <p>
      * <strong>Usage Example:</strong>
      * <pre>{@code
      * Selion.screenshot();  // Saves as: 1697234567890.png
      * }</pre>
-     * </p>
+     *
      *
      * @see #screenshot(String)
      * @see SnLogHandler#screenshotDirectory()
@@ -520,28 +520,28 @@ public final class Selion {
      * This method captures the current state of the browser and saves it as a PNG file in the screenshot
      * directory. The filename includes a timestamp and an optional descriptive suffix to help identify
      * what the screenshot depicts.
-     * </p>
+     * 
      *
      * <p>
      * <strong>File Naming:</strong> Screenshots are named using the format: {@code {timestamp}-{screenshotName}.png}
      * Example with name: {@code 1697234567890-login-page.png}
      * Example without name: {@code 1697234567890.png}
-     * </p>
+     * 
      *
      * <p>
      * <strong>Storage Location:</strong> Screenshots are stored in the directory returned by
      * {@link SnLogHandler#screenshotDirectory()}.
-     * </p>
+     * 
      *
      * <p>
      * <strong>Error Handling:</strong> If an {@link IOException} occurs during screenshot capture or file writing,
      * the error is logged at ERROR level but does not throw an exception, allowing tests to continue.
-     * </p>
+     * 
      *
      * <p>
      * <strong>Debugging:</strong> After successful capture, the screenshot file path is logged at DEBUG level
      * in a file:// URL format for easy access.
-     * </p>
+     * 
      *
      * <p>
      * <strong>Usage Examples:</strong>
@@ -553,7 +553,7 @@ public final class Selion {
      * // Without name
      * Selion.screenshot();                       // Saves as: 1697234567890.png
      * }</pre>
-     * </p>
+     *
      *
      * @param screenshotName an optional descriptive name for the screenshot; if empty, only timestamp is used
      * @see #screenshot()

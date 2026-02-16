@@ -13,7 +13,7 @@ import java.util.Arrays;
  * selection methods. The class builds complex CSS selector expressions by chaining method calls,
  * allowing intuitive construction of element selectors with support for various CSS combinators
  * (descendant, child, sibling, and next sibling relationships).
- * </p>
+ * 
  *
  * @see SnSelector
  * @see SnCssSelectorChild
@@ -31,7 +31,7 @@ public sealed abstract class SnCssSelector extends SnSelector permits SnCssSelec
      *
      * <p>This constructor is typically called by subclasses to initialize a CSS selector
      * without a prior selector node (root-level selector).
-     * </p>
+     * 
      *
      * @param selectorProperties variable number of {@link SnCssSelectorPropertyType} objects that define
      *                           attributes and conditions for the selector (e.g., class, id, attribute values)
@@ -46,7 +46,7 @@ public sealed abstract class SnCssSelector extends SnSelector permits SnCssSelec
      *
      * <p>This constructor is used by subclasses to chain CSS selectors by linking to a
      * previous selector node, enabling composition of complex CSS selector expressions.
-     * </p>
+     * 
      *
      * @param priorSelectorNode the previous {@link SnCssSelector} node in the selector chain; allows
      *                         building composite CSS selector expressions
@@ -71,7 +71,7 @@ public sealed abstract class SnCssSelector extends SnSelector permits SnCssSelec
     /**
      * Returns the hash code for this CSS selector based on its string representation.
      *
-     * <p>Two {@code SnCssSelector} objects with identical CSS selector expressions will have the same hash code.</p>
+     * <p>Two {@code SnCssSelector} objects with identical CSS selector expressions will have the same hash code.
      *
      * @return the hash code of the string representation of this CSS selector
      */
@@ -85,7 +85,7 @@ public sealed abstract class SnCssSelector extends SnSelector permits SnCssSelec
      *
      * <p>This method converts the CSS selector to a Selenium-compatible locator for element identification.
      * The resulting CSS selector expression is logged at DEBUG level for troubleshooting purposes.
-     * </p>
+     * 
      *
      * @return a {@link By} object using CSS selector locator strategy
      * @see By#cssSelector(String)
@@ -105,7 +105,7 @@ public sealed abstract class SnCssSelector extends SnSelector permits SnCssSelec
      * <p>This method constructs an {@link SnCssSelectorDescendant} selector that represents all descendants
      * of the current element matching the specified criteria. This is equivalent to the CSS
      * descendant combinator (space character) relationship.
-     * </p>
+     * 
      *
      * @param selectorProperties optional properties to filter descendant elements by attributes or other selectors
      * @return a new {@code SnCssSelector} object representing the descendant selector
@@ -122,7 +122,7 @@ public sealed abstract class SnCssSelector extends SnSelector permits SnCssSelec
      * <p>This method constructs an {@link SnCssSelectorChild} selector that represents only direct children
      * of the current element matching the specified criteria. This is equivalent to the CSS
      * child combinator (&#62;) relationship.
-     * </p>
+     * 
      *
      * @param selectorProperties optional properties to filter child elements by attributes or other selectors
      * @return a new {@code SnCssSelector} object representing the child selector
@@ -139,7 +139,7 @@ public sealed abstract class SnCssSelector extends SnSelector permits SnCssSelec
      * <p>This method constructs an {@link SnCssSelectorSibling} selector that represents general sibling elements
      * (any sibling element in the DOM regardless of position) matching the specified criteria.
      * This is equivalent to the CSS general sibling combinator (~) relationship.
-     * </p>
+     * 
      *
      * @param selectorProperties optional properties to filter sibling elements by attributes or other selectors
      * @return a new {@code SnCssSelector} object representing the sibling selector
@@ -156,7 +156,7 @@ public sealed abstract class SnCssSelector extends SnSelector permits SnCssSelec
      * <p>This method constructs an {@link SnCssSelectorNextSibling} selector that represents the immediately
      * following sibling element matching the specified criteria. This is equivalent to the CSS
      * adjacent sibling combinator (+) relationship.
-     * </p>
+     * 
      *
      * @param selectorProperties optional properties to filter the next sibling element by attributes or other selectors
      * @return a new {@code SnCssSelector} object representing the next sibling selector
@@ -172,7 +172,7 @@ public sealed abstract class SnCssSelector extends SnSelector permits SnCssSelec
      * <p>This method constructs an {@link SnCssSelectorPage} selector that represents a root-level element
      * in the page DOM, starting a new selector chain not dependent on the current element.
      * This is useful for initiating independent CSS selector expressions.
-     * </p>
+     * 
      *
      * @param selectorProperties optional properties to filter page-level elements by attributes or other selectors
      * @return a new {@code SnCssSelector} object representing the page-level selector

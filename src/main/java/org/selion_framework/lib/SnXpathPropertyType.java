@@ -9,7 +9,7 @@ package org.selion_framework.lib;
  the XML/HTML structure of a web or mobile application. It extends
  {@link SnSelectorPropertyType} to provide a type-safe way to manage XPath-based
  element locators.
- </p>
+ 
 
  @see SnXPath
  @see SnSelectorPropertyType

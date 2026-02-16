@@ -12,7 +12,7 @@ import java.util.Arrays;
  * <p>SnXPath extends {@link SnSelector} and provides XPath-specific navigation and selection
  * methods. The class builds complex XPath expressions by chaining method calls, allowing
  * intuitive construction of element selectors with support for various XPath relationships.
- * </p>
+ * 
  *
  * @see SnSelector
  * @see SnXPathChild
@@ -30,7 +30,7 @@ public sealed abstract class SnXPath extends SnSelector permits SnXPathChild, Sn
      *
      * <p>This constructor is typically called by subclasses to initialize an XPath selector
      * without a prior selector node (root-level selector).
-     * </p>
+     * 
      *
      * @param tag the HTML tag name for this XPath node (e.g., "div", "input", "button")
      * @param selectorProperties variable number of {@link SnXpathPropertyType} objects that define
@@ -47,7 +47,7 @@ public sealed abstract class SnXPath extends SnSelector permits SnXPathChild, Sn
      *
      * <p>This constructor is used by subclasses to chain XPath selectors by linking to a
      * previous selector node, enabling composition of complex XPath expressions.
-     * </p>
+     * 
      *
      * @param priorSelectorNode the previous {@link SnXPath} node in the selector chain; allows
      *                         building composite XPath expressions
@@ -75,7 +75,7 @@ public sealed abstract class SnXPath extends SnSelector permits SnXPathChild, Sn
      * Returns the hash code for this XPath selector based on its string representation.
      *
      * <p>Two {@code SnXPath} objects with identical XPath expressions will have the same hash code.
-     * </p>
+     * 
      *
      * @return the hash code of the string representation of this XPath selector
      */
@@ -89,7 +89,7 @@ public sealed abstract class SnXPath extends SnSelector permits SnXPathChild, Sn
      *
      * <p>This method calls {@link #build(boolean)} with {@code false}, creating a relative XPath
      * locator without a "current node" prefix.
-     * </p>
+     * 
      *
      * @return a {@link By} object using XPath locator strategy with no prefix
      * @see #build(boolean)
@@ -105,7 +105,7 @@ public sealed abstract class SnXPath extends SnSelector permits SnXPathChild, Sn
      * <p>When {@code withPrefix} is {@code true}, a "." prefix is added to the XPath expression,
      * indicating a relative XPath starting from the current node. When {@code false}, the XPath
      * is relative to the document root or the context node.
-     * </p>
+     * 
      *
      * @param withPrefix {@code true} to add a "current node" prefix (".") to the XPath expression;
      *                  {@code false} for an absolute or document-relative XPath
@@ -126,7 +126,7 @@ public sealed abstract class SnXPath extends SnSelector permits SnXPathChild, Sn
      * <p>This method constructs an {@link SnXPathDescendant} selector that represents all descendants
      * of the current element matching the specified criteria. This is equivalent to the XPath
      * "//" relationship.
-     * </p>
+     * 
      *
      * @param tag the HTML tag name of the descendant element
      * @param selectorProperties optional properties to filter descendant elements by attributes or content
@@ -144,7 +144,7 @@ public sealed abstract class SnXPath extends SnSelector permits SnXPathChild, Sn
      * <p>This method constructs an {@link SnXPathChild} selector that represents only direct children
      * of the current element matching the specified criteria. This is equivalent to the XPath "/"
      * relationship.
-     * </p>
+     * 
      *
      * @param tag the HTML tag name of the child element
      * @param selectorProperties optional properties to filter child elements by attributes or content
@@ -161,7 +161,7 @@ public sealed abstract class SnXPath extends SnSelector permits SnXPathChild, Sn
      *
      * <p>This method constructs an {@link SnXPathSibling} selector that represents sibling elements
      * (elements sharing the same parent) matching the specified criteria.
-     * </p>
+     * 
      *
      * @param tag the HTML tag name of the sibling element
      * @param selectorProperties optional properties to filter sibling elements by attributes or content
@@ -178,7 +178,7 @@ public sealed abstract class SnXPath extends SnSelector permits SnXPathChild, Sn
      *
      * <p>This method constructs an {@link SnXPathPrecedingSibling} selector that represents preceding
      * sibling elements (siblings appearing earlier in the document) matching the specified criteria.
-     * </p>
+     * 
      *
      * @param tag the HTML tag name of the preceding sibling element
      * @param selectorProperties optional properties to filter preceding sibling elements by attributes or content
@@ -196,7 +196,7 @@ public sealed abstract class SnXPath extends SnSelector permits SnXPathChild, Sn
      * <p>This method constructs an {@link SnXPathFollowing} selector that represents elements
      * following the current element in document order that match the specified criteria.
      * This is equivalent to the XPath "following::" axis.
-     * </p>
+     * 
      *
      * @param tag the HTML tag name of the following element
      * @param selectorProperties optional properties to filter following elements by attributes or content
@@ -214,7 +214,7 @@ public sealed abstract class SnXPath extends SnSelector permits SnXPathChild, Sn
      * <p>This method constructs an {@link SnXPathPreceding} selector that represents elements
      * preceding the current element in document order that match the specified criteria.
      * This is equivalent to the XPath "preceding::" axis.
-     * </p>
+     * 
      *
      * @param tag the HTML tag name of the preceding element
      * @param selectorProperties optional properties to filter preceding elements by attributes or content
@@ -230,7 +230,7 @@ public sealed abstract class SnXPath extends SnSelector permits SnXPathChild, Sn
      *
      * <p>This method constructs an {@link SnXPathParent} selector that represents the direct parent
      * element of the current element. This is equivalent to the XPath ".." relationship.
-     * </p>
+     * 
      *
      * @return a new {@code SnXPath} object representing the parent selector
      * @see SnXPathParent
@@ -246,7 +246,7 @@ public sealed abstract class SnXPath extends SnSelector permits SnXPathChild, Sn
      * <p>This method constructs an {@link SnXPathPage} selector that represents a root-level element
      * in the page DOM, starting a new selector chain not dependent on the current element.
      * This is useful for initiating independent XPath expressions.
-     * </p>
+     * 
      *
      * @param tag the HTML tag name of the page-level element
      * @param selectorProperties optional properties to filter page-level elements by attributes or content

@@ -7,9 +7,9 @@ package org.selion_framework.lib;
  * are scrolled into view on the page. It implements the builder pattern, allowing for
  * fluent configuration of scroll behavior, vertical alignment (block), and horizontal
  * alignment (inline).
- * </p>
+ * 
  *
- * <h3>Default Configuration:</h3>
+ * <h2>Default Configuration:</h2>
  * <ul>
  *   <li><strong>Behavior</strong>: {@link Behavior#instant} - Scroll without animation</li>
  *   <li><strong>Block</strong>: {@link Block#center} - Align element to center vertically</li>
@@ -56,10 +56,10 @@ public class SnScrollOptions {
      *   <li>Block: {@link Block#center} - center element vertically in viewport</li>
      *   <li>Inline: {@link Inline#center} - center element horizontally in viewport</li>
      * </ul>
-     * </p>
+     * 
      * <p>
      * Individual options can be customized using the builder-style methods after construction.
-     * </p>
+     * 
      */
     SnScrollOptions() {
         this.behavior = Behavior.instant;
@@ -76,7 +76,7 @@ public class SnScrollOptions {
      *   <li>{@link Behavior#instant} - Scrolls immediately without animation</li>
      *   <li>{@link Behavior#auto} - Browser-dependent behavior (typically instant)</li>
      * </ul>
-     * </p>
+     * 
      *
      * @param behavior the scroll behavior, must not be null
      * @return this {@code SnScrollOptions} instance for method chaining
@@ -97,7 +97,7 @@ public class SnScrollOptions {
      *   <li>{@link Block#end} - Align element to the bottom of the viewport</li>
      *   <li>{@link Block#nearest} - Minimize scrolling distance (scroll minimally)</li>
      * </ul>
-     * </p>
+     * 
      *
      * @param block the vertical alignment option, must not be null
      * @return this {@code SnScrollOptions} instance for method chaining
@@ -118,7 +118,7 @@ public class SnScrollOptions {
      *   <li>{@link Inline#end} - Align element to the right of the viewport</li>
      *   <li>{@link Inline#nearest} - Minimize scrolling distance (scroll minimally)</li>
      * </ul>
-     * </p>
+     * 
      *
      * @param inline the horizontal alignment option, must not be null
      * @return this {@code SnScrollOptions} instance for method chaining
@@ -135,7 +135,7 @@ public class SnScrollOptions {
      * The returned string format is suitable for use with JavaScript's
      * {@code Element.scrollIntoView()} API. The format is:
      * {@code {behavior: '<behavior>', block: '<block>', inline: '<inline>'}}
-     * </p>
+     * 
      *
      * @return a JavaScript-formatted string representation of the scroll options
      */
@@ -148,7 +148,7 @@ public class SnScrollOptions {
      * Enumeration for scroll animation behavior options.
      * <p>
      * Controls how the scroll operation is performed when an element is scrolled into view.
-     * </p>
+     * 
      *
      * @since 1.0
      */
@@ -174,7 +174,7 @@ public class SnScrollOptions {
      * Enumeration for vertical alignment options when scrolling into view.
      * <p>
      * Controls where the element is positioned vertically within the viewport after scrolling.
-     * </p>
+     * 
      *
      * @since 1.0
      */
@@ -208,7 +208,7 @@ public class SnScrollOptions {
      * Enumeration for horizontal alignment options when scrolling into view.
      * <p>
      * Controls where the element is positioned horizontally within the viewport after scrolling.
-     * </p>
+     * 
      *
      * @since 1.0
      */

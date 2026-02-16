@@ -12,7 +12,7 @@ import java.lang.reflect.InvocationTargetException;
  * This class is obtained through the {@link SnPage#with(Class)}
  * factory method. It handles the instantiation of page objects and provides methods for performing
  * actions within the context of the page.
- * </p>
+ * 
  *
  * <p>
  * <strong>Purpose:</strong> {@code SnWithPage} encapsulates the complexity of:
@@ -22,7 +22,7 @@ import java.lang.reflect.InvocationTargetException;
  *   <li>Waiting for pages to load before returning control</li>
  *   <li>Providing access to the components within the page</li>
  * </ul>
- * </p>
+ *
  *
  * <p>
  * <strong>Typical Usage:</strong>
@@ -36,7 +36,7 @@ import java.lang.reflect.InvocationTargetException;
  * });
  *
  * }</pre>
- * </p>
+ *
  *
  * @param <T> the type of page being created; must extend from {@link SnPage}
  *
@@ -55,12 +55,12 @@ public final class SnWithPage<T extends SnPage> {
      * This constructor uses reflection to create a new instance of the page class via its
      * no-argument constructor. This is called internally by the {@link SnPage#with(Class)}
      * factory method.
-     * </p>
+     * 
      *
      * <p>
      * If the page cannot be instantiated (due to missing no-arg constructor, access restrictions, etc.),
      * a {@link SnPageCreationException} is thrown.
-     * </p>
+     * 
      *
      * @param pageType the class of the page to instantiate; must extend from {@link SnPage}
      *                 and have a no-argument constructor (typically protected or private)
@@ -86,16 +86,16 @@ public final class SnWithPage<T extends SnPage> {
      *
      * <p>
      * This method is the primary way to interact with a page using the fluent builder pattern.
-     * </p>
+     * 
      *
      * <p>
      * The page is guaranteed to be fully loaded before the action code executes, ensuring that
      * all elements are available and ready for interaction.
-     * </p>
+     * 
      *
      * <p>
      * <strong>Usage Examples:</strong>
-     * </p>
+     * 
      *
      * <p>
      * <pre>{@code
@@ -106,7 +106,7 @@ public final class SnWithPage<T extends SnPage> {
      *     home.searchButton.click();
      * });
      * }</pre>
-     * </p>
+     * 
      *
      * @param action the {@link InPageAction} to execute within the page context;
      *               receives the fully loaded page instance as a parameter
@@ -135,7 +135,7 @@ public final class SnWithPage<T extends SnPage> {
          * <p>
          * This method is called by {@link SnWithPage#inPage(InPageAction)} with a fully
          * loaded and initialized page instance.
-         * </p>
+         * 
          *
          * @param page the fully loaded page instance; guaranteed to be non-null and ready for use
          */

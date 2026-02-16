@@ -14,7 +14,7 @@ import java.util.stream.StreamSupport;
  *
  * <p>This class provides a high-level API to interact with multiple UI elements simultaneously,
  * supporting lazy-loading of {@link WebElement}s and functional-style operations like
- * filtering and mapping.</p>
+ * filtering and mapping.
  *
  * @param <T> The specific type of {@link SnComponent} contained in this collection (e.g., SnButton, SnTextField).
  * @see SnComponent

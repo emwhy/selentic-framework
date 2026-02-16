@@ -18,7 +18,7 @@ import java.util.regex.Pattern;
  * <p>
  * {@code SnComponent} is the abstract base class for all component classes in the Selion Framework.
  * All component classes must extend from {@code SnComponent} or one of its subclasses when defined.
- * </p>
+ * 
  *
  * <p>
  * This class serves as a wrapper around Selenium's {@link WebElement}, providing enhanced
@@ -33,7 +33,6 @@ import java.util.regex.Pattern;
  *   <li>Attribute and property access</li>
  *   <li>Extensibility</li>
  * </ul>
- * </p>
  *
  * <p>
  * <strong>Component Structure:</strong> A typical component class looks like this:
@@ -64,7 +63,7 @@ import java.util.regex.Pattern;
  *     public final SnTextbox textbox = $textbox(TEXTBOX);
  * }
  * }</pre>
- * </p>
+ *
  *
  * <p>
  * <strong>Key Features:</strong>
@@ -79,13 +78,13 @@ import java.util.regex.Pattern;
  *   <li><strong>Hierarchy Support:</strong> Components can contain other components through child selectors,
  *       supporting complex nested structures.</li>
  * </ul>
- * </p>
+ *
  *
  * <p>
  * <strong>Usage:</strong> Components are not directly instantiated via the constructor. Instead, use
  * the {@code $component(selector, type)} factory method to create instances which are accessible within subclasses of
  * {@link SnPage} and {@link SnComponent}.
- * </p>
+ * 
  *
  * @see SnAbstractComponent
  * @see SnComponentRule
@@ -175,7 +174,7 @@ public abstract class SnComponent extends SnAbstractComponent {
      *   <li>Re-fetches the element if it has become stale or null</li>
      *   <li>Searches for the element from the page or parent component based on the selector</li>
      * </ul>
-     * </p>
+     * 
      *
      * @return the {@link WebElement} represented by this component
      * @throws SnElementNotFoundException if the selector is not present or element cannot be found
@@ -200,7 +199,7 @@ public abstract class SnComponent extends SnAbstractComponent {
      * <p>
      * This abstract method must be implemented by all subclasses to define the validation rules
      * that ensure the intended web element type is referred to by this component.
-     * </p>
+     * 
      * <p>
      * This is important for:
      * <ul>
@@ -208,11 +207,11 @@ public abstract class SnComponent extends SnAbstractComponent {
      *   <li>Preventing duplicate implementations - allowing searching by web element properties</li>
      *   <li>Validation - verifying that the element has the expected tag, classes, and attributes</li>
      * </ul>
-     * </p>
+     * 
      * <p>
      * At least one rule must be provided in the method. If there is no special properties that can be defined,
      * rule.
-     * </p>
+     * 
      *
      * @param rule the {@link SnComponentRule} used to define validation rules for this component
      * @see SnComponentRule
@@ -225,7 +224,7 @@ public abstract class SnComponent extends SnAbstractComponent {
      * <p>
      * This method is called during element initialization to ensure the element matches the expected
      * properties. The verification is performed only once and then cached.
-     * </p>
+     * 
      *
      * @param element the {@link WebElement} to verify
      * @throws SnComponentRulesException if the element does not match the defined rules
@@ -245,7 +244,7 @@ public abstract class SnComponent extends SnAbstractComponent {
      *
      * <p>
      * This method waits for the component to exist and verifies it matches the defined rules.
-     * </p>
+     * 
      *
      * @return the {@link WebElement} that exists in the DOM
      * @throws SnElementNotFoundException if the element does not exist or becomes stale
@@ -268,7 +267,7 @@ public abstract class SnComponent extends SnAbstractComponent {
      *
      * <p>
      * This method waits for the component to be visible on the page before returning the element.
-     * </p>
+     * 
      *
      * @return the {@link WebElement} that is currently displayed
      * @throws SnElementNotFoundException if the element is not displayed or becomes stale
@@ -288,7 +287,7 @@ public abstract class SnComponent extends SnAbstractComponent {
      * <p>
      * This method is commonly used before interacting with an element to ensure it is visible
      * and in the viewport. It uses default scroll options.
-     * </p>
+     * 
      *
      * @return the {@link WebElement} after scrolling it into view
      */
@@ -303,7 +302,7 @@ public abstract class SnComponent extends SnAbstractComponent {
      * This method is commonly used before interacting with an element to ensure it is visible
      * and in the viewport. The scroll behavior can be customized using {@link SnScrollOptions} which can be
      * acquired by calling {@link #scrollOptions()} method.
-     * </p>
+     * 
      *
      * @param options the {@link SnScrollOptions} specifying scroll behavior
      * @return the {@link WebElement} after scrolling it into view
@@ -322,7 +321,7 @@ public abstract class SnComponent extends SnAbstractComponent {
      * This method checks whether the element currently exists in the DOM by attempting to access
      * its tag name. It handles stale element references gracefully by catching the exception
      * and returning false.
-     * </p>
+     * 
      *
      * @return true if the element exists in the DOM; false otherwise
      */
@@ -343,7 +342,7 @@ public abstract class SnComponent extends SnAbstractComponent {
      * This method can be overridden in subclasses as needed, as sometimes the "isDisplayed" status
      * may depend on other component properties or visibility rules. This method is used in
      * {@link #waitForDisplayed()} and {@link #displayed()}, affecting their waiting behavior.
-     * </p>
+     * 
      *
      * @return true if the element is displayed; false otherwise
      */
@@ -356,7 +355,7 @@ public abstract class SnComponent extends SnAbstractComponent {
      *
      * <p>
      * This method blocks until the component becomes visible or a timeout occurs.
-     * </p>
+     * 
      *
      * @throws SnComponentNotDisplayedException if the element does not become displayed within the timeout period
      */
@@ -369,13 +368,13 @@ public abstract class SnComponent extends SnAbstractComponent {
      *
      * <p>
      * This method blocks until the component is no longer animated or a timeout occurs.
-     * </p>
+     * 
      *
      * <p>
      * <strong>Limitation</strong>: This method only recognizes animations that are created using {@code element.animate()}
      * JavaScript function, which can be recognized by {@code document.getAnimations()}. CSS based manual animations (often
      * implemented by using {@code setInterval()} function) is not recognized by this method.
-     * </p>
+     * 
      *
      * @throws SnComponentAnimatingException if the element does not stop animating within the timeout period
      */
@@ -396,7 +395,7 @@ public abstract class SnComponent extends SnAbstractComponent {
      *
      * <p>
      * Override this method in subclasses to customize scrolling behavior for specific components.
-     * </p>
+     * 
      *
      * @return the {@link SnScrollOptions} for this component, defaults to new instance with default options
      */
@@ -410,7 +409,7 @@ public abstract class SnComponent extends SnAbstractComponent {
      * <p>
      * This is a protected method, so it can be used within the extended component class as needed.
      * If click needs to be public, extend from {@link SnClickableComponent} instead.
-     * </p>
+     * 
      *
      * @throws SnElementNotFoundException if the element is not displayed
      */
@@ -424,7 +423,7 @@ public abstract class SnComponent extends SnAbstractComponent {
      * <p>
      * This is a protected method, so it can be used within the extended component class as needed.
      * If double-click needs to be public, extend from {@link SnClickableComponent} instead.
-     * </p>
+     * 
      *
      * @throws SnElementNotFoundException if the element is not displayed
      */
@@ -441,7 +440,7 @@ public abstract class SnComponent extends SnAbstractComponent {
      * <p>
      * This is a protected method, so it can be used within the extended component class as needed.
      * If click needs to be public, extend from {@link SnClickableComponent} instead.
-     * </p>
+     * 
      *
      * @param x the x-coordinate offset from the component's top-left corner
      * @param y the y-coordinate offset from the component's top-left corner
@@ -460,7 +459,7 @@ public abstract class SnComponent extends SnAbstractComponent {
      * <p>
      * This is a protected method, so it can be used within the extended component class as needed.
      * If double-click needs to be public, extend from {@link SnClickableComponent} instead.
-     * </p>
+     * 
      *
      * @param x the x-coordinate offset from the component's top-left corner
      * @param y the y-coordinate offset from the component's top-left corner
@@ -478,7 +477,7 @@ public abstract class SnComponent extends SnAbstractComponent {
      * <p>
      * This method can be used to focus on a component before performing keyboard interactions or
      * to ensure the component is visible on the page.
-     * </p>
+     * 
      */
     protected void focus() {
         new Actions(Selion.driver())
@@ -501,13 +500,13 @@ public abstract class SnComponent extends SnAbstractComponent {
      * <p>
      * By default, this method returns the same value as {@link #text()}. Override this method to provide
      * a custom text representation for specific component types.
-     * </p>
+     * 
      *
      * <p>
      * The string returned by {@code key()} is used as a key value in {@link SnComponentCollection},
      * so overriding it to return a proper unique value simpplifies getting a component from the collection using
      * {@link SnComponentCollection#entry(String)}.
-     * </p>
+     * 
      *
      * @return a unique key identifying this component instance
      *
@@ -533,7 +532,7 @@ public abstract class SnComponent extends SnAbstractComponent {
      *
      * <p>
      * This includes all HTML markup and text of all child elements.
-     * </p>
+     * 
      *
      * @return the inner HTML content of this component
      */
@@ -547,7 +546,7 @@ public abstract class SnComponent extends SnAbstractComponent {
      * <p>
      * This method parses the HTML and removes all nested HTML tags, returning only the direct text
      * content of this element.
-     * </p>
+     * 
      *
      * @return the text content of this component excluding child elements
      * @throws SnInvalidHtmlException if the HTML cannot be properly parsed
@@ -561,7 +560,7 @@ public abstract class SnComponent extends SnAbstractComponent {
      *
      * <p>
      * This is the text visible to the user, excluding hidden elements and excluding HTML markup.
-     * </p>
+     * 
      *
      * @return the inner text content of this component
      */
@@ -595,12 +594,12 @@ public abstract class SnComponent extends SnAbstractComponent {
      * <p>
      * The wait timeout determines how long the component will wait for operations like
      * element existence, visibility, or animation to complete before throwing a timeout exception.
-     * </p>
+     * 
      *
      * <p>
      * The default wait timeout is as defined in {@link SelionConfig}. It can be changed only for this component
      * by overriding this method and providing another value.
-     * </p>
+     * 
      *
      * @return the wait timeout in milliseconds
      */
@@ -624,7 +623,7 @@ public abstract class SnComponent extends SnAbstractComponent {
      * This class provides functionality to remove HTML tags and markup from inner HTML content,
      * returning only the direct text content of an element while handling self-closing and
      * void tags appropriately.
-     * </p>
+     * 
      */
     private static class SeOwnText {
         private static final Set<String> VOIDED_TAGS = Set.of("br", "img", "hr", "input", "meta", "link", "source", "area", "base", "col", "embed", "param", "track", "wbr");
@@ -642,7 +641,7 @@ public abstract class SnComponent extends SnAbstractComponent {
          *   <li>Recursively removes paired HTML tags</li>
          *   <li>Validates that all HTML is properly removed</li>
          * </ul>
-         * </p>
+         * 
          *
          * @param originalHtmlText the HTML text to process
          * @return the extracted text content without HTML markup

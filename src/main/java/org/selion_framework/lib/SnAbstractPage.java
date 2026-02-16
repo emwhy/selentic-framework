@@ -38,12 +38,12 @@ public abstract class SnAbstractPage extends SnAbstractComponent {
      * <p>
      * This is a convenience method that waits for the component to become visible. It can be used
      * to ensure that a critical component is displayed before proceeding with test actions.
-     * </p>
+     * 
      *
      * <p>
      * This method is typically called within the {@link #waitForDisplayed()} method to wait for
      * key components that indicate the page has fully loaded.
-     * </p>
+     * 
      *
      * <p>
      * <strong>Example:</strong>
@@ -54,7 +54,7 @@ public abstract class SnAbstractPage extends SnAbstractComponent {
      *     waitForComponent(passwordField);
      * }
      * }</pre>
-     * </p>
+     * 
      *
      * @param c the {@link SnComponent} to wait for
      * @throws SnWaitTimeoutException if the component does not become displayed within the timeout period

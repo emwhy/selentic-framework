@@ -7,12 +7,12 @@ package org.selion_framework.lib;
  * This class provides a specialized interface for interacting with HTML checkbox elements ({@code <input type="checkbox">}).
  * It extends {@link SnSelectableComponent} to inherit selection state checking and selection functionality,
  * and adds the ability to deselect checkboxes.
- * </p>
+ * 
  *
  * <h2>Supported Element Type</h2>
  * <p>
  * This component exclusively handles HTML checkbox elements:
- * </p>
+ * 
  * <ul>
  *   <li><strong>{@code <input type="checkbox">}</strong> - Standard HTML checkbox input</li>
  * </ul>
@@ -79,7 +79,7 @@ package org.selion_framework.lib;
  *   <li>The tag name is exactly "input"</li>
  *   <li>The type attribute is exactly "checkbox"</li>
  * </ul>
- * </p>
+ *
  *
  * <p>
  * <strong>Idempotent Behavior:</strong> All state change operations are idempotent:
@@ -91,7 +91,7 @@ package org.selion_framework.lib;
  * checkbox.deselect();    // Safe to call multiple times - no effect if already deselected
  * checkbox.deselect();    // No harm done
  * }</pre>
- * </p>
+ *
  *
  * @see SnSelectableComponent
  * @see SnFormComponent
@@ -105,7 +105,7 @@ public class SnCheckbox extends SnSelectableComponent {
      * <p>
      * This method validates that the component wraps a valid checkbox input element. Checkboxes must be
      * implemented specifically as HTML {@code <input>} elements with the type attribute set to "checkbox".
-     * </p>
+     * 
      *
      * <p>
      * <strong>Validation Logic:</strong>
@@ -113,7 +113,7 @@ public class SnCheckbox extends SnSelectableComponent {
      *   <li>Checks that the element's tag name is exactly "input"</li>
      *   <li>Verifies the type attribute is exactly "checkbox"</li>
      * </ol>
-     * </p>
+     * 
      *
      * <p>
      * <strong>Valid and Invalid Examples:</strong>
@@ -128,7 +128,7 @@ public class SnCheckbox extends SnSelectableComponent {
      * <input type="radio" id="option" />                   // Invalid - radio, not checkbox
      * <input type="text" id="field" />                     // Invalid - text input
      * }</pre>
-     * </p>
+     * 
      *
      * @param rule the {@link SnComponentRule} object used to define and verify checkbox validation rules
      * @see SnComponentRule#tag()
@@ -146,12 +146,12 @@ public class SnCheckbox extends SnSelectableComponent {
      * <p>
      * The automatic scrolling ensures that the checkbox is visible on the screen before attempting
      * to click it, which helps prevent issues with elements that are not in the viewport.
-     * </p>
+     * 
      *
      * <p>
      * <strong>Idempotent Behavior:</strong> This method is safe to call multiple times. Calling deselect()
      * on an already-deselected checkbox has no effect.
-     * </p>
+     * 
      *
      * <p>
      * <strong>Usage Examples:</strong>
@@ -171,7 +171,7 @@ public class SnCheckbox extends SnSelectableComponent {
      * checkbox.select();     // Select it
      * checkbox.deselect();   // Now deselect it
      * }</pre>
-     * </p>
+     * 
      *
      * @see #select()
      * @see #isSelected()

@@ -6,7 +6,7 @@ package org.selion_framework.lib;
  * <p>
  * This class selects all descendant elements at any depth, as opposed to the child combinator
  * ({@code >}) which matches only direct children.
- * </p>
+ * 
  *
  * <h2>Descendant vs. Child</h2>
  * <ul>
@@ -35,7 +35,7 @@ public final class SnCssSelectorDescendant extends SnCssSelector {
      *
      * <p>
      * Used internally by the framework for creating root descendant selectors.
-     * </p>
+     * 
      *
      * @param selectorProperties optional properties to filter descendant elements
      */
@@ -49,7 +49,7 @@ public final class SnCssSelectorDescendant extends SnCssSelector {
      * <p>
      * This constructor is package-private and called internally by the framework. Use the fluent API
      * method {@link SnCssSelector#descendant(SnCssSelectorPropertyType...)} instead.
-     * </p>
+     * 
      *
      * @param priorSelectorNode the parent element selector in the chain
      * @param selectorProperties optional properties to filter descendant elements
@@ -64,7 +64,7 @@ public final class SnCssSelectorDescendant extends SnCssSelector {
      * <p>
      * This symbol is placed between parent and descendant selectors in the CSS selector string.
      * Called internally during selector string construction.
-     * </p>
+     * 
      *
      * @return the CSS descendant combinator: a single space
      */

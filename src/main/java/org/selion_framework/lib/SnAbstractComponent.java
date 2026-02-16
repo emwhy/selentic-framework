@@ -23,19 +23,19 @@ import java.util.Optional;
  *   <li>Dialog component management</li>
  *   <li>Component and page lifecycle management</li>
  * </ul>
- * </p>
+ *
  *
  * <p>
  * <strong>Component Factory Pattern:</strong> This class provides numerous factory methods prefixed with
  * {@code $} (for single components) or {@code $$} (for component collections) that enable intuitive
  * component creation with automatic initialization.
- * </p>
+ * 
  *
  * <p>
  * <strong>Selector Building:</strong> Protected methods provide access to selector builders and properties
  * for constructing complex selectors with fluent, readable syntax. Selector related method names start with
  * the underscore {@code _} character, making it easy to find.
- * </p>
+ * 
  *
  * @see SnComponent
  * @see SnAbstractPage
@@ -49,14 +49,14 @@ public abstract class SnAbstractComponent {
      * <p>
      * This method inverts the logic of a selector property, useful for expressing negative
      * conditions in XPath or CSS selector construction.
-     * </p>
+     * 
      *
      * <p>
      * <strong>Example:</strong>
      * <pre>{@code
      * _not(_cssClasses("disabled"))  // Matches elements without 'disabled' class
      * }</pre>
-     * </p>
+     *
      *
      * @param selectorProperty the selector property to negate
      * @return a {@link SnSelectorNotProperty} that represents the negation
@@ -71,7 +71,7 @@ public abstract class SnAbstractComponent {
      * <p>
      * This method provides access to attribute-based selector conditions, allowing
      * you to build selectors based on any HTML attribute.
-     * </p>
+     * 
      *
      * <p>
      * <strong>Example:</strong>
@@ -79,7 +79,7 @@ public abstract class SnAbstractComponent {
      * _attr("data-testid").is("submit-button")
      * _attr("aria-label").contains("search")
      * }</pre>
-     * </p>
+     *
      *
      * @param attribute the name of the HTML attribute
      * @return a {@link SnSelectorAttributeCondition} for building attribute-based selectors
@@ -94,7 +94,7 @@ public abstract class SnAbstractComponent {
      * <p>
      * This method builds a selector property that matches elements containing the specified
      * CSS classes. Multiple classes can be provided to match elements with all specified classes.
-     * </p>
+     * 
      *
      * <p>
      * <strong>Example:</strong>
@@ -102,7 +102,7 @@ public abstract class SnAbstractComponent {
      * _cssClasses("button", "primary")  // Matches elements with both 'button' and 'primary' classes
      * _cssClasses("active")             // Matches elements with 'active' class
      * }</pre>
-     * </p>
+     *
      *
      * @param cssClasses one or more CSS class names to match
      * @return a {@link SnSelectorCssClassesProperty} for building CSS class-based selectors
@@ -116,7 +116,7 @@ public abstract class SnAbstractComponent {
      *
      * <p>
      * This method builds a selector property that matches elements with the specified tag name.
-     * </p>
+     * 
      *
      * <p>
      * <strong>Example:</strong>
@@ -125,7 +125,7 @@ public abstract class SnAbstractComponent {
      * _tag("div")         // Matches div elements
      * _tag("input")       // Matches input elements
      * }</pre>
-     * </p>
+     *
      *
      * @param tag the HTML tag name to match
      * @return a {@link SnSelectorTagProperty} for building tag-based selectors
@@ -140,14 +140,14 @@ public abstract class SnAbstractComponent {
      * <p>
      * This method provides access to id-based selector conditions without specifying a value,
      * useful for checking if an element has an id attribute.
-     * </p>
+     * 
      *
      * <p>
      * <strong>Example:</strong>
      * <pre>{@code
      * _id().isPresent()   // Matches elements that have an id attribute
      * }</pre>
-     * </p>
+     *
      *
      * @return a {@link SnSelectorAttributeCondition} for building id-based selectors
      */
@@ -161,7 +161,7 @@ public abstract class SnAbstractComponent {
      *
      * <p>
      * This method builds a selector property that matches elements with the specified id value.
-     * </p>
+     * 
      *
      * <p>
      * <strong>Example:</strong>
@@ -169,7 +169,7 @@ public abstract class SnAbstractComponent {
      * _id("submit-button")    // Matches element with id="submit-button"
      * _id("user-input")       // Matches element with id="user-input"
      * }</pre>
-     * </p>
+     *
      *
      * @param id the id attribute value to match
      * @return a {@link SnSelectorIdProperty} for building id-based selectors
@@ -184,14 +184,14 @@ public abstract class SnAbstractComponent {
      * <p>
      * This method provides access to name-based selector conditions, useful for matching
      * form input elements by their name attribute.
-     * </p>
+     * 
      *
      * <p>
      * <strong>Example:</strong>
      * <pre>{@code
      * _name().is("email")     // Matches elements with name="email"
      * }</pre>
-     * </p>
+     *
      *
      * @return a {@link SnSelectorAttributeCondition} for building name-based selectors
      */
@@ -205,7 +205,7 @@ public abstract class SnAbstractComponent {
      * <p>
      * This method provides access to type-based selector conditions, primarily useful for
      * matching input elements of specific types.
-     * </p>
+     * 
      *
      * <p>
      * <strong>Example:</strong>
@@ -213,7 +213,7 @@ public abstract class SnAbstractComponent {
      * _type().is("text")      // Matches input elements with type="text"
      * _type().is("checkbox")  // Matches input elements with type="checkbox"
      * }</pre>
-     * </p>
+     * 
      *
      * @return a {@link SnSelectorAttributeCondition} for building type-based selectors
      */
@@ -227,7 +227,7 @@ public abstract class SnAbstractComponent {
      * <p>
      * This method provides access to text-based selector conditions, allowing you to match
      * elements based on their text content.
-     * </p>
+     * 
      *
      * <p>
      * <strong>Example:</strong>
@@ -236,7 +236,7 @@ public abstract class SnAbstractComponent {
      * _text().contains("Click")       // Matches elements containing the text
      * _text().startsWith("Submit")    // Matches elements starting with the text
      * }</pre>
-     * </p>
+     * 
      *
      * @return a {@link SnSelectorTextCondition} for building text-based selectors
      */
@@ -250,7 +250,7 @@ public abstract class SnAbstractComponent {
      * <p>
      * This method builds a selector property that matches a range of elements starting from
      * the specified index (0-based).
-     * </p>
+     * 
      *
      * <p>
      * <strong>Example:</strong>
@@ -258,7 +258,7 @@ public abstract class SnAbstractComponent {
      * _indexFrom(0)   // Matches elements starting from the first element (index 0)
      * _indexFrom(5)   // Matches elements starting from the sixth element
      * }</pre>
-     * </p>
+     * 
      *
      * @param startIndex the starting index (0-based)
      * @return a {@link SnSelectorIndexProperty} for building index-based range selectors
@@ -273,7 +273,7 @@ public abstract class SnAbstractComponent {
      * <p>
      * This method builds a selector property that matches a range of elements up to
      * the specified index (inclusive, 0-based).
-     * </p>
+     * 
      *
      * <p>
      * <strong>Example:</strong>
@@ -281,7 +281,7 @@ public abstract class SnAbstractComponent {
      * _indexTo(0)     // Matches only the first element
      * _indexTo(4)     // Matches elements with indices 0 through 4
      * }</pre>
-     * </p>
+     * 
      *
      * @param endIndex the ending index (0-based, inclusive)
      * @return a {@link SnSelectorIndexProperty} for building index-based range selectors
@@ -296,7 +296,7 @@ public abstract class SnAbstractComponent {
      * <p>
      * This method builds a selector property that matches exactly one element at the
      * specified index (0-based).
-     * </p>
+     * 
      *
      * <p>
      * <strong>Example:</strong>
@@ -305,7 +305,7 @@ public abstract class SnAbstractComponent {
      * _indexAt(5)     // Matches the sixth element
      * _indexAt(10)    // Matches the eleventh element
      * }</pre>
-     * </p>
+     * 
      *
      * @param index the index of the element to match (0-based)
      * @return a {@link SnSelectorIndexProperty} for building exact index-based selectors
@@ -319,14 +319,14 @@ public abstract class SnAbstractComponent {
      *
      * <p>
      * This method is a convenience method equivalent to {@code _indexAt(0)}.
-     * </p>
+     * 
      *
      * <p>
      * <strong>Example:</strong>
      * <pre>{@code
      * _first()    // Matches the first matching element
      * }</pre>
-     * </p>
+     * 
      *
      * @return a {@link SnSelectorIndexProperty} for selecting the first element
      */
@@ -340,14 +340,14 @@ public abstract class SnAbstractComponent {
      * <p>
      * This method builds a selector property that matches the last element in a set of
      * matching elements.
-     * </p>
+     * 
      *
      * <p>
      * <strong>Example:</strong>
      * <pre>{@code
      * _last()     // Matches the last matching element
      * }</pre>
-     * </p>
+     * 
      *
      * @return a {@link SnSelectorIndexProperty} for selecting the last element
      */
@@ -362,7 +362,7 @@ public abstract class SnAbstractComponent {
      * This method builds a selector property that matches elements based on their position
      * among siblings of the same type (tag name). This is useful for selecting specific
      * elements within a group of the same tag type.
-     * </p>
+     * 
      *
      * <p>
      * <strong>Example:</strong>
@@ -370,7 +370,7 @@ public abstract class SnAbstractComponent {
      * _nthOfType(0)   // Matches the first element of its type
      * _nthOfType(2)   // Matches the third element of its type
      * }</pre>
-     * </p>
+     * 
      *
      * @param index the nth-of-type position (0-based)
      * @return a {@link SnSelectorNthOfTypeProperty} for building nth-of-type selectors
@@ -387,7 +387,7 @@ public abstract class SnAbstractComponent {
      * This method builds a selector property that matches elements based on their position
      * among siblings of the same type, counting from the last element backwards. This is useful
      * for selecting specific elements within a group of the same tag type from the end.
-     * </p>
+     * 
      *
      * <p>
      * <strong>Example:</strong>
@@ -395,7 +395,7 @@ public abstract class SnAbstractComponent {
      * _nthLastOfType(0)   // Matches the last element of its type
      * _nthLastOfType(1)   // Matches the second-to-last element of its type
      * }</pre>
-     * </p>
+     * 
      *
      * @param index the nth-last-of-type position counting from the end (0-based)
      * @return a {@link SnSelectorNthLastOfTypeProperty} for building nth-last-of-type selectors
@@ -411,14 +411,14 @@ public abstract class SnAbstractComponent {
      * <p>
      * This method builds a selector property that matches the first element among siblings
      * of the same type (tag name). This is equivalent to {@code _nthOfType(0)}.
-     * </p>
+     * 
      *
      * <p>
      * <strong>Example:</strong>
      * <pre>{@code
      * _firstOfType()   // Matches the first div, first p, etc.
      * }</pre>
-     * </p>
+     * 
      *
      * @return a {@link SnSelectorFirstOfTypeProperty} for building first-of-type selectors
      * @see SnSelectorFirstOfTypeProperty
@@ -433,14 +433,14 @@ public abstract class SnAbstractComponent {
      * <p>
      * This method builds a selector property that matches the last element among siblings
      * of the same type (tag name). This is equivalent to {@code _nthLastOfType(0)}.
-     * </p>
+     * 
      *
      * <p>
      * <strong>Example:</strong>
      * <pre>{@code
      * _lastOfType()   // Matches the last div, last p, etc.
      * }</pre>
-     * </p>
+     * 
      *
      * @return a {@link SnSelectorLastOfTypeProperty} for building last-of-type selectors
      * @see SnSelectorLastOfTypeProperty
@@ -456,7 +456,7 @@ public abstract class SnAbstractComponent {
      * This method builds a selector property that matches elements based on their position
      * among all siblings (regardless of tag type). This is useful for selecting specific
      * elements by their order in the parent element.
-     * </p>
+     * 
      *
      * <p>
      * <strong>Example:</strong>
@@ -464,7 +464,7 @@ public abstract class SnAbstractComponent {
      * _nthChild(0)   // Matches the first child element
      * _nthChild(2)   // Matches the third child element
      * }</pre>
-     * </p>
+     * 
      *
      * @param index the nth-child position (0-based)
      * @return a {@link SnSelectorNthChildProperty} for building nth-child selectors
@@ -481,7 +481,7 @@ public abstract class SnAbstractComponent {
      * This method builds a selector property that matches elements based on their position
      * among all siblings, counting from the last element backwards (regardless of tag type).
      * This is useful for selecting specific elements by their reverse order in the parent element.
-     * </p>
+     * 
      *
      * <p>
      * <strong>Example:</strong>
@@ -489,7 +489,7 @@ public abstract class SnAbstractComponent {
      * _nthLastChild(0)   // Matches the last child element
      * _nthLastChild(1)   // Matches the second-to-last child element
      * }</pre>
-     * </p>
+     * 
      *
      * @param index the nth-last-child position counting from the end (0-based)
      * @return a {@link SnSelectorNthLastChildProperty} for building nth-last-child selectors
@@ -505,14 +505,14 @@ public abstract class SnAbstractComponent {
      * <p>
      * This method builds a selector property that matches the first element among all siblings
      * (regardless of tag type). This is equivalent to {@code _nthChild(0)}.
-     * </p>
+     * 
      *
      * <p>
      * <strong>Example:</strong>
      * <pre>{@code
      * _firstChild()   // Matches the first child in a parent element
      * }</pre>
-     * </p>
+     * 
      *
      * @return a {@link SnSelectorFirstChildProperty} for building first-child selectors
      * @see SnSelectorFirstChildProperty
@@ -527,14 +527,14 @@ public abstract class SnAbstractComponent {
      * <p>
      * This method builds a selector property that matches the last element among all siblings
      * (regardless of tag type). This is equivalent to {@code _nthLastChild(0)}.
-     * </p>
+     * 
      *
      * <p>
      * <strong>Example:</strong>
      * <pre>{@code
      * _lastChild()   // Matches the last child in a parent element
      * }</pre>
-     * </p>
+     * 
      *
      * @return a {@link SnSelectorLastChildProperty} for building last-child selectors
      * @see SnSelectorLastChildProperty
@@ -549,7 +549,7 @@ public abstract class SnAbstractComponent {
      * <p>
      * This is a convenience method equivalent to {@code $component(selector, SnGenericComponent.class)}.
      * Use this when you need a basic component without specific functionality.
-     * </p>
+     * 
      *
      * <p>
      * <strong>Example:</strong>
@@ -557,7 +557,7 @@ public abstract class SnAbstractComponent {
      * private static final SnCssSelector HEADER_TEXT = _cssSelector.descendant(_cssClasses("header"));
      * public final SnGenericComponent headerText = $genericComponent(HEADER_TEXT);
      * }</pre>
-     * </p>
+     * 
      *
      * @param selector the {@link SnSelector} for locating the component
      * @return a {@link SnGenericComponent} wrapping the located element
@@ -572,7 +572,7 @@ public abstract class SnAbstractComponent {
      * <p>
      * This is a convenience method equivalent to {@code $component(selector, SnTextbox.class)}.
      * Use this for input elements where text entry is needed.
-     * </p>
+     * 
      *
      * <p>
      * <strong>Example:</strong>
@@ -583,7 +583,7 @@ public abstract class SnAbstractComponent {
      * // In test code
      * page.usernameTextbox.enterText("john_doe");
      * }</pre>
-     * </p>
+     * 
      *
      * @param selector the {@link SnSelector} for locating the textbox
      * @return a {@link SnTextbox} component for text input interaction
@@ -598,7 +598,7 @@ public abstract class SnAbstractComponent {
      * <p>
      * This is a convenience method equivalent to {@code $component(selector, SnCheckbox.class)}.
      * Use this for checkbox input elements.
-     * </p>
+     * 
      *
      * <p>
      * <strong>Example:</strong>
@@ -609,7 +609,7 @@ public abstract class SnAbstractComponent {
      * // In test code
      * page.rememberMeCheckbox.select();
      * }</pre>
-     * </p>
+     * 
      *
      * @param selector the {@link SnSelector} for locating the checkbox
      * @return a {@link SnCheckbox} component for checkbox interaction
@@ -624,7 +624,7 @@ public abstract class SnAbstractComponent {
      * <p>
      * This is a convenience method equivalent to {@code $component(selector, SnDropdown.class)}.
      * Use this for HTML select elements with single selection.
-     * </p>
+     * 
      *
      * <p>
      * <strong>Example:</strong>
@@ -635,7 +635,7 @@ public abstract class SnAbstractComponent {
      * // In test code
      * page.countryDropdown.select("United States");
      * }</pre>
-     * </p>
+     * 
      *
      * @param selector the {@link SnSelector} for locating the dropdown
      * @return a {@link SnDropdown} component for dropdown selection
@@ -650,7 +650,7 @@ public abstract class SnAbstractComponent {
      * <p>
      * This is a convenience method equivalent to {@code $component(selector, SnMultiSelect.class)}.
      * Use this for HTML select elements with multiple selection enabled.
-     * </p>
+     * 
      *
      * <p>
      * <strong>Example:</strong>
@@ -661,7 +661,7 @@ public abstract class SnAbstractComponent {
      * // In test code
      * page.interestsMultiSelect.select("Sports", "Music", "Reading");
      * }</pre>
-     * </p>
+     * 
      *
      * @param selector the {@link SnSelector} for locating the multi-select
      * @return a {@link SnMultiSelect} component for multi-select interaction
@@ -676,7 +676,7 @@ public abstract class SnAbstractComponent {
      * <p>
      * This is a convenience method equivalent to {@code $component(selector, SnLink.class)}.
      * Use this for anchor (&lt;a&gt;) elements.
-     * </p>
+     * 
      *
      * <p>
      * <strong>Example:</strong>
@@ -687,7 +687,7 @@ public abstract class SnAbstractComponent {
      * // In test code
      * page.logoutLink.click();
      * }</pre>
-     * </p>
+     * 
      *
      * @param selector the {@link SnSelector} for locating the link
      * @return a {@link SnLink} component for link interaction
@@ -702,7 +702,7 @@ public abstract class SnAbstractComponent {
      * <p>
      * This is a convenience method equivalent to {@code $component(selector, SnButton.class)}.
      * Use this for button (&lt;button&gt;) elements or input button (&lt;input type="button|submit|reset"&gt;) elements.
-     * </p>
+     * 
      *
      * <p>
      * <strong>Example:</strong>
@@ -713,7 +713,7 @@ public abstract class SnAbstractComponent {
      * // In test code
      * page.logoutLink.click();
      * }</pre>
-     * </p>
+     * 
      *
      * @param selector the {@link SnSelector} for locating the link
      * @return a {@link SnButton} component for button interaction
@@ -728,7 +728,7 @@ public abstract class SnAbstractComponent {
      * <p>
      * This is a convenience method equivalent to {@code $component(selector, SnImage.class)}.
      * Use this for image (&lt;img&gt;) elements.
-     * </p>
+     * 
      *
      * <p>
      * <strong>Example:</strong>
@@ -739,7 +739,7 @@ public abstract class SnAbstractComponent {
      * // In test code
      * String imageSrc = page.logoImage.source();
      * }</pre>
-     * </p>
+     * 
      *
      * @param selector the {@link SnSelector} for locating the image
      * @return a {@link SnImage} component for image interaction
@@ -755,7 +755,7 @@ public abstract class SnAbstractComponent {
      * This method creates a collection of radio buttons that are treated as a group.
      * It's equivalent to {@code $$components(selector, SnRadioButton.class, SnRadioButtonGroup.class)}.
      * Use this for groups of radio buttons that share the same name attribute.
-     * </p>
+     * 
      *
      * <p>
      * <strong>Example:</strong>
@@ -766,7 +766,7 @@ public abstract class SnAbstractComponent {
      * // In test code
      * page.genderRadioButtons.select("male");
      * }</pre>
-     * </p>
+     * 
      *
      * @param selector the {@link SnSelector} for locating the radio buttons
      * @return a {@link SnRadioButtonGroup} for managing radio button groups
@@ -781,12 +781,12 @@ public abstract class SnAbstractComponent {
      * <p>
      * This method is called by the framework to wait for a component or page to be displayed.
      * Subclasses can override this method to implement custom waiting logic specific to their needs.
-     * </p>
+     * 
      *
      * <p>
      * By default, this method does nothing. Subclasses should override it to define what needs to be
      * waited for before the component/page is considered ready for interaction.
-     * </p>
+     * 
      *
      * @see SnComponent#waitForDisplayed()
      * @see SnAbstractPage#waitForComponent(SnComponent)
@@ -804,12 +804,12 @@ public abstract class SnAbstractComponent {
      *   <li>Establishes the parent-child relationship (caller component and owner page)</li>
      *   <li>Handles any instantiation errors by throwing {@link SnComponentCreationException}</li>
      * </ul>
-     * </p>
+     * 
      *
      * <p>
      * The component is not displayed or validated at this point; it is only instantiated and configured.
      * The actual element location and validation occur lazily when the component is first accessed.
-     * </p>
+     * 
      *
      * <p>
      * <strong>Usage Example:</strong>
@@ -817,7 +817,7 @@ public abstract class SnAbstractComponent {
      * private static final SnCssSelector LOGIN_BUTTON = _cssSelector.descendant(_id("login"));
      * public final SnButton loginButton = $component(LOGIN_BUTTON, SnButton.class);
      * }</pre>
-     * </p>
+     * 
      *
      * @param selector the {@link SnSelector} for locating the component element
      * @param componentType the class of the component to create; must extend from {@link SnComponent}
@@ -841,12 +841,12 @@ public abstract class SnAbstractComponent {
      *   <li>Sets the selector on the component</li>
      *   <li>Handles any instantiation errors by throwing {@link SnComponentCreationException}</li>
      * </ul>
-     * </p>
+     * 
      *
      * <p>
      * This method is used when instantiating a component class that is an inner class. The containing object must be provided to allow proper
      * instantiation.
-     * </p>
+     * 
      *
      * @param selector the {@link SnSelector} for locating the component element
      * @param componentType the class of the component to create; must extend from {@link SnComponent}
@@ -885,12 +885,12 @@ public abstract class SnAbstractComponent {
      *   <li>Creates a new collection instance</li>
      *   <li>Configures the selector and component type</li>
      * </ul>
-     * </p>
+     * 
      *
      * <p>
      * Components in the collection are lazily instantiated as they are accessed. The collection
      * provides convenient methods for iterating, filtering, and accessing individual components.
-     * </p>
+     * 
      *
      * <p>
      * <strong>Usage Example:</strong>
@@ -903,7 +903,7 @@ public abstract class SnAbstractComponent {
      *     System.out.println(row.text());
      * }
      * }</pre>
-     * </p>
+     * 
      *
      * @param selector the {@link SnSelector} for locating the component elements
      * @param componentType the class of the components to create; must extend from {@link SnComponent}
@@ -933,12 +933,12 @@ public abstract class SnAbstractComponent {
      *   <li>Creates a new collection instance</li>
      *   <li>Configures the selector, component type, and containing object</li>
      * </ul>
-     * </p>
+     * 
      *
      * <p>
      * Use this when your collection items are inner classes that require a reference to their
      * containing object for instantiation.
-     * </p>
+     * 
      *
      * <p>
      * <strong>Usage Example:</strong>
@@ -946,7 +946,7 @@ public abstract class SnAbstractComponent {
      * private static final SnCssSelector ITEMS = _cssSelector.className("item");
      * public final SnComponentCollection<CartItem> items = $$components(ITEMS, CartItem.class, this);
      * }</pre>
-     * </p>
+     * 
      *
      * @param selector the {@link SnSelector} for locating the component elements
      * @param componentType the class of the components to create; must extend from {@link SnComponent}
@@ -979,12 +979,12 @@ public abstract class SnAbstractComponent {
      *   <li>Configures the selector and component type</li>
      *   <li>Handles instantiation errors by throwing {@link SnComponentCreationException}</li>
      * </ul>
-     * </p>
+     * 
      *
      * <p>
      * Use this when you need custom collection behavior, such as filtering, searching, or
      * specialized access patterns specific to your test domain.
-     * </p>
+     * 
      *
      * <p>
      * <strong>Usage Example:</strong>
@@ -996,7 +996,7 @@ public abstract class SnAbstractComponent {
      * private static final SnCssSelector MENU_ITEMS = _cssSelector.descendant(_className("menu-item"));
      * public final MenuItemCollection menu = $$components(MENU_ITEMS, MenuItem.class, MenuItemCollection.class);
      * }</pre>
-     * </p>
+     * 
      *
      * @param selector the {@link SnSelector} for locating the component elements
      * @param componentType the class of the components to create; must extend from {@link SnComponent}
@@ -1035,12 +1035,12 @@ public abstract class SnAbstractComponent {
      *   <li>Executes the provided action within the frame context</li>
      *   <li>Automatically switches back to the parent frame (even if an exception occurs)</li>
      * </ul>
-     * </p>
+     * 
      *
      * <p>
      * The try-finally pattern ensures that the WebDriver context is always restored to the
      * parent frame, even if an error occurs during frame content interaction.
-     * </p>
+     * 
      *
      * <p>
      * <strong>Usage Example:</strong>
@@ -1052,7 +1052,7 @@ public abstract class SnAbstractComponent {
      *     $frame(IFRAME, EmbeddedFrameContent.class, predicate);
      * }
      * }</pre>
-     * </p>
+     * 
      *
      * @param frameSelector the {@link SnSelector} for locating the frame element
      * @param frameContentType the class representing the frame content; must extend from {@link SnFrameContent}
@@ -1081,12 +1081,12 @@ public abstract class SnAbstractComponent {
      *   <li>Executes the provided action within the frame context</li>
      *   <li>Automatically switches back to the parent frame (via finally block)</li>
      * </ul>
-     * </p>
+     * 
      *
      * <p>
      * The try-finally pattern ensures that the WebDriver context is always restored to the
      * parent frame, preventing orphaned frame context issues.
-     * </p>
+     * 
      *
      * @param frameSelector the {@link SnSelector} for locating the frame element
      * @param frameContentType the class representing the frame content; must extend from {@link SnFrameContent}
@@ -1137,12 +1137,12 @@ public abstract class SnAbstractComponent {
      *   <li>Logs the dialog closing event at debug level</li>
      *   <li>Waits for the dialog to be hidden</li>
      * </ul>
-     * </p>
+     * 
      *
      * <p>
      * This method is useful for testing modal dialogs, alerts, and other popup components
      * that appear and disappear as part of user workflows.
-     * </p>
+     * 
      *
      * <p>
      * <strong>Usage Example:</strong>
@@ -1158,7 +1158,7 @@ public abstract class SnAbstractComponent {
      *     dialog.okButton.click();
      * });
      * }</pre>
-     * </p>
+     * 
      *
      * @param selector the {@link SnSelector} for locating the dialog element
      * @param componentType the class of the dialog; must extend from {@link SnDialog}
@@ -1184,13 +1184,13 @@ public abstract class SnAbstractComponent {
      *   <li>Executes the provided action within the dialog context</li>
      *   <li>Waits for the dialog to be hidden before returning</li>
      * </ul>
-     * </p>
+     * 
      *
      * <p>
      * The logging and wait operations ensure that your test code doesn't proceed until the
      * dialog has fully appeared and then fully disappeared, maintaining synchronization with
      * the application's UI state.
-     * </p>
+     * 
      *
      * @param selector the {@link SnSelector} for locating the dialog element
      * @param componentType the class of the dialog; must extend from {@link SnDialog}

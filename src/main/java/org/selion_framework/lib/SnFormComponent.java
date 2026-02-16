@@ -7,9 +7,9 @@ package org.selion_framework.lib;
  * functionality for interactive form elements such as text inputs, text areas, select dropdowns,
  * checkboxes, and radio buttons. It combines the click interaction capabilities inherited from
  * {@link SnClickableComponent} with form-specific operations.
- * </p>
+ * 
  *
- * <h3>Inheritance Hierarchy:</h3>
+ * <h2>Inheritance Hierarchy:</h2>
  * <pre>
  * SnComponent (base component)
  *     ↓
@@ -31,7 +31,7 @@ public abstract class SnFormComponent extends SnClickableComponent {
      * This method retrieves the value of the "value".
      * For most standard HTML form elements (input, textarea, etc.), this returns the current
      * value that would be submitted with a form.
-     * </p>
+     * 
      *
      * @return the value of the "value" attribute, or empty string if the attribute is not present
      * @see org.openqa.selenium.WebElement#getAttribute(String)

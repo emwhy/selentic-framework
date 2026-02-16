@@ -8,7 +8,7 @@ package org.selion_framework.lib;
  This interface serves as a marker or specialized type for identifying selectors that use
  CSS-based strategies to locate elements in a web application. It extends {@link SnSelectorPropertyType} to
  integrate with the framework's generalized selector property management.
- </p>
+ 
 
  @see SnCssSelector
  @see SnSelectorPropertyType

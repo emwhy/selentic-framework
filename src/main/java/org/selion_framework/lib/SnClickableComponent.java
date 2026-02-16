@@ -11,7 +11,7 @@ import org.selion_framework.lib.util.SnWait;
  * interactive web elements that can be clicked, such as buttons, links, and clickable divs.
  * All click operations are guarded by automatic wait and enabled checks to ensure elements
  * are in a valid state before interaction.
- * </p>
+ * 
  * <p>
  * Key features:
  * <ul>
@@ -20,16 +20,16 @@ import org.selion_framework.lib.util.SnWait;
  *   <li><strong>Error Handling</strong>: Throws {@link SnComponentNotEnabledException} if element doesn't become enabled</li>
  *   <li><strong>Multiple Click Types</strong>: Supports single click, double click, and positioned clicks</li>
  * </ul>
- * </p>
  *
- * <h3>Usage Example:</h3>
+ *
+ * <h2>Usage Example:</h2>
  * <pre>
  * button.click();           // Waits for enabled, then clicks
  * button.doubleClick();     // Waits for enabled, then double clicks
  * button.clickAt(10, 20);   // Waits for enabled, then clicks at offset (10, 20)
  * </pre>
  *
- * <h3>Behavior:</h3>
+ * <h2>Behavior:</h2>
  * <p>
  * All click operations follow this sequence:
  * <ol>
@@ -39,7 +39,7 @@ import org.selion_framework.lib.util.SnWait;
  * </ol>
  * If the element fails to become enabled within the timeout period, a {@link SnComponentNotEnabledException}
  * is thrown immediately, preventing invalid interactions with disabled elements.
- * </p>
+ *
  *
  * @see SnComponent
  * @see SnButton
@@ -53,7 +53,7 @@ public abstract class SnClickableComponent extends SnComponent {
      * An element is considered enabled if it exists in the DOM and the WebElement's
      * {@link WebElement#isEnabled()} method returns true. This typically means the element
      * is not disabled and is available for user interaction.
-     * </p>
+     * 
      *
      * @return true if the component exists and is enabled, false otherwise
      */
@@ -70,12 +70,12 @@ public abstract class SnClickableComponent extends SnComponent {
      *   <li>Scrolls the element into view</li>
      *   <li>Returns the web element ready for interaction</li>
      * </ol>
-     * </p>
+     * 
      * <p>
      * The wait operation uses the framework's default timeout configuration.
      * If the element does not become enabled within this timeout, a {@link SnComponentNotEnabledException}
      * is thrown.
-     * </p>
+     * 
      *
      * @return the scrolled {@link WebElement} that is ready for interaction
      * @throws SnComponentNotEnabledException if the component does not become enabled within the timeout period
@@ -92,7 +92,7 @@ public abstract class SnClickableComponent extends SnComponent {
      * The click is executed on the scrolled (into view) element. If the component fails to become
      * enabled within the default timeout, a {@link SnComponentNotEnabledException} is thrown
      * and the click is not performed.
-     * </p>
+     * 
      *
      * @throws SnComponentNotEnabledException if the component does not become enabled within the timeout
      */
@@ -108,7 +108,7 @@ public abstract class SnClickableComponent extends SnComponent {
      * The double click is executed on the scrolled (into view) element. If the component fails to become
      * enabled within the default timeout, a {@link SnComponentNotEnabledException} is thrown
      * and the double click is not performed.
-     * </p>
+     * 
      *
      * @throws SnComponentNotEnabledException if the component does not become enabled within the timeout
      */
@@ -124,7 +124,7 @@ public abstract class SnClickableComponent extends SnComponent {
      * specified coordinates relative to the element's top-left corner. The click is executed on the
      * scrolled (into view) element. If the component fails to become enabled within the default timeout,
      * a {@link SnComponentNotEnabledException} is thrown and the click is not performed.
-     * </p>
+     * 
      *
      * @param x the x-coordinate offset from the element's top-left corner
      * @param y the y-coordinate offset from the element's top-left corner
@@ -142,7 +142,7 @@ public abstract class SnClickableComponent extends SnComponent {
      * specified coordinates relative to the element's top-left corner. The double click is executed on the
      * scrolled (into view) element. If the component fails to become enabled within the default timeout,
      * a {@link SnComponentNotEnabledException} is thrown and the double click is not performed.
-     * </p>
+     * 
      *
      * @param x the x-coordinate offset from the element's top-left corner
      * @param y the y-coordinate offset from the element's top-left corner

@@ -5,7 +5,7 @@ package org.selion_framework.lib;
  * <p>
  * This class extends {@link SnSelectorBuilder} to provide fluent methods for creating
  * various types of CSS selectors.
- * </p>
+ * 
  * @see SnCssSelector
  */
 public final class SnComponentCssSelectorBuilder extends SnSelectorBuilder {

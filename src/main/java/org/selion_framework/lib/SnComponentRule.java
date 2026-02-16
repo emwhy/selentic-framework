@@ -18,7 +18,7 @@ import java.util.regex.Pattern;
  * <strong>Purpose:</strong> This class enables component validation by allowing developers
  * to specify what HTML attributes, CSS classes, tag names, and other properties must be present or
  * match certain conditions on the underlying web element.
- * </p>
+ * 
  *
  * <p>
  * <strong>Usage Example:</strong>
@@ -30,7 +30,7 @@ import java.util.regex.Pattern;
  *     rule.attr("id").isPresent();                     // id attribute must be present
  * }
  * }</pre>
- * </p>
+ *
  *
  * <p>
  * <strong>Rule Conditions:</strong> Rules can verify:
@@ -40,13 +40,13 @@ import java.util.regex.Pattern;
  *   <li>CSS classes (presence, specific classes, multiple classes)</li>
  *   <li>Text content matching patterns or specific values</li>
  * </ul>
- * </p>
+ *
  *
  * <p>
  * <strong>Verification:</strong> Rules are verified when {@link #verifyRules(Class)} is called.
  * If any rule fails, a {@link SnComponentRulesException} is thrown with detailed error messages
  * about which rules failed and why.
- * </p>
+ * 
  *
  * @see SnComponent
  * @see SnComponentRulesException
@@ -63,7 +63,7 @@ public class SnComponentRule {
      * <p>
      * This constructor is package-private and is called internally by the framework.
      * Use this class through the {@link SnComponent#rules(SnComponentRule)} method.
-     * </p>
+     * 
      *
      * @param element the {@link WebElement} to validate with rules
      */
@@ -79,7 +79,7 @@ public class SnComponentRule {
      * This method checks that at least one rule has been defined and that all defined rules pass.
      * If no rules are defined, an exception is thrown. If any rule fails verification, detailed
      * error messages are included in the exception.
-     * </p>
+     * 
      *
      * @param <T> the component type being verified
      * @param componentType the class of the component being verified
@@ -105,7 +105,7 @@ public class SnComponentRule {
      * <p>
      * This rule can be used as a placeholder or when no specific validation is needed
      * but at least one rule is required by the framework.
-     * </p>
+     * 
      */
     public void any() {
         this.ruleResults.add(new SnRuleResult(SnRuleType.Any));
@@ -116,7 +116,7 @@ public class SnComponentRule {
      *
      * <p>
      * Example: {@code rule.tag().is("div"); }
-     * </p>
+     * 
      *
      * @return a {@link SnRuleCondition} for the element's tag name
      */
@@ -129,7 +129,7 @@ public class SnComponentRule {
      *
      * <p>
      * Example: {@code rule.attr("data-id").is("123"); }
-     * </p>
+     * 
      *
      * @param attr the name of the HTML attribute to validate
      * @return a {@link SnRuleCondition} for the specified attribute
@@ -144,7 +144,7 @@ public class SnComponentRule {
      * <p>
      * This is a convenience method equivalent to {@code attr("type")}.
      * Example: {@code rule.type().is("text"); }
-     * </p>
+     * 
      *
      * @return a {@link SnRuleCondition} for the "type" attribute
      */
@@ -158,7 +158,7 @@ public class SnComponentRule {
      * <p>
      * This is a convenience method equivalent to {@code attr("name")}.
      * Example: {@code rule.name().is("username"); }
-     * </p>
+     * 
      *
      * @return a {@link SnRuleCondition} for the "name" attribute
      */
@@ -172,7 +172,7 @@ public class SnComponentRule {
      * <p>
      * This is a convenience method equivalent to {@code attr("id")}.
      * Example: {@code rule.id().is("submit-btn"); }
-     * </p>
+     * 
      *
      * @return a {@link SnRuleCondition} for the "id" attribute
      */
@@ -187,7 +187,7 @@ public class SnComponentRule {
      * This is a convenience method equivalent to {@code attr("href")}.
      * Typically used for link elements.
      * Example: {@code rule.href().startsWith("https://"); }
-     * </p>
+     * 
      *
      * @return a {@link SnRuleCondition} for the "href" attribute
      */
@@ -201,7 +201,7 @@ public class SnComponentRule {
      * <p>
      * This is a convenience method equivalent to {@code attr("title")}.
      * Example: {@code rule.title().contains("Click"); }
-     * </p>
+     * 
      *
      * @return a {@link SnRuleCondition} for the "title" attribute
      */
@@ -216,7 +216,7 @@ public class SnComponentRule {
      * This method provides specialized handling for CSS class validation with methods like
      * {@code has()}, {@code hasAllOf()}, and {@code hasAnyOf()}.
      * Example: {@code rule.cssClasses().has("active"); }
-     * </p>
+     * 
      *
      * @return a {@link SnCssClassRuleCondition} for validating CSS classes
      */
@@ -232,7 +232,7 @@ public class SnComponentRule {
      * This inner class allows developers to chain validation methods to check whether
      * an attribute or element property matches certain conditions. Each method in this class
      * adds a rule result that will be verified later.
-     * </p>
+     * 
      *
      * <p>
      * <strong>Available Conditions:</strong>
@@ -248,7 +248,7 @@ public class SnComponentRule {
      *   <li>{@code endsWith(String)} - attribute ends with suffix</li>
      *   <li>{@code matches(String)} - attribute matches regex pattern</li>
      * </ul>
-     * </p>
+     *
      */
     public class SnRuleCondition {
         private final String valueType;
@@ -270,7 +270,7 @@ public class SnComponentRule {
          *
          * <p>
          * Example: {@code rule.id().isPresent(); }
-         * </p>
+         * 
          */
         public void isPresent() {
             SnComponentRule.this.ruleResults.add(new SnRuleResult(valueType, SnRuleType.IsPresent, actualValue));
@@ -281,7 +281,7 @@ public class SnComponentRule {
          *
          * <p>
          * Example: {@code rule.attr("disabled").isAbsent(); }
-         * </p>
+         * 
          */
         public void isAbsent() {
             SnComponentRule.this.ruleResults.add(new SnRuleResult(valueType, SnRuleType.IsAbsent, actualValue));
@@ -293,7 +293,7 @@ public class SnComponentRule {
          * <p>
          * The comparison is case-sensitive.
          * Example: {@code rule.tag().is("button"); }
-         * </p>
+         * 
          *
          * @param expected the expected value
          */
@@ -307,7 +307,7 @@ public class SnComponentRule {
          * <p>
          * The comparison is case-sensitive.
          * Example: {@code rule.type().isNot("hidden"); }
-         * </p>
+         * 
          *
          * @param expected the unexpected value
          */
@@ -320,7 +320,7 @@ public class SnComponentRule {
          *
          * <p>
          * Example: {@code rule.type().isOneOf("text", "email", "password"); }
-         * </p>
+         * 
          *
          * @param expected one or more acceptable values
          */
@@ -333,7 +333,7 @@ public class SnComponentRule {
          *
          * <p>
          * Example: {@code rule.attr("class").doesNotContain("hidden"); }
-         * </p>
+         * 
          *
          * @param expected the substring that must not be present
          */
@@ -346,7 +346,7 @@ public class SnComponentRule {
          *
          * <p>
          * Example: {@code rule.attr("class").contains("btn"); }
-         * </p>
+         * 
          *
          * @param expected the substring that must be present
          */
@@ -359,7 +359,7 @@ public class SnComponentRule {
          *
          * <p>
          * Example: {@code rule.href().startsWith("https://"); }
-         * </p>
+         * 
          *
          * @param expected the required prefix
          */
@@ -372,7 +372,7 @@ public class SnComponentRule {
          *
          * <p>
          * Example: {@code rule.href().endsWith(".html"); }
-         * </p>
+         * 
          *
          * @param expected the required suffix
          */
@@ -385,7 +385,7 @@ public class SnComponentRule {
          *
          * <p>
          * Example: {@code rule.attr("data-id").matches("\\d+"); }
-         * </p>
+         * 
          *
          * @param regexPattern the regex pattern the value must match
          */
@@ -401,7 +401,7 @@ public class SnComponentRule {
      * This inner class specializes in validating the CSS classes of an element.
      * It provides methods to check for presence of specific classes, combinations of classes,
      * and absence of classes.
-     * </p>
+     * 
      *
      * <p>
      * <strong>Available CSS Class Conditions:</strong>
@@ -414,7 +414,7 @@ public class SnComponentRule {
      *   <li>{@code hasAnyOf(String...)} - element has at least one of the specified classes</li>
      *   <li>{@code hasNoneOf(String...)} - element has none of the specified classes</li>
      * </ul>
-     * </p>
+     *
      *
      * <p>
      * <strong>Example:</strong>
@@ -423,7 +423,7 @@ public class SnComponentRule {
      * rule.cssClasses().hasAllOf("btn", "primary");    // Must have both classes
      * rule.cssClasses().hasNoneOf("disabled", "hidden"); // Must not have these classes
      * }</pre>
-     * </p>
+     *
      */
     public class SnCssClassRuleCondition {
         private final Optional<String[]> actualCssClasses;
@@ -449,7 +449,7 @@ public class SnComponentRule {
          *
          * <p>
          * Example: {@code rule.cssClasses().isPresent(); }
-         * </p>
+         * 
          */
         public void isPresent() {
             SnComponentRule.this.ruleResults.add(new SnCssClassRunResult(SnCssClassRuleType.IsPresent, actualCssClasses));
@@ -461,7 +461,7 @@ public class SnComponentRule {
          *
          * <p>
          * Example: {@code rule.cssClasses().isAbsent(); }
-         * </p>
+         * 
          */
         public void isAbsent() {
             SnComponentRule.this.ruleResults.add(new SnCssClassRunResult(SnCssClassRuleType.IsAbsent, actualCssClasses));
@@ -472,7 +472,7 @@ public class SnComponentRule {
          *
          * <p>
          * Example: {@code rule.cssClasses().has("active"); }
-         * </p>
+         * 
          *
          * @param expectedCssClass the CSS class that must be present
          */
@@ -485,7 +485,7 @@ public class SnComponentRule {
          *
          * <p>
          * Example: {@code rule.cssClasses().doesNotHave("hidden"); }
-         * </p>
+         * 
          *
          * @param expectedCssClass the CSS class that must not be present
          */
@@ -498,7 +498,7 @@ public class SnComponentRule {
          *
          * <p>
          * Example: {@code rule.cssClasses().hasAllOf("btn", "btn-primary", "active"); }
-         * </p>
+         * 
          *
          * @param expectedCssClasses all CSS classes that must be present
          */
@@ -511,7 +511,7 @@ public class SnComponentRule {
          *
          * <p>
          * Example: {@code rule.cssClasses().hasAnyOf("primary", "secondary", "tertiary"); }
-         * </p>
+         * 
          *
          * @param expectedCssClasses one or more CSS classes where at least one must be present
          */
@@ -524,7 +524,7 @@ public class SnComponentRule {
          *
          * <p>
          * Example: {@code rule.cssClasses().hasNoneOf("disabled", "hidden", "loading"); }
-         * </p>
+         * 
          *
          * @param expectedCssClasses CSS classes that must not be present
          */
@@ -623,7 +623,7 @@ public class SnComponentRule {
      * <p>
      * This class tracks whether a rule has passed or failed and provides an error message
      * if the rule failed.
-     * </p>
+     * 
      */
     private abstract class SnAbstractRunResult {
         private boolean result = false;
@@ -660,7 +660,7 @@ public class SnComponentRule {
      * <p>
      * This class evaluates the rule based on the rule type and actual/expected values,
      * and provides detailed error messages when the rule fails.
-     * </p>
+     * 
      */
     private class SnRuleResult extends SnAbstractRunResult {
         private final String valueType;
@@ -697,7 +697,7 @@ public class SnComponentRule {
          *
          * <p>
          * This constructor evaluates the rule immediately based on the actual and expected values.
-         * </p>
+         * 
          *
          * @param valueType description of the value being tested
          * @param ruleType the type of rule
@@ -777,7 +777,7 @@ public class SnComponentRule {
      * <p>
      * This class evaluates CSS class rules based on the rule type and actual/expected classes,
      * and provides detailed error messages when the rule fails.
-     * </p>
+     * 
      */
     private class SnCssClassRunResult extends SnAbstractRunResult {
         private final SnCssClassRuleType ruleType;
@@ -799,7 +799,7 @@ public class SnComponentRule {
          *
          * <p>
          * This constructor evaluates the rule immediately based on the actual and expected classes.
-         * </p>
+         * 
          *
          * @param ruleType the type of CSS class rule
          * @param actualCssValues the actual CSS classes from the element
@@ -870,7 +870,7 @@ public class SnComponentRule {
      *
      * <p>
      * Example: {@code ["foo", "bar", "baz"]} becomes {@code "'foo', 'bar', 'baz'"}
-     * </p>
+     * 
      *
      * @param values the string array to convert
      * @return the formatted string with each value wrapped in single quotes and separated by commas

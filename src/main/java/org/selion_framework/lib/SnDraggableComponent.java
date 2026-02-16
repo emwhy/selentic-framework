@@ -1,7 +1,5 @@
 package org.selion_framework.lib;
 
-import org.openqa.selenium.interactions.Actions;
-
 public abstract class SnDraggableComponent extends SnClickableComponent {
 
     public SnDragAction drag() {

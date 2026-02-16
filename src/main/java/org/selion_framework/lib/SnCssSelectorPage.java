@@ -6,7 +6,7 @@ package org.selion_framework.lib;
  * <p>
  * This class creates page-level (document root) selectors that are not dependent on any prior element.
  * It is used to initiate independent CSS selector expressions from the beginning of the DOM.
- * </p>
+ * 
  *
  * <h2>Usage Example</h2>
  * <pre>{@code
@@ -31,7 +31,7 @@ public final class SnCssSelectorPage extends SnCssSelector {
      * <p>
      * This constructor is package-private and called internally by the framework. Use the fluent API
      * method {@link SnCssSelector#page(SnCssSelectorPropertyType...)} instead.
-     * </p>
+     * 
      *
      * @param selectorProperties optional properties to filter page-level elements
      */
@@ -45,7 +45,7 @@ public final class SnCssSelectorPage extends SnCssSelector {
      * <p>
      * Root selectors start from the document without a preceding element.
      * Called internally during selector string construction.
-     * </p>
+     * 
      *
      * @return an empty string (no combinator)
      */

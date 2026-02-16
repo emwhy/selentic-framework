@@ -17,17 +17,17 @@ import java.io.File;
  * This class provides centralized access to framework configuration including browser selection, timeout settings,
  * and logging configuration. Configuration values are loaded from the {@code selion.conf} file located on the
  * classpath, with sensible defaults provided for any missing settings.
- * </p>
+ * 
  *
  * <h2>Configuration File</h2>
  * <p>
  * The framework loads configuration from a {@code selion.conf} file (HOCON format). If the file is not found or
  * contains errors, default values are used.
- * </p>
+ * 
  *
  * <p>
  * <strong>Configuration File Location:</strong> The file should be placed in any location on the classpath.
- * </p>
+ * 
  *
  * <h2>Configuration File Format (selion.conf)</h2>
  * <pre>{@code
@@ -86,7 +86,7 @@ public class SelionConfig {
      * <p>
      * This is the primary entry point for accessing framework configuration. The configuration is loaded
      * once when the class is first initialized and remains constant throughout the test execution.
-     * </p>
+     * 
      *
      * @return the global {@code SelionConfig} singleton instance
      */
@@ -104,11 +104,11 @@ public class SelionConfig {
      *   <li>Falls back to default values if the file is not found or contains errors</li>
      *   <li>Logs configuration details for debugging purposes</li>
      * </ul>
-     * </p>
+     * 
      *
      * <p>
      * This constructor should not be called directly. Use {@link #config()} to access the singleton instance.
-     * </p>
+     * 
      */
     private SelionConfig() {
         try {
@@ -215,11 +215,11 @@ public class SelionConfig {
      * <p>
      * This timeout is used by the framework when waiting for elements to exist, become visible, or other
      * time-based operations. The default value is 5000 milliseconds (5 seconds).
-     * </p>
+     * 
      *
      * <p>
      * <strong>Configuration Key:</strong> {@code wait-timeout-millisec}
-     * </p>
+     * 
      *
      * @return the wait timeout in milliseconds
      */
@@ -233,15 +233,15 @@ public class SelionConfig {
      * <p>
      * This setting controls the logging level for all loggers except the Selion Framework logger,
      * which uses its own separate log level setting. The default value is {@link Level#INFO}.
-     * </p>
+     * 
      *
      * <p>
      * <strong>Configuration Key:</strong> {@code log.root-log-level}
-     * </p>
+     * 
      *
      * <p>
      * <strong>Valid Values:</strong> TRACE, DEBUG, INFO, WARN, ERROR, OFF
-     * </p>
+     * 
      *
      * @return the {@link Level} for the root logger
      * @see #selionLogLevel()
@@ -257,15 +257,15 @@ public class SelionConfig {
      * This setting controls the logging level specifically for the Selion Framework's internal logging,
      * allowing you to see framework-specific debug information independently of your application logs.
      * The default value is {@link Level#DEBUG}.
-     * </p>
+     * 
      *
      * <p>
      * <strong>Configuration Key:</strong> {@code log.selion-log-level}
-     * </p>
+     * 
      *
      * <p>
      * <strong>Valid Values:</strong> TRACE, DEBUG, INFO, WARN, ERROR, OFF
-     * </p>
+     * 
      *
      * @return the {@link Level} for the Selion Framework logger
      * @see #rootLogLevel()
@@ -280,11 +280,11 @@ public class SelionConfig {
      * <p>
      * This setting determines how long log files are retained before being automatically deleted.
      * A value of 0 indicates that logs are not kept.
-     * </p>
+     * 
      *
      * <p>
      * <strong>Configuration Key:</strong> {@code log.keep-duration-min}
-     * </p>
+     * 
      *
      * <p>
      * <strong>Examples:</strong>
@@ -294,7 +294,7 @@ public class SelionConfig {
      *   <li>1440 = Keep logs for 1 day</li>
      *   <li>10080 = Keep logs for 1 week</li>
      * </ul>
-     * </p>
+     *
      *
      * @return the log retention duration in minutes
      */
@@ -308,15 +308,15 @@ public class SelionConfig {
      * <p>
      * This setting determines which web browser the framework will use when initializing WebDriver instances.
      * The default value is {@link SnBrowser#Chrome}.
-     * </p>
+     * 
      *
      * <p>
      * <strong>Configuration Key:</strong> {@code browser}
-     * </p>
+     * 
      *
      * <p>
      * <strong>Valid Values:</strong> chrome, firefox, safari, edge (case-insensitive)
-     * </p>
+     * 
      *
      * @return the {@link SnBrowser} to use for test execution
      * @see SnBrowser
@@ -331,11 +331,11 @@ public class SelionConfig {
      * <p>
      * This setting specifies the base directory where all framework log files will be written.
      * The default value is {@code {user.dir}/log} (a "log" directory in the current working directory).
-     * </p>
+     * 
      *
      * <p>
      * <strong>Configuration Key:</strong> {@code log.root-dir}
-     * </p>
+     * 
      *
      * @return the {@link File} representing the log root directory
      */
@@ -350,7 +350,7 @@ public class SelionConfig {
      * This utility method converts absolute directory paths to a normalized format, removing platform-specific
      * path separators and keeping only the relevant directory portion. This is used internally for logging
      * configuration values in a consistent format.
-     * </p>
+     * 
      *
      * @param originalDir the original directory path string to parse
      * @return the normalized directory path with platform-specific separators converted to forward slashes

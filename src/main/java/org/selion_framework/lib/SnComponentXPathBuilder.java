@@ -5,7 +5,7 @@ package org.selion_framework.lib;
  * <p>
  * This class provides a fluent API to build complex XPath expressions by defining
  * relationships.
- * </p>
+ * 
  * @see SnXPath
  */
 public final class SnComponentXPathBuilder extends SnSelectorBuilder {
