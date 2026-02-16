@@ -2,14 +2,14 @@ package org.selion_framework.sanity.component.dialog;
 
 import org.selion_framework.lib.*;
 
-public class SnSanityTestDialog extends SnDialog {
-    private static final SnXPath TEXTBOX = _xpath.descendant("input", _id().is("sanitytest-dialog-textbox"));
+public class SnTestDialog extends SnDialog {
+    private static final SnXPath TEXTBOX = _xpath.descendant("input", _id().is("test-dialog-textbox"));
     private static final SnXPath CLOSE_BUTTON = _xpath.descendant("button", _cssClasses("close"));
 
     @Override
     protected void rules(SnComponentRule rule) {
         rule.tag().is("div");
-        rule.id().is("sanitytest-dialog");
+        rule.id().is("test-dialog");
     }
 
 

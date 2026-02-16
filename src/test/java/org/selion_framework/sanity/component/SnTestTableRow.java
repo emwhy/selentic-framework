@@ -5,7 +5,7 @@ import org.selion_framework.lib.SnComponentRule;
 import org.selion_framework.lib.SnGenericComponent;
 import org.selion_framework.lib.SnXPath;
 
-public class SnSanityTestTableRow extends SnComponent {
+public class SnTestTableRow extends SnComponent {
     private static final SnXPath PRODUCT_NAME_TEXT = _xpath.descendant("td", _cssClasses("product-name"));
     private static final SnXPath SERIAL_NUMBER_TEXT = _xpath.descendant("td", _cssClasses("serial-number"));
     private static final SnXPath PRODUCT_TYPE_TEXT = _xpath.descendant("td", _cssClasses("product-type"));

@@ -2,7 +2,7 @@ package org.selion_framework.sanity.component;
 
 import org.selion_framework.lib.*;
 
-public class SnSanityTestLongListEntryComponent extends SnComponent {
+public class SnLongListEntryComponent extends SnComponent {
     private static final SnCssSelector TITLE_TEXT = _cssSelector.descendant(_cssClasses("title"));
     private static final SnCssSelector CHECKBOX = _cssSelector.descendant(_type().is("checkbox"));
     private static final SnCssSelector TEXTBOX = _cssSelector.descendant(_type().is("text"));

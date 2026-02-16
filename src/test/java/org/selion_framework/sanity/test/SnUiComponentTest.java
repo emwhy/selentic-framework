@@ -1,6 +1,5 @@
 package org.selion_framework.sanity.test;
 
-import com.sun.source.tree.AssertTree;
 import org.selion_framework.lib.Selion;
 import org.selion_framework.lib.SnButton;
 import org.selion_framework.lib.SnPage;
@@ -9,12 +8,12 @@ import org.selion_framework.lib.exception.*;
 import org.selion_framework.lib.util.SnDownloadCsvFileParser;
 import org.selion_framework.lib.util.SnLogHandler;
 import org.selion_framework.lib.util.SnWait;
-import org.selion_framework.sanity.component.SnSanityTestAnimatedBox;
-import org.selion_framework.sanity.component.SnSanityTestLongListEntryComponent;
-import org.selion_framework.sanity.component.SnSanityTestTableRow;
+import org.selion_framework.sanity.component.SnAnimatedBox;
+import org.selion_framework.sanity.component.SnLongListEntryComponent;
+import org.selion_framework.sanity.component.SnTestTableRow;
 import org.selion_framework.sanity.page.SnDragAndDropTestPage;
-import org.selion_framework.sanity.page.SnSanityTestCssSelectorPage;
-import org.selion_framework.sanity.page.SnSanityTestExternalPage;
+import org.selion_framework.sanity.page.SnUiComponentPage;
+import org.selion_framework.sanity.page.SnExternalPage;
 import org.slf4j.Logger;
 import org.testng.Assert;
 import org.testng.annotations.AfterClass;
@@ -30,21 +29,21 @@ import java.util.regex.Pattern;
 import static org.testng.AssertJUnit.assertTrue;
 import static org.testng.AssertJUnit.fail;
 
-public class SnSanityCssSelectorTest {
-    private static final Logger LOG = SnLogHandler.logger(SnSanityCssSelectorTest.class);
+public class SnUiComponentTest {
+    private static final Logger LOG = SnLogHandler.logger(SnUiComponentTest.class);
 
-    private final SnWithPage<SnSanityTestCssSelectorPage> sanitytestPage = SnPage.with(SnSanityTestCssSelectorPage.class);
-    private final SnWithPage<SnSanityTestExternalPage> sanitytestExternalPage = SnPage.with(SnSanityTestExternalPage.class);
+    private final SnWithPage<SnUiComponentPage> testPage = SnPage.with(SnUiComponentPage.class);
+    private final SnWithPage<SnExternalPage> testExternalPage = SnPage.with(SnExternalPage.class);
     private final SnWithPage<SnDragAndDropTestPage> dragAndDropTestPage = SnPage.with(SnDragAndDropTestPage.class);
 
     @BeforeClass 
     public void setup() {
-        Selion.open("file://" + System.getProperty("user.dir") + "/build/resources/test/sanitytest_file/sanitytest.htm");
+        Selion.open("file://" + System.getProperty("user.dir") + "/build/resources/test/test_file/test.htm");
     }
 
     @AfterMethod(alwaysRun = true)
     public void reload() {
-        sanitytestPage.inPage(SnPage::reload);
+        testPage.inPage(SnPage::reload);
     }
 
     @AfterClass(alwaysRun = true)
@@ -54,23 +53,23 @@ public class SnSanityCssSelectorTest {
 
     @Test
     public void testTextbox() {
-        sanitytestPage.inPage(p -> {
-            Assert.assertEquals(p.sanitytestTextbox.text(), "textbox text");
+        testPage.inPage(p -> {
+            Assert.assertEquals(p.testTextbox.text(), "textbox text");
 
-            p.sanitytestTextbox.enterText("this is a test");
+            p.testTextbox.enterText("this is a test");
 
-            Assert.assertEquals(p.sanitytestTextbox.text(), "this is a test");
+            Assert.assertEquals(p.testTextbox.text(), "this is a test");
         });
     }
 
     @Test
     public void testTextarea() {
-        sanitytestPage.inPage(p -> {
-            Assert.assertEquals(p.sanitytestTextarea.text(), "textarea text");
+        testPage.inPage(p -> {
+            Assert.assertEquals(p.testTextarea.text(), "textarea text");
 
-            p.sanitytestTextarea.enterText("test text");
+            p.testTextarea.enterText("test text");
 
-            Assert.assertEquals(p.sanitytestTextarea.text(), "test text");
+            Assert.assertEquals(p.testTextarea.text(), "test text");
         });
     }
 
@@ -78,104 +77,104 @@ public class SnSanityCssSelectorTest {
     public void testDateTextbox() {
         LocalDate futureDate = LocalDate.now().plusDays(8);
 
-        sanitytestPage.inPage(p -> {
-            Assert.assertEquals(p.sanitytestDateTextbox.text(), "");
+        testPage.inPage(p -> {
+            Assert.assertEquals(p.testDateTextbox.text(), "");
 
-            p.sanitytestDateTextbox.enterDate(futureDate);
+            p.testDateTextbox.enterDate(futureDate);
 
-            Assert.assertEquals(p.sanitytestDateTextbox.text(), futureDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
-            Assert.assertEquals(p.sanitytestDateTextbox.parse(), futureDate);
+            Assert.assertEquals(p.testDateTextbox.text(), futureDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
+            Assert.assertEquals(p.testDateTextbox.parse(), futureDate);
         });
     }
 
     @Test
     public void testDropdown() {
-        sanitytestPage.inPage(p -> {
-            final List<String> options = p.sanitytestDropdown.optionTexts();
+        testPage.inPage(p -> {
+            final List<String> options = p.testDropdown.optionTexts();
 
             for (int i = 1; i <= 40; i++) {
                 Assert.assertEquals(options.get(i-1), "TEST " + i);
             }
 
-            Assert.assertEquals(p.sanitytestDropdown.selectedText(), "TEST 1");
+            Assert.assertEquals(p.testDropdown.selectedText(), "TEST 1");
 
-            p.sanitytestDropdown.select("TEST 35");
+            p.testDropdown.select("TEST 35");
 
-            Assert.assertEquals(p.sanitytestDropdown.selectedText(), "TEST 35");
+            Assert.assertEquals(p.testDropdown.selectedText(), "TEST 35");
 
-            p.sanitytestDropdown.select(Pattern.compile(".*23$"));
+            p.testDropdown.select(Pattern.compile(".*23$"));
 
-            Assert.assertEquals(p.sanitytestDropdown.selectedText(), "TEST 23");
+            Assert.assertEquals(p.testDropdown.selectedText(), "TEST 23");
         });
 
     }
 
     @Test
     public void testMultiSelect() {
-        sanitytestPage.inPage(p -> {
-            final List<String> options = p.sanitytestMultiSelect.optionTexts();
+        testPage.inPage(p -> {
+            final List<String> options = p.testMultiSelect.optionTexts();
 
             for (int i = 1; i <= 40; i++) {
                 Assert.assertEquals(options.get(i-1), "TEST " + i);
             }
 
-            Assert.assertTrue(p.sanitytestMultiSelect.selectedTexts().isEmpty());
+            Assert.assertTrue(p.testMultiSelect.selectedTexts().isEmpty());
 
-            p.sanitytestMultiSelect.select("TEST 31");
-            p.sanitytestMultiSelect.select("TEST 21");
-            p.sanitytestMultiSelect.select("TEST 11");
-            p.sanitytestMultiSelect.select("TEST 9");
+            p.testMultiSelect.select("TEST 31");
+            p.testMultiSelect.select("TEST 21");
+            p.testMultiSelect.select("TEST 11");
+            p.testMultiSelect.select("TEST 9");
 
-            Assert.assertListContainsObject(p.sanitytestMultiSelect.selectedTexts(), "TEST 11", "");
-            Assert.assertListContainsObject(p.sanitytestMultiSelect.selectedTexts(), "TEST 21", "");
-            Assert.assertListContainsObject(p.sanitytestMultiSelect.selectedTexts(), "TEST 9", "");
-            Assert.assertListContainsObject(p.sanitytestMultiSelect.selectedTexts(), "TEST 31", "");
+            Assert.assertListContainsObject(p.testMultiSelect.selectedTexts(), "TEST 11", "");
+            Assert.assertListContainsObject(p.testMultiSelect.selectedTexts(), "TEST 21", "");
+            Assert.assertListContainsObject(p.testMultiSelect.selectedTexts(), "TEST 9", "");
+            Assert.assertListContainsObject(p.testMultiSelect.selectedTexts(), "TEST 31", "");
 
-            p.sanitytestMultiSelect.deselect("TEST 11");
-            p.sanitytestMultiSelect.deselect("TEST 21");
+            p.testMultiSelect.deselect("TEST 11");
+            p.testMultiSelect.deselect("TEST 21");
 
-            Assert.assertListContainsObject(p.sanitytestMultiSelect.selectedTexts(), "TEST 9", "");
-            Assert.assertListContainsObject(p.sanitytestMultiSelect.selectedTexts(), "TEST 31", "");
-            Assert.assertListNotContainsObject(p.sanitytestMultiSelect.selectedTexts(), "TEST 11", "");
-            Assert.assertListNotContainsObject(p.sanitytestMultiSelect.selectedTexts(), "TEST 21", "");
+            Assert.assertListContainsObject(p.testMultiSelect.selectedTexts(), "TEST 9", "");
+            Assert.assertListContainsObject(p.testMultiSelect.selectedTexts(), "TEST 31", "");
+            Assert.assertListNotContainsObject(p.testMultiSelect.selectedTexts(), "TEST 11", "");
+            Assert.assertListNotContainsObject(p.testMultiSelect.selectedTexts(), "TEST 21", "");
 
-            p.sanitytestMultiSelect.clear();
+            p.testMultiSelect.clear();
 
-            assertTrue(p.sanitytestMultiSelect.selectedTexts().isEmpty());
+            assertTrue(p.testMultiSelect.selectedTexts().isEmpty());
 
-            p.sanitytestMultiSelect.select(Pattern.compile("^TEST 4.*"));
+            p.testMultiSelect.select(Pattern.compile("^TEST 4.*"));
 
-            Assert.assertListContainsObject(p.sanitytestMultiSelect.selectedTexts(), "TEST 4", "");
-            Assert.assertListContainsObject(p.sanitytestMultiSelect.selectedTexts(), "TEST 40", "");
+            Assert.assertListContainsObject(p.testMultiSelect.selectedTexts(), "TEST 4", "");
+            Assert.assertListContainsObject(p.testMultiSelect.selectedTexts(), "TEST 40", "");
 
-            p.sanitytestMultiSelect.deselect(Pattern.compile(".*4$"));
+            p.testMultiSelect.deselect(Pattern.compile(".*4$"));
 
-            Assert.assertListContainsObject(p.sanitytestMultiSelect.selectedTexts(), "TEST 40", "");
-            Assert.assertListNotContainsObject(p.sanitytestMultiSelect.selectedTexts(), "TEST 4", "");
+            Assert.assertListContainsObject(p.testMultiSelect.selectedTexts(), "TEST 40", "");
+            Assert.assertListNotContainsObject(p.testMultiSelect.selectedTexts(), "TEST 4", "");
         });
     }
 
     @Test
     public void testCheckbox() {
-        sanitytestPage.inPage(p -> {
-            Assert.assertTrue(p.sanitytestCheckbox.isSelected());
+        testPage.inPage(p -> {
+            Assert.assertTrue(p.testCheckbox.isSelected());
 
-            p.sanitytestCheckbox.deselect();
+            p.testCheckbox.deselect();
 
-            Assert.assertFalse(p.sanitytestCheckbox.isSelected());
+            Assert.assertFalse(p.testCheckbox.isSelected());
 
-            p.sanitytestCheckbox.select();
+            p.testCheckbox.select();
 
-            Assert.assertTrue(p.sanitytestCheckbox.isSelected());
+            Assert.assertTrue(p.testCheckbox.isSelected());
 
-            Assert.assertEquals(p.sanitytestCheckbox.text(), "Test CheckBox");
+            Assert.assertEquals(p.testCheckbox.text(), "Test CheckBox");
         });
     }
 
     @Test
     public void testRadioButtons() {
-        sanitytestPage.inPage(p -> {
-            final List<String> texts = p.sanitytestRadioButtons.texts();
+        testPage.inPage(p -> {
+            final List<String> texts = p.testRadioButtons.texts();
 
             Assert.assertListContainsObject(texts, "Test Radio 1", "");
             Assert.assertListContainsObject(texts, "Test Radio 2", "");
@@ -183,50 +182,50 @@ public class SnSanityCssSelectorTest {
             Assert.assertListContainsObject(texts, "Test Radio 4", "");
             Assert.assertListContainsObject(texts, "Test Radio 5", "");
 
-            Assert.assertEquals(p.sanitytestRadioButtons.selectedText(), "Test Radio 2");
+            Assert.assertEquals(p.testRadioButtons.selectedText(), "Test Radio 2");
 
-            p.sanitytestRadioButtons.select("Test Radio 5");
+            p.testRadioButtons.select("Test Radio 5");
 
-            Assert.assertEquals(p.sanitytestRadioButtons.selectedText(), "Test Radio 5");
+            Assert.assertEquals(p.testRadioButtons.selectedText(), "Test Radio 5");
         });
     }
 
     @Test
     public void testInputButton() {
-        sanitytestPage.inPage(p -> {
-            Assert.assertEquals(p.sanitytestInputButton.text(), "SanityTest Input Button");
+        testPage.inPage(p -> {
+            Assert.assertEquals(p.testInputButton.text(), "SanityTest Input Button");
 
-            p.sanitytestInputButton.click();
+            p.testInputButton.click();
 
-            Assert.assertEquals(p.sanitytestInputButtonIndicatorText.text(), "Clicked!");
+            Assert.assertEquals(p.testInputButtonIndicatorText.text(), "Clicked!");
         });
     }
 
     @Test
     public void testButton() {
-        sanitytestPage.inPage(p -> {
-            Assert.assertEquals(p.sanitytestButton.text(), "SanityTest Button");
+        testPage.inPage(p -> {
+            Assert.assertEquals(p.testButton.text(), "SanityTest Button");
 
-            p.sanitytestButton.click();
+            p.testButton.click();
 
-            Assert.assertEquals(p.sanitytestButtonIndicatorText.text(), "Clicked!");
+            Assert.assertEquals(p.testButtonIndicatorText.text(), "Clicked!");
         });
     }
 
     @Test
     public void testTableRows() {
-        sanitytestPage.inPage(p -> {
-            final List<SnSanityTestTableRow> filteredRow = p.sanitytestTableRows.filter(r -> r.productTypeText.text().equals("Type 1"));
+        testPage.inPage(p -> {
+            final List<SnTestTableRow> filteredRow = p.testTableRows.filter(r -> r.productTypeText.text().equals("Type 1"));
 
-            Assert.assertEquals(p.sanitytestTableRows.size(), 3);
+            Assert.assertEquals(p.testTableRows.size(), 3);
 
-            Assert.assertEquals(p.sanitytestTableRows.at(0).text(), "SanityTest 1");
-            Assert.assertEquals(p.sanitytestTableRows.at(1).text(), "SanityTest 2");
-            Assert.assertEquals(p.sanitytestTableRows.at(2).text(), "SanityTest 3");
+            Assert.assertEquals(p.testTableRows.at(0).text(), "SanityTest 1");
+            Assert.assertEquals(p.testTableRows.at(1).text(), "SanityTest 2");
+            Assert.assertEquals(p.testTableRows.at(2).text(), "SanityTest 3");
 
-            Assert.assertEquals(p.sanitytestTableRows.entry("SanityTest 1").serialNumberText.text(), "#TDD987");
-            Assert.assertEquals(p.sanitytestTableRows.entry("SanityTest 2").serialNumberText.text(), "#AEV974");
-            Assert.assertEquals(p.sanitytestTableRows.entry("SanityTest 3").serialNumberText.text(), "#CCA106");
+            Assert.assertEquals(p.testTableRows.entry("SanityTest 1").serialNumberText.text(), "#TDD987");
+            Assert.assertEquals(p.testTableRows.entry("SanityTest 2").serialNumberText.text(), "#AEV974");
+            Assert.assertEquals(p.testTableRows.entry("SanityTest 3").serialNumberText.text(), "#CCA106");
 
             Assert.assertEquals(filteredRow.size(), 2);
             Assert.assertEquals(filteredRow.get(0).productNameText.text(), "SanityTest 1");
@@ -240,29 +239,29 @@ public class SnSanityCssSelectorTest {
 
     @Test
     public void testFrame() {
-        sanitytestPage.inPage(p -> {
+        testPage.inPage(p -> {
             p.inSanityTestInnerFrame(frameContent -> {
-                Assert.assertEquals(frameContent.sanitytestExternalTextbox.text(), "external textbox text");
+                Assert.assertEquals(frameContent.testExternalTextbox.text(), "external textbox text");
 
-                Assert.assertEquals(frameContent.sanitytestExternalTableRows.size(), 3);
+                Assert.assertEquals(frameContent.testExternalTableRows.size(), 3);
 
-                Assert.assertEquals(frameContent.sanitytestExternalTableRows.at(0).text(), "External SanityTest 1");
-                Assert.assertEquals(frameContent.sanitytestExternalTableRows.at(1).text(), "External SanityTest 2");
-                Assert.assertEquals(frameContent.sanitytestExternalTableRows.at(2).text(), "External SanityTest 3");
+                Assert.assertEquals(frameContent.testExternalTableRows.at(0).text(), "External SanityTest 1");
+                Assert.assertEquals(frameContent.testExternalTableRows.at(1).text(), "External SanityTest 2");
+                Assert.assertEquals(frameContent.testExternalTableRows.at(2).text(), "External SanityTest 3");
 
-                Assert.assertEquals(frameContent.sanitytestExternalTableRows.entry("External SanityTest 1").serialNumberText.text(), "#EX-TDD987");
-                Assert.assertEquals(frameContent.sanitytestExternalTableRows.entry("External SanityTest 2").serialNumberText.text(), "#EX-AEV974");
-                Assert.assertEquals(frameContent.sanitytestExternalTableRows.entry("External SanityTest 3").serialNumberText.text(), "#EX-CCA106");
+                Assert.assertEquals(frameContent.testExternalTableRows.entry("External SanityTest 1").serialNumberText.text(), "#EX-TDD987");
+                Assert.assertEquals(frameContent.testExternalTableRows.entry("External SanityTest 2").serialNumberText.text(), "#EX-AEV974");
+                Assert.assertEquals(frameContent.testExternalTableRows.entry("External SanityTest 3").serialNumberText.text(), "#EX-CCA106");
             });
         });
     }
 
     @Test
     public void testDialog() {
-        sanitytestPage.inPage(p -> {
+        testPage.inPage(p -> {
             p.openSanityTestDialogButton.click();
             p.inSanityTestDialog(dialog -> {
-                Assert.assertEquals(dialog.textbox.text(), "sanitytest dialog text");
+                Assert.assertEquals(dialog.textbox.text(), "test dialog text");
 
                 dialog.textbox.enterText("Test text in dialog");
 
@@ -276,10 +275,10 @@ public class SnSanityCssSelectorTest {
 
     @Test
     public void testModalDialog() {
-        sanitytestPage.inPage(p -> {
+        testPage.inPage(p -> {
             p.openSanityTestModalDialogButton.click();
             p.inSanityTestModalDialog(dialog -> {
-                Assert.assertEquals(dialog.textbox.text(), "sanitytest modal dialog text");
+                Assert.assertEquals(dialog.textbox.text(), "test modal dialog text");
 
                 dialog.textbox.enterText("Test test in modal dialog");
 
@@ -293,12 +292,12 @@ public class SnSanityCssSelectorTest {
 
     @Test
     public void testExternalWindows() {
-        sanitytestPage.inPage(p -> {
+        testPage.inPage(p -> {
 
             // Ensure that calling "inWindow()" without having a window open would cause
             // exception.
             try {
-                p.inWindow(sanitytestExternalPage, p1 -> {
+                p.inWindow(testExternalPage, p1 -> {
                     fail("Should have thrown an exception");
                 });
                 fail("Should have thrown an exception");
@@ -308,19 +307,19 @@ public class SnSanityCssSelectorTest {
 
             // Open a new window.
             p.openExternalWindowLink.click();
-            p.inWindow(sanitytestExternalPage, p1 -> {
+            p.inWindow(testExternalPage, p1 -> {
                 // Open another new window.
                 p1.openExternalWindowLink.click();
-                p1.inWindow(sanitytestExternalPage, (p2, controller) -> {
+                p1.inWindow(testExternalPage, (p2, controller) -> {
 
                     // Controller allows temporary switching control to other windows
                     // without closing them, then return the control back to the original
                     // window.
-                    controller.inOtherWindow(sanitytestPage, 0, p3 -> {
+                    controller.inOtherWindow(testPage, 0, p3 -> {
                         // Ensure that the focused window is the root one.
-                        Assert.assertEquals(p3.sanitytestTableRows.entry("SanityTest 1").serialNumberText.text(), "#TDD987");
-                        Assert.assertEquals(p3.sanitytestTableRows.entry("SanityTest 2").serialNumberText.text(), "#AEV974");
-                        Assert.assertEquals(p3.sanitytestTableRows.entry("SanityTest 3").serialNumberText.text(), "#CCA106");
+                        Assert.assertEquals(p3.testTableRows.entry("SanityTest 1").serialNumberText.text(), "#TDD987");
+                        Assert.assertEquals(p3.testTableRows.entry("SanityTest 2").serialNumberText.text(), "#AEV974");
+                        Assert.assertEquals(p3.testTableRows.entry("SanityTest 3").serialNumberText.text(), "#CCA106");
 
                         Assert.assertEquals(controller.windowCount(), 3);
                     });
@@ -328,17 +327,17 @@ public class SnSanityCssSelectorTest {
 
                     // Assertion on the external window after the control is returned from
                     // "the other window".
-                    Assert.assertEquals(p2.sanitytestExternalTextbox.text(), "external textbox text");
+                    Assert.assertEquals(p2.testExternalTextbox.text(), "external textbox text");
 
-                    Assert.assertEquals(p2.sanitytestExternalTableRows.size(), 3);
+                    Assert.assertEquals(p2.testExternalTableRows.size(), 3);
 
-                    Assert.assertEquals(p2.sanitytestExternalTableRows.at(0).text(), "External SanityTest 1");
-                    Assert.assertEquals(p2.sanitytestExternalTableRows.at(1).text(), "External SanityTest 2");
-                    Assert.assertEquals(p2.sanitytestExternalTableRows.at(2).text(), "External SanityTest 3");
+                    Assert.assertEquals(p2.testExternalTableRows.at(0).text(), "External SanityTest 1");
+                    Assert.assertEquals(p2.testExternalTableRows.at(1).text(), "External SanityTest 2");
+                    Assert.assertEquals(p2.testExternalTableRows.at(2).text(), "External SanityTest 3");
 
-                    Assert.assertEquals(p2.sanitytestExternalTableRows.entry("External SanityTest 1").serialNumberText.text(), "#EX-TDD987");
-                    Assert.assertEquals(p2.sanitytestExternalTableRows.entry("External SanityTest 2").serialNumberText.text(), "#EX-AEV974");
-                    Assert.assertEquals(p2.sanitytestExternalTableRows.entry("External SanityTest 3").serialNumberText.text(), "#EX-CCA106");
+                    Assert.assertEquals(p2.testExternalTableRows.entry("External SanityTest 1").serialNumberText.text(), "#EX-TDD987");
+                    Assert.assertEquals(p2.testExternalTableRows.entry("External SanityTest 2").serialNumberText.text(), "#EX-AEV974");
+                    Assert.assertEquals(p2.testExternalTableRows.entry("External SanityTest 3").serialNumberText.text(), "#EX-CCA106");
 
                     // Close the current window.
                     p2.closeCurrentWindowButton.click();
@@ -348,17 +347,17 @@ public class SnSanityCssSelectorTest {
                 // closed before its end.
                 Assert.assertEquals(Selion.driver().getWindowHandles().size(), 2);
 
-                Assert.assertEquals(p1.sanitytestExternalTextbox.text(), "external textbox text");
+                Assert.assertEquals(p1.testExternalTextbox.text(), "external textbox text");
 
-                Assert.assertEquals(p1.sanitytestExternalTableRows.size(), 3);
+                Assert.assertEquals(p1.testExternalTableRows.size(), 3);
 
-                Assert.assertEquals(p1.sanitytestExternalTableRows.at(0).text(), "External SanityTest 1");
-                Assert.assertEquals(p1.sanitytestExternalTableRows.at(1).text(), "External SanityTest 2");
-                Assert.assertEquals(p1.sanitytestExternalTableRows.at(2).text(), "External SanityTest 3");
+                Assert.assertEquals(p1.testExternalTableRows.at(0).text(), "External SanityTest 1");
+                Assert.assertEquals(p1.testExternalTableRows.at(1).text(), "External SanityTest 2");
+                Assert.assertEquals(p1.testExternalTableRows.at(2).text(), "External SanityTest 3");
 
-                Assert.assertEquals(p1.sanitytestExternalTableRows.entry("External SanityTest 1").serialNumberText.text(), "#EX-TDD987");
-                Assert.assertEquals(p1.sanitytestExternalTableRows.entry("External SanityTest 2").serialNumberText.text(), "#EX-AEV974");
-                Assert.assertEquals(p1.sanitytestExternalTableRows.entry("External SanityTest 3").serialNumberText.text(), "#EX-CCA106");
+                Assert.assertEquals(p1.testExternalTableRows.entry("External SanityTest 1").serialNumberText.text(), "#EX-TDD987");
+                Assert.assertEquals(p1.testExternalTableRows.entry("External SanityTest 2").serialNumberText.text(), "#EX-AEV974");
+                Assert.assertEquals(p1.testExternalTableRows.entry("External SanityTest 3").serialNumberText.text(), "#EX-CCA106");
             });
 
         });
@@ -369,12 +368,12 @@ public class SnSanityCssSelectorTest {
 
     @Test
     public void testLongComponentList() {
-        sanitytestPage.inPage(p -> {
+        testPage.inPage(p -> {
             int i = 0;
 
             Assert.assertEquals(p.longComponentEntries.size(), 500);
 
-            for (SnSanityTestLongListEntryComponent entry : p.longComponentEntries) {
+            for (SnLongListEntryComponent entry : p.longComponentEntries) {
                 i++;
 
                 Assert.assertEquals(entry.titleText.text(), "Long List Entry " + i);
@@ -394,10 +393,10 @@ public class SnSanityCssSelectorTest {
 
     @Test
     public void testCsvDownload() {
-        sanitytestPage.inPage(p -> {
-            final SnDownloadCsvFileParser csvParser = p.sanitytestCsvDownloadLink.download().parse(SnDownloadCsvFileParser.class);
+        testPage.inPage(p -> {
+            final SnDownloadCsvFileParser csvParser = p.testCsvDownloadLink.download().parse(SnDownloadCsvFileParser.class);
 
-            Assert.assertEquals(csvParser.baseName(), "sanitytest");
+            Assert.assertEquals(csvParser.baseName(), "test");
             Assert.assertEquals(csvParser.extension(), "csv");
             Assert.assertEquals(csvParser.contentText(), "\"1\", \"test\", \"This is a test content.\"");
             Assert.assertEquals(csvParser.csvContents().getFirst().getFirst(), "1");
@@ -408,26 +407,26 @@ public class SnSanityCssSelectorTest {
 
     @Test
     public void testOwnText() {
-        sanitytestPage.inPage(p -> {
-            Assert.assertEquals(p.sanitytestOwnText.exposedOwnText(), "This is the own text.");
+        testPage.inPage(p -> {
+            Assert.assertEquals(p.testOwnText.exposedOwnText(), "This is the own text.");
         });
     }
 
     @Test
     public void testWaitObject() {
-        sanitytestPage.inPage(p -> {
+        testPage.inPage(p -> {
             // These methods use SnWait within them.
-            Assert.assertFalse(p.sanitytestNonExistingLink.exists());
-            Assert.assertFalse(p.sanitytestNonExistingLink.isDisplayed());
+            Assert.assertFalse(p.testNonExistingLink.exists());
+            Assert.assertFalse(p.testNonExistingLink.isDisplayed());
 
             try {
-                p.sanitytestNonExistingLink.text();
+                p.testNonExistingLink.text();
             } catch (SnElementNotFoundException ex) {
                 // Expected.
             }
 
             try {
-                p.sanitytestNonExistingLink.click();
+                p.testNonExistingLink.click();
             } catch (SnComponentNotDisplayedException ex) {
                 // Expected.
             }
@@ -454,7 +453,7 @@ public class SnSanityCssSelectorTest {
 
     @Test
     public void testWaitForAnimation() {
-        sanitytestPage.inPage(p -> {
+        testPage.inPage(p -> {
             testAnimation(p.animatedBox, p.animateMoveButton);
             testAnimation(p.animatedBox, p.animateRotateButton);
             testAnimation(p.animatedBox, p.animateOpacityButton);
@@ -471,7 +470,7 @@ public class SnSanityCssSelectorTest {
 
     @Test
     public void testAlert() {
-        sanitytestPage.inPage(p -> {
+        testPage.inPage(p -> {
             p.showAlertButton.click();
             p.inAlert(a -> {
                 Assert.assertEquals(a.getText(), "Test Alert");
@@ -496,7 +495,7 @@ public class SnSanityCssSelectorTest {
 
     @Test
     public void testDragAndDrop() {
-        sanitytestPage.inPage(p -> {
+        testPage.inPage(p -> {
 
             p.openDragAndDropPageLink.click();
             p.inWindow(dragAndDropTestPage, p1 -> {
@@ -516,7 +515,7 @@ public class SnSanityCssSelectorTest {
         });
     }
 
-    private void testAnimation(SnSanityTestAnimatedBox animatedBox, SnButton button) {
+    private void testAnimation(SnAnimatedBox animatedBox, SnButton button) {
         long startTimestamp, endTimestamp;
 
         button.click();
