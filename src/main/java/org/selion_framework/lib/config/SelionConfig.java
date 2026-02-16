@@ -1,30 +1,365 @@
 package org.selion_framework.lib.config;
 
 import ch.qos.logback.classic.Level;
+import com.typesafe.config.Config;
+import com.typesafe.config.ConfigException;
+import com.typesafe.config.ConfigFactory;
 import org.selion_framework.lib.SnBrowser;
+import org.selion_framework.lib.util.SnLogHandler;
+import org.slf4j.Logger;
 
+import java.io.File;
+
+/**
+ * {@code SelionConfig} is a singleton configuration class that manages all global configuration settings.
+ *
+ * <p>
+ * This class provides centralized access to framework configuration including browser selection, timeout settings,
+ * and logging configuration. Configuration values are loaded from the {@code selion.conf} file located on the
+ * classpath, with sensible defaults provided for any missing settings.
+ * </p>
+ *
+ * <h2>Configuration File</h2>
+ * <p>
+ * The framework loads configuration from a {@code selion.conf} file (HOCON format). If the file is not found or
+ * contains errors, default values are used.
+ * </p>
+ *
+ * <p>
+ * <strong>Configuration File Location:</strong> The file should be placed in any location on the classpath.
+ * </p>
+ *
+ * <h2>Configuration File Format (selion.conf)</h2>
+ * <pre>{@code
+ * // Browser configuration
+ * browser = "chrome"  // Options: chrome, firefox, safari, edge
+ *
+ * // Wait timeout in milliseconds
+ * wait-timeout-millisec = 5000
+ *
+ * // Logging configuration
+ * log {
+ *     root-dir = "./log"              // Directory where logs are stored
+ *     root-log-level = "INFO"         // Log level for root logger (TRACE, DEBUG, INFO, WARN, ERROR)
+ *     selion-log-level = "DEBUG"      // Log level for Selion Framework logger (TRACE, DEBUG, INFO, WARN, ERROR)
+ *     keep-duration-min = 0           // How long to keep logs in minutes (0 = will not keep)
+ * }
+ * }</pre>
+ *
+ * <h2>Default Configuration Values</h2>
+ * <ul>
+ *   <li><strong>browser:</strong> Chrome</li>
+ *   <li><strong>wait-timeout-millisec:</strong> 5000 (5 seconds)</li>
+ *   <li><strong>log.root-dir:</strong> {@code {user.dir}/log}</li>
+ *   <li><strong>log.root-log-level:</strong> INFO</li>
+ *   <li><strong>log.selion-log-level:</strong> DEBUG</li>
+ *   <li><strong>log.keep-duration-min:</strong> 0 (keep forever)</li>
+ * </ul>
+ *
+ * <h2>Access configuration values</h2>
+ * <pre>{@code
+ * SnBrowser browser = config.browser();
+ * long timeout = config.waitTimeoutMilliseconds();
+ * File logDir = config.logRootDir();
+ * Level rootLogLevel = config.rootLogLevel();
+ * Level selionLogLevel = config.selionLogLevel();
+ * long logRetention = config.keepLogDurationMinutes();
+ * }</pre>
+ *
+ * @see SnBrowser
+ * @see ch.qos.logback.classic.Level
+ */
 public class SelionConfig {
+    private static final Logger LOG = SnLogHandler.logger(SelionConfig.class);
     private static final SelionConfig GLOBAL_CONFIG = new SelionConfig();
 
     private SnBrowser browser = SnBrowser.Chrome;
-    public long waitTimeoutMilliseconds = 5000;
-    public String rootLogLevel = Level.INFO.levelStr;
-    public String selionLogLevel = Level.DEBUG.levelStr;
-    public long keepLogInMinutes = 0;
+    private long waitTimeoutMilliseconds = 5000;
+    private Level rootLogLevel = Level.INFO;
+    private Level selionLogLevel = Level.DEBUG;
+    private long keepLogDurationMinutes = 0;
+    private File logRootDir = new File(System.getProperty("user.dir") + "/log");
 
+    /**
+     * Returns the singleton instance of {@code SelionConfig}.
+     *
+     * <p>
+     * This is the primary entry point for accessing framework configuration. The configuration is loaded
+     * once when the class is first initialized and remains constant throughout the test execution.
+     * </p>
+     *
+     * @return the global {@code SelionConfig} singleton instance
+     */
     public static SelionConfig config() {
         return GLOBAL_CONFIG;
     }
 
+    /**
+     * Private constructor for the {@code SelionConfig} singleton.
+     *
+     * <p>
+     * Instances are created only once, and the constructor:
+     * <ul>
+     *   <li>Attempts to load the {@code selion.conf} file from the classpath</li>
+     *   <li>Falls back to default values if the file is not found or contains errors</li>
+     *   <li>Logs configuration details for debugging purposes</li>
+     * </ul>
+     * </p>
+     *
+     * <p>
+     * This constructor should not be called directly. Use {@link #config()} to access the singleton instance.
+     * </p>
+     */
+    private SelionConfig() {
+        try {
+            final Config config = ConfigFactory.load("selion.conf");
+
+            loadFromFile(config);
+        } catch (Throwable th) {
+            LOG.error("Error while attempting to load 'selion.conf' file. There are errors while parsing it.", th);
+            LOG.error("Using default configuration values for this run:");
+            LOG.error("""
+                    
+                    
+                    browser = '{}'
+                    wait-timeout-millisec = {}
+                    log {
+                        root-dir = '{}'
+                        root-log-level = '{}'
+                        selion-log-level = '{}'
+                        keep-duration-min = {}
+                    }
+
+                    """, this.browser.toString().toLowerCase(), this.waitTimeoutMilliseconds, parseDir(this.logRootDir.getAbsolutePath()), this.rootLogLevel.toString().toUpperCase(), this.selionLogLevel.toString().toUpperCase(), this.keepLogDurationMinutes);
+        }
+    }
+
+    /**
+     * Loads configuration values from 'selion.conf' file.
+     *
+     * @param config the {@link Config} object containing configuration properties
+     */
+    private void loadFromFile(Config config) {
+        int defaultConfigCount = 0;
+
+        try {
+            this.browser = SnBrowser.toEnum(config.getString("browser"));
+            LOG.info("browser = '{}'", this.browser.toString().toLowerCase());
+        } catch (ConfigException ex) {
+            LOG.info("browser = '{}' (default)", this.browser.toString().toLowerCase());
+            defaultConfigCount++;
+        }
+
+        try {
+            this.waitTimeoutMilliseconds = config.getLong("wait-timeout-millisec");
+            LOG.info("wait-timeout-millisec = {}", this.waitTimeoutMilliseconds);
+        } catch (ConfigException ex) {
+            LOG.info("wait-timeout-millisec = {} (default)", this.waitTimeoutMilliseconds);
+            defaultConfigCount++;
+        }
+
+        try {
+            this.logRootDir = new File(config.getString("log.root-dir"));
+            LOG.info("log.root-dir = '{}'", parseDir(this.logRootDir.getAbsolutePath()));
+        } catch (ConfigException ex) {
+            LOG.info("log.root-dir = '{}' (default)", parseDir(this.logRootDir.getAbsolutePath()));
+            defaultConfigCount++;
+        }
+
+        try {
+            this.rootLogLevel = Level.toLevel(config.getString("log.root-log-level").toUpperCase());
+            LOG.info("log.root-log-level = {}", this.rootLogLevel.toString().toUpperCase());
+        } catch (ConfigException ex) {
+            LOG.info("log.root-log-level = {} (default)", this.rootLogLevel.toString().toUpperCase());
+            defaultConfigCount++;
+        }
+
+        try {
+            this.selionLogLevel = Level.toLevel(config.getString("log.selion-log-level").toUpperCase());
+            LOG.info("log.selion-log-level = {}", this.selionLogLevel.toString().toUpperCase());
+        } catch (ConfigException ex) {
+            LOG.info("log.selion-log-level = {} (default)", this.selionLogLevel.toString().toUpperCase());
+            defaultConfigCount++;
+        }
+
+        try {
+            this.keepLogDurationMinutes = config.getLong("log.keep-duration-min");
+            LOG.info("log.keep-duration-min = {}", this.keepLogDurationMinutes);
+        } catch (ConfigException ex) {
+            LOG.info("log.keep-duration-min = {} (default)", this.keepLogDurationMinutes);
+            defaultConfigCount++;
+        }
+
+        if (defaultConfigCount >= 6) {
+            LOG.info("You can control the configuration values by adding 'selion.conf' file to one of classpath locations.");
+            LOG.info("""
+                    
+                    
+                    // 'selion.conf' file content. You can copy and paste.
+                    browser = '{}'
+                    wait-timeout-millisec = {}
+                    log {
+                        root-dir = '{}'
+                        root-log-level = '{}'
+                        selion-log-level = '{}'
+                        keep-duration-min = {}
+                    }
+
+                    """, this.browser.toString().toLowerCase(), this.waitTimeoutMilliseconds, parseDir(this.logRootDir.getAbsolutePath()), this.rootLogLevel.toString().toUpperCase(), this.selionLogLevel.toString().toUpperCase(), this.keepLogDurationMinutes);
+        }
+    }
+
+    /**
+     * Returns the wait timeout duration in milliseconds.
+     *
+     * <p>
+     * This timeout is used by the framework when waiting for elements to exist, become visible, or other
+     * time-based operations. The default value is 5000 milliseconds (5 seconds).
+     * </p>
+     *
+     * <p>
+     * <strong>Configuration Key:</strong> {@code wait-timeout-millisec}
+     * </p>
+     *
+     * @return the wait timeout in milliseconds
+     */
+    public long waitTimeoutMilliseconds() {
+        return waitTimeoutMilliseconds;
+    }
+
+    /**
+     * Returns the log level for the root logger.
+     *
+     * <p>
+     * This setting controls the logging level for all loggers except the Selion Framework logger,
+     * which uses its own separate log level setting. The default value is {@link Level#INFO}.
+     * </p>
+     *
+     * <p>
+     * <strong>Configuration Key:</strong> {@code log.root-log-level}
+     * </p>
+     *
+     * <p>
+     * <strong>Valid Values:</strong> TRACE, DEBUG, INFO, WARN, ERROR, OFF
+     * </p>
+     *
+     * @return the {@link Level} for the root logger
+     * @see #selionLogLevel()
+     */
+    public Level rootLogLevel() {
+        return rootLogLevel;
+    }
+
+    /**
+     * Returns the log level for the Selion Framework logger.
+     *
+     * <p>
+     * This setting controls the logging level specifically for the Selion Framework's internal logging,
+     * allowing you to see framework-specific debug information independently of your application logs.
+     * The default value is {@link Level#DEBUG}.
+     * </p>
+     *
+     * <p>
+     * <strong>Configuration Key:</strong> {@code log.selion-log-level}
+     * </p>
+     *
+     * <p>
+     * <strong>Valid Values:</strong> TRACE, DEBUG, INFO, WARN, ERROR, OFF
+     * </p>
+     *
+     * @return the {@link Level} for the Selion Framework logger
+     * @see #rootLogLevel()
+     */
+    public Level selionLogLevel() {
+        return selionLogLevel;
+    }
+
+    /**
+     * Returns the log retention duration in minutes.
+     *
+     * <p>
+     * This setting determines how long log files are retained before being automatically deleted.
+     * A value of 0 indicates that logs are not kept.
+     * </p>
+     *
+     * <p>
+     * <strong>Configuration Key:</strong> {@code log.keep-duration-min}
+     * </p>
+     *
+     * <p>
+     * <strong>Examples:</strong>
+     * <ul>
+     *   <li>0 = Keep none (default)</li>
+     *   <li>60 = Keep logs for 1 hour</li>
+     *   <li>1440 = Keep logs for 1 day</li>
+     *   <li>10080 = Keep logs for 1 week</li>
+     * </ul>
+     * </p>
+     *
+     * @return the log retention duration in minutes
+     */
+    public long keepLogDurationMinutes() {
+        return keepLogDurationMinutes;
+    }
+
+    /**
+     * Returns the configured browser type for test execution.
+     *
+     * <p>
+     * This setting determines which web browser the framework will use when initializing WebDriver instances.
+     * The default value is {@link SnBrowser#Chrome}.
+     * </p>
+     *
+     * <p>
+     * <strong>Configuration Key:</strong> {@code browser}
+     * </p>
+     *
+     * <p>
+     * <strong>Valid Values:</strong> chrome, firefox, safari, edge (case-insensitive)
+     * </p>
+     *
+     * @return the {@link SnBrowser} to use for test execution
+     * @see SnBrowser
+     */
     public SnBrowser browser() {
         return this.browser;
     }
 
-    public void setBrowser(SnBrowser browser) {
-        this.browser = browser;
+    /**
+     * Returns the root directory where log files are stored.
+     *
+     * <p>
+     * This setting specifies the base directory where all framework log files will be written.
+     * The default value is {@code {user.dir}/log} (a "log" directory in the current working directory).
+     * </p>
+     *
+     * <p>
+     * <strong>Configuration Key:</strong> {@code log.root-dir}
+     * </p>
+     *
+     * @return the {@link File} representing the log root directory
+     */
+    public File logRootDir() {
+        return logRootDir;
     }
 
-    private SelionConfig() {
+    /**
+     * Parses and normalizes a directory path string.
+     *
+     * <p>
+     * This utility method converts absolute directory paths to a normalized format, removing platform-specific
+     * path separators and keeping only the relevant directory portion. This is used internally for logging
+     * configuration values in a consistent format.
+     * </p>
+     *
+     * @param originalDir the original directory path string to parse
+     * @return the normalized directory path with platform-specific separators converted to forward slashes
+     */
+    private static String parseDir(String originalDir) {
+        if (originalDir.contains(":")) {
+            return originalDir.split(":")[1].replace("\\", "/");
+        } else {
+            return originalDir.replace("\\", "/");
+        }
     }
-
 }

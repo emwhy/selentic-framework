@@ -1,6 +1,12 @@
 package org.selion_framework.lib;
 
+import org.openqa.selenium.Alert;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 import org.selion_framework.lib.exception.SnUnexpectedPageException;
+import org.selion_framework.lib.util.SnWait;
+
+import java.time.Duration;
 
 /**
  * {@code SnPage} is the concrete base class for all page classes in the Selion Framework.
@@ -280,5 +286,105 @@ public abstract class SnPage extends SnAbstractPage {
      */
     public void inWindow(SnWindow.WindowActionController predicate) {
         new SnWindow().inWindow(predicate);
+    }
+
+
+    /**
+     * Performs an action within the context of a browser alert dialog.
+     *
+     * <p>
+     * This method allows executing test code that interacts with JavaScript alert, confirm, or
+     * prompt dialogs. The framework automatically switches to the alert and provides it to the
+     * provided action for interaction.
+     * </p>
+     *
+     * <p>
+     * The alert object provides methods to:
+     * <ul>
+     *   <li>Get the alert text via {@link Alert#getText()}</li>
+     *   <li>Accept (click OK) the alert via {@link Alert#accept()}</li>
+     *   <li>Dismiss (click Cancel) the alert via {@link Alert#dismiss()}</li>
+     *   <li>Send text to a prompt dialog via {@link Alert#sendKeys(String)}</li>
+     * </ul>
+     * </p>
+     *
+     * <p>
+     * <strong>Usage Example:</strong>
+     * <pre>{@code
+     *  final HomePage homePage = SnPage.with(HomePage.class);
+     *
+     *  homePage.inPage(p -> {
+     *      // Click button that triggers an alert
+     *      p.deleteButton.click();
+     *
+     *      // Interact with the alert dialog
+     *      p.inAlert(alert -> {
+     *          String alertText = alert.getText();
+     *          System.out.println("Alert message: " + alertText);
+     *
+     *          // Verify the alert message
+     *          assert alertText.contains("Are you sure?") : "Expected confirmation message";
+     *
+     *          // Accept the alert
+     *          alert.accept();
+     *      });
+     *   });
+     * // Continue with test after alert is handled
+     * }</pre>
+     * </p>
+     *
+     * @param action a {@link SnAlertAction} functional interface containing the action to perform
+     *               with the alert dialog
+     *
+     * @see SnAlertAction
+     * @see Alert
+     */
+    public void inAlert(SnAlertAction action) {
+        final WebDriverWait wait = new WebDriverWait(Selion.driver(), Duration.ofSeconds(1));
+        final Alert alert = wait.until(ExpectedConditions.alertIsPresent());
+
+        action.inAlert(alert);
+        SnWait.sleep(500);
+    }
+
+    /**
+     * Functional interface for performing actions on browser alert dialogs.
+     *
+     * <p>
+     * This interface is used with the {@link #inAlert(SnAlertAction)} method to handle
+     * JavaScript alert, confirm, and prompt dialogs in a functional programming style.
+     * </p>
+     *
+     * <p>
+     * <strong>Typical Implementation:</strong>
+     * <pre>{@code
+     * // Using lambda expression
+     * page.inAlert(alert -> {
+     *     String text = alert.getText();
+     *     alert.accept();
+     * });
+     * }</pre>
+     * </p>
+     *
+     * @see #inAlert(SnAlertAction)
+     * @see Alert
+     */
+    public interface SnAlertAction {
+        /**
+         * Performs an action with the provided alert dialog.
+         *
+         * <p>
+         * This method is called by the framework with an {@link Alert} object representing
+         * the current browser alert. The implementation should perform the desired interactions
+         * with the alert such as reading its text, accepting it, dismissing it, or sending keys.
+         * </p>
+         *
+         * @param alert the {@link Alert} object representing the browser alert dialog
+         * @see Alert#getText()
+         * @see Alert#accept()
+         * @see Alert#dismiss()
+         * @see Alert#sendKeys(String)
+         */
+        void inAlert(Alert alert);
     }
 }

@@ -83,7 +83,7 @@ public abstract class SnSelectableComponent extends SnFormComponent {
      */
     public void select() {
         if (!this.isSelected()) {
-            this.scrolled().click();
+            this.enabled().click();
         }
     }
 

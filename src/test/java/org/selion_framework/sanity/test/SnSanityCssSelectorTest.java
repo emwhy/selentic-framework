@@ -470,6 +470,31 @@ public class SnSanityCssSelectorTest {
         });
     }
 
+    @Test
+    public void testAlert() {
+        sanitytestPage.inPage(p -> {
+            p.showAlertButton.click();
+            p.inAlert(a -> {
+                Assert.assertEquals(a.getText(), "Test Alert");
+                a.accept();
+            });
+
+            p.showConfirmButton.click();
+            p.inAlert(a -> {
+                Assert.assertEquals(a.getText(), "Test Confirm");
+                a.dismiss();
+            });
+
+            p.showPromptButton.click();
+            p.inAlert(a -> {
+                Assert.assertEquals(a.getText(), "Test Prompt");
+
+                a.sendKeys("This is a new text");
+                a.accept();
+            });
+        });
+    }
+
     private void testAnimation(SnSanityTestAnimatedBox animatedBox, SnButton button) {
         long startTimestamp, endTimestamp;
 

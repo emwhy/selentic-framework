@@ -81,7 +81,7 @@ public abstract class SnClickableComponent extends SnComponent {
      * @throws SnComponentNotEnabledException if the component does not become enabled within the timeout period
      */
     protected final WebElement enabled() {
-        SnWait.waitUntil(this::isEnabled, SnComponentNotEnabledException::new);
+        SnWait.waitUntil(this.waitTimeout(), this::isEnabled, SnComponentNotEnabledException::new);
         return scrolled();
     }
 

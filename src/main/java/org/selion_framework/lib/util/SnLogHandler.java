@@ -33,9 +33,9 @@ public final class SnLogHandler {
         final SelionConfig selionConfig = SelionConfig.config();
 
         // Set the log level at the root level.
-        rootLogger.setLevel(Level.toLevel(selionConfig.rootLogLevel.toUpperCase()));
+        rootLogger.setLevel(selionConfig.rootLogLevel());
         // Set the log level for all Selion Framework packages.
-        selionLogger.setLevel(Level.toLevel(selionConfig.selionLogLevel.toUpperCase()));
+        selionLogger.setLevel(selionConfig.selionLogLevel());
         // Turn down Apache HC logging because they are particularly annoying.
         apacheHttpLogger.setLevel(Level.WARN);
 
@@ -79,10 +79,6 @@ public final class SnLogHandler {
 
     public static File downloadDirectory() {
         return new File(logDirectory(), "download");
-    }
-
-    public static File userDirectory() {
-        return new File(System.getProperty("user.dir"));
     }
 
     public static File screenshotDirectory() {

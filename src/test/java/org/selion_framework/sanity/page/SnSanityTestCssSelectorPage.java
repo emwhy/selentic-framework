@@ -42,6 +42,10 @@ public class SnSanityTestCssSelectorPage extends SnPage {
     private static final SnCssSelector ANIMATE_SIZE_BUTTON = _cssSelector.descendant(_id("animate-size-button"));
     private static final SnCssSelector ANIMATE_LONG_BUTTON = _cssSelector.descendant(_id("animate-long-button"));
 
+    private static final SnCssSelector SHOW_ALERT_BUTTON = _cssSelector.descendant(_id("show-alert"));
+    private static final SnCssSelector SHOW_CONFIRM_BUTTON = _cssSelector.descendant(_id("show-confirm"));
+    private static final SnCssSelector SHOW_PROMPT_BUTTON = _cssSelector.descendant(_id("show-prompt"));
+
     @Override
     protected void waitForDisplayed() {
         waitForComponent(sanitytestTextbox);
@@ -73,6 +77,10 @@ public class SnSanityTestCssSelectorPage extends SnPage {
     public final SnButton animateOpacityButton = $button(ANIMATE_OPACITY_BUTTON);
     public final SnButton animateSizeButton = $button(ANIMATE_SIZE_BUTTON);
     public final SnButton animateLongButton = $button(ANIMATE_LONG_BUTTON);
+
+    public final SnButton showAlertButton = $button(SHOW_ALERT_BUTTON);
+    public final SnButton showConfirmButton = $button(SHOW_CONFIRM_BUTTON);
+    public final SnButton showPromptButton = $button(SHOW_PROMPT_BUTTON);
 
     public void inSanityTestInnerFrame(SnFrameAction<SnSanityTestFrameContent> predicate) {
         $frame(SANITYTEST_IFRAME, SnSanityTestFrameContent.class, predicate);

@@ -10,6 +10,15 @@ public class SnSanityTestAnimatedBox extends SnComponent {
     }
 
     /**
+     * Override the value for this class only.
+     * @return
+     */
+    @Override
+    protected long waitTimeout() {
+        return 5000;
+    }
+
+    /**
      * Exposing {@link #waitForAnimation()} for testing the method.
      */
     public void exposedWaitForAnimation() {

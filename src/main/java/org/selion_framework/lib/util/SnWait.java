@@ -61,7 +61,7 @@ public class SnWait {
     /**
      * Waits until the specified condition becomes true using the default timeout.
      * <p>
-     * The default timeout is retrieved from {@link SelionConfig#waitTimeoutMilliseconds}.
+     * The default timeout is retrieved from {@link SelionConfig#waitTimeoutMilliseconds()}.
      * If the condition is not satisfied within the timeout period, a {@link SnWaitTimeoutException}
      * is thrown.
      * </p>
@@ -71,13 +71,13 @@ public class SnWait {
      * @throws NullPointerException if waitTrueCondition is null
      */
     public static void waitUntil(SnWaitTrueCondition waitTrueCondition) {
-        waitUntil(SelionConfig.config().waitTimeoutMilliseconds, waitTrueCondition);
+        waitUntil(SelionConfig.config().waitTimeoutMilliseconds(), waitTrueCondition);
     }
 
     /**
      * Waits until the specified condition becomes true using the default timeout with custom exception handling.
      * <p>
-     * The default timeout is retrieved from {@link SelionConfig#waitTimeoutMilliseconds}.
+     * The default timeout is retrieved from {@link SelionConfig#waitTimeoutMilliseconds()}.
      * If the timeout is exceeded, the {@code onTimeout} handler is invoked to determine the exception to throw.
      * </p>
      *
@@ -87,7 +87,7 @@ public class SnWait {
      * @throws NullPointerException if waitTrueCondition is null
      */
     public static void waitUntil(SnWaitTrueCondition waitTrueCondition, SnOnTimeout onTimeout) {
-        waitUntil(SelionConfig.config().waitTimeoutMilliseconds, waitTrueCondition, onTimeout);
+        waitUntil(SelionConfig.config().waitTimeoutMilliseconds(), waitTrueCondition, onTimeout);
     }
 
     /**
@@ -129,7 +129,7 @@ public class SnWait {
     /**
      * Waits until a non-null value is returned from the specified condition using the default timeout.
      * <p>
-     * The default timeout is retrieved from {@link SelionConfig#waitTimeoutMilliseconds}.
+     * The default timeout is retrieved from {@link SelionConfig#waitTimeoutMilliseconds()}.
      * This method is useful for waiting until an element or object is available before proceeding.
      * </p>
      *
@@ -139,8 +139,8 @@ public class SnWait {
      * @throws SnWaitTimeoutException if no non-null value is obtained within the default timeout
      * @throws NullPointerException if waitPresenceCondition is null
      */
-    public static <T> T waitUntilNonNull(SnWaitNonNullCondition waitPresenceCondition) {
-        return SnWait.waitUntilNonNull(SelionConfig.config().waitTimeoutMilliseconds, waitPresenceCondition);
+    public static <T> T waitUntilNonNull(SnWaitNonNullCondition<T> waitPresenceCondition) {
+        return SnWait.waitUntilNonNull(SelionConfig.config().waitTimeoutMilliseconds(), waitPresenceCondition);
     }
 
     /**
@@ -156,7 +156,7 @@ public class SnWait {
      * @throws SnWaitTimeoutException if no non-null value is obtained within maxWaitMilliseconds
      * @throws NullPointerException if waitPresenceCondition is null
      */
-    public static <T> T waitUntilNonNull(long maxWaitMilliseconds, SnWaitNonNullCondition waitPresenceCondition) {
+    public static <T> T waitUntilNonNull(long maxWaitMilliseconds, SnWaitNonNullCondition<T> waitPresenceCondition) {
         final SnWait wait = new SnWait(maxWaitMilliseconds);
 
         return wait.doWaitNonNull(waitPresenceCondition);
@@ -230,7 +230,7 @@ public class SnWait {
      * @return the non-null value from the condition
      * @throws SnWaitTimeoutException if the condition consistently returns null until timeout
      */
-    private <T> T doWaitNonNull(SnWaitNonNullCondition waitNonNullCondition) {
+    private <T> T doWaitNonNull(SnWaitNonNullCondition<T> waitNonNullCondition) {
         Object value = null;
 
         while ((value = waitNonNullCondition.waitNonNull()) == null) {

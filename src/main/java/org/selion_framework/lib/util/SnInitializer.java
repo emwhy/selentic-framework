@@ -15,10 +15,10 @@ final class SnInitializer {
     private static final Logger LOG = SnLogHandler.logger(SnInitializer.class);
 
     static void init() {
-        final File rootProjectDir = SnLogHandler.userDirectory();
-        final File logsDir = new File(rootProjectDir, "/logs");
+        final SelionConfig config = SelionConfig.config();
+        final File logsDir = config.logRootDir();
         final File currentLogDir = new File(logsDir.getAbsolutePath() + "/log-" + LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy_MM_dd-HH_mm_ss_SSS")));
-        final long keepLogDuration = 60 * 1000 * SelionConfig.config().keepLogInMinutes;
+        final long keepLogDuration = 60 * 1000 * config.keepLogDurationMinutes();
 
         if (logsDir.exists()) {
             File[] directories = logsDir.listFiles((dir, name) -> name.startsWith("log-"));

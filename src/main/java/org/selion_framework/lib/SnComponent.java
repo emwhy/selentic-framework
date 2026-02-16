@@ -4,6 +4,7 @@ import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.StaleElementReferenceException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
+import org.selion_framework.lib.config.SelionConfig;
 import org.selion_framework.lib.exception.*;
 import org.selion_framework.lib.util.SnWait;
 
@@ -261,7 +262,7 @@ public abstract class SnComponent extends SnAbstractComponent {
         try {
             WebElement element;
 
-            SnWait.waitUntil(this::exists);
+            SnWait.waitUntil(this.waitTimeout(), this::exists);
             element = webElement();
             this.verifyRules(element);
             return element;
@@ -368,7 +369,7 @@ public abstract class SnComponent extends SnAbstractComponent {
      * @throws SnComponentNotDisplayedException if the element does not become displayed within the timeout period
      */
     protected void waitForDisplayed() {
-        SnWait.waitUntil(this::isDisplayed, SnComponentNotDisplayedException::new);
+        SnWait.waitUntil(this.waitTimeout(), this::isDisplayed, SnComponentNotDisplayedException::new);
     }
 
     /**
@@ -387,7 +388,7 @@ public abstract class SnComponent extends SnAbstractComponent {
      * @throws SnComponentAnimatingException if the element does not stop animating within the timeout period
      */
     protected final void waitForAnimation() {
-        SnWait.waitUntil(() -> (Boolean) Selion.executeScript(
+        SnWait.waitUntil(this.waitTimeout(), () -> (Boolean) Selion.executeScript(
                         """
                             let e = arguments[0];
                             return !e.getAnimations().some(a => a.playState === 'running' || a.playState === 'pending');
@@ -597,6 +598,24 @@ public abstract class SnComponent extends SnAbstractComponent {
         String a;
 
         return (a = this.existing().getDomAttribute(name)) == null ? Optional.empty() : Optional.of(a);
+    }
+    /**
+     * Returns the wait timeout for this component in milliseconds.
+     *
+     * <p>
+     * The wait timeout determines how long the component will wait for operations like
+     * element existence, visibility, or animation to complete before throwing a timeout exception.
+     * </p>
+     *
+     * <p>
+     * The default wait timeout is as defined in {@link SelionConfig}. It can be changed only for this component
+     * by overriding this method and providing another value.
+     * </p>
+     *
+     * @return the wait timeout in milliseconds
+     */
+    protected long waitTimeout() {
+        return SelionConfig.config().waitTimeoutMilliseconds();
     }
 
     /**
