@@ -90,6 +90,7 @@ import java.util.regex.Pattern;
  * @see SnAbstractComponent
  * @see SnComponentRule
  * @see SnComponentCollection
+ * @see SnPage
  */
 public abstract class SnComponent extends SnAbstractComponent {
     private Optional<SnSelector> selector = Optional.empty();

@@ -31,25 +31,28 @@ import java.time.Duration;
  * <strong>Typical Usage:</strong>
  * <pre>{@code
  * public class HomePage extends SnPage {
- *     private static final SnCssSelector SEARCH_BOX = _cssSelector.id("search");
- *     private static final SnCssSelector SEARCH_BUTTON = _cssSelector.id("search-btn");
- *     private static final SnCssSelector HEADER = _cssSelector.className("header");
+ *     private static final SnCssSelector SEARCH_TEXTBOX = _cssSelector.descendant(_id("search"));
+ *     private static final SnCssSelector SEARCH_BUTTON = _cssSelector.descendant(_id("search-btn"));
+ *     private static final SnCssSelector HEADER_TEXT = _cssSelector.descendant(_className("header"));
  *
- *     public final SnTextbox searchBox = $component(SEARCH_BOX, SnTextbox.class);
- *     public final SnButton searchButton = $component(SEARCH_BUTTON, SnButton.class);
- *     public final SnGenericComponent header = $component(HEADER, SnGenericComponent.class);
+ *     public final SnTextbox searchTextbox = $textbox(SEARCH_BOX);
+ *     public final SnButton searchButton = $button(SEARCH_BUTTON);
+ *     public final SnGenericComponent headerText = $genericComponent(HEADER);
  *
  *     @Override
  *     protected void waitForDisplayed() {
- *         waitForComponent(header);
- *         waitForComponent(searchBox);
+ *         waitForComponent(headerText);
+ *         waitForComponent(searchTextbox);
  *     }
  * }
  *
  * // In test code
- * final HomePage home = SnPage.with(HomePage.class).waitForPage().get();
- * home.searchBox.enterText("Selenium");
- * home.searchButton.click();
+ * final SnWithPage<HomePage> homePage = SnPage.with(HomePage.class);
+ *
+ * homePage.inPage(p -> {
+ *      p.searchTextbox.enterText("Selenium");
+ *      p.searchButton.click();
+ * });
  * }</pre>
  * </p>
  *
@@ -71,7 +74,7 @@ import java.time.Duration;
  * @see SnAbstractPage
  * @see SnWithPage
  * @see SnWindow
- * @see SnGenericComponent
+ * @see SnComponent
  */
 public abstract class SnPage extends SnAbstractPage {
     private static final SnXPath PAGE_TITLE = _xpath.descendant("title");
@@ -83,8 +86,8 @@ public abstract class SnPage extends SnAbstractPage {
      * <strong>Usage Example:</strong>
      * <pre>{@code
      * // Create and initialize page.
-     * HomePage home = SnPage.with(HomePage.class);
-     * </pre>
+     * final SnWithPage<HomePage> homePage = SnPage.with(HomePage.class);
+     * }</pre>
      * </p>
      *
      * @param <T> the page type to create
@@ -125,14 +128,16 @@ public abstract class SnPage extends SnAbstractPage {
      * <p>
      * <strong>Usage Example:</strong>
      * <pre>{@code
-     * HomePage home = SnPage.with(HomePage.class).waitForPage().get();
+     * final SnWithPage<HomePage> homePage = SnPage.with(HomePage.class);
      *
-     * // Get the page title text
-     * String titleText = home.pageTitle().text();
-     * System.out.println("Page title: " + titleText);
+     * homePage.inPage(p -> {
+     *      // Get the page title text
+     *      String titleText = p.pageTitle().text();
+     *      System.out.println("Page title: " + titleText);
      *
-     * // Verify the page title
-     * assert titleText.contains("Home") : "Expected 'Home' in page title";
+     *      // Verify the page title
+     *      assert titleText.contains("Home") : "Expected 'Home' in page title";
+     * });
      * }</pre>
      * </p>
      *
@@ -172,16 +177,18 @@ public abstract class SnPage extends SnAbstractPage {
      * <p>
      * <strong>Usage Example:</strong>
      * <pre>{@code
-     * HomePage home = SnPage.with(HomePage.class).waitForPage().get();
+     *  final SnWithPage<HomePage> homePage = SnPage.with(HomePage.class);
      *
-     * // Perform some actions
-     * home.searchBox.setText("test");
+     *  homePage.inPage(p -> {
+     *      // Perform some actions
+     *      p.searchBox.enterText("test");
      *
-     * // Reload the page to clear the search
-     * home.reload();
+     *      // Reload the page to clear the search
+     *      p.reload();
      *
-     * // Verify the page is back to its initial state
-     * assert home.searchBox.text().isEmpty() : "Search box should be empty after reload";
+     *      // Verify the page is back to its initial state
+     *      assert p.searchBox.text().isEmpty() : "Search box should be empty after reload";
+     * });
      * }</pre>
      * </p>
      *
@@ -212,15 +219,22 @@ public abstract class SnPage extends SnAbstractPage {
      * <p>
      * <strong>Usage Example:</strong>
      * <pre>{@code
-     * HomePage home = SnPage.with(HomePage.class).waitForPage().get();
+     *  final SnWithPage<HomePage> homePage = SnPage.with(HomePage.class);
      *
-     * // Click a link that opens a new window
-     * home.externalLink.click();
+     *  homePage.inPage(p -> {
+     *      // Click a link that opens a new window
+     *      p.externalLink.click();
      *
-     * // Perform actions in the new window
-     * home.inWindow(() -> {
-     *     System.out.println("Current URL: " + Selion.driver().getCurrentUrl());
-     *     // Perform assertions or actions in the new window
+     *      // Perform actions in the new window
+     *      p.inWindow(() -> {
+     *          String currentUrl = Selion.driver().getCurrentUrl();
+     *          System.out.println("New window URL: " + currentUrl);
+     *
+     *          // Verify content in the new window
+     *          assert currentUrl.contains("external") : "Expected external site URL";
+     *
+     *          // Closing the window happens automatically.
+     *      });
      * });
      *
      * // Control is automatically returned to the original window
@@ -256,22 +270,23 @@ public abstract class SnPage extends SnAbstractPage {
      * <p>
      * <strong>Usage Example:</strong>
      * <pre>{@code
-     * HomePage home = SnPage.with(HomePage.class).waitForPage().get();
+     *  final SnWithPage<HomePage> homePage = SnPage.with(HomePage.class);
      *
-     * // Click a link that opens a new window
-     * home.externalLink.click();
+     *  homePage.inPage(p -> {
+     *      // Click a link that opens a new window
+     *      p.externalLink.click();
      *
-     * // Perform actions in the new window with controller access
-     * home.inWindow(controller -> {
-     *     String currentUrl = Selion.driver().getCurrentUrl();
-     *     System.out.println("New window URL: " + currentUrl);
+     *      // Perform actions in the new window with controller access. Controller gives access to switch to previous
+     *      // windows without closing.
+     *      p.inWindow(controller -> {
+     *          String currentUrl = Selion.driver().getCurrentUrl();
+     *          System.out.println("New window URL: " + currentUrl);
      *
-     *     // Verify content in the new window
-     *     assert currentUrl.contains("external") : "Expected external site URL";
+     *          // Verify content in the new window
+     *          assert currentUrl.contains("external") : "Expected external site URL";
      *
-     *     // Close the new window and switch back to the original
-     *     Selion.driver().close();
-     *     controller.switchToParentWindow();
+     *          // Closing the window happens automatically.
+     *      });
      * });
      *
      * // Control is automatically returned to the original window
@@ -311,7 +326,7 @@ public abstract class SnPage extends SnAbstractPage {
      * <p>
      * <strong>Usage Example:</strong>
      * <pre>{@code
-     *  final HomePage homePage = SnPage.with(HomePage.class);
+     *  final SnWithPage<HomePage> homePage = SnPage.with(HomePage.class);
      *
      *  homePage.inPage(p -> {
      *      // Click button that triggers an alert
