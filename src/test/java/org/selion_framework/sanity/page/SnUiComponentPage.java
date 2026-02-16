@@ -1,10 +1,7 @@
 package org.selion_framework.sanity.page;
 
 import org.selion_framework.lib.*;
-import org.selion_framework.sanity.component.SnSanityTestAnimatedBox;
-import org.selion_framework.sanity.component.SnSanityTestFrameContent;
-import org.selion_framework.sanity.component.SnSanityTestLongListEntryComponent;
-import org.selion_framework.sanity.component.SnSanityTestTableRow;
+import org.selion_framework.sanity.component.*;
 import org.selion_framework.sanity.component.dialog.SnSanityTestDialog;
 import org.selion_framework.sanity.component.dialog.SnSanityTestModalDialog;
 
@@ -70,7 +67,7 @@ public class SnSanityTestCssSelectorPage extends SnPage {
     public final SnLink openExternalWindowLink = $component(OPEN_EXTERNAL_WINDOW_LINK, SnLink.class);
     public final SnComponentCollection<SnSanityTestLongListEntryComponent> longComponentEntries = $$components(SANITYTEST_LONG_COMPONENT_LIST, SnSanityTestLongListEntryComponent.class);
     public final SnLink sanitytestCsvDownloadLink = $component(SANITYTEST_CSV_DOWNLOAD_LINK, SnLink.class);
-    public final SnGenericComponent sanitytestOwnText = $genericComponent(SANITYTEST_OWN_TEXT);
+    public final SnExposedOwnText sanitytestOwnText = $component(SANITYTEST_OWN_TEXT, SnExposedOwnText.class);
     public final SnLink sanitytestNonExistingLink = $link(SANITYTEST_NON_EXISTING_COMPONENT);
 
     public final SnSanityTestAnimatedBox animatedBox = $component(ANIMATED_BOX, SnSanityTestAnimatedBox.class);

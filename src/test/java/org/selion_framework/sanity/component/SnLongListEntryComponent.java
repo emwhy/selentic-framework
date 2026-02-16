@@ -14,8 +14,8 @@ public class SnSanityTestLongListEntryComponent extends SnComponent {
     }
 
     @Override
-    public String key() {
-        return titleText.key();
+    public String text() {
+        return titleText.text();
     }
 
     public final SnGenericComponent titleText = $genericComponent(TITLE_TEXT);

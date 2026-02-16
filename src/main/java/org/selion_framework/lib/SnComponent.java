@@ -55,7 +55,7 @@ import java.util.regex.Pattern;
  *     // key() enables quick lookup in SnComponentCollection
  *     @Override
  *     public String key() {
- *         return titleText.key();
+ *         return titleText.text();
  *     }
  *
  *     // Child components within this component
@@ -489,34 +489,32 @@ public abstract class SnComponent extends SnAbstractComponent {
     /**
      * Returns the text from this component.
      *
-     * <p>
-     * By default, this method returns the same value as {@link #key()}. Override this method to provide
-     * a custom text representation for specific component types.
-     * </p>
-     *
      * @return the text content of this component
      */
     public String text() {
-        return this.key();
+        return this.existing().getText().trim();
     }
 
     /**
      * Returns a unique key or identifier for this component.
      *
      * <p>
-     * By default, this method returns the text content of the element (trimmed).
-     * Override this method in subclasses to provide a unique identifier suitable for your component.
+     * By default, this method returns the same value as {@link #text()}. Override this method to provide
+     * a custom text representation for specific component types.
      * </p>
      *
      * <p>
      * The string returned by {@code key()} is used as a key value in {@link SnComponentCollection},
-     * so overriding it to return a proper unique value would make searching within the collection much simpler.
+     * so overriding it to return a proper unique value simpplifies getting a component from the collection using
+     * {@link SnComponentCollection#entry(String)}.
      * </p>
      *
      * @return a unique key identifying this component instance
+     *
+     * @see SnComponentCollection#entry(String)
      */
-    public String key() {
-        return this.existing().getText().trim();
+    protected String key() {
+        return this.text();
     }
 
     /**
@@ -539,7 +537,7 @@ public abstract class SnComponent extends SnAbstractComponent {
      *
      * @return the inner HTML content of this component
      */
-    public final String innerHtml() {
+    protected final String innerHtml() {
         return this.existing().getAttribute("innerHTML");
     }
 
@@ -554,7 +552,7 @@ public abstract class SnComponent extends SnAbstractComponent {
      * @return the text content of this component excluding child elements
      * @throws SnInvalidHtmlException if the HTML cannot be properly parsed
      */
-    public final String ownText() {
+    protected final String ownText() {
         return SeOwnText.removeHtml(this.innerHtml());
     }
 
@@ -567,7 +565,7 @@ public abstract class SnComponent extends SnAbstractComponent {
      *
      * @return the inner text content of this component
      */
-    public final String innerText() {
+    protected final String innerText() {
         return this.existing().getAttribute("innerText");
     }
 

@@ -1,14 +1,21 @@
 package org.selion_framework.sanity.test;
 
+import com.sun.source.tree.AssertTree;
+import org.selion_framework.lib.Selion;
+import org.selion_framework.lib.SnButton;
 import org.selion_framework.lib.SnPage;
 import org.selion_framework.lib.SnWithPage;
-import org.selion_framework.lib.Selion;
-import org.selion_framework.lib.exception.SnWindowException;
+import org.selion_framework.lib.exception.*;
 import org.selion_framework.lib.util.SnDownloadCsvFileParser;
+import org.selion_framework.lib.util.SnLogHandler;
+import org.selion_framework.lib.util.SnWait;
+import org.selion_framework.sanity.component.SnSanityTestAnimatedBox;
 import org.selion_framework.sanity.component.SnSanityTestLongListEntryComponent;
 import org.selion_framework.sanity.component.SnSanityTestTableRow;
+import org.selion_framework.sanity.page.SnDragAndDropTestPage;
+import org.selion_framework.sanity.page.SnSanityTestCssSelectorPage;
 import org.selion_framework.sanity.page.SnSanityTestExternalPage;
-import org.selion_framework.sanity.page.SnSanityTestXPathPage;
+import org.slf4j.Logger;
 import org.testng.Assert;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.AfterMethod;
@@ -23,9 +30,12 @@ import java.util.regex.Pattern;
 import static org.testng.AssertJUnit.assertTrue;
 import static org.testng.AssertJUnit.fail;
 
-public class SnSanityXPathTest {
-    private final SnWithPage<SnSanityTestXPathPage> sanitytestPage = SnPage.with(SnSanityTestXPathPage.class);
+public class SnSanityCssSelectorTest {
+    private static final Logger LOG = SnLogHandler.logger(SnSanityCssSelectorTest.class);
+
+    private final SnWithPage<SnSanityTestCssSelectorPage> sanitytestPage = SnPage.with(SnSanityTestCssSelectorPage.class);
     private final SnWithPage<SnSanityTestExternalPage> sanitytestExternalPage = SnPage.with(SnSanityTestExternalPage.class);
+    private final SnWithPage<SnDragAndDropTestPage> dragAndDropTestPage = SnPage.with(SnDragAndDropTestPage.class);
 
     @BeforeClass 
     public void setup() {
@@ -399,8 +409,130 @@ public class SnSanityXPathTest {
     @Test
     public void testOwnText() {
         sanitytestPage.inPage(p -> {
-            Assert.assertEquals(p.sanitytestOwnText.ownText(), "This is the own text.");
+            Assert.assertEquals(p.sanitytestOwnText.exposedOwnText(), "This is the own text.");
         });
     }
 
+    @Test
+    public void testWaitObject() {
+        sanitytestPage.inPage(p -> {
+            // These methods use SnWait within them.
+            Assert.assertFalse(p.sanitytestNonExistingLink.exists());
+            Assert.assertFalse(p.sanitytestNonExistingLink.isDisplayed());
+
+            try {
+                p.sanitytestNonExistingLink.text();
+            } catch (SnElementNotFoundException ex) {
+                // Expected.
+            }
+
+            try {
+                p.sanitytestNonExistingLink.click();
+            } catch (SnComponentNotDisplayedException ex) {
+                // Expected.
+            }
+
+            try {
+                SnWait.waitUntil(10, () -> false);
+            } catch (SnWaitTimeoutException ex) {
+                // Expected.
+            }
+
+            try {
+                SnWait.waitUntil(10, () -> false, SnSanityTestException::new);
+            } catch (SnSanityTestException ex) {
+                // Expected.
+            }
+
+            try {
+                SnWait.waitUntil(10, () -> false, ex -> null);
+                Assert.fail("Unexpected exception were thrown.");
+            } catch (SnWaitTimeoutException ex) {
+            }
+        });
+    }
+
+    @Test
+    public void testWaitForAnimation() {
+        sanitytestPage.inPage(p -> {
+            testAnimation(p.animatedBox, p.animateMoveButton);
+            testAnimation(p.animatedBox, p.animateRotateButton);
+            testAnimation(p.animatedBox, p.animateOpacityButton);
+            testAnimation(p.animatedBox, p.animateSizeButton);
+
+            try {
+                testAnimation(p.animatedBox, p.animateLongButton);
+                fail("Should not get here because it should throw exception.");
+            } catch (SnComponentAnimatingException ex) {
+
+            }
+        });
+    }
+
+    @Test
+    public void testAlert() {
+        sanitytestPage.inPage(p -> {
+            p.showAlertButton.click();
+            p.inAlert(a -> {
+                Assert.assertEquals(a.getText(), "Test Alert");
+                a.accept();
+            });
+
+            p.showConfirmButton.click();
+            p.inAlert(a -> {
+                Assert.assertEquals(a.getText(), "Test Confirm");
+                a.dismiss();
+            });
+
+            p.showPromptButton.click();
+            p.inAlert(a -> {
+                Assert.assertEquals(a.getText(), "Test Prompt");
+
+                a.sendKeys("This is a new text");
+                a.accept();
+            });
+        });
+    }
+
+    @Test
+    public void testDragAndDrop() {
+        sanitytestPage.inPage(p -> {
+
+            p.openDragAndDropPageLink.click();
+            p.inWindow(dragAndDropTestPage, p1 -> {
+                Assert.assertTrue(p1.dropZone1.draggedItem.isDisplayed());
+                Assert.assertFalse(p1.dropZone2.draggedItem.isDisplayed());
+
+                p1.draggedItem.drag().to(p1.dropZone2);
+
+                Assert.assertFalse(p1.dropZone1.draggedItem.isDisplayed());
+                Assert.assertTrue(p1.dropZone2.draggedItem.isDisplayed());
+
+                p1.draggedItem.drag().to(p1.dropZone1);
+
+                Assert.assertTrue(p1.dropZone1.draggedItem.isDisplayed());
+                Assert.assertFalse(p1.dropZone2.draggedItem.isDisplayed());
+            });
+        });
+    }
+
+    private void testAnimation(SnSanityTestAnimatedBox animatedBox, SnButton button) {
+        long startTimestamp, endTimestamp;
+
+        button.click();
+        startTimestamp = System.currentTimeMillis();
+        animatedBox.exposedWaitForAnimation();
+        endTimestamp = System.currentTimeMillis();
+
+        LOG.debug("Waited Time: {}", endTimestamp - startTimestamp);
+        Assert.assertTrue(endTimestamp - startTimestamp > 1900);
+        Assert.assertTrue(endTimestamp - startTimestamp < 2500);
+        SnWait.sleep(500);
+    }
+
+    public class SnSanityTestException extends RuntimeException {
+        SnSanityTestException(Throwable ex) {
+            super("Sanity Test Failure", ex);
+        }
+    }
 }

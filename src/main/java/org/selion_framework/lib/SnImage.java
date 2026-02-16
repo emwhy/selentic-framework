@@ -8,7 +8,7 @@ public class SnImage extends SnComponent {
     }
 
     @Override
-    public String key() {
+    public String text() {
         return source();
     }
 

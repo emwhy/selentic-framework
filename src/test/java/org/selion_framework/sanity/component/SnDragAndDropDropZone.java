@@ -16,8 +16,8 @@ public class SnDragAndDropDropZone extends SnComponent {
     }
 
     @Override
-    public String key() {
-        return $genericComponent(LABEL_TEXT).key();
+    public String text() {
+        return $genericComponent(LABEL_TEXT).text();
     }
 
     public final SnGenericComponent draggedItem = $component(DRAGGED_ITEM, SnGenericComponent.class);

@@ -13,7 +13,7 @@ public class SnTextbox extends SnFormComponent {
     }
 
     @Override
-    public String key() {
+    public String text() {
         return this.value();
     }
 

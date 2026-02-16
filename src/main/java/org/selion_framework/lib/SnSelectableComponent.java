@@ -22,16 +22,16 @@ public abstract class SnSelectableComponent extends SnFormComponent {
      * @see SnComponent#key()
      */
     @Override
-    public String key() {
+    public String text() {
         final SnGenericComponent $parentComponent = $component(_xpath.parent(), SnGenericComponent.class);
 
         if ($parentComponent.tag().equals("label")) {
-            return $parentComponent.key();
+            return $parentComponent.text();
         } else if (this.id().isPresent()){
             final SnGenericComponent $label = $component(_xpath.page("label", _attr("for").is(this.id().get())), SnGenericComponent.class);
 
             if ($label.exists()) {
-                return $label.key();
+                return $label.text();
             }
         }
         return this.value();

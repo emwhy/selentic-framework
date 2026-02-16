@@ -135,12 +135,12 @@ public class SnButton extends SnFormComponent {
      * @return the text content for {@code <button>} elements or the value attribute for {@code <input>}
      *         button elements
      * @see #value()
-     * @see SnComponent#key()
+     * @see SnComponent#text()
      */
     @Override
-    public String key() {
+    public String text() {
         if (this.tag().equals("button")) {
-            return super.key();
+            return super.text();
         } else {
             return this.value();
         }

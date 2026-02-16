@@ -18,8 +18,8 @@ public class SnSanityTestTableRow extends SnComponent {
     }
 
     @Override
-    public String key() {
-        return productNameText.key();
+    public String text() {
+        return productNameText.text();
     }
 
     public final SnGenericComponent productNameText = $genericComponent(PRODUCT_NAME_TEXT);
