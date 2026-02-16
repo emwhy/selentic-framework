@@ -9,6 +9,10 @@ repositories {
     mavenCentral()
 }
 
+java {
+    withJavadocJar()
+}
+
 dependencies {
     testImplementation("org.testng:testng:7.11.+")
     implementation("org.seleniumhq.selenium:selenium-java:4.+")
