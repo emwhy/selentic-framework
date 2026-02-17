@@ -17,7 +17,8 @@ public final class SnSelectorCssClassesProperty extends SnSelectorProperty imple
                 if (negated()) {
                     selector.append("not(");
                 }
-                selector.append("contains(@class,'").append(cssClass).append("')");
+                // This would be more accurate than typical contains(@class,'className').
+                selector.append("contains(concat(' ', normalize-space(@class), ' '), ' ").append(cssClass).append(" ')");
                 if (negated()) {
                     selector.append(")");
                 }

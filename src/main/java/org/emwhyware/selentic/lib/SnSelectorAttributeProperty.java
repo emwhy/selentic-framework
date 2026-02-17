@@ -24,6 +24,7 @@ public final class SnSelectorAttributeProperty extends SnSelectorProperty implem
                 case Contains -> selector = "contains(" + this.prefix + this.attribute + ", '" + this.text + "'";
                 case StartsWith -> selector = "starts-width(" + this.prefix + this.attribute + "='" + this.text + "'";
                 case EndsWith -> selector = "substring(" + this.prefix + this.attribute + ", string-length(" + this.prefix + this.attribute + ") - string-length('" + this.text + "')+1) = '" + this.text + "'";
+                case WholeWord -> selector = "[contains(concat(' ', normalize-space(" + this.prefix + this.attribute + "), ' '), ' " + this.text + " ')]";
             }
 
             if (this.negated()) {
@@ -36,6 +37,7 @@ public final class SnSelectorAttributeProperty extends SnSelectorProperty implem
                 case Contains -> selector = this.attribute + "*='" + this.text + "'";
                 case StartsWith -> selector = this.attribute + "^='" + this.text + "'";
                 case EndsWith -> selector = this.attribute + "$='" + this.text + "'";
+                case WholeWord -> selector = this.attribute + "~='" + this.text + "'";
             }
 
             if (this.negated()) {
@@ -49,7 +51,7 @@ public final class SnSelectorAttributeProperty extends SnSelectorProperty implem
     }
 
     enum Conditions {
-        Is, Contains, StartsWith, EndsWith;
+        Is, Contains, StartsWith, EndsWith, WholeWord;
     }
 
 }

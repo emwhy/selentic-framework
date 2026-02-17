@@ -24,4 +24,8 @@ public class SnSelectorAttributeCondition {
     public SnSelectorAttributeProperty endsWith(String text) {
         return new SnSelectorAttributeProperty(this.prefix, this.attribute, SnSelectorAttributeProperty.Conditions.EndsWith, text);
     }
+
+    public SnSelectorAttributeProperty wholeWord(String text) {
+        return new SnSelectorAttributeProperty(this.prefix, this.attribute, SnSelectorAttributeProperty.Conditions.WholeWord, text);
+    }
 }
