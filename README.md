@@ -144,5 +144,110 @@ The dropdown on this page is SlimSelect, which is stylized and provides more enh
 Looking at the source doe, while the select element does exist on the page, it is not visible, so any attempt to directly interact with it would throw error. 
 The actual visual elements are div tag under the select.
 
-Because it is not a standard select dropdown, it needs to be defined.
+Because it is not a standard select dropdown, it needs to be defined as shown below.
 
+```
+public class SnSlimSelectDropdown extends SnComponent {
+    private static final SnCssSelector ARROW_BUTTON = _cssSelector.descendant(_tag("svg"), _cssClasses("ss-arrow"));
+    private static final SnCssSelector SELECTED_TEXT = _cssSelector.descendant(_tag("div"), _cssClasses("ss-single"));
+    private static final SnCssSelector CONTENT_PANEL = _cssSelector.page(_tag("div"), _cssClasses("ss-content", "ss-open"));
+    private static final SnCssSelector LIST_ITEMS = CONTENT_PANEL.descendant(_tag("div"), _cssClasses("ss-option"));
+
+    @Override
+    protected void rules(SnComponentRule rule) {
+        rule.tag().is("div");
+        rule.attr("aria-label").is("Combobox");
+        rule.attr("role").is("combobox");
+        rule.attr("aria-controls").isPresent();
+    }
+
+    private SnArrowButton arrowButton = $component(ARROW_BUTTON, SnArrowButton.class, this);
+    private SnGenericComponent contentPanel = $genericComponent(CONTENT_PANEL);
+    private SnComponentCollection<SnListItem> listItems = $$components(LIST_ITEMS, SnListItem.class, this);
+
+    @Override
+    public String text() {
+        return selectedText();
+    }
+
+    public String selectedText() {
+        return $genericComponent(SELECTED_TEXT).text();
+    }
+
+    public void select(String text) {
+        arrowButton.click();
+        SnWait.waitUntil(() -> contentPanel.isDisplayed());
+        listItems.entry(text).click();
+        SnWait.waitUntil(() -> !contentPanel.isDisplayed());
+    }
+
+    /*
+        Inner classes.
+     */
+
+    public class SnArrowButton extends SnClickableComponent {
+        @Override
+        protected void rules(SnComponentRule rule) {
+            rule.tag().is("svg");
+            rule.cssClasses().has("ss-arrow");
+        }
+    }
+
+    public class SnListItem extends SnClickableComponent {
+        @Override
+        protected void rules(SnComponentRule rule) {
+            rule.tag().is("div");
+            rule.cssClasses().has("ss-option");
+        }
+
+        public boolean isSelected() {
+            return this.cssClasses().contains("ss-selected");
+        }
+    }
+}
+```
+
+- Page and component should look very similar in structure, with selectors at the top and defined contained components.
+- **rules()** method must be implemented. This allows you to define what web element properties are required for this component class to be assigned to an element.
+if a wrong type of element is assigned to this component, it would throw error. This also provides a way to search for properties text, so that if a component already exists, you can find it.
+- Overriding **text()** ensures that the text value is a selected text. Otherwise, it would be an inner text of the div tag, which may contain undesired texts.
+- Components that are specific to this component can be defined as inner classes. To do this, you must supply the containing object in $component() or $$components() method calls as a 3rd parameter.
+- *SnArrowButton* and *SnListItem* are both div tag. Extending from **SnClickableComponent** automatically gives them ability to click.
+- The content of the dropdown's list items are attached at the bottom of the page when the arrow is clicked to open the dropdown. Using *_cssSelector.page()* method
+says that the framework should look for the entire page rather than descendent of this component.
+
+Once **SnSlimSelectDropdown** class is defined, it can be used anytime the Slim select appears in the application. Typically, 
+web components are repeatedly used within an application, so while it may take some time to initially build the component, it 
+can easily save time and effort.
+
+It might look like below when implemented in a test.
+
+```
+public class SnLoginEnhancedTest {
+    private final SnWithPage<SnLoginEnhancedPage> loginPage = SnPage.with(SnLoginEnhancedPage.class);
+
+    @BeforeClass
+    public void setup() {
+        Selion.open("file://" + System.getProperty("user.dir") + "/build/resources/test/test_file/login-enhanced.htm");
+    }
+
+    @AfterClass(alwaysRun = true)
+    public void finish() {
+        Selion.quit();
+    }
+
+    @Test
+    public void testLogin() {
+        loginPage.inPage(p -> {
+            p.accountTypeDropdown.select("Viewer");
+
+            Assert.assertEquals(p.accountTypeDropdown.selectedText(), "Viewer");
+
+            p.userNameTextbox.enterText("test");
+            p.passwordTextbox.enterText("test");
+            p.loginButton.click();
+        });
+    }
+}
+```
+The test code remains simple and legible despite the complexity of Slim select. 
