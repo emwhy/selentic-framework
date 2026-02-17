@@ -72,6 +72,7 @@ Below is the page class for this login page, written with Selion Framework.
 (imports and package are omitted)
 
 public class SnLoginPage extends SnPage {
+    // Selectors are defined at the top.
     private static final SnCssSelector USERNAME_TEXTBOX = _cssSelector.descendant(_id("username"));
     private static final SnCssSelector PASSWORD_TEXTBOX = _cssSelector.descendant(_id("password"));
     private static final SnCssSelector LOGIN_BUTTON = _cssSelector.descendant(_tag("button"), _type().is("submit"));
@@ -81,6 +82,7 @@ public class SnLoginPage extends SnPage {
         waitForComponent(userNameTextbox);
     }
     
+    // Components on this page.
     public final SnTextbox userNameTextbox = $textbox(USERNAME_TEXTBOX);
     public final SnTextbox passwordTextbox = $textbox(PASSWORD_TEXTBOX);
     public final SnButton loginButton = $button(LOGIN_BUTTON);
@@ -102,8 +104,10 @@ Once the page is defined, writing a test is straight forward (Written with TestN
 (imports and package are omitted)
 
 public class SnExampleTest {
+    // Define the page class.
     private final SnWithPage<SnLoginPage> loginPage = SnPage.with(SnLoginPage.class);
 
+    // Start web driver, and open the page.
     @BeforeClass
     public void setup() {
         Selion.open("file://" + System.getProperty("user.dir") + "/build/resources/main/html/login.htm");
@@ -116,6 +120,7 @@ public class SnExampleTest {
 
     @Test
     public void testLogin() {
+        // All actions on the page goes inside of "inPage()".
         loginPage.inPage(p -> {
             p.userNameTextbox.enterText("test");
             p.passwordTextbox.enterText("test");
@@ -150,11 +155,17 @@ Because it is not a standard select dropdown, it needs to be defined as shown be
 (imports and package are omitted)
 
 public class SnSlimSelectDropdown extends SnComponent {
+    // Selectors are at the top.
     private static final SnCssSelector ARROW_BUTTON = _cssSelector.descendant(_tag("svg"), _cssClasses("ss-arrow"));
     private static final SnCssSelector SELECTED_TEXT = _cssSelector.descendant(_tag("div"), _cssClasses("ss-single"));
+    
+    // "page" changes the scope to see the entire page rather than descendent.
     private static final SnCssSelector CONTENT_PANEL = _cssSelector.page(_tag("div"), _cssClasses("ss-content", "ss-open"));
+    
+    // You can concatenate selectors.
     private static final SnCssSelector LIST_ITEMS = CONTENT_PANEL.descendant(_tag("div"), _cssClasses("ss-option"));
 
+    // Set rules.
     @Override
     protected void rules(SnComponentRule rule) {
         rule.tag().is("div");
@@ -163,6 +174,7 @@ public class SnSlimSelectDropdown extends SnComponent {
         rule.attr("aria-controls").isPresent();
     }
 
+    // Components on this component. None of these need to be public.
     private final SnArrowButton arrowButton = $component(ARROW_BUTTON, SnArrowButton.class, this);
     private final SnGenericComponent contentPanel = $genericComponent(CONTENT_PANEL);
     private final SnComponentCollection<SnListItem> listItems = $$components(LIST_ITEMS, SnListItem.class, this);
