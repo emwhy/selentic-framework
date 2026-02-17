@@ -64,7 +64,7 @@ dependencies {
 
 Below is a simple login page.
 
-[login.htm](readme_files/login.htm)
+![login-page.png](readme_files/login-page.png)
 
 Below is the page class for this login page, written with Selion Framework.
 
@@ -161,9 +161,9 @@ public class SnSlimSelectDropdown extends SnComponent {
         rule.attr("aria-controls").isPresent();
     }
 
-    private SnArrowButton arrowButton = $component(ARROW_BUTTON, SnArrowButton.class, this);
-    private SnGenericComponent contentPanel = $genericComponent(CONTENT_PANEL);
-    private SnComponentCollection<SnListItem> listItems = $$components(LIST_ITEMS, SnListItem.class, this);
+    private final SnArrowButton arrowButton = $component(ARROW_BUTTON, SnArrowButton.class, this);
+    private final SnGenericComponent contentPanel = $genericComponent(CONTENT_PANEL);
+    private final SnComponentCollection<SnListItem> listItems = $$components(LIST_ITEMS, SnListItem.class, this);
 
     @Override
     public String text() {
@@ -216,11 +216,11 @@ if a wrong type of element is assigned to this component, it would throw error. 
 - The content of the dropdown's list items are attached at the bottom of the page when the arrow is clicked to open the dropdown. Using *_cssSelector.page()* method
 says that the framework should look for the entire page rather than descendent of this component.
 
-Once **SnSlimSelectDropdown** class is defined, it can be used anytime the Slim select appears in the application. Typically, 
-web components are repeatedly used within an application, so while it may take some time to initially build the component, it 
-can easily save time and effort.
+Once **SnSlimSelectDropdown** class is defined, it can be used anytime the Slim select appears in applications. Typically, 
+web components are repeatedly used within an application. While it may take some time to initially build the component, it 
+can easily save time and effort as more page classes are created.
 
-It might look like below when implemented in a test.
+Below is a example test that utilizes the Slim select.
 
 ```
 public class SnLoginEnhancedTest {
@@ -250,4 +250,5 @@ public class SnLoginEnhancedTest {
     }
 }
 ```
-The test code remains simple and legible despite the complexity of Slim select. 
+The test code remains simple and legible. The design pushes more complex code to the back and with more reusability to
+minimize the amount of code. More reusable code means less code to support and maintain.

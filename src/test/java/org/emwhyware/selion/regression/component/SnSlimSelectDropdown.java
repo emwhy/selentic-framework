@@ -17,9 +17,9 @@ public class SnSlimSelectDropdown extends SnComponent {
         rule.attr("aria-controls").isPresent();
     }
 
-    private SnArrowButton arrowButton = $component(ARROW_BUTTON, SnArrowButton.class, this);
-    private SnGenericComponent contentPanel = $genericComponent(CONTENT_PANEL);
-    private SnComponentCollection<SnListItem> listItems = $$components(LIST_ITEMS, SnListItem.class, this);
+    private final SnArrowButton arrowButton = $component(ARROW_BUTTON, SnArrowButton.class, this);
+    private final SnGenericComponent contentPanel = $genericComponent(CONTENT_PANEL);
+    private final SnComponentCollection<SnListItem> listItems = $$components(LIST_ITEMS, SnListItem.class, this);
 
     @Override
     public String text() {
