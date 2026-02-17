@@ -19,12 +19,13 @@ public class SnComponentRulesException extends RuntimeException {
     }
 
     private static <T extends SnComponent> String exceptionMessage(Class<T> componentType, List<String> ruleFailures) {
-        final StringBuilder message = new StringBuilder("One or more component rules were violated. Incorrect web element may have been targeted for " + componentType.getName() + ".\n");
+        final StringBuilder message = new StringBuilder("One or more component rules were violated. Incorrect web element may have been targeted for ");
+
+        message.append(componentType.getName());
 
         for (String ruleFailure : ruleFailures) {
-            message.append("\n\t").append(ruleFailure);
+            message.append("\n . ").append(ruleFailure);
         }
-        message.append("\n");
         return message.toString();
     }
 }

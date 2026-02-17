@@ -91,8 +91,7 @@ import java.util.regex.Pattern;
  */
 public abstract class SnComponent extends SnAbstractComponent {
     private Optional<SnSelector> selector = Optional.empty();
-    private Optional<SnComponent> $callerComponent = Optional.empty();
-    private SnAbstractPage $ownerPage;
+    private SnAbstractComponent $callerComponent;
     private WebElement webElement;
     private Optional<SnComponentRule> rule = Optional.empty();
 
@@ -127,21 +126,12 @@ public abstract class SnComponent extends SnAbstractComponent {
     }
 
     /**
-     * Internal method to set the owner page of this component.
-     *
-     * @param $page the {@link SnAbstractPage} that contains this component
-     */
-    final void setOwnerPage(SnAbstractPage $page) {
-        this.$ownerPage = $page;
-    }
-
-    /**
      * Returns the page class that contains this instance of the component.
      *
      * @return the {@link SnAbstractPage} that owns this component
      */
     final protected SnAbstractPage ownerPage() {
-        return $ownerPage;
+        return $callerComponent instanceof SnAbstractPage ? (SnAbstractPage) $callerComponent : ((SnComponent) $callerComponent).ownerPage();
     }
 
     /**
@@ -154,12 +144,12 @@ public abstract class SnComponent extends SnAbstractComponent {
     }
 
     /**
-     * Internal method to set the parent component that called this component.
+     * Internal method to set the parent component or page that called this component.
      *
-     * @param $component an {@link Optional} containing the parent component, or empty if this is a page-level component
+     * @param $componentOrPage a calling component or page.
      */
-    final void setCallerComponent(Optional<SnComponent> $component) {
-        this.$callerComponent = $component;
+    final void setCallerComponent(SnAbstractComponent $componentOrPage) {
+        this.$callerComponent = $componentOrPage;
     }
 
     /**
@@ -179,10 +169,10 @@ public abstract class SnComponent extends SnAbstractComponent {
      */
     private WebElement webElement() {
         if (this.webElement == null) {
-            if (this.selector.isPresent() && (this.$callerComponent.isEmpty() || this.selector.get() instanceof SnXPathPage|| this.selector.get() instanceof SnCssSelectorPage)) {
+            if (this.selector.isPresent() && (this.$callerComponent instanceof SnAbstractPage || this.selector.get().isAbsolute())) {
                 return Selion.driver().findElement(selector.get().build());
             } else if (this.selector.isPresent()) {
-                return selector.get() instanceof SnXPath ? this.$callerComponent.get().existingElement().findElement(((SnXPath) selector.get()).build(true)) : this.$callerComponent.get().existingElement().findElement(selector.get().build());
+                return selector.get() instanceof SnXPath ? ((SnComponent) this.$callerComponent).existingElement().findElement(((SnXPath) selector.get()).build(true)) : ((SnComponent) this.$callerComponent).existingElement().findElement(selector.get().build());
             } else {
                 throw new SnElementNotFoundException("Selector is not present.");
             }

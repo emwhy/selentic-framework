@@ -863,12 +863,7 @@ public abstract class SnAbstractComponent {
 
             $component = containingObject == null ? componentType.getDeclaredConstructor().newInstance() : componentType.getDeclaredConstructor(containingObject.getClass()).newInstance(containingObject);
             $component.setSelector(selector);
-            if (this instanceof SnComponent $this) {
-                $component.setCallerComponent(Optional.of($this));
-                $component.setOwnerPage($this.ownerPage());
-            } else {
-                $component.setOwnerPage((SnAbstractPage) this);
-            }
+            $component.setCallerComponent(this);
             return $component;
         } catch (Exception ex) {
             throw new SnComponentCreationException(ex);
@@ -918,12 +913,7 @@ public abstract class SnAbstractComponent {
 
         $$components.setSelector(selector);
         $$components.setComponentType(componentType);
-        $$components.setOwnerPage(this);
-        if (this instanceof SnComponent $this) {
-            $$components.setOwnerPage($this.ownerPage());
-        } else {
-            $$components.setOwnerPage(this);
-        }
+        $$components.setCallerComponent(this);
 
         return $$components;
     }
@@ -968,11 +958,7 @@ public abstract class SnAbstractComponent {
         $$components.setSelector(selector);
         $$components.setComponentType(componentType);
         $$components.setContainingObject(containingObject);
-        if (this instanceof SnComponent $this) {
-            $$components.setOwnerPage($this.ownerPage());
-        } else {
-            $$components.setOwnerPage(this);
-        }
+        $$components.setCallerComponent(this);
 
         return $$components;
     }
@@ -1025,11 +1011,8 @@ public abstract class SnAbstractComponent {
             $$components = componentCollectionType.getDeclaredConstructor().newInstance();
             $$components.setSelector(selector);
             $$components.setComponentType(componentType);
-            if (this instanceof SnComponent $this) {
-                $$components.setOwnerPage($this.ownerPage());
-            } else {
-                $$components.setOwnerPage(this);
-            }
+            $$components.setCallerComponent(this);
+
             return $$components;
         } catch (Exception ex) {
             throw new SnComponentCreationException(ex);
