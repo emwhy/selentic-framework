@@ -4,7 +4,7 @@ import ch.qos.logback.classic.Level;
 import com.typesafe.config.Config;
 import com.typesafe.config.ConfigException;
 import com.typesafe.config.ConfigFactory;
-import org.emwhyware.selentic.lib.SnBrowser;
+import org.emwhyware.selentic.lib.ScBrowser;
 import org.emwhyware.selentic.lib.util.ScLogHandler;
 import org.slf4j.Logger;
 
@@ -66,14 +66,14 @@ import java.io.File;
  * long logRetention = config.keepLogDurationMinutes();
  * }</pre>
  *
- * @see SnBrowser
+ * @see ScBrowser
  * @see ch.qos.logback.classic.Level
  */
 public class SelelenticConfig {
     private static final Logger LOG = ScLogHandler.logger(SelelenticConfig.class);
     private static final SelelenticConfig GLOBAL_CONFIG = new SelelenticConfig();
 
-    private SnBrowser browser = SnBrowser.Chrome;
+    private ScBrowser browser = ScBrowser.Chrome;
     private long waitTimeoutMilliseconds = 5000;
     private Level rootLogLevel = Level.INFO;
     private Level selenticLogLevel = Level.DEBUG;
@@ -143,7 +143,7 @@ public class SelelenticConfig {
         int defaultConfigCount = 0;
 
         try {
-            this.browser = SnBrowser.toEnum(config.getString("browser"));
+            this.browser = ScBrowser.toEnum(config.getString("browser"));
             LOG.info("browser = '{}'", this.browser.toString().toLowerCase());
         } catch (ConfigException ex) {
             LOG.info("browser = '{}' (default)", this.browser.toString().toLowerCase());
@@ -307,7 +307,7 @@ public class SelelenticConfig {
      *
      * <p>
      * This setting determines which web browser the framework will use when initializing WebDriver instances.
-     * The default value is {@link SnBrowser#Chrome}.
+     * The default value is {@link ScBrowser#Chrome}.
      * 
      *
      * <p>
@@ -318,10 +318,10 @@ public class SelelenticConfig {
      * <strong>Valid Values:</strong> chrome, firefox, safari, edge (case-insensitive)
      * 
      *
-     * @return the {@link SnBrowser} to use for test execution
-     * @see SnBrowser
+     * @return the {@link ScBrowser} to use for test execution
+     * @see ScBrowser
      */
-    public SnBrowser browser() {
+    public ScBrowser browser() {
         return this.browser;
     }
 

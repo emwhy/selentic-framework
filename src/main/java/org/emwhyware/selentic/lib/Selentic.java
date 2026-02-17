@@ -53,15 +53,15 @@ import java.util.Optional;
  * WebDriver instance, allowing for parallel test execution without interference.
  * 
  *
- * @see SnBrowser
- * @see SnWebDriverOptions
+ * @see ScBrowser
+ * @see ScWebDriverOptions
  * @see WebDriver
  * @see WebDriverListener
  */
 public final class Selentic {
     private static final Logger LOG = ScLogHandler.logger(Selentic.class);
     private static final HashMap<Long, WebDriver> DRIVERS = new HashMap<>();
-    private static final SnWebDriverOptions WEBDRIVER_OPTIONS = new SnWebDriverOptions();
+    private static final ScWebDriverOptions WEBDRIVER_OPTIONS = new ScWebDriverOptions();
     private static Optional<WebDriverListener> webDriverListener = Optional.empty();
 
     /**
@@ -91,7 +91,7 @@ public final class Selentic {
      * 
      *     *
      * @return the {@link WebDriver} instance for the current thread
-     * @see #driver(SnBrowser)
+     * @see #driver(ScBrowser)
      * @see SelelenticConfig#browser()
      */
     public static synchronized WebDriver driver() {
@@ -123,19 +123,19 @@ public final class Selentic {
      * <strong>Browser Options:</strong> Each browser is initialized with default options. These can be
      * customized before calling this method using the {@code withXxxOptions()} methods:
      * <ul>
-     *   <li>{@link #withChromeOptions(SnWebDriverOptions.ChromeOptionSetup)}</li>
-     *   <li>{@link #withFirefoxOptions(SnWebDriverOptions.FirefoxOptionSetup)}</li>
-     *   <li>{@link #withEdgeOptions(SnWebDriverOptions.EdgeOptionSetup)}</li>
-     *   <li>{@link #withSafariOptions(SnWebDriverOptions.SafariOptionSetup)}</li>
+     *   <li>{@link #withChromeOptions(ScWebDriverOptions.ChromeOptionSetup)}</li>
+     *   <li>{@link #withFirefoxOptions(ScWebDriverOptions.FirefoxOptionSetup)}</li>
+     *   <li>{@link #withEdgeOptions(ScWebDriverOptions.EdgeOptionSetup)}</li>
+     *   <li>{@link #withSafariOptions(ScWebDriverOptions.SafariOptionSetup)}</li>
      * </ul>
      *
      *
-     * @param browser the {@link SnBrowser} type to use for creating the WebDriver
+     * @param browser the {@link ScBrowser} type to use for creating the WebDriver
      * @return the {@link WebDriver} instance for the current thread with the specified browser
      * @see #driver()
-     * @see SnBrowser
+     * @see ScBrowser
      */
-    public static synchronized WebDriver driver(SnBrowser browser) {
+    public static synchronized WebDriver driver(ScBrowser browser) {
         final long threadId = Thread.currentThread().threadId();
 
         if (!DRIVERS.containsKey(threadId)) {
@@ -169,7 +169,7 @@ public final class Selentic {
      *
      * <p>
      * <strong>Important:</strong> This method must be called BEFORE calling {@link #driver()} or
-     * {@link #driver(SnBrowser)} to ensure the options are applied to the new ChromeDriver instance.
+     * {@link #driver(ScBrowser)} to ensure the options are applied to the new ChromeDriver instance.
      * 
      *
      * <p>
@@ -187,13 +187,13 @@ public final class Selentic {
      * }</pre>
      *
      *
-     * @param optionSetup a {@link SnWebDriverOptions.ChromeOptionSetup} functional interface that receives
+     * @param optionSetup a {@link ScWebDriverOptions.ChromeOptionSetup} functional interface that receives
      *                   the Chrome options and preferences for configuration
-     * @see SnWebDriverOptions.ChromeOptionSetup
-     * @see #withFirefoxOptions(SnWebDriverOptions.FirefoxOptionSetup)
-     * @see #withEdgeOptions(SnWebDriverOptions.EdgeOptionSetup)
+     * @see ScWebDriverOptions.ChromeOptionSetup
+     * @see #withFirefoxOptions(ScWebDriverOptions.FirefoxOptionSetup)
+     * @see #withEdgeOptions(ScWebDriverOptions.EdgeOptionSetup)
      */
-    public static synchronized void withChromeOptions(SnWebDriverOptions.ChromeOptionSetup optionSetup) {
+    public static synchronized void withChromeOptions(ScWebDriverOptions.ChromeOptionSetup optionSetup) {
         optionSetup.options(WEBDRIVER_OPTIONS.chromeOptions(), WEBDRIVER_OPTIONS.chromePrefs());
 
         WEBDRIVER_OPTIONS.chromeOptions().setExperimentalOption("pref", WEBDRIVER_OPTIONS.chromePrefs());
@@ -210,7 +210,7 @@ public final class Selentic {
      *
      * <p>
      * <strong>Important:</strong> This method must be called BEFORE calling {@link #driver()} or
-     * {@link #driver(SnBrowser)} to ensure the options are applied to the new FirefoxDriver instance.
+     * {@link #driver(ScBrowser)} to ensure the options are applied to the new FirefoxDriver instance.
      * 
      *
      * <p>
@@ -224,13 +224,13 @@ public final class Selentic {
      * }</pre>
      *
      *
-     * @param optionSetup a {@link SnWebDriverOptions.FirefoxOptionSetup} functional interface that receives
+     * @param optionSetup a {@link ScWebDriverOptions.FirefoxOptionSetup} functional interface that receives
      *                   the Firefox options for configuration
-     * @see SnWebDriverOptions.FirefoxOptionSetup
-     * @see #withChromeOptions(SnWebDriverOptions.ChromeOptionSetup)
-     * @see #withEdgeOptions(SnWebDriverOptions.EdgeOptionSetup)
+     * @see ScWebDriverOptions.FirefoxOptionSetup
+     * @see #withChromeOptions(ScWebDriverOptions.ChromeOptionSetup)
+     * @see #withEdgeOptions(ScWebDriverOptions.EdgeOptionSetup)
      */
-    public static synchronized void withFirefoxOptions(SnWebDriverOptions.FirefoxOptionSetup optionSetup) {
+    public static synchronized void withFirefoxOptions(ScWebDriverOptions.FirefoxOptionSetup optionSetup) {
         optionSetup.options(WEBDRIVER_OPTIONS.firefoxOptions());
     }
 
@@ -245,7 +245,7 @@ public final class Selentic {
      *
      * <p>
      * <strong>Important:</strong> This method must be called BEFORE calling {@link #driver()} or
-     * {@link #driver(SnBrowser)} to ensure the options are applied to the new EdgeDriver instance.
+     * {@link #driver(ScBrowser)} to ensure the options are applied to the new EdgeDriver instance.
      * 
      *
      * <p>
@@ -260,13 +260,13 @@ public final class Selentic {
      * }</pre>
      *
      *
-     * @param optionSetup a {@link SnWebDriverOptions.EdgeOptionSetup} functional interface that receives
+     * @param optionSetup a {@link ScWebDriverOptions.EdgeOptionSetup} functional interface that receives
      *                   the Edge options and preferences for configuration
-     * @see SnWebDriverOptions.EdgeOptionSetup
-     * @see #withChromeOptions(SnWebDriverOptions.ChromeOptionSetup)
-     * @see #withFirefoxOptions(SnWebDriverOptions.FirefoxOptionSetup)
+     * @see ScWebDriverOptions.EdgeOptionSetup
+     * @see #withChromeOptions(ScWebDriverOptions.ChromeOptionSetup)
+     * @see #withFirefoxOptions(ScWebDriverOptions.FirefoxOptionSetup)
      */
-    public static synchronized void withEdgeOptions(SnWebDriverOptions.EdgeOptionSetup optionSetup) {
+    public static synchronized void withEdgeOptions(ScWebDriverOptions.EdgeOptionSetup optionSetup) {
         optionSetup.options(WEBDRIVER_OPTIONS.edgeOptions(), WEBDRIVER_OPTIONS.edgePrefs());
 
         WEBDRIVER_OPTIONS.edgeOptions().setExperimentalOption("pref", WEBDRIVER_OPTIONS.edgeOptions());
@@ -283,7 +283,7 @@ public final class Selentic {
      *
      * <p>
      * <strong>Important:</strong> This method must be called BEFORE calling {@link #driver()} or
-     * {@link #driver(SnBrowser)} to ensure the options are applied to the new SafariDriver instance.
+     * {@link #driver(ScBrowser)} to ensure the options are applied to the new SafariDriver instance.
      * 
      *
      * <p>
@@ -291,13 +291,13 @@ public final class Selentic {
      * Some options available in other browsers may not be supported in Safari.
      * 
      *
-     * @param optionSetup a {@link SnWebDriverOptions.SafariOptionSetup} functional interface that receives
+     * @param optionSetup a {@link ScWebDriverOptions.SafariOptionSetup} functional interface that receives
      *                   the Safari options for configuration
-     * @see SnWebDriverOptions.SafariOptionSetup
-     * @see #withChromeOptions(SnWebDriverOptions.ChromeOptionSetup)
-     * @see #withFirefoxOptions(SnWebDriverOptions.FirefoxOptionSetup)
+     * @see ScWebDriverOptions.SafariOptionSetup
+     * @see #withChromeOptions(ScWebDriverOptions.ChromeOptionSetup)
+     * @see #withFirefoxOptions(ScWebDriverOptions.FirefoxOptionSetup)
      */
-    public static synchronized void withSafariOptions(SnWebDriverOptions.SafariOptionSetup optionSetup) {
+    public static synchronized void withSafariOptions(ScWebDriverOptions.SafariOptionSetup optionSetup) {
         optionSetup.options(WEBDRIVER_OPTIONS.safariOptions());
     }
 

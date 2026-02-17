@@ -1,11 +1,11 @@
 package org.emwhyware.selentic.regression.component;
 
 import org.emwhyware.selentic.lib.ScComponent;
-import org.emwhyware.selentic.lib.SnComponentRule;
+import org.emwhyware.selentic.lib.ScComponentRule;
 
 public class ScAnimatedBox extends ScComponent {
     @Override
-    protected void rules(SnComponentRule rule) {
+    protected void rules(ScComponentRule rule) {
         rule.id().is("animated-box");
     }
 

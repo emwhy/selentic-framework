@@ -3,7 +3,7 @@ package org.emwhyware.selentic.regression.test;
 import org.emwhyware.selentic.lib.ScButton;
 import org.emwhyware.selentic.lib.Selentic;
 import org.emwhyware.selentic.lib.ScPage;
-import org.emwhyware.selentic.lib.SnWithPage;
+import org.emwhyware.selentic.lib.ScWithPage;
 import org.emwhyware.selentic.lib.exception.ScComponentAnimatingException;
 import org.emwhyware.selentic.lib.exception.ScElementNotFoundException;
 import org.emwhyware.selentic.lib.exception.ScWaitTimeoutException;
@@ -35,9 +35,9 @@ import static org.testng.AssertJUnit.fail;
 public class ScUiComponentTest {
     private static final Logger LOG = ScLogHandler.logger(ScUiComponentTest.class);
 
-    private final SnWithPage<ScUiComponentPage> testPage = ScPage.with(ScUiComponentPage.class);
-    private final SnWithPage<ScExternalPage> testExternalPage = ScPage.with(ScExternalPage.class);
-    private final SnWithPage<ScDragAndDropTestPage> dragAndDropTestPage = ScPage.with(ScDragAndDropTestPage.class);
+    private final ScWithPage<ScUiComponentPage> testPage = ScPage.with(ScUiComponentPage.class);
+    private final ScWithPage<ScExternalPage> testExternalPage = ScPage.with(ScExternalPage.class);
+    private final ScWithPage<ScDragAndDropTestPage> dragAndDropTestPage = ScPage.with(ScDragAndDropTestPage.class);
 
     @BeforeClass 
     public void setup() {

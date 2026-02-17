@@ -10,7 +10,7 @@ package org.emwhyware.selentic.lib;
  * @see ScFormComponent
  * @see ScCheckbox
  * @see ScRadioButton
- * @see SnRadioButtonGroup
+ * @see ScRadioButtonGroup
  */
 public abstract class ScSelectableComponent extends ScFormComponent {
 

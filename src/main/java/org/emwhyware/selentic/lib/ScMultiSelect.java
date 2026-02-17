@@ -10,7 +10,7 @@ import java.util.regex.Pattern;
 
 public class ScMultiSelect extends ScFormComponent {
     @Override
-    protected void rules(SnComponentRule rule) {
+    protected void rules(ScComponentRule rule) {
         rule.tag().is("select");
         rule.attr("multiple").isPresent();
     }

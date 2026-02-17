@@ -9,7 +9,7 @@ import java.util.Arrays;
 public class ScLink extends ScClickableComponent {
 
     @Override
-    protected void rules(SnComponentRule rule) {
+    protected void rules(ScComponentRule rule) {
         rule.tag().is("a");
     }
 

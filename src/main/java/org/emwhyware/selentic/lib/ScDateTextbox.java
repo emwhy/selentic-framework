@@ -11,7 +11,7 @@ public class ScDateTextbox extends ScTextbox {
     private DateTimeFormatter inputFormatter = DateTimeFormatter.ofPattern("MMddyyyy");
 
     @Override
-    protected void rules(SnComponentRule rule) {
+    protected void rules(ScComponentRule rule) {
         rule.tag().is("input");
         rule.type().is("date");
     }

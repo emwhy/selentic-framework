@@ -63,7 +63,7 @@ package org.emwhyware.selentic.lib;
  *
  * <h2>Component Rules</h2>
  * <p>
- * The {@link #rules(SnComponentRule)} method validates that an element is a valid button by checking:
+ * The {@link #rules(ScComponentRule)} method validates that an element is a valid button by checking:
  * <ul>
  *   <li>The tag name is either "button" or "input"</li>
  *   <li>If it's an "input" element, the type attribute must be one of: "button", "submit", or "reset"</li>
@@ -71,7 +71,7 @@ package org.emwhyware.selentic.lib;
  *
  * @see ScFormComponent
  * @see ScComponent
- * @see SnComponentRule
+ * @see ScComponentRule
  */
 public class ScButton extends ScFormComponent {
     /**
@@ -109,12 +109,12 @@ public class ScButton extends ScFormComponent {
      * }</pre>
      * 
      *
-     * @param rule the {@link SnComponentRule} object used to define and verify button validation rules
-     * @see SnComponentRule#tag()
-     * @see SnComponentRule#type()
+     * @param rule the {@link ScComponentRule} object used to define and verify button validation rules
+     * @see ScComponentRule#tag()
+     * @see ScComponentRule#type()
      */
     @Override
-    protected void rules(SnComponentRule rule) {
+    protected void rules(ScComponentRule rule) {
         // Needs to do extra IF because button can be both input and button.
         rule.tag().isOneOf("input", "button");
         if (this.tag().equals("input")) {

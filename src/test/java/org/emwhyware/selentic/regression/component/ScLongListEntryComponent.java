@@ -3,12 +3,12 @@ package org.emwhyware.selentic.regression.component;
 import org.emwhyware.selentic.lib.*;
 
 public class ScLongListEntryComponent extends ScComponent {
-    private static final SnCssSelector TITLE_TEXT = _cssSelector.descendant(_cssClasses("title"));
-    private static final SnCssSelector CHECKBOX = _cssSelector.descendant(_type().is("checkbox"));
-    private static final SnCssSelector TEXTBOX = _cssSelector.descendant(_type().is("text"));
+    private static final ScCssSelector TITLE_TEXT = _cssSelector.descendant(_cssClasses("title"));
+    private static final ScCssSelector CHECKBOX = _cssSelector.descendant(_type().is("checkbox"));
+    private static final ScCssSelector TEXTBOX = _cssSelector.descendant(_type().is("text"));
 
     @Override
-    protected void rules(SnComponentRule rule) {
+    protected void rules(ScComponentRule rule) {
         rule.tag().is("div");
         rule.cssClasses().has("long-component-list-entry");
     }

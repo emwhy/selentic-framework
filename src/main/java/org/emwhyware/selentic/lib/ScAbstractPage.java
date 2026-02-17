@@ -21,16 +21,16 @@ public abstract class ScAbstractPage extends ScAbstractComponent {
     /**
      * Provides access to the builder which provides methods to build XPath selector objects for page-level elements.
      *
-     * @see SnPageXPathBuilder
+     * @see ScPageXPathBuilder
      */
-    protected static final SnPageXPathBuilder _xpath = new SnPageXPathBuilder();
+    protected static final ScPageXPathBuilder _xpath = new ScPageXPathBuilder();
 
     /**
      * Provides access to the builder which provides methods to build CSS selector objects for page-level elements.
      *
-     * @see SnPageCssSelectorBuilder
+     * @see ScPageCssSelectorBuilder
      */
-    protected static final SnPageCssSelectorBuilder _cssSelector = new SnPageCssSelectorBuilder();
+    protected static final ScPageCssSelectorBuilder _cssSelector = new ScPageCssSelectorBuilder();
 
     /**
      * Waits for a specific component to be displayed on the page.

@@ -5,19 +5,19 @@ public class SnSelectorTextCondition {
     SnSelectorTextCondition() {
     }
 
-    public SnSelectorTextProperty is(String text) {
-        return new SnSelectorTextProperty(SnSelectorTextProperty.Conditions.Is, text);
+    public ScSelectorTextProperty is(String text) {
+        return new ScSelectorTextProperty(ScSelectorTextProperty.Conditions.Is, text);
     }
 
-    public SnSelectorTextProperty contains(String text) {
-        return new SnSelectorTextProperty(SnSelectorTextProperty.Conditions.Contains, text);
+    public ScSelectorTextProperty contains(String text) {
+        return new ScSelectorTextProperty(ScSelectorTextProperty.Conditions.Contains, text);
     }
 
-    public SnSelectorTextProperty startsWith(String text) {
-        return new SnSelectorTextProperty(SnSelectorTextProperty.Conditions.StartsWith, text);
+    public ScSelectorTextProperty startsWith(String text) {
+        return new ScSelectorTextProperty(ScSelectorTextProperty.Conditions.StartsWith, text);
     }
 
-    public SnSelectorTextProperty endsWith(String text) {
-        return new SnSelectorTextProperty(SnSelectorTextProperty.Conditions.EndsWith, text);
+    public ScSelectorTextProperty endsWith(String text) {
+        return new ScSelectorTextProperty(ScSelectorTextProperty.Conditions.EndsWith, text);
     }
 }

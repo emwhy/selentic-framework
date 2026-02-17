@@ -60,24 +60,24 @@ import java.time.Duration;
  * <strong>Key Features:</strong>
  * <ul>
  *   <li><strong>Fluent Page Initialization:</strong> Use {@code with(Class)} to create page instances
- *       with automatic page load waiting through the {@link SnWithPage} fluent builder.</li>
+ *       with automatic page load waiting through the {@link ScWithPage} fluent builder.</li>
  *   <li><strong>Page Title Access:</strong> Conveniently access the page's HTML title element
  *       through {@link #pageTitle()}.</li>
  *   <li><strong>Page Reload:</strong> Reload the current page and wait for it to fully load
  *       using {@link #reload()}.</li>
  *   <li><strong>Window Management:</strong> Control browser windows and perform window-specific
- *       operations through {@link #inWindow(SnWithPage, SnWindow.SnWindowAction)} and
- *       {@link #inWindow(SnWithPage, SnWindow.SnWindowActionWithController)}.</li>
+ *       operations through {@link #inWindow(ScWithPage, ScWindow.SnWindowAction)} and
+ *       {@link #inWindow(ScWithPage, ScWindow.SnWindowActionWithController)}.</li>
  * </ul>
  *
  *
  * @see ScAbstractPage
- * @see SnWithPage
- * @see SnWindow
+ * @see ScWithPage
+ * @see ScWindow
  * @see ScComponent
  */
 public abstract class ScPage extends ScAbstractPage {
-    private static final SnXPath PAGE_TITLE = _xpath.descendant("title");
+    private static final ScXPath PAGE_TITLE = _xpath.descendant("title");
 
     /**
      * Creates a fluent builder for initializing and loading a page of the specified type.
@@ -92,12 +92,12 @@ public abstract class ScPage extends ScAbstractPage {
      *
      * @param <T> the page type to create
      * @param pageType the class of the page to create; must extend from {@code SnPage}
-     * @return a {@link SnWithPage} fluent builder for the specified page type
+     * @return a {@link ScWithPage} fluent builder for the specified page type
      *
-     * @see SnWithPage
+     * @see ScWithPage
      */
-    public static <T extends ScPage> SnWithPage<T> with(Class<T> pageType) {
-        return new SnWithPage<>(pageType);
+    public static <T extends ScPage> ScWithPage<T> with(Class<T> pageType) {
+        return new ScWithPage<>(pageType);
     }
 
     /**
@@ -242,14 +242,14 @@ public abstract class ScPage extends ScAbstractPage {
      * }</pre>
      * 
      *
-     * @param predicate a {@link SnWindow.SnWindowAction} functional interface containing
+     * @param predicate a {@link ScWindow.SnWindowAction} functional interface containing
      *                  the action to perform within the window context
      *
-     * @see SnWindow
-     * @see SnWindow.SnWindowAction
+     * @see ScWindow
+     * @see ScWindow.SnWindowAction
      */
-    public <T extends ScPage> void inWindow(SnWithPage<T> withPage, SnWindow.SnWindowAction<T> predicate) {
-        new SnWindow().inWindow(withPage, predicate);
+    public <T extends ScPage> void inWindow(ScWithPage<T> withPage, ScWindow.SnWindowAction<T> predicate) {
+        new ScWindow().inWindow(withPage, predicate);
     }
 
     /**
@@ -257,7 +257,7 @@ public abstract class ScPage extends ScAbstractPage {
      *
      * <p>
      * This method allows executing test code within a different browser window with access to
-     * a {@link SnWindow.SnWindowActionWithController} that provides methods for controlling window behavior.
+     * a {@link ScWindow.SnWindowActionWithController} that provides methods for controlling window behavior.
      * The framework automatically handles window switching and cleanup, ensuring that the
      * original window is restored after the action completes.
      * 
@@ -295,14 +295,14 @@ public abstract class ScPage extends ScAbstractPage {
      * }</pre>
      * 
      *
-     * @param predicate a {@link SnWindow.SnWindowActionWithController} functional interface containing
+     * @param predicate a {@link ScWindow.SnWindowActionWithController} functional interface containing
      *                  the action to perform within the window context with access to window control methods
      *
-     * @see SnWindow
-     * @see SnWindow.SnWindowActionWithController
+     * @see ScWindow
+     * @see ScWindow.SnWindowActionWithController
      */
-    public <T extends ScPage> void inWindow(SnWithPage<T> withPage, SnWindow.SnWindowActionWithController<T> predicate) {
-        new SnWindow().inWindow(withPage, predicate);
+    public <T extends ScPage> void inWindow(ScWithPage<T> withPage, ScWindow.SnWindowActionWithController<T> predicate) {
+        new ScWindow().inWindow(withPage, predicate);
     }
 
     /**

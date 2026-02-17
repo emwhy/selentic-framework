@@ -74,7 +74,7 @@ package org.emwhyware.selentic.lib;
  *
  * <h2>Component Rules</h2>
  * <p>
- * The {@link #rules(SnComponentRule)} method validates that an element is a valid checkbox by checking:
+ * The {@link #rules(ScComponentRule)} method validates that an element is a valid checkbox by checking:
  * <ul>
  *   <li>The tag name is exactly "input"</li>
  *   <li>The type attribute is exactly "checkbox"</li>
@@ -96,7 +96,7 @@ package org.emwhyware.selentic.lib;
  * @see ScSelectableComponent
  * @see ScFormComponent
  * @see ScComponent
- * @see SnComponentRule
+ * @see ScComponentRule
  */
 public class ScCheckbox extends ScSelectableComponent {
     /**
@@ -130,12 +130,12 @@ public class ScCheckbox extends ScSelectableComponent {
      * }</pre>
      * 
      *
-     * @param rule the {@link SnComponentRule} object used to define and verify checkbox validation rules
-     * @see SnComponentRule#tag()
-     * @see SnComponentRule#type()
+     * @param rule the {@link ScComponentRule} object used to define and verify checkbox validation rules
+     * @see ScComponentRule#tag()
+     * @see ScComponentRule#type()
      */
     @Override
-    protected void rules(SnComponentRule rule) {
+    protected void rules(ScComponentRule rule) {
         rule.tag().is("input");
         rule.type().is("checkbox");
     }

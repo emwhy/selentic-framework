@@ -1,19 +1,19 @@
 package org.emwhyware.selentic.regression.component;
 
 import org.emwhyware.selentic.lib.ScComponent;
-import org.emwhyware.selentic.lib.SnComponentRule;
+import org.emwhyware.selentic.lib.ScComponentRule;
 import org.emwhyware.selentic.lib.ScGenericComponent;
-import org.emwhyware.selentic.lib.SnXPath;
+import org.emwhyware.selentic.lib.ScXPath;
 
 public class ScTestTableRow extends ScComponent {
-    private static final SnXPath PRODUCT_NAME_TEXT = _xpath.descendant("td", _cssClasses("product-name"));
-    private static final SnXPath SERIAL_NUMBER_TEXT = _xpath.descendant("td", _cssClasses("serial-number"));
-    private static final SnXPath PRODUCT_TYPE_TEXT = _xpath.descendant("td", _cssClasses("product-type"));
-    private static final SnXPath BUILT_DATE_TEXT = _xpath.descendant("td", _cssClasses("built-date"));
-    private static final SnXPath PRICE_AMOUNT_TEXT = _xpath.descendant("td", _cssClasses("price"));
+    private static final ScXPath PRODUCT_NAME_TEXT = _xpath.descendant("td", _cssClasses("product-name"));
+    private static final ScXPath SERIAL_NUMBER_TEXT = _xpath.descendant("td", _cssClasses("serial-number"));
+    private static final ScXPath PRODUCT_TYPE_TEXT = _xpath.descendant("td", _cssClasses("product-type"));
+    private static final ScXPath BUILT_DATE_TEXT = _xpath.descendant("td", _cssClasses("built-date"));
+    private static final ScXPath PRICE_AMOUNT_TEXT = _xpath.descendant("td", _cssClasses("price"));
 
     @Override
-    protected void rules(SnComponentRule rule) {
+    protected void rules(ScComponentRule rule) {
         rule.tag().is("tr");
     }
 

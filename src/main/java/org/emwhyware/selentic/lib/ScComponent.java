@@ -66,11 +66,11 @@ import java.util.regex.Pattern;
  * <p>
  * <strong>Key Features:</strong>
  * <ul>
- *   <li><strong>Component Rules:</strong> The {@link #rules(SnComponentRule)} method must be overridden
+ *   <li><strong>Component Rules:</strong> The {@link #rules(ScComponentRule)} method must be overridden
  *       to define validation rules for the web element. This ensures type safety and helps prevent duplicate
  *       component implementations.</li>
  *   <li><strong>Key:</strong> Override {@link #key()} to provide a unique identifier for the component,
- *       especially useful when working with {@link SnComponentCollection}.</li>
+ *       especially useful when working with {@link ScComponentCollection}.</li>
  *   <li><strong>Lazy Initialization:</strong> Web elements are lazily initialized and automatically re-fetched
  *       if they become stale.</li>
  *   <li><strong>Hierarchy Support:</strong> Components can contain other components through child selectors,
@@ -85,29 +85,29 @@ import java.util.regex.Pattern;
  * 
  *
  * @see ScAbstractComponent
- * @see SnComponentRule
- * @see SnComponentCollection
+ * @see ScComponentRule
+ * @see ScComponentCollection
  * @see ScPage
  */
 public abstract class ScComponent extends ScAbstractComponent {
-    private Optional<SnSelector> selector = Optional.empty();
+    private Optional<ScSelector> selector = Optional.empty();
     private ScAbstractComponent $callerComponent;
     private WebElement webElement;
-    private Optional<SnComponentRule> rule = Optional.empty();
+    private Optional<ScComponentRule> rule = Optional.empty();
 
     /**
      * Provides access to the builder which provides methods to build XPath selector objects.
      *
-     * @see SnXPath
+     * @see ScXPath
      */
-    final static protected SnComponentXPathBuilder _xpath = new SnComponentXPathBuilder();
+    final static protected ScComponentXPathBuilder _xpath = new ScComponentXPathBuilder();
 
     /**
      * Provides access to the builder which provides methods to build CSS selector objects.
      *
-     * @see SnCssSelector
+     * @see ScCssSelector
      */
-    final static protected SnComponentCssSelectorBuilder _cssSelector = new SnComponentCssSelectorBuilder();
+    final static protected ScComponentCssSelectorBuilder _cssSelector = new ScComponentCssSelectorBuilder();
 
     /**
      * Protected constructor. Components are not directly instantiated through calling the constructor.
@@ -119,9 +119,9 @@ public abstract class ScComponent extends ScAbstractComponent {
     /**
      * Internal method to set the selector for this component.
      *
-     * @param selector the {@link SnSelector} to use for locating the web element
+     * @param selector the {@link ScSelector} to use for locating the web element
      */
-    final void setSelector(SnSelector selector) {
+    final void setSelector(ScSelector selector) {
         this.selector = Optional.of(selector);
     }
 
@@ -172,7 +172,7 @@ public abstract class ScComponent extends ScAbstractComponent {
             if (this.selector.isPresent() && (this.$callerComponent instanceof ScAbstractPage || this.selector.get().isAbsolute())) {
                 return Selentic.driver().findElement(selector.get().build());
             } else if (this.selector.isPresent()) {
-                return selector.get() instanceof SnXPath ? ((ScComponent) this.$callerComponent).existingElement().findElement(((SnXPath) selector.get()).build(true)) : ((ScComponent) this.$callerComponent).existingElement().findElement(selector.get().build());
+                return selector.get() instanceof ScXPath ? ((ScComponent) this.$callerComponent).existingElement().findElement(((ScXPath) selector.get()).build(true)) : ((ScComponent) this.$callerComponent).existingElement().findElement(selector.get().build());
             } else {
                 throw new ScElementNotFoundException("Selector is not present.");
             }
@@ -201,10 +201,10 @@ public abstract class ScComponent extends ScAbstractComponent {
      * rule.
      * 
      *
-     * @param rule the {@link SnComponentRule} used to define validation rules for this component
-     * @see SnComponentRule
+     * @param rule the {@link ScComponentRule} used to define validation rules for this component
+     * @see ScComponentRule
      */
-    protected abstract void rules(SnComponentRule rule);
+    protected abstract void rules(ScComponentRule rule);
 
     /**
      * Verifies that the web element matches all rules defined for this component.
@@ -219,7 +219,7 @@ public abstract class ScComponent extends ScAbstractComponent {
      */
     private void verifyRules(WebElement element) {
         if (this.rule.isEmpty()) {
-            final SnComponentRule componentRule = new SnComponentRule(element);
+            final ScComponentRule componentRule = new ScComponentRule(element);
 
             this.rule = Optional.of(componentRule);
             this.rules(componentRule);
@@ -288,14 +288,14 @@ public abstract class ScComponent extends ScAbstractComponent {
      *
      * <p>
      * This method is commonly used before interacting with an element to ensure it is visible
-     * and in the viewport. The scroll behavior can be customized using {@link SnScrollOptions} which can be
+     * and in the viewport. The scroll behavior can be customized using {@link ScScrollOptions} which can be
      * acquired by calling {@link #scrollOptions()} method.
      * 
      *
-     * @param options the {@link SnScrollOptions} specifying scroll behavior
+     * @param options the {@link ScScrollOptions} specifying scroll behavior
      * @return the {@link WebElement} after scrolling it into view
      */
-    protected final WebElement scrolledElement(SnScrollOptions options) {
+    protected final WebElement scrolledElement(ScScrollOptions options) {
         final WebElement e = displayedElement();
 
         Selentic.executeScript("arguments[0].scrollIntoView(arguments[1])", this, options.toString());
@@ -387,10 +387,10 @@ public abstract class ScComponent extends ScAbstractComponent {
      * Override this method in subclasses to customize scrolling behavior for specific components.
      * 
      *
-     * @return the {@link SnScrollOptions} for this component, defaults to new instance with default options
+     * @return the {@link ScScrollOptions} for this component, defaults to new instance with default options
      */
-    protected final SnScrollOptions scrollOptions() {
-        return new SnScrollOptions();
+    protected final ScScrollOptions scrollOptions() {
+        return new ScScrollOptions();
     }
 
     /**
@@ -493,14 +493,14 @@ public abstract class ScComponent extends ScAbstractComponent {
      * 
      *
      * <p>
-     * The string returned by {@code key()} is used as a key value in {@link SnComponentCollection},
+     * The string returned by {@code key()} is used as a key value in {@link ScComponentCollection},
      * so overriding it to return a proper unique value simpplifies getting a component from the collection using
-     * {@link SnComponentCollection#entry(String)}.
+     * {@link ScComponentCollection#entry(String)}.
      * 
      *
      * @return a unique key identifying this component instance
      *
-     * @see SnComponentCollection#entry(String)
+     * @see ScComponentCollection#entry(String)
      */
     protected String key() {
         return this.text();

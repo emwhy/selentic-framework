@@ -3,7 +3,7 @@ package org.emwhyware.selentic.lib;
 public class ScImage extends ScComponent {
 
     @Override
-    protected void rules(SnComponentRule rule) {
+    protected void rules(ScComponentRule rule) {
         rule.tag().is("img");
     }
 
