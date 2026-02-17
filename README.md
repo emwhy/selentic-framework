@@ -147,6 +147,8 @@ The actual visual elements are div tag under the select.
 Because it is not a standard select dropdown, it needs to be defined as shown below.
 
 ```
+(imports and package are omitted)
+
 public class SnSlimSelectDropdown extends SnComponent {
     private static final SnCssSelector ARROW_BUTTON = _cssSelector.descendant(_tag("svg"), _cssClasses("ss-arrow"));
     private static final SnCssSelector SELECTED_TEXT = _cssSelector.descendant(_tag("div"), _cssClasses("ss-single"));
@@ -220,9 +222,11 @@ Once **SnSlimSelectDropdown** class is defined, it can be used anytime the Slim 
 web components are repeatedly used within an application. While it may take some time to initially build the component, it 
 can easily save time and effort as more page classes are created.
 
-Below is a example test that utilizes the Slim select.
+Below is a example test that utilizes the Slim select (TestNG).
 
 ```
+(imports and package are omitted)
+
 public class SnLoginEnhancedTest {
     private final SnWithPage<SnLoginEnhancedPage> loginPage = SnPage.with(SnLoginEnhancedPage.class);
 
