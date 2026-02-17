@@ -40,3 +40,24 @@ The Component Object Model (COM) in test automation is a design pattern that str
 
 The Component Object Model design pattern is often implemented using a Page Object Model, where a page object acts as a holder for various component objects. This allows test automation engineers to access component-specific action methods via the page object, creating a clear separation of concerns between test logic, page structure, and individual component behavior.  
 
+## Setting up Selion Framework
+
+- Download the latest **selion-framework.jar** file from https://github.com/emwhy/selion-framework/releases/. The release also contains ***selion-framework-javadoc.jar*** file that contains detailed documentation. When configured, the documentation can be shown right from IDE (such as IntelliJ).
+- Move the file to appropriate location in your project directory (i.e., ./lib).
+- There are additional packages that Selion depends on. Add reference to these packages. If you are working with Gradle, add dependencies to **build.gradle.kts** file.
+```
+dependencies {
+    implementation("org.seleniumhq.selenium:selenium-java:4.+")
+    implementation("ch.qos.logback:logback-classic:1.5.+")
+    implementation("ch.qos.logback:logback-core:1.5.+")
+    implementation("commons-io:commons-io:2.17.+")
+    implementation("com.typesafe:config:1.4.+")
+}
+```
+- **selion-framework-jar** can be added also.
+```
+    implementation(files("lib/selion-framework.jar"));
+```
+- Reload your Gradle. You should now be able to use Selion classes.
+
+
