@@ -60,4 +60,89 @@ dependencies {
 ```
 - Reload your Gradle. You should now be able to use Selion classes.
 
+## Writing a Simple Page Class
+
+Below is a simple login page.
+
+[login.htm](readme_files/login.htm)
+
+Below is the page class for this login page, written with Selion Framework.
+
+```
+(imports and package are omitted)
+
+public class SnLoginPage extends SnPage {
+    private static final SnCssSelector USERNAME_TEXTBOX = _cssSelector.descendant(_id("username"));
+    private static final SnCssSelector PASSWORD_TEXTBOX = _cssSelector.descendant(_id("password"));
+    private static final SnCssSelector LOGIN_BUTTON = _cssSelector.descendant(_tag("button"), _type().is("submit"));
+    
+    @Override
+    protected void waitForDisplayed() {
+        waitForComponent(userNameTextbox);
+    }
+    
+    public final SnTextbox userNameTextbox = $textbox(USERNAME_TEXTBOX);
+    public final SnTextbox passwordTextbox = $textbox(PASSWORD_TEXTBOX);
+    public final SnButton loginButton = $button(LOGIN_BUTTON);
+}
+```
+
+- All Selion classes are prefixed with "Sn". This makes it clear about classes that are part of Selion Framework.
+- All page class must extend from **SnPage** or one of its subclass. This provides access to properties and methods for 
+ constructing selectors and defining components.
+- Selectors are defined at the top. Selectors can be either **SnCssSelector** or **SnXPath**. Regardless of which is used, the syntax is similar.
+Generally CSS selectors are faster while XPath offer more complex features.
+- Since textbox and button are both standard HTML form element, they are already defined in Selion Framework.
+- Both selector object and component object name ends with the component type (i.e., USERNAME_**TEXTBOX**, username**Textbox**). This practice is recommended to keep the test code easily legible.
+- Overriding **waitForDisplayed** is optional. The page would automatically wait for the page to complete loading. However, if additional wait is needed (i.e., Ajax based components require more wait to fully load), that can be implemented here. In this case, in addition to waiting for the page to load, it also waits for the username textbox to be displayed.  
+
+Once the page is defined, writing a test is straight forward (Written with TestNG).
+
+```
+(imports and package are omitted)
+
+public class SnExampleTest {
+    private final SnWithPage<SnLoginPage> loginPage = SnPage.with(SnLoginPage.class);
+
+    @BeforeClass
+    public void setup() {
+        Selion.open("file://" + System.getProperty("user.dir") + "/build/resources/main/html/login.htm");
+    }
+
+    @AfterClass(alwaysRun = true)
+    public void finish() {
+        Selion.quit();
+    }
+
+    @Test
+    public void testLogin() {
+        loginPage.inPage(p -> {
+            p.userNameTextbox.enterText("test");
+            p.passwordTextbox.enterText("test");
+            p.loginButton.click();
+        });
+    }
+}
+```
+
+- The pages being used is defined at the top using **SnWithPage** class. This gives access to the page content by using **inPage()** method.
+- When entering **inPage()** method, the page waits for the page to load without additional code. If **waitForDisplayed** of the page is overridden, that would also be executed.
+- Because components are defined with respective component type, only relevant methods are available, like *click* for button and *enterText* for textbox.
+- Before actions take place (i.e., click, enterText), the framework automatically checks for component's existence, ensure that it is displayed, check to ensure it is enabled (if needed), then scroll to the component.
+This is to keep the test code focused only on actions, without cluttering it up with other code like checking for displayed or scrolling to component.
+
+## Writing a Component Class
+
+The previous example only contained simple components. But the example below adds a dropdown.
+
+![login-enhanced-page.png](readme_files/login-enhanced-page.png)
+
+The dropdown on this page is SlimSelect, which is stylized and provides more enhanced user experiences than standard select dropdown.
+
+![slimselect-source.png](readme_files/slimselect-source.png)
+
+Looking at the source doe, while the select element does exist on the page, it is not visible, so any attempt to directly interact with it would throw error. 
+The actual visual elements are div tag under the select.
+
+Because it is not a standard select dropdown, it needs to be defined.
 

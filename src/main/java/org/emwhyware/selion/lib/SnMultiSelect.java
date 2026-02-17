@@ -16,7 +16,7 @@ public class SnMultiSelect extends SnFormComponent {
     }
 
     public void select(String... texts) {
-        final Select select = new Select(this.scrolled());
+        final Select select = new Select(this.scrolledElement());
         final List<String> notFoundTexts = new ArrayList<>();
 
         for (String text : texts) {
@@ -43,7 +43,7 @@ public class SnMultiSelect extends SnFormComponent {
     }
 
     public void deselect(String... texts) {
-        final Select select = new Select(this.scrolled());
+        final Select select = new Select(this.scrolledElement());
         final List<String> notFoundTexts = new ArrayList<>();
 
         for (String text : texts) {
@@ -70,15 +70,15 @@ public class SnMultiSelect extends SnFormComponent {
     }
 
     public void clear() {
-        new Select(this.scrolled()).deselectAll();
+        new Select(this.scrolledElement()).deselectAll();
     }
 
     public List<String> selectedTexts() {
-        return new Select(this.scrolled()).getAllSelectedOptions().stream().map(WebElement::getText).toList();
+        return new Select(this.scrolledElement()).getAllSelectedOptions().stream().map(WebElement::getText).toList();
     }
 
 
     public List<String> optionTexts() {
-        return new Select(existing()).getOptions().stream().map(e -> e.getText().trim()).toList();
+        return new Select(existingElement()).getOptions().stream().map(e -> e.getText().trim()).toList();
     }
 }

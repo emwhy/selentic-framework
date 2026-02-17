@@ -427,7 +427,7 @@ public class SnUiComponentTest {
 
             try {
                 p.testNonExistingLink.click();
-            } catch (SnComponentNotDisplayedException ex) {
+            } catch (SnElementNotFoundException ex) {
                 // Expected.
             }
 

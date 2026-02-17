@@ -90,10 +90,10 @@ public class SnComponentCollection<T extends SnComponent> implements Iterable<T>
      * @return A list of live WebElements.
      */
     private List<WebElement> webElements() {
-        if (this.$callerComponent.isEmpty() || this.selector instanceof SnXPathPage) {
+        if (this.$callerComponent.isEmpty() || this.selector instanceof SnXPathPage || this.selector instanceof SnCssSelectorPage) {
             return Selion.driver().findElements(this.selector.build());
         } else {
-            return this.$callerComponent.get().existing().findElements(
+            return this.$callerComponent.get().existingElement().findElements(
                     this.selector instanceof SnXPath ? ((SnXPath) this.selector).build(true) : this.selector.build());
         }
     }

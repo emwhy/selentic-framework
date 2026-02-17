@@ -443,7 +443,7 @@ public final class Selion {
      */
     public static Object executeScript(String script, Object... params) {
         final JavascriptExecutor executor = (JavascriptExecutor) driver();
-        final Object[] objects = Arrays.stream(params).map(o -> o instanceof SnComponent ? ((SnComponent) o).existing() : o).toArray();
+        final Object[] objects = Arrays.stream(params).map(o -> o instanceof SnComponent ? ((SnComponent) o).existingElement() : o).toArray();
 
         return executor.executeScript(script, objects);
     }
@@ -476,7 +476,7 @@ public final class Selion {
      */
     public static String executeAsyncScript(String script, Object... params) {
         final JavascriptExecutor executor = (JavascriptExecutor) driver();
-        final List<Object> objects = Arrays.stream(params).map(o -> o instanceof SnComponent ? ((SnComponent) o).existing() : o).toList();
+        final List<Object> objects = Arrays.stream(params).map(o -> o instanceof SnComponent ? ((SnComponent) o).existingElement() : o).toList();
 
         return String.valueOf(executor.executeAsyncScript(script, objects));
     }

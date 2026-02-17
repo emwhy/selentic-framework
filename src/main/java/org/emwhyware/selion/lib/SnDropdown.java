@@ -16,7 +16,7 @@ public class SnDropdown extends SnFormComponent {
     }
 
     public void select(String text) {
-        final Select select = new Select(this.scrolled());
+        final Select select = new Select(this.scrolledElement());
 
         select.selectByVisibleText(text);
     }
@@ -32,13 +32,13 @@ public class SnDropdown extends SnFormComponent {
     }
 
     public String selectedText() {
-        final Select select = new Select(this.existing());
+        final Select select = new Select(this.existingElement());
 
         return select.getFirstSelectedOption().getText();
     }
 
     public List<String> optionTexts() {
-        final Select select = new Select(this.existing());
+        final Select select = new Select(this.existingElement());
 
         return select.getOptions().stream().map(e -> e.getText().trim()).toList();
     }

@@ -919,6 +919,11 @@ public abstract class SnAbstractComponent {
         $$components.setSelector(selector);
         $$components.setComponentType(componentType);
         $$components.setOwnerPage(this);
+        if (this instanceof SnComponent $this) {
+            $$components.setOwnerPage($this.ownerPage());
+        } else {
+            $$components.setOwnerPage(this);
+        }
 
         return $$components;
     }
@@ -963,7 +968,11 @@ public abstract class SnAbstractComponent {
         $$components.setSelector(selector);
         $$components.setComponentType(componentType);
         $$components.setContainingObject(containingObject);
-        $$components.setOwnerPage(this);
+        if (this instanceof SnComponent $this) {
+            $$components.setOwnerPage($this.ownerPage());
+        } else {
+            $$components.setOwnerPage(this);
+        }
 
         return $$components;
     }
@@ -1016,7 +1025,11 @@ public abstract class SnAbstractComponent {
             $$components = componentCollectionType.getDeclaredConstructor().newInstance();
             $$components.setSelector(selector);
             $$components.setComponentType(componentType);
-            $$components.setOwnerPage(this);
+            if (this instanceof SnComponent $this) {
+                $$components.setOwnerPage($this.ownerPage());
+            } else {
+                $$components.setOwnerPage(this);
+            }
             return $$components;
         } catch (Exception ex) {
             throw new SnComponentCreationException(ex);
@@ -1115,7 +1128,7 @@ public abstract class SnAbstractComponent {
 
         try {
             $frame.waitForDisplayed();
-            webDriver.switchTo().frame($frame.scrolled());
+            webDriver.switchTo().frame($frame.scrolledElement());
 
             $frameContent.waitForPage();
             predicate.inFrame($frameContent);
