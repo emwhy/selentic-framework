@@ -7,7 +7,7 @@ import org.openqa.selenium.WebDriver;
 import org.slf4j.Logger;
 
 /**
- * {@code SnAbstractComponent} is the abstract base class for all components and pages.
+ * {@code ScAbstractComponent} is the abstract base class for all components and pages.
  * It provides a comprehensive methods for creating, locating, and interacting with UI components through a
  * fluent, declarative syntax.
  *
@@ -236,10 +236,10 @@ public abstract class ScAbstractComponent {
      * }</pre>
      * 
      *
-     * @return a {@link SnSelectorTextCondition} for building text-based selectors
+     * @return a {@link ScSelectorTextCondition} for building text-based selectors
      */
-    protected static SnSelectorTextCondition _text() {
-        return new SnSelectorTextCondition();
+    protected static ScSelectorTextCondition _text() {
+        return new ScSelectorTextCondition();
     }
 
     /**
@@ -545,15 +545,15 @@ public abstract class ScAbstractComponent {
      * Creates a generic component with the specified selector.
      *
      * <p>
-     * This is a convenience method equivalent to {@code $component(selector, SnGenericComponent.class)}.
+     * This is a convenience method equivalent to {@code $component(selector, ScGenericComponent.class)}.
      * Use this when you need a basic component without specific functionality.
      * 
      *
      * <p>
      * <strong>Example:</strong>
      * <pre>{@code
-     * private static final SnCssSelector HEADER_TEXT = _cssSelector.descendant(_cssClasses("header"));
-     * public final SnGenericComponent headerText = $genericComponent(HEADER_TEXT);
+     * private static final ScCssSelector HEADER_TEXT = _cssSelector.descendant(_cssClasses("header"));
+     * public final ScGenericComponent headerText = $genericComponent(HEADER_TEXT);
      * }</pre>
      * 
      *
@@ -568,15 +568,15 @@ public abstract class ScAbstractComponent {
      * Creates a textbox component with the specified selector.
      *
      * <p>
-     * This is a convenience method equivalent to {@code $component(selector, SnTextbox.class)}.
+     * This is a convenience method equivalent to {@code $component(selector, ScTextbox.class)}.
      * Use this for input elements where text entry is needed.
      * 
      *
      * <p>
      * <strong>Example:</strong>
      * <pre>{@code
-     * private static final SnCssSelector USERNAME_TEXTBOX = _cssSelector.descendant(_id("username"));
-     * public final SnTextbox usernameTextbox = $textbox(USERNAME_TEXTBOX);
+     * private static final ScCssSelector USERNAME_TEXTBOX = _cssSelector.descendant(_id("username"));
+     * public final ScTextbox usernameTextbox = $textbox(USERNAME_TEXTBOX);
      *
      * // In test code
      * page.usernameTextbox.enterText("john_doe");
@@ -594,15 +594,15 @@ public abstract class ScAbstractComponent {
      * Creates a checkbox component with the specified selector.
      *
      * <p>
-     * This is a convenience method equivalent to {@code $component(selector, SnCheckbox.class)}.
+     * This is a convenience method equivalent to {@code $component(selector, ScCheckbox.class)}.
      * Use this for checkbox input elements.
      * 
      *
      * <p>
      * <strong>Example:</strong>
      * <pre>{@code
-     * private static final SnCssSelector REMEMBER_ME_CHECKBOX = _cssSelector.descendant(_id("rememberMe"));
-     * public final SnCheckbox rememberMeCheckbox = $checkbox(REMEMBER_ME_CHECKBOX);
+     * private static final ScCssSelector REMEMBER_ME_CHECKBOX = _cssSelector.descendant(_id("rememberMe"));
+     * public final ScCheckbox rememberMeCheckbox = $checkbox(REMEMBER_ME_CHECKBOX);
      *
      * // In test code
      * page.rememberMeCheckbox.select();
@@ -620,15 +620,15 @@ public abstract class ScAbstractComponent {
      * Creates a dropdown component with the specified selector.
      *
      * <p>
-     * This is a convenience method equivalent to {@code $component(selector, SnDropdown.class)}.
+     * This is a convenience method equivalent to {@code $component(selector, ScDropdown.class)}.
      * Use this for HTML select elements with single selection.
      * 
      *
      * <p>
      * <strong>Example:</strong>
      * <pre>{@code
-     * private static final SnCssSelector COUNTRY_DROPDOWN = _cssSelector.descendant(_id("country"));
-     * public final SnDropdown countryDropdown = $dropdown(COUNTRY_DROPDOWN);
+     * private static final ScCssSelector COUNTRY_DROPDOWN = _cssSelector.descendant(_id("country"));
+     * public final ScDropdown countryDropdown = $dropdown(COUNTRY_DROPDOWN);
      *
      * // In test code
      * page.countryDropdown.select("United States");
@@ -646,15 +646,15 @@ public abstract class ScAbstractComponent {
      * Creates a multi-select component with the specified selector.
      *
      * <p>
-     * This is a convenience method equivalent to {@code $component(selector, SnMultiSelect.class)}.
+     * This is a convenience method equivalent to {@code $component(selector, ScMultiSelect.class)}.
      * Use this for HTML select elements with multiple selection enabled.
      * 
      *
      * <p>
      * <strong>Example:</strong>
      * <pre>{@code
-     * private static final SnCssSelector INTERESTS_MULTISELECT = _cssSelector.descendant(_id("interests"));
-     * public final SnMultiSelect interestsMultiSelect = $multiSelect(INTERESTS_MULTISELECT);
+     * private static final ScCssSelector INTERESTS_MULTISELECT = _cssSelector.descendant(_id("interests"));
+     * public final ScMultiSelect interestsMultiSelect = $multiSelect(INTERESTS_MULTISELECT);
      *
      * // In test code
      * page.interestsMultiSelect.select("Sports", "Music", "Reading");
@@ -672,15 +672,15 @@ public abstract class ScAbstractComponent {
      * Creates a link component with the specified selector.
      *
      * <p>
-     * This is a convenience method equivalent to {@code $component(selector, SnLink.class)}.
+     * This is a convenience method equivalent to {@code $component(selector, ScLink.class)}.
      * Use this for anchor (&lt;a&gt;) elements.
      * 
      *
      * <p>
      * <strong>Example:</strong>
      * <pre>{@code
-     * private static final SnCssSelector LOGOUT_LINK = _cssSelector.descendant(_cssClasses("Logout"));
-     * public final SnLink logoutLink = $link(LOGOUT_LINK);
+     * private static final ScCssSelector LOGOUT_LINK = _cssSelector.descendant(_cssClasses("Logout"));
+     * public final ScLink logoutLink = $link(LOGOUT_LINK);
      *
      * // In test code
      * page.logoutLink.click();
@@ -698,15 +698,15 @@ public abstract class ScAbstractComponent {
      * Creates a button component with the specified selector.
      *
      * <p>
-     * This is a convenience method equivalent to {@code $component(selector, SnButton.class)}.
+     * This is a convenience method equivalent to {@code $component(selector, ScButton.class)}.
      * Use this for button (&lt;button&gt;) elements or input button (&lt;input type="button|submit|reset"&gt;) elements.
      * 
      *
      * <p>
      * <strong>Example:</strong>
      * <pre>{@code
-     * private static final SnCssSelector LOGOUT_BUTTON = _cssSelector.descendant(_id("Logout"));
-     * public final SnButton logoutButton = $button(LOGOUT_BUTTON);
+     * private static final ScCssSelector LOGOUT_BUTTON = _cssSelector.descendant(_id("Logout"));
+     * public final ScButton logoutButton = $button(LOGOUT_BUTTON);
      *
      * // In test code
      * page.logoutLink.click();
@@ -724,15 +724,15 @@ public abstract class ScAbstractComponent {
      * Creates an image component with the specified selector.
      *
      * <p>
-     * This is a convenience method equivalent to {@code $component(selector, SnImage.class)}.
+     * This is a convenience method equivalent to {@code $component(selector, ScImage.class)}.
      * Use this for image (&lt;img&gt;) elements.
      * 
      *
      * <p>
      * <strong>Example:</strong>
      * <pre>{@code
-     * private static final SnCssSelector LOGO_IMAGE = _cssSelector.descendant(_className("logo"));
-     * public final SnImage logoImage = $image(LOGO_IMAGE);
+     * private static final ScCssSelector LOGO_IMAGE = _cssSelector.descendant(_className("logo"));
+     * public final ScImage logoImage = $image(LOGO_IMAGE);
      *
      * // In test code
      * String imageSrc = page.logoImage.source();
@@ -751,15 +751,15 @@ public abstract class ScAbstractComponent {
      *
      * <p>
      * This method creates a collection of radio buttons that are treated as a group.
-     * It's equivalent to {@code $$components(selector, SnRadioButton.class, SnRadioButtonGroup.class)}.
+     * It's equivalent to {@code $$components(selector, ScRadioButton.class, ScRadioButtonGroup.class)}.
      * Use this for groups of radio buttons that share the same name attribute.
      * 
      *
      * <p>
      * <strong>Example:</strong>
      * <pre>{@code
-     * private static final SnCssSelector GENDER_RADIO_BUTTONS = _cssSelector.descendant(_attr("name").is("gender"));
-     * public final SnRadioButtonGroup genderRadioButtons = $radioButtons(GENDER_RADIO_BUTTONS);
+     * private static final ScCssSelector GENDER_RADIO_BUTTONS = _cssSelector.descendant(_attr("name").is("gender"));
+     * public final ScRadioButtonGroup genderRadioButtons = $radioButtons(GENDER_RADIO_BUTTONS);
      *
      * // In test code
      * page.genderRadioButtons.select("male");
@@ -812,8 +812,8 @@ public abstract class ScAbstractComponent {
      * <p>
      * <strong>Usage Example:</strong>
      * <pre>{@code
-     * private static final SnCssSelector LOGIN_BUTTON = _cssSelector.descendant(_id("login"));
-     * public final SnButton loginButton = $component(LOGIN_BUTTON, SnButton.class);
+     * private static final ScCssSelector LOGIN_BUTTON = _cssSelector.descendant(_id("login"));
+     * public final ScButton loginButton = $component(LOGIN_BUTTON, ScButton.class);
      * }</pre>
      * 
      *
@@ -888,11 +888,11 @@ public abstract class ScAbstractComponent {
      * <p>
      * <strong>Usage Example:</strong>
      * <pre>{@code
-     * private static final SnCssSelector TABLE_ROWS = _cssSelector.descendant(_className("table-row"));
-     * public final SnComponentCollection<SnTableRow> rows = $$components(TABLE_ROWS, SnTableRow.class);
+     * private static final ScCssSelector TABLE_ROWS = _cssSelector.descendant(_className("table-row"));
+     * public final ScComponentCollection<ScTableRow> rows = $$components(TABLE_ROWS, ScTableRow.class);
      *
      * // In test code
-     * for (SnTableRow row : page.rows) {
+     * for (ScTableRow row : page.rows) {
      *     System.out.println(row.text());
      * }
      * }</pre>
@@ -936,8 +936,8 @@ public abstract class ScAbstractComponent {
      * <p>
      * <strong>Usage Example:</strong>
      * <pre>{@code
-     * private static final SnCssSelector ITEMS = _cssSelector.className("item");
-     * public final SnComponentCollection<CartItem> items = $$components(ITEMS, CartItem.class, this);
+     * private static final ScCssSelector ITEMS = _cssSelector.className("item");
+     * public final ScComponentCollection<CartItem> items = $$components(ITEMS, CartItem.class, this);
      * }</pre>
      * 
      *
@@ -982,11 +982,11 @@ public abstract class ScAbstractComponent {
      * <p>
      * <strong>Usage Example:</strong>
      * <pre>{@code
-     * public class MenuItemCollection extends SnComponentCollection<MenuItem> {
+     * public class MenuItemCollection extends ScComponentCollection<MenuItem> {
      *  ...
      * }
      *
-     * private static final SnCssSelector MENU_ITEMS = _cssSelector.descendant(_className("menu-item"));
+     * private static final ScCssSelector MENU_ITEMS = _cssSelector.descendant(_className("menu-item"));
      * public final MenuItemCollection menu = $$components(MENU_ITEMS, MenuItem.class, MenuItemCollection.class);
      * }</pre>
      * 
@@ -1039,10 +1039,10 @@ public abstract class ScAbstractComponent {
      * <p>
      * <strong>Usage Example:</strong>
      * <pre>{@code
-     * private static final SnCssSelector IFRAME = _cssSelector.id("embedded-content");
+     * private static final ScCssSelector IFRAME = _cssSelector.id("embedded-content");
      *
      * @Override
-     * public final void inEmbeddedFrameContentFrame(SnFrameAction<EmbeddedFrameContent> predicate) {
+     * public final void inEmbeddedFrameContentFrame(ScFrameAction<EmbeddedFrameContent> predicate) {
      *     $frame(IFRAME, EmbeddedFrameContent.class, predicate);
      * }
      * }</pre>
@@ -1141,10 +1141,10 @@ public abstract class ScAbstractComponent {
      * <p>
      * <strong>Usage Example:</strong>
      * <pre>{@code
-     * private static final SnXPath SANITYTEST_DIALOG = _xpath.descendant("div", _id().is("sanitytest-dialog"));
+     * private static final ScXPath SANITYTEST_DIALOG = _xpath.descendant("div", _id().is("sanitytest-dialog"));
      *
-     * public void inSanityTestDialog(SnDialogAction<SnSanityTestDialog> predicate) {
-     *     $dialog(SANITYTEST_DIALOG, SnSanityTestDialog.class, predicate);
+     * public void inSanityTestDialog(ScDialogAction<ScSanityTestDialog> predicate) {
+     *     $dialog(SANITYTEST_DIALOG, ScSanityTestDialog.class, predicate);
      * }
      *
      * // In test code

@@ -3,7 +3,7 @@ package org.emwhyware.selentic.lib;
 /**
  * Configuration class for customizing element scroll behavior for {@link ScComponent}.
  * <p>
- * The {@code SnScrollOptions} class encapsulates scroll options that control how elements
+ * The {@code ScScrollOptions} class encapsulates scroll options that control how elements
  * are scrolled into view on the page. It implements the builder pattern, allowing for
  * fluent configuration of scroll behavior, vertical alignment (block), and horizontal
  * alignment (inline).
@@ -19,7 +19,7 @@ package org.emwhyware.selentic.lib;
  * <h3>Usage Example:</h3>
  * <pre>
  * // You can only get this inside of a subclass of {@link ScComponent} because methods are protected.
- * this.scrolled(this.scrollOptions().behavior(SnScrollOptions.Behavior.instant).block(SnScrollOptions.Block.center)).
+ * this.scrolled(this.scrollOptions().behavior(ScScrollOptions.Behavior.instant).block(ScScrollOptions.Block.center)).
  *
  * </pre>
  *
@@ -48,7 +48,7 @@ public class ScScrollOptions {
     private Inline inline;
 
     /**
-     * Constructs a new {@code SnScrollOptions} with default scroll configuration.
+     * Constructs a new {@code ScScrollOptions} with default scroll configuration.
      * <p>
      * The default settings are:
      * <ul>
@@ -79,7 +79,7 @@ public class ScScrollOptions {
      * 
      *
      * @param behavior the scroll behavior, must not be null
-     * @return this {@code SnScrollOptions} instance for method chaining
+     * @return this {@code ScScrollOptions} instance for method chaining
      * @throws NullPointerException if behavior is null
      */
     public ScScrollOptions behavior(Behavior behavior) {
@@ -100,7 +100,7 @@ public class ScScrollOptions {
      * 
      *
      * @param block the vertical alignment option, must not be null
-     * @return this {@code SnScrollOptions} instance for method chaining
+     * @return this {@code ScScrollOptions} instance for method chaining
      * @throws NullPointerException if block is null
      */
     public ScScrollOptions block(Block block) {
@@ -121,7 +121,7 @@ public class ScScrollOptions {
      * 
      *
      * @param inline the horizontal alignment option, must not be null
-     * @return this {@code SnScrollOptions} instance for method chaining
+     * @return this {@code ScScrollOptions} instance for method chaining
      * @throws NullPointerException if inline is null
      */
     public ScScrollOptions inline(Inline inline) {

@@ -16,7 +16,7 @@ import java.util.stream.StreamSupport;
  * supporting lazy-loading of {@link WebElement}s and functional-style operations like
  * filtering and mapping.
  *
- * @param <T> The specific type of {@link ScComponent} contained in this collection (e.g., SnButton, SnTextField).
+ * @param <T> The specific type of {@link ScComponent} contained in this collection (e.g., ScButton, ScTextField).
  * @see ScComponent
  * @see ScAbstractPage
  */

@@ -1,8 +1,8 @@
 package org.emwhyware.selentic.lib;
 
-public class SnSelectorTextCondition {
+public class ScSelectorTextCondition {
 
-    SnSelectorTextCondition() {
+    ScSelectorTextCondition() {
     }
 
     public ScSelectorTextProperty is(String text) {

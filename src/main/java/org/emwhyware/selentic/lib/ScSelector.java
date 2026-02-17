@@ -7,7 +7,7 @@ import java.util.Optional;
 /**
  * Abstract sealed base class for web element selectors.
  * <p>
- * The {@code SnSelector} class defines a hierarchical selector pattern that allows building
+ * The {@code ScSelector} class defines a hierarchical selector pattern that allows building
  * complex element locators by chaining multiple selector nodes together.
  * 
  *

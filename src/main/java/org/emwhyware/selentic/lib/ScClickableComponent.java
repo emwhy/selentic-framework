@@ -8,7 +8,7 @@ import org.openqa.selenium.WebElement;
 /**
  * Abstract base class for web components that support click interactions.
  * <p>
- * The {@code SnClickableComponent} extends {@link ScComponent} and provides functionality for
+ * The {@code ScClickableComponent} extends {@link ScComponent} and provides functionality for
  * interactive web elements that can be clicked, such as buttons, links, and clickable divs.
  * All click operations are guarded by automatic wait and enabled checks to ensure elements
  * are in a valid state before interaction.

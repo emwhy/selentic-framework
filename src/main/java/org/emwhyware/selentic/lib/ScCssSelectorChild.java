@@ -1,7 +1,7 @@
 package org.emwhyware.selentic.lib;
 
 /**
- * {@code SnCssSelectorChild} represents a CSS selector using the child combinator ({@code >}).
+ * {@code ScCssSelectorChild} represents a CSS selector using the child combinator ({@code >}).
  *
  * <p>
  * This class selects elements that are direct children of a parent element, as opposed to
@@ -17,11 +17,11 @@ package org.emwhyware.selentic.lib;
  * <h2>Usage Example</h2>
  * <pre>{@code
  * // Select button directly inside form
- * SnCssSelector button = _cssSelector.descendant(_id("container"))
+ * ScCssSelector button = _cssSelector.descendant(_id("container"))
  *                                    .child(_cssClasses("submit"));
  *
  * // Select list items directly inside unordered list
- * SnCssSelector items = _cssSelector.descendant(_tag("ul"), _id("menu"))
+ * ScCssSelector items = _cssSelector.descendant(_tag("ul"), _id("menu"))
  *                                   .child("li");
  * }</pre>
  *
@@ -31,7 +31,7 @@ package org.emwhyware.selentic.lib;
 public final class ScCssSelectorChild extends ScCssSelector {
 
     /**
-     * Constructs an {@code SnCssSelectorChild} with a prior selector node and optional properties.
+     * Constructs an {@code ScCssSelectorChild} with a prior selector node and optional properties.
      *
      * <p>
      * This constructor is package-private and called internally by the framework. Use the fluent API

@@ -1,7 +1,7 @@
 package org.emwhyware.selentic.lib;
 
 /**
- * {@code SnButton} is a component class that represents button elements in web pages.
+ * {@code ScButton} is a component class that represents button elements in web pages.
  *
  * <p>
  * This class handles both HTML button elements ({@code <button>}) and input elements with button-like types
@@ -38,18 +38,18 @@ package org.emwhyware.selentic.lib;
  * <h2>Usage Examples</h2>
  * <pre>{@code
  * // Define button components in a page class
- * public class LoginPage extends SnPage {
- *     private static final SnCssSelector SUBMIT_BUTTON = _cssSelector.descendant(_id("submit-btn"));
- *     private static final SnCssSelector RESET_BUTTON = _cssSelector.descendant(_id("reset-btn"));
+ * public class LoginPage extends ScPage {
+ *     private static final ScCssSelector SUBMIT_BUTTON = _cssSelector.descendant(_id("submit-btn"));
+ *     private static final ScCssSelector RESET_BUTTON = _cssSelector.descendant(_id("reset-btn"));
  *
- *     public final SnButton resetButton = $component(RESET_BUTTON, SnButton.class);
+ *     public final ScButton resetButton = $component(RESET_BUTTON, ScButton.class);
  *
  *     // Shorthand.
- *     public final SnButton submitButton = $button(SUBMIT_BUTTON);
+ *     public final ScButton submitButton = $button(SUBMIT_BUTTON);
  * }
  *
  * // In test code
- * final SnWithPage<LoginPage> loginPage = SnPage.with(LoginPage.class);
+ * final ScWithPage<LoginPage> loginPage = ScPage.with(LoginPage.class);
  *
  * loginPage.inPage(p -> {
  *      // Click a button

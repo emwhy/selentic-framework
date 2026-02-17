@@ -9,8 +9,8 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import java.time.Duration;
 
 /**
- * {@code SnPage} is the concrete base class for all page classes in the Selentic Framework.
- * All page classes must extend from {@code SnPage} when defined.
+ * {@code ScPage} is the concrete base class for all page classes in the Selentic Framework.
+ * All page classes must extend from {@code ScPage} when defined.
  *
  * <p>
  * This class extends {@link ScAbstractPage} and provides common page functionality including:
@@ -22,7 +22,7 @@ import java.time.Duration;
  *
  *
  * <p>
- * <strong>Page Creation Pattern:</strong> {@code SnPage} provides a method for creating
+ * <strong>Page Creation Pattern:</strong> {@code ScPage} provides a method for creating
  * and initializing page instances using the {@code with(Class)} factory method. This allows
  * for clean, readable page creation in test code.
  * 
@@ -30,14 +30,14 @@ import java.time.Duration;
  * <p>
  * <strong>Typical Usage:</strong>
  * <pre>{@code
- * public class HomePage extends SnPage {
- *     private static final SnCssSelector SEARCH_TEXTBOX = _cssSelector.descendant(_id("search"));
- *     private static final SnCssSelector SEARCH_BUTTON = _cssSelector.descendant(_id("search-btn"));
- *     private static final SnCssSelector HEADER_TEXT = _cssSelector.descendant(_className("header"));
+ * public class HomePage extends ScPage {
+ *     private static final ScCssSelector SEARCH_TEXTBOX = _cssSelector.descendant(_id("search"));
+ *     private static final ScCssSelector SEARCH_BUTTON = _cssSelector.descendant(_id("search-btn"));
+ *     private static final ScCssSelector HEADER_TEXT = _cssSelector.descendant(_className("header"));
  *
- *     public final SnTextbox searchTextbox = $textbox(SEARCH_BOX);
- *     public final SnButton searchButton = $button(SEARCH_BUTTON);
- *     public final SnGenericComponent headerText = $genericComponent(HEADER);
+ *     public final ScTextbox searchTextbox = $textbox(SEARCH_BOX);
+ *     public final ScButton searchButton = $button(SEARCH_BUTTON);
+ *     public final ScGenericComponent headerText = $genericComponent(HEADER);
  *
  *     @Override
  *     protected void waitForDisplayed() {
@@ -47,7 +47,7 @@ import java.time.Duration;
  * }
  *
  * // In test code
- * final SnWithPage<HomePage> homePage = SnPage.with(HomePage.class);
+ * final ScWithPage<HomePage> homePage = ScPage.with(HomePage.class);
  *
  * homePage.inPage(p -> {
  *      p.searchTextbox.enterText("Selenium");
@@ -66,8 +66,8 @@ import java.time.Duration;
  *   <li><strong>Page Reload:</strong> Reload the current page and wait for it to fully load
  *       using {@link #reload()}.</li>
  *   <li><strong>Window Management:</strong> Control browser windows and perform window-specific
- *       operations through {@link #inWindow(ScWithPage, ScWindow.SnWindowAction)} and
- *       {@link #inWindow(ScWithPage, ScWindow.SnWindowActionWithController)}.</li>
+ *       operations through {@link #inWindow(ScWithPage, ScWindow.ScWindowAction)} and
+ *       {@link #inWindow(ScWithPage, ScWindow.ScWindowActionWithController)}.</li>
  * </ul>
  *
  *
@@ -86,12 +86,12 @@ public abstract class ScPage extends ScAbstractPage {
      * <strong>Usage Example:</strong>
      * <pre>{@code
      * // Create and initialize page.
-     * final SnWithPage<HomePage> homePage = SnPage.with(HomePage.class);
+     * final ScWithPage<HomePage> homePage = ScPage.with(HomePage.class);
      * }</pre>
      * 
      *
      * @param <T> the page type to create
-     * @param pageType the class of the page to create; must extend from {@code SnPage}
+     * @param pageType the class of the page to create; must extend from {@code ScPage}
      * @return a {@link ScWithPage} fluent builder for the specified page type
      *
      * @see ScWithPage
@@ -101,7 +101,7 @@ public abstract class ScPage extends ScAbstractPage {
     }
 
     /**
-     * Protected constructor for {@code SnPage}.
+     * Protected constructor for {@code ScPage}.
      *
      * <p>
      * Page instances should not be created directly through the constructor.
@@ -128,7 +128,7 @@ public abstract class ScPage extends ScAbstractPage {
      * <p>
      * <strong>Usage Example:</strong>
      * <pre>{@code
-     * final SnWithPage<HomePage> homePage = SnPage.with(HomePage.class);
+     * final ScWithPage<HomePage> homePage = ScPage.with(HomePage.class);
      *
      * homePage.inPage(p -> {
      *      // Get the page title text
@@ -177,7 +177,7 @@ public abstract class ScPage extends ScAbstractPage {
      * <p>
      * <strong>Usage Example:</strong>
      * <pre>{@code
-     *  final SnWithPage<HomePage> homePage = SnPage.with(HomePage.class);
+     *  final ScWithPage<HomePage> homePage = ScPage.with(HomePage.class);
      *
      *  homePage.inPage(p -> {
      *      // Perform some actions
@@ -219,8 +219,8 @@ public abstract class ScPage extends ScAbstractPage {
      * <p>
      * <strong>Usage Example:</strong>
      * <pre>{@code
-     *  final SnWithPage<HomePage> homePage = SnPage.with(HomePage.class);
-     *  final SnWithPage<ExternalPage> exPage = SnPage.with(ExternalPage.class);
+     *  final ScWithPage<HomePage> homePage = ScPage.with(HomePage.class);
+     *  final ScWithPage<ExternalPage> exPage = ScPage.with(ExternalPage.class);
      *
      *  homePage.inPage(p -> {
      *      // Click a link that opens a new window
@@ -242,13 +242,13 @@ public abstract class ScPage extends ScAbstractPage {
      * }</pre>
      * 
      *
-     * @param predicate a {@link ScWindow.SnWindowAction} functional interface containing
+     * @param predicate a {@link ScWindow.ScWindowAction} functional interface containing
      *                  the action to perform within the window context
      *
      * @see ScWindow
-     * @see ScWindow.SnWindowAction
+     * @see ScWindow.ScWindowAction
      */
-    public <T extends ScPage> void inWindow(ScWithPage<T> withPage, ScWindow.SnWindowAction<T> predicate) {
+    public <T extends ScPage> void inWindow(ScWithPage<T> withPage, ScWindow.ScWindowAction<T> predicate) {
         new ScWindow().inWindow(withPage, predicate);
     }
 
@@ -257,7 +257,7 @@ public abstract class ScPage extends ScAbstractPage {
      *
      * <p>
      * This method allows executing test code within a different browser window with access to
-     * a {@link ScWindow.SnWindowActionWithController} that provides methods for controlling window behavior.
+     * a {@link ScWindow.ScWindowActionWithController} that provides methods for controlling window behavior.
      * The framework automatically handles window switching and cleanup, ensuring that the
      * original window is restored after the action completes.
      * 
@@ -271,8 +271,8 @@ public abstract class ScPage extends ScAbstractPage {
      * <p>
      * <strong>Usage Example:</strong>
      * <pre>{@code
-     *  final SnWithPage<HomePage> homePage = SnPage.with(HomePage.class);
-     *  final SnWithPage<ExternalPage> exPage = SnPage.with(ExternalPage.class);
+     *  final ScWithPage<HomePage> homePage = ScPage.with(HomePage.class);
+     *  final ScWithPage<ExternalPage> exPage = ScPage.with(ExternalPage.class);
      *
      *  homePage.inPage(p -> {
      *      // Click a link that opens a new window
@@ -295,13 +295,13 @@ public abstract class ScPage extends ScAbstractPage {
      * }</pre>
      * 
      *
-     * @param predicate a {@link ScWindow.SnWindowActionWithController} functional interface containing
+     * @param predicate a {@link ScWindow.ScWindowActionWithController} functional interface containing
      *                  the action to perform within the window context with access to window control methods
      *
      * @see ScWindow
-     * @see ScWindow.SnWindowActionWithController
+     * @see ScWindow.ScWindowActionWithController
      */
-    public <T extends ScPage> void inWindow(ScWithPage<T> withPage, ScWindow.SnWindowActionWithController<T> predicate) {
+    public <T extends ScPage> void inWindow(ScWithPage<T> withPage, ScWindow.ScWindowActionWithController<T> predicate) {
         new ScWindow().inWindow(withPage, predicate);
     }
 
@@ -327,7 +327,7 @@ public abstract class ScPage extends ScAbstractPage {
      * <p>
      * <strong>Usage Example:</strong>
      * <pre>{@code
-     *  final SnWithPage<HomePage> homePage = SnPage.with(HomePage.class);
+     *  final ScWithPage<HomePage> homePage = ScPage.with(HomePage.class);
      *
      *  homePage.inPage(p -> {
      *      // Click button that triggers an alert
@@ -349,13 +349,13 @@ public abstract class ScPage extends ScAbstractPage {
      * }</pre>
      * 
      *
-     * @param action a {@link SnAlertAction} functional interface containing the action to perform
+     * @param action a {@link ScAlertAction} functional interface containing the action to perform
      *               with the alert dialog
      *
-     * @see SnAlertAction
+     * @see ScAlertAction
      * @see Alert
      */
-    public void inAlert(SnAlertAction action) {
+    public void inAlert(ScAlertAction action) {
         final WebDriverWait wait = new WebDriverWait(Selentic.driver(), Duration.ofSeconds(1));
         final Alert alert = wait.until(ExpectedConditions.alertIsPresent());
 
@@ -367,7 +367,7 @@ public abstract class ScPage extends ScAbstractPage {
      * Functional interface for performing actions on browser alert dialogs.
      *
      * <p>
-     * This interface is used with the {@link #inAlert(SnAlertAction)} method to handle
+     * This interface is used with the {@link #inAlert(ScAlertAction)} method to handle
      * JavaScript alert, confirm, and prompt dialogs in a functional programming style.
      * 
      *
@@ -382,10 +382,10 @@ public abstract class ScPage extends ScAbstractPage {
      * }</pre>
      *
      *
-     * @see #inAlert(SnAlertAction)
+     * @see #inAlert(ScAlertAction)
      * @see Alert
      */
-    public interface SnAlertAction {
+    public interface ScAlertAction {
         /**
          * Performs an action with the provided alert dialog.
          *

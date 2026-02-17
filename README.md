@@ -9,7 +9,7 @@ Selentic Framework utilizes ***Selenium*** and is written in ***Java*** (Develop
 ## Feature Highlights
 
 - The Component Object Model design allows custom components that are reusable, minimizing re-writing the code to do same or similar actions or copying-and-pasting, allowing less code to maintain.
-- It was designed to provides library to code in strongly pattern based design that are consistent throughout. It making the codes more predictable, legible, and easy to maintain while making it easier to spot any abnormality that could cause unexpected behaviors.
+- It was designed to provides library to code in strongly pattern based design that are consistent throughout. It makes the codes more predictable, legible, and easy to maintain while making it easier to spot any abnormality that could cause unexpected behaviors.
 - It implements automatic wait allows the code to focus on actions and assertions rather than timing, while allowing custom waits for those more difficult cases.
 - It forces indentations for actions on page, frame, external windows, dialog, etc. making it easy to spot where actions are happening.
 - It includes selector builder. This allows both CSS selector and XPath to be implemented in consistent manner while utilizing code highlighting and code suggestions of IDE. 
@@ -44,7 +44,7 @@ The Component Object Model design pattern is often implemented using a Page Obje
 
 - Download the latest **selentic-framework.jar** file from https://github.com/emwhy/selentic-framework/releases/. The release also contains ***selentic-framework-javadoc.jar*** file that contains detailed documentation. When configured, the documentation can be shown right from IDE (such as IntelliJ).
 - Move the file to appropriate location in a project directory (i.e., ./lib).
-- There are additional packages that Selentic depends on. Add reference to these packages. If you are working with Gradle, add dependencies to **build.gradle.kts** file.
+- There are additional packages that Selentic Framework depends on. Add reference to these packages. If you are working with Gradle, add dependencies to **build.gradle.kts** file.
 ```
 dependencies {
     implementation("org.seleniumhq.selenium:selenium-java:4.+")
@@ -59,6 +59,32 @@ dependencies {
     implementation(files("lib/selentic-framework.jar"));
 ```
 - Reload your Gradle. You should now be able to use Selentic classes.
+
+## Configuration File
+
+Selentic configuration file allows setting some configurations before tests start.
+
+Selentic looks for **selentic.conf** file in a classpath. If not found, default values are used.
+
+The following shows the default values that can be modified.
+
+```
+ // Default browser
+ browser = "chrome"  // Options: chrome, firefox, safari, edge
+ 
+ // Wait timeout in milliseconds
+ wait-timeout-millisec = 5000
+ 
+ // Logging configuration
+ log {
+     root-dir = ""              // Default is $user.dir/log. Directory where logs are stored. 
+     root-log-level = "INFO"         // Log level for root logger (TRACE, DEBUG, INFO, WARN, ERROR)
+     selentic-log-level = "DEBUG"      // Log level for Selentic Framework logger (TRACE, DEBUG, INFO, WARN, ERROR)
+     keep-duration-min = 0           // How long to keep logs in minutes (0 = will not keep)
+ }
+
+```
+
 
 ## Writing a Simple Page Class
 
@@ -95,7 +121,7 @@ public class ScLoginPage extends ScPage {
 - Selectors are defined at the top. Selectors can be either **ScCssSelector** or **ScXPath**. Regardless of which is used, the syntax is similar.
 Generally CSS selectors are faster while XPath offer more complex features.
 - Since textbox and button are both standard HTML form element, they are already defined in Selentic Framework.
-- Both selector object and component object name ends with the component type (i.e., USERNAME_**TEXTBOX**, username**Textbox**). This practice is recommended to keep the test code easily legible.
+- Both selector object and component object name end with the component type (i.e., USERNAME_**TEXTBOX**, username**Textbox**). This practice is recommended to keep the test code easily legible.
 - Overriding **waitForDisplayed** is optional. The page would automatically wait for the page to complete loading. However, if additional wait is needed (i.e., Ajax based components require more wait to fully load), that can be implemented here. In this case, in addition to waiting for the page to load, it also waits for the username textbox to be displayed.  
 
 Once the page is defined, writing a test is straight forward (Written with TestNG).
@@ -153,7 +179,7 @@ Because it is not a standard select dropdown, it needs to be defined.
 
 ### Creating the Component Class
 
-To get started, we can start creating a Slim Select component class. It must be extend from ScComponent.
+To get started, we can start creating a Slim Select component class. It must be extended from ScComponent.
 
 This forces us to implement **rules()** method where we can define what element properties are required.
 
@@ -403,13 +429,15 @@ public class ScSlimSelectDropdown extends ScComponent {
 ```
 Page and component should look very similar in structure, with selectors at the top and defined contained components.
 
-Once **ScSlimSelectDropdown** class is defined, it can be used in any places where the Slim select appears on a page in applications. Typically, 
+Once **ScSlimSelectDropdown** class is defined, it can be used in any places where the Slim Select appears on a page in applications. Typically, 
 the same web components are repeatedly used within an application for consistent look and saving development time. While it may take some time to initially build the component, it 
 can easily pay off in saved time, as more page classes are created.
 
+Note that this is based on Slim Select being a single select dropdown. If this component allows different mode (like multi-select options), it can be implemented within this class, or create a new class for handling it.
+
 ### Using the Component in Test
 
-Below is a example test that utilizes the Slim select (TestNG).
+Below is an example test that utilizes the Slim Select (TestNG).
 
 ```java 
 // (imports and package are omitted)

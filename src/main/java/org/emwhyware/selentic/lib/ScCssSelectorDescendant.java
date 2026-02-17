@@ -1,7 +1,7 @@
 package org.emwhyware.selentic.lib;
 
 /**
- * {@code SnCssSelectorDescendant} represents a CSS selector using the descendant combinator (space).
+ * {@code ScCssSelectorDescendant} represents a CSS selector using the descendant combinator (space).
  *
  * <p>
  * This class selects all descendant elements at any depth, as opposed to the child combinator
@@ -17,11 +17,11 @@ package org.emwhyware.selentic.lib;
  * <h2>Usage Example</h2>
  * <pre>{@code
  * // Select all spans anywhere inside a container
- * SnCssSelector spans = _cssSelector.descendant(_id().is("container"))
+ * ScCssSelector spans = _cssSelector.descendant(_id().is("container"))
  *                                   .descendant(_tag("span"));
  *
  * // Select all links anywhere inside navigation
- * SnCssSelector links = _cssSelector.page(_tag("nav"))
+ * ScCssSelector links = _cssSelector.page(_tag("nav"))
  *                                   .descendant(_attr("href").isNotEmpty());
  * }</pre>
  *
@@ -31,7 +31,7 @@ package org.emwhyware.selentic.lib;
 public final class ScCssSelectorDescendant extends ScCssSelector {
 
     /**
-     * Constructs an {@code SnCssSelectorDescendant} without a prior selector (root-level selector).
+     * Constructs an {@code ScCssSelectorDescendant} without a prior selector (root-level selector).
      *
      * <p>
      * Used internally by the framework for creating root descendant selectors.
@@ -44,7 +44,7 @@ public final class ScCssSelectorDescendant extends ScCssSelector {
     }
 
     /**
-     * Constructs an {@code SnCssSelectorDescendant} with a prior selector node and optional properties.
+     * Constructs an {@code ScCssSelectorDescendant} with a prior selector node and optional properties.
      *
      * <p>
      * This constructor is package-private and called internally by the framework. Use the fluent API

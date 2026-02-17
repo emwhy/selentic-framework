@@ -1,7 +1,7 @@
 package org.emwhyware.selentic.lib;
 
 /**
- * {@code SnCssSelectorNextSibling} represents a CSS selector using the adjacent sibling combinator ({@code +}).
+ * {@code ScCssSelectorNextSibling} represents a CSS selector using the adjacent sibling combinator ({@code +}).
  *
  * <p>
  * This class selects the immediately following sibling element that matches the selector.
@@ -17,11 +17,11 @@ package org.emwhyware.selentic.lib;
  * <h2>Usage Example</h2>
  * <pre>{@code
  * // Select the paragraph immediately after a heading
- * SnCssSelector nextP = _cssSelector.descendant(_tag("h1"))
+ * ScCssSelector nextP = _cssSelector.descendant(_tag("h1"))
  *                                   .nextSibling(_tag("p"));
  *
  * // Select the button immediately after an input
- * SnCssSelector nextBtn = _cssSelector.descendant(_tag("input"), _type().is("text"))
+ * ScCssSelector nextBtn = _cssSelector.descendant(_tag("input"), _type().is("text"))
  *                                     .nextSibling(_tag("button"));
  * }</pre>
  *
@@ -31,7 +31,7 @@ package org.emwhyware.selentic.lib;
 public final class ScCssSelectorNextSibling extends ScCssSelector {
 
     /**
-     * Constructs an {@code SnCssSelectorNextSibling} with a prior selector node and optional properties.
+     * Constructs an {@code ScCssSelectorNextSibling} with a prior selector node and optional properties.
      *
      * <p>
      * This constructor is package-private and called internally by the framework. Use the fluent API

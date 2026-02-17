@@ -6,7 +6,7 @@ import org.emwhyware.selentic.lib.exception.ScUnexpectedPageException;
 import java.lang.reflect.InvocationTargetException;
 
 /**
- * {@code SnWithPage} is a builder class for initializing and working with page instances
+ * {@code ScWithPage} is a builder class for initializing and working with page instances
  *
  * <p>
  * This class is obtained through the {@link ScPage#with(Class)}
@@ -15,7 +15,7 @@ import java.lang.reflect.InvocationTargetException;
  * 
  *
  * <p>
- * <strong>Purpose:</strong> {@code SnWithPage} encapsulates the complexity of:
+ * <strong>Purpose:</strong> {@code ScWithPage} encapsulates the complexity of:
  * <ul>
  *   <li>Creating page instances using reflection</li>
  *   <li>Handling page instantiation errors gracefully</li>
@@ -28,7 +28,7 @@ import java.lang.reflect.InvocationTargetException;
  * <strong>Typical Usage:</strong>
  * <pre>{@code
  * // Simple page initialization and action
- * final WithPage<HomePage> homePage = SnPage.with(HomePage.class);
+ * final WithPage<HomePage> homePage = ScPage.with(HomePage.class);
  *
  * homePage.inPage(home -> {
  *     home.searchBox.setText("Selenium");
@@ -49,7 +49,7 @@ public final class ScWithPage<T extends ScPage> {
     private final T page;
 
     /**
-     * Constructs a {@code SnWithPage} builder by instantiating the specified page type.
+     * Constructs a {@code ScWithPage} builder by instantiating the specified page type.
      *
      * <p>
      * This constructor uses reflection to create a new instance of the page class via its
@@ -99,7 +99,7 @@ public final class ScWithPage<T extends ScPage> {
      *
      * <p>
      * <pre>{@code
-     * final SnWithPage<HomePage> homePage = SnPage.with(HomePage.class);
+     * final ScWithPage<HomePage> homePage = ScPage.with(HomePage.class);
      *
      * homePage.inPage(home -> {
      *     home.searchBox.setText("Selenium");

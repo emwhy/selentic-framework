@@ -9,7 +9,7 @@ import java.util.Arrays;
 /**
  * An abstract class that represents a CSS selector.
  *
- * <p>SnCssSelector extends {@link ScSelector} and provides CSS selector-specific navigation and
+ * <p>ScCssSelector extends {@link ScSelector} and provides CSS selector-specific navigation and
  * selection methods. The class builds complex CSS selector expressions by chaining method calls,
  * allowing intuitive construction of element selectors with support for various CSS combinators
  * (descendant, child, sibling, and next sibling relationships).
@@ -27,7 +27,7 @@ public sealed abstract class ScCssSelector extends ScSelector permits ScCssSelec
     private final ScCssSelectorPropertyType[] selectorProperties;
 
     /**
-     * Constructs an {@code SnCssSelector} instance with optional selector properties.
+     * Constructs an {@code ScCssSelector} instance with optional selector properties.
      *
      * <p>This constructor is typically called by subclasses to initialize a CSS selector
      * without a prior selector node (root-level selector).
@@ -42,7 +42,7 @@ public sealed abstract class ScCssSelector extends ScSelector permits ScCssSelec
     }
 
     /**
-     * Constructs an {@code SnCssSelector} instance with a prior selector node and optional selector properties.
+     * Constructs an {@code ScCssSelector} instance with a prior selector node and optional selector properties.
      *
      * <p>This constructor is used by subclasses to chain CSS selectors by linking to a
      * previous selector node, enabling composition of complex CSS selector expressions.
@@ -71,7 +71,7 @@ public sealed abstract class ScCssSelector extends ScSelector permits ScCssSelec
     /**
      * Returns the hash code for this CSS selector based on its string representation.
      *
-     * <p>Two {@code SnCssSelector} objects with identical CSS selector expressions will have the same hash code.
+     * <p>Two {@code ScCssSelector} objects with identical CSS selector expressions will have the same hash code.
      *
      * @return the hash code of the string representation of this CSS selector
      */
@@ -99,7 +99,7 @@ public sealed abstract class ScCssSelector extends ScSelector permits ScCssSelec
     }
 
     /**
-     * Creates a new {@code SnCssSelector} representing a descendant relationship to an element
+     * Creates a new {@code ScCssSelector} representing a descendant relationship to an element
      * with the specified properties.
      *
      * <p>This method constructs an {@link ScCssSelectorDescendant} selector that represents all descendants
@@ -108,7 +108,7 @@ public sealed abstract class ScCssSelector extends ScSelector permits ScCssSelec
      * 
      *
      * @param selectorProperties optional properties to filter descendant elements by attributes or other selectors
-     * @return a new {@code SnCssSelector} object representing the descendant selector
+     * @return a new {@code ScCssSelector} object representing the descendant selector
      * @see ScCssSelectorDescendant
      */
     public ScCssSelector descendant(ScCssSelectorPropertyType... selectorProperties) {
@@ -116,7 +116,7 @@ public sealed abstract class ScCssSelector extends ScSelector permits ScCssSelec
     }
 
     /**
-     * Creates a new {@code SnCssSelector} representing a direct child relationship to an element
+     * Creates a new {@code ScCssSelector} representing a direct child relationship to an element
      * with the specified properties.
      *
      * <p>This method constructs an {@link ScCssSelectorChild} selector that represents only direct children
@@ -125,7 +125,7 @@ public sealed abstract class ScCssSelector extends ScSelector permits ScCssSelec
      * 
      *
      * @param selectorProperties optional properties to filter child elements by attributes or other selectors
-     * @return a new {@code SnCssSelector} object representing the child selector
+     * @return a new {@code ScCssSelector} object representing the child selector
      * @see ScCssSelectorChild
      */
     public ScCssSelector child(ScCssSelectorPropertyType... selectorProperties) {
@@ -133,7 +133,7 @@ public sealed abstract class ScCssSelector extends ScSelector permits ScCssSelec
     }
 
     /**
-     * Creates a new {@code SnCssSelector} representing a sibling relationship to an element
+     * Creates a new {@code ScCssSelector} representing a sibling relationship to an element
      * with the specified properties.
      *
      * <p>This method constructs an {@link ScCssSelectorSibling} selector that represents general sibling elements
@@ -142,7 +142,7 @@ public sealed abstract class ScCssSelector extends ScSelector permits ScCssSelec
      * 
      *
      * @param selectorProperties optional properties to filter sibling elements by attributes or other selectors
-     * @return a new {@code SnCssSelector} object representing the sibling selector
+     * @return a new {@code ScCssSelector} object representing the sibling selector
      * @see ScCssSelectorSibling
      */
     public ScCssSelector sibling(ScCssSelectorPropertyType... selectorProperties) {
@@ -150,7 +150,7 @@ public sealed abstract class ScCssSelector extends ScSelector permits ScCssSelec
     }
 
     /**
-     * Creates a new {@code SnCssSelector} representing a next sibling relationship to an element
+     * Creates a new {@code ScCssSelector} representing a next sibling relationship to an element
      * with the specified properties.
      *
      * <p>This method constructs an {@link ScCssSelectorNextSibling} selector that represents the immediately
@@ -159,7 +159,7 @@ public sealed abstract class ScCssSelector extends ScSelector permits ScCssSelec
      * 
      *
      * @param selectorProperties optional properties to filter the next sibling element by attributes or other selectors
-     * @return a new {@code SnCssSelector} object representing the next sibling selector
+     * @return a new {@code ScCssSelector} object representing the next sibling selector
      * @see ScCssSelectorNextSibling
      */
     public ScCssSelector nextSibling(ScCssSelectorPropertyType... selectorProperties) {
@@ -167,7 +167,7 @@ public sealed abstract class ScCssSelector extends ScSelector permits ScCssSelec
     }
 
     /**
-     * Creates a new {@code SnCssSelector} representing a page-level (root) element with the specified properties.
+     * Creates a new {@code ScCssSelector} representing a page-level (root) element with the specified properties.
      *
      * <p>This method constructs an {@link ScCssSelectorPage} selector that represents a root-level element
      * in the page DOM, starting a new selector chain not dependent on the current element.
@@ -175,7 +175,7 @@ public sealed abstract class ScCssSelector extends ScSelector permits ScCssSelec
      * 
      *
      * @param selectorProperties optional properties to filter page-level elements by attributes or other selectors
-     * @return a new {@code SnCssSelector} object representing the page-level selector
+     * @return a new {@code ScCssSelector} object representing the page-level selector
      * @see ScCssSelectorPage
      */
     public ScCssSelector page(ScCssSelectorPropertyType... selectorProperties) {

@@ -2,14 +2,14 @@ package org.emwhyware.selentic.lib;
 
 public abstract class ScDraggableComponent extends ScClickableComponent {
 
-    public SnDragAction drag() {
-        return new SnDragAction(this);
+    public ScDragAction drag() {
+        return new ScDragAction(this);
     }
 
-    public class SnDragAction {
+    public class ScDragAction {
         private final ScComponent draggedComponent;
 
-        private SnDragAction(ScComponent draggedComponent) {
+        private ScDragAction(ScComponent draggedComponent) {
             this.draggedComponent = draggedComponent;
         }
 

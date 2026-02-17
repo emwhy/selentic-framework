@@ -3,7 +3,7 @@ package org.emwhyware.selentic.lib;
 /**
  * Abstract base class for web form components.
  * <p>
- * The {@code SnFormComponent} extends {@link ScClickableComponent} and provides foundational
+ * The {@code ScFormComponent} extends {@link ScClickableComponent} and provides foundational
  * functionality for interactive form elements such as text inputs, text areas, select dropdowns,
  * checkboxes, and radio buttons. It combines the click interaction capabilities inherited from
  * {@link ScClickableComponent} with form-specific operations.
@@ -11,13 +11,13 @@ package org.emwhyware.selentic.lib;
  *
  * <h2>Inheritance Hierarchy:</h2>
  * <pre>
- * SnComponent (base component)
+ * ScComponent (base component)
  *     ↓
- * SnClickableComponent (clickable interactions)
+ * ScClickableComponent (clickable interactions)
  *     ↓
- * SnFormComponent (form element support)
+ * ScFormComponent (form element support)
  *     ↓
- * Concrete implementations (SnTextbox, SnDropdown, etc.)
+ * Concrete implementations (ScTextbox, ScDropdown, etc.)
  * </pre>
  *
  * @see ScClickableComponent

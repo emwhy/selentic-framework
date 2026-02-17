@@ -21,7 +21,7 @@ public final class ScWindow {
      * Switch the control to the top window, and perform the actions in predicate.
      * @param predicate
      */
-    public <T extends ScPage> void inWindow(ScWithPage<T> withPage, SnWindowAction<T> predicate) {
+    public <T extends ScPage> void inWindow(ScWithPage<T> withPage, ScWindowAction<T> predicate) {
         inWindow(withPage, predicate, null);
     }
 
@@ -30,7 +30,7 @@ public final class ScWindow {
      * "controller" is provided as parameter.
      * @param predicate
      */
-    public <T extends ScPage> void inWindow(ScWithPage<T> withPage, SnWindowActionWithController<T> predicate) {
+    public <T extends ScPage> void inWindow(ScWithPage<T> withPage, ScWindowActionWithController<T> predicate) {
         inWindow(withPage, null, predicate);
     }
 
@@ -39,7 +39,7 @@ public final class ScWindow {
      * @param predicate
      * @param controllerPredicate
      */
-    private <T extends ScPage> void inWindow(ScWithPage<T> withPage, SnWindowAction<T> predicate, SnWindowActionWithController<T> controllerPredicate) {
+    private <T extends ScPage> void inWindow(ScWithPage<T> withPage, ScWindowAction<T> predicate, ScWindowActionWithController<T> controllerPredicate) {
         final WebDriver driver = Selentic.driver();
         final String mainWindowHandle = driver.getWindowHandle();
         final List<String> windowHandles = getWindowHandles(driver);
@@ -50,7 +50,7 @@ public final class ScWindow {
             if (predicate != null) {
                 withPage.inPage(p -> predicate.inWindow(p));
             } else if (controllerPredicate != null) {
-                withPage.inPage(p -> controllerPredicate.inWindow(p, new SnWindowController(driver, newWindowHandle)));
+                withPage.inPage(p -> controllerPredicate.inWindow(p, new ScWindowController(driver, newWindowHandle)));
             } else {
                 // This should never happen.
                 throw new ScWindowException("No predicate defined.");
@@ -146,11 +146,11 @@ public final class ScWindow {
         }
     }
 
-    public final class SnWindowController {
+    public final class ScWindowController {
         private final WebDriver webDriver;
         private final String currentHandle;
 
-        private SnWindowController(WebDriver webDriver, String currentHandle) {
+        private ScWindowController(WebDriver webDriver, String currentHandle) {
             this.webDriver = webDriver;
             this.currentHandle = currentHandle;
         }
@@ -160,7 +160,7 @@ public final class ScWindow {
          * @param index
          * @param predicate
          */
-        public <T extends ScPage> void inOtherWindow(ScWithPage<T> withPage, int index, SnWindowAction<T> predicate) {
+        public <T extends ScPage> void inOtherWindow(ScWithPage<T> withPage, int index, ScWindowAction<T> predicate) {
             final List<String> handles = webDriver.getWindowHandles().stream().toList();
 
             try {
@@ -187,11 +187,11 @@ public final class ScWindow {
         }
     }
 
-    public interface SnWindowAction<T extends ScPage> {
+    public interface ScWindowAction<T extends ScPage> {
         void inWindow(T page);
     }
 
-    public interface SnWindowActionWithController<T extends ScPage> {
-        void inWindow(T page, SnWindowController controller);
+    public interface ScWindowActionWithController<T extends ScPage> {
+        void inWindow(T page, ScWindowController controller);
     }
 }

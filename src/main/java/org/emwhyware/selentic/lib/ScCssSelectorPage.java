@@ -1,7 +1,7 @@
 package org.emwhyware.selentic.lib;
 
 /**
- * {@code SnCssSelectorPage} represents a root-level CSS selector that starts a new selector chain.
+ * {@code ScCssSelectorPage} represents a root-level CSS selector that starts a new selector chain.
  *
  * <p>
  * This class creates page-level (document root) selectors that are not dependent on any prior element.
@@ -11,13 +11,13 @@ package org.emwhyware.selentic.lib;
  * <h2>Usage Example</h2>
  * <pre>{@code
  * // Select a button directly on the page
- * SnCssSelector button = _cssSelector.page(_id("submit"));
+ * ScCssSelector button = _cssSelector.page(_id("submit"));
  *
  * // Select all paragraphs with a specific class
- * SnCssSelector paragraphs = _cssSelector.page(_tag("p"), _cssClasses("intro"));
+ * ScCssSelector paragraphs = _cssSelector.page(_tag("p"), _cssClasses("intro"));
  *
  * // Chain with descendant or child selectors
- * SnCssSelector input = _cssSelector.page(_id("login"))
+ * ScCssSelector input = _cssSelector.page(_id("login"))
  *                                   .child(_tag("input"), _type().is("text"));
  * }</pre>
  *
@@ -26,7 +26,7 @@ package org.emwhyware.selentic.lib;
 public final class ScCssSelectorPage extends ScCssSelector {
 
     /**
-     * Constructs an {@code SnCssSelectorPage} with optional properties.
+     * Constructs an {@code ScCssSelectorPage} with optional properties.
      *
      * <p>
      * This constructor is package-private and called internally by the framework. Use the fluent API

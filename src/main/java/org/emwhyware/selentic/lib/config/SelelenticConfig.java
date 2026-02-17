@@ -31,7 +31,7 @@ import java.io.File;
  *
  * <h2>Configuration File Format (selentic.conf)</h2>
  * <pre>{@code
- * // Browser configuration
+ * // Default browser
  * browser = "chrome"  // Options: chrome, firefox, safari, edge
  *
  * // Wait timeout in milliseconds
@@ -39,7 +39,7 @@ import java.io.File;
  *
  * // Logging configuration
  * log {
- *     root-dir = "./log"              // Directory where logs are stored
+ *     root-dir = ""              // Default is $user.dir/log. Directory where logs are stored.
  *     root-log-level = "INFO"         // Log level for root logger (TRACE, DEBUG, INFO, WARN, ERROR)
  *     selentic-log-level = "DEBUG"      // Log level for Selentic Framework logger (TRACE, DEBUG, INFO, WARN, ERROR)
  *     keep-duration-min = 0           // How long to keep logs in minutes (0 = will not keep)
@@ -58,7 +58,7 @@ import java.io.File;
  *
  * <h2>Access configuration values</h2>
  * <pre>{@code
- * SnBrowser browser = config.browser();
+ * ScBrowser browser = config.browser();
  * long timeout = config.waitTimeoutMilliseconds();
  * File logDir = config.logRootDir();
  * Level rootLogLevel = config.rootLogLevel();

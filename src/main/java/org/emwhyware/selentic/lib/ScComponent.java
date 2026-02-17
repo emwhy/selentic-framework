@@ -14,8 +14,8 @@ import java.util.regex.Pattern;
 
 /**
  * <p>
- * {@code SnComponent} is the abstract base class for all component classes in the Selentic Framework.
- * All component classes must extend from {@code SnComponent} or one of its subclasses when defined.
+ * {@code ScComponent} is the abstract base class for all component classes in the Selentic Framework.
+ * All component classes must extend from {@code ScComponent} or one of its subclasses when defined.
  * 
  *
  * <p>
@@ -35,16 +35,16 @@ import java.util.regex.Pattern;
  * <p>
  * <strong>Component Structure:</strong> A typical component class looks like this:
  * <pre>{@code
- * // Must extend from SnComponent
- * public class SnSanityTestLongListEntryComponent extends SnComponent {
+ * // Must extend from ScComponent
+ * public class ScSanityTestLongListEntryComponent extends ScComponent {
  *     // Selectors are defined at the top
- *     private static final SnCssSelector TITLE_TEXT = _cssSelector.descendant(_cssClasses("title"));
- *     private static final SnCssSelector CHECKBOX = _cssSelector.descendant(_type().is("checkbox"));
- *     private static final SnCssSelector TEXTBOX = _cssSelector.descendant(_type().is("text"));
+ *     private static final ScCssSelector TITLE_TEXT = _cssSelector.descendant(_cssClasses("title"));
+ *     private static final ScCssSelector CHECKBOX = _cssSelector.descendant(_type().is("checkbox"));
+ *     private static final ScCssSelector TEXTBOX = _cssSelector.descendant(_type().is("text"));
  *
  *     // Requires this override to define component validation rules
  *     @Override
- *     protected void rules(SnComponentRule rule) {
+ *     protected void rules(ScComponentRule rule) {
  *         rule.tag().is("div");
  *         rule.cssClasses().has("long-component-list-entry");
  *     }
@@ -56,9 +56,9 @@ import java.util.regex.Pattern;
  *     }
  *
  *     // Child components within this component
- *     public final SnGenericComponent titleText = $genericComponent(TITLE_TEXT);
- *     public final SnCheckbox checkbox = $checkbox(CHECKBOX);
- *     public final SnTextbox textbox = $textbox(TEXTBOX);
+ *     public final ScGenericComponent titleText = $genericComponent(TITLE_TEXT);
+ *     public final ScCheckbox checkbox = $checkbox(CHECKBOX);
+ *     public final ScTextbox textbox = $textbox(TEXTBOX);
  * }
  * }</pre>
  *

@@ -9,7 +9,7 @@ import java.util.Arrays;
 /**
  * An abstract class that represents an XPath selector.
  *
- * <p>SnXPath extends {@link ScSelector} and provides XPath-specific navigation and selection
+ * <p>ScXPath extends {@link ScSelector} and provides XPath-specific navigation and selection
  * methods. The class builds complex XPath expressions by chaining method calls, allowing
  * intuitive construction of element selectors with support for various XPath relationships.
  * 
@@ -26,7 +26,7 @@ public sealed abstract class ScXPath extends ScSelector permits ScXPathChild, Sc
     private final ScXpathPropertyType[] selectorProperties;
 
     /**
-     * Constructs an {@code SnXPath} instance with a specified tag and optional selector properties.
+     * Constructs an {@code ScXPath} instance with a specified tag and optional selector properties.
      *
      * <p>This constructor is typically called by subclasses to initialize an XPath selector
      * without a prior selector node (root-level selector).
@@ -43,7 +43,7 @@ public sealed abstract class ScXPath extends ScSelector permits ScXPathChild, Sc
     }
 
     /**
-     * Constructs an {@code SnXPath} instance with a prior selector node and specified tag and properties.
+     * Constructs an {@code ScXPath} instance with a prior selector node and specified tag and properties.
      *
      * <p>This constructor is used by subclasses to chain XPath selectors by linking to a
      * previous selector node, enabling composition of complex XPath expressions.
@@ -74,7 +74,7 @@ public sealed abstract class ScXPath extends ScSelector permits ScXPathChild, Sc
     /**
      * Returns the hash code for this XPath selector based on its string representation.
      *
-     * <p>Two {@code SnXPath} objects with identical XPath expressions will have the same hash code.
+     * <p>Two {@code ScXPath} objects with identical XPath expressions will have the same hash code.
      * 
      *
      * @return the hash code of the string representation of this XPath selector
@@ -120,7 +120,7 @@ public sealed abstract class ScXPath extends ScSelector permits ScXPathChild, Sc
     }
 
     /**
-     * Creates a new {@code SnXPath} selector representing a descendant relationship to an element
+     * Creates a new {@code ScXPath} selector representing a descendant relationship to an element
      * with the specified tag and optional properties.
      *
      * <p>This method constructs an {@link ScXPathDescendant} selector that represents all descendants
@@ -130,7 +130,7 @@ public sealed abstract class ScXPath extends ScSelector permits ScXPathChild, Sc
      *
      * @param tag the HTML tag name of the descendant element
      * @param selectorProperties optional properties to filter descendant elements by attributes or content
-     * @return a new {@code SnXPath} object representing the descendant selector
+     * @return a new {@code ScXPath} object representing the descendant selector
      * @see ScXPathDescendant
      */
     public ScXPath descendant(String tag, ScXpathPropertyType... selectorProperties) {
@@ -138,7 +138,7 @@ public sealed abstract class ScXPath extends ScSelector permits ScXPathChild, Sc
     }
 
     /**
-     * Creates a new {@code SnXPath} selector representing a direct child relationship to an element
+     * Creates a new {@code ScXPath} selector representing a direct child relationship to an element
      * with the specified tag and optional properties.
      *
      * <p>This method constructs an {@link ScXPathChild} selector that represents only direct children
@@ -148,7 +148,7 @@ public sealed abstract class ScXPath extends ScSelector permits ScXPathChild, Sc
      *
      * @param tag the HTML tag name of the child element
      * @param selectorProperties optional properties to filter child elements by attributes or content
-     * @return a new {@code SnXPath} object representing the child selector
+     * @return a new {@code ScXPath} object representing the child selector
      * @see ScXPathChild
      */
     public ScXPath child(String tag, ScXpathPropertyType... selectorProperties) {
@@ -156,7 +156,7 @@ public sealed abstract class ScXPath extends ScSelector permits ScXPathChild, Sc
     }
 
     /**
-     * Creates a new {@code SnXPath} selector representing a sibling relationship to an element
+     * Creates a new {@code ScXPath} selector representing a sibling relationship to an element
      * with the specified tag and optional properties.
      *
      * <p>This method constructs an {@link ScXPathSibling} selector that represents sibling elements
@@ -165,7 +165,7 @@ public sealed abstract class ScXPath extends ScSelector permits ScXPathChild, Sc
      *
      * @param tag the HTML tag name of the sibling element
      * @param selectorProperties optional properties to filter sibling elements by attributes or content
-     * @return a new {@code SnXPath} object representing the sibling selector
+     * @return a new {@code ScXPath} object representing the sibling selector
      * @see ScXPathSibling
      */
     public ScXPath sibling(String tag, ScXpathPropertyType... selectorProperties) {
@@ -173,7 +173,7 @@ public sealed abstract class ScXPath extends ScSelector permits ScXPathChild, Sc
     }
 
     /**
-     * Creates a new {@code SnXPath} selector representing a preceding sibling relationship to an element
+     * Creates a new {@code ScXPath} selector representing a preceding sibling relationship to an element
      * with the specified tag and optional properties.
      *
      * <p>This method constructs an {@link ScXPathPrecedingSibling} selector that represents preceding
@@ -182,7 +182,7 @@ public sealed abstract class ScXPath extends ScSelector permits ScXPathChild, Sc
      *
      * @param tag the HTML tag name of the preceding sibling element
      * @param selectorProperties optional properties to filter preceding sibling elements by attributes or content
-     * @return a new {@code SnXPath} object representing the preceding sibling selector
+     * @return a new {@code ScXPath} object representing the preceding sibling selector
      * @see ScXPathPrecedingSibling
      */
     public ScXPath precedingSibling(String tag, ScXpathPropertyType... selectorProperties) {
@@ -190,7 +190,7 @@ public sealed abstract class ScXPath extends ScSelector permits ScXPathChild, Sc
     }
 
     /**
-     * Creates a new {@code SnXPath} selector representing a following relationship to an element
+     * Creates a new {@code ScXPath} selector representing a following relationship to an element
      * with the specified tag and optional properties.
      *
      * <p>This method constructs an {@link ScXPathFollowing} selector that represents elements
@@ -200,7 +200,7 @@ public sealed abstract class ScXPath extends ScSelector permits ScXPathChild, Sc
      *
      * @param tag the HTML tag name of the following element
      * @param selectorProperties optional properties to filter following elements by attributes or content
-     * @return a new {@code SnXPath} object representing the following selector
+     * @return a new {@code ScXPath} object representing the following selector
      * @see ScXPathFollowing
      */
     public ScXPath following(String tag, ScXpathPropertyType... selectorProperties) {
@@ -208,7 +208,7 @@ public sealed abstract class ScXPath extends ScSelector permits ScXPathChild, Sc
     }
 
     /**
-     * Creates a new {@code SnXPath} selector representing a preceding relationship to an element
+     * Creates a new {@code ScXPath} selector representing a preceding relationship to an element
      * with the specified tag and optional properties.
      *
      * <p>This method constructs an {@link ScXPathPreceding} selector that represents elements
@@ -218,7 +218,7 @@ public sealed abstract class ScXPath extends ScSelector permits ScXPathChild, Sc
      *
      * @param tag the HTML tag name of the preceding element
      * @param selectorProperties optional properties to filter preceding elements by attributes or content
-     * @return a new {@code SnXPath} object representing the preceding selector
+     * @return a new {@code ScXPath} object representing the preceding selector
      * @see ScXPathPreceding
      */
     public ScXPath preceding(String tag, ScXpathPropertyType... selectorProperties) {
@@ -226,13 +226,13 @@ public sealed abstract class ScXPath extends ScSelector permits ScXPathChild, Sc
     }
 
     /**
-     * Creates a new {@code SnXPath} selector representing the parent relationship to the current element.
+     * Creates a new {@code ScXPath} selector representing the parent relationship to the current element.
      *
      * <p>This method constructs an {@link ScXPathParent} selector that represents the direct parent
      * element of the current element. This is equivalent to the XPath ".." relationship.
      * 
      *
-     * @return a new {@code SnXPath} object representing the parent selector
+     * @return a new {@code ScXPath} object representing the parent selector
      * @see ScXPathParent
      */
     public ScXPath parent() {
@@ -240,7 +240,7 @@ public sealed abstract class ScXPath extends ScSelector permits ScXPathChild, Sc
     }
 
     /**
-     * Creates a new {@code SnXPath} selector representing a page-level (root) element with the specified
+     * Creates a new {@code ScXPath} selector representing a page-level (root) element with the specified
      * tag and optional properties.
      *
      * <p>This method constructs an {@link ScXPathPage} selector that represents a root-level element
@@ -250,7 +250,7 @@ public sealed abstract class ScXPath extends ScSelector permits ScXPathChild, Sc
      *
      * @param tag the HTML tag name of the page-level element
      * @param selectorProperties optional properties to filter page-level elements by attributes or content
-     * @return a new {@code SnXPath} object representing the page-level selector
+     * @return a new {@code ScXPath} object representing the page-level selector
      * @see ScXPathPage
      */
     public ScXPath page(String tag, ScXpathPropertyType... selectorProperties) {

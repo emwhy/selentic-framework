@@ -8,8 +8,8 @@ import org.slf4j.Logger;
 import static org.emwhyware.selentic.lib.util.ScWait.waitUntil;
 
 /**
- * {@code SnAbstractPage} is the abstract base class for all page classes.
- * All page classes must extend from {@code SnAbstractPage} when defined.
+ * {@code ScAbstractPage} is the abstract base class for all page classes.
+ * All page classes must extend from {@code ScAbstractPage} when defined.
  *
  * @see ScComponent
  * @see ScAbstractComponent

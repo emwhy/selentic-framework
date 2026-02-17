@@ -1,7 +1,7 @@
 package org.emwhyware.selentic.lib;
 
 /**
- * {@code SnCheckbox} is a component class that represents checkbox input elements in web pages.
+ * {@code ScCheckbox} is a component class that represents checkbox input elements in web pages.
  *
  * <p>
  * This class provides a specialized interface for interacting with HTML checkbox elements ({@code <input type="checkbox">}).
@@ -39,20 +39,20 @@ package org.emwhyware.selentic.lib;
  * <h2>Usage Examples</h2>
  * <pre>{@code
  * // Define checkbox components in a page class
- * public class SettingsPage extends SnPage {
- *     private static final SnCssSelector AGREE_CHECKBOX = _cssSelector.descendant(_id("agree"));
- *     private static final SnCssSelector NEWSLETTER_CHECKBOX = _cssSelector.descendant(_id("newsletter"));
- *     private static final SnCssSelector REMEMBER_CHECKBOX = _cssSelector.descendant(_id("remember"));
+ * public class SettingsPage extends ScPage {
+ *     private static final ScCssSelector AGREE_CHECKBOX = _cssSelector.descendant(_id("agree"));
+ *     private static final ScCssSelector NEWSLETTER_CHECKBOX = _cssSelector.descendant(_id("newsletter"));
+ *     private static final ScCssSelector REMEMBER_CHECKBOX = _cssSelector.descendant(_id("remember"));
  *
- *     public final SnCheckbox agreeCheckbox = $component(AGREE_CHECKBOX, SnCheckbox.class);
- *     public final SnCheckbox newsletterCheckbox = $component(NEWSLETTER_CHECKBOX, SnCheckbox.class);
+ *     public final ScCheckbox agreeCheckbox = $component(AGREE_CHECKBOX, ScCheckbox.class);
+ *     public final ScCheckbox newsletterCheckbox = $component(NEWSLETTER_CHECKBOX, ScCheckbox.class);
  *
  *     // Shorthand.
- *     public final SnCheckbox rememberCheckbox = $checkbox(REMEMBER_CHECKBOX;
+ *     public final ScCheckbox rememberCheckbox = $checkbox(REMEMBER_CHECKBOX;
  * }
  *
  * // In test code
- * final final SnWithPage<SettingsPage> settingsPage = SnPage.with(SettingsPage.class);
+ * final final ScWithPage<SettingsPage> settingsPage = ScPage.with(SettingsPage.class);
  *
  * settingsPage.inPage(p -> {
  *      // Select a checkbox
@@ -156,7 +156,7 @@ public class ScCheckbox extends ScSelectableComponent {
      * <p>
      * <strong>Usage Examples:</strong>
      * <pre>{@code
-     * SnCheckbox checkbox = page.checkbox;
+     * ScCheckbox checkbox = page.checkbox;
      *
      * // Deselect the checkbox
      * checkbox.deselect();
