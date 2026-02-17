@@ -2,7 +2,7 @@ plugins {
     id("java")
 }
 
-group = "seliion-framework"
+group = "selentic-framework"
 version = "release"
 
 repositories {
