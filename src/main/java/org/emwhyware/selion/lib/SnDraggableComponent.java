@@ -15,18 +15,18 @@ public abstract class SnDraggableComponent extends SnClickableComponent {
 
         public void to(SnComponent targetComponent) {
             SnDraggableComponent.this.actions()
-                    .moveToElement(this.draggedComponent.scrolled())
+                    .moveToElement(this.draggedComponent.scrolledElement())
                     .clickAndHold()
-                    .moveToElement(targetComponent.scrolled())
+                    .moveToElement(targetComponent.scrolledElement())
                     .release()
                     .build().perform();
         }
 
         public void to(SnComponent targetComponent, int offsetX, int offsetY) {
             SnDraggableComponent.this.actions()
-                    .moveToElement(this.draggedComponent.scrolled())
+                    .moveToElement(this.draggedComponent.scrolledElement())
                     .clickAndHold()
-                    .moveToElement(targetComponent.scrolled(), offsetX, offsetY)
+                    .moveToElement(targetComponent.scrolledElement(), offsetX, offsetY)
                     .release()
                     .build().perform();
         }

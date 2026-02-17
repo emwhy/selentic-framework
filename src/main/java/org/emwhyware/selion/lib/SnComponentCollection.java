@@ -24,9 +24,8 @@ public class SnComponentCollection<T extends SnComponent> implements Iterable<T>
 
     private SnSelector selector;
     private Class<T> componentType;
-    private Optional<SnComponent> $callerComponent = Optional.empty();
+    private SnAbstractComponent $callerComponent;
     private Optional<SnAbstractComponent> containingObject = Optional.empty();
-    private SnAbstractPage $ownerPage;
 
     /**
      * Protected constructor used by the framework for internal instantiation.
@@ -40,6 +39,15 @@ public class SnComponentCollection<T extends SnComponent> implements Iterable<T>
      */
     final void setSelector(SnSelector selector) {
         this.selector = selector;
+    }
+
+    /**
+     * Internal method to set the parent component or page that called this component.
+     *
+     * @param $componentOrPage a calling component or page.
+     */
+    final void setCallerComponent(SnAbstractComponent $componentOrPage) {
+        this.$callerComponent = $componentOrPage;
     }
 
     /**
@@ -61,27 +69,12 @@ public class SnComponentCollection<T extends SnComponent> implements Iterable<T>
     }
 
     /**
-     * Associates this collection with its parent page.
-     *
-     * @param abstractComponent The component or page to derive the owner page from.
-     * @throws SnComponentCreationException If the page context cannot be resolved.
-     */
-    final void setOwnerPage(SnAbstractComponent abstractComponent) {
-        switch (abstractComponent) {
-            case SnAbstractPage optPage -> this.$ownerPage = optPage;
-            case SnComponent optComponent -> this.$ownerPage = optComponent.ownerPage();
-            case null, default -> throw new SnComponentCreationException("Failed to set page where the component belongs to.");
-        }
-    }
-
-    /**
      * Returns the page that owns this collection.
      *
-     * @param <P> The expected subtype of {@link SnAbstractPage}.
      * @return The owner page instance.
      */
-    final protected <P extends SnAbstractPage> P ownerPage() {
-        return (P) $ownerPage;
+    final protected SnAbstractPage ownerPage() {
+        return $callerComponent instanceof SnAbstractPage ? (SnAbstractPage) $callerComponent : ((SnComponent) $callerComponent).ownerPage();
     }
 
     /**
@@ -90,11 +83,10 @@ public class SnComponentCollection<T extends SnComponent> implements Iterable<T>
      * @return A list of live WebElements.
      */
     private List<WebElement> webElements() {
-        if (this.$callerComponent.isEmpty() || this.selector instanceof SnXPathPage) {
+        if (this.$callerComponent instanceof SnAbstractPage || this.selector.isAbsolute()) {
             return Selion.driver().findElements(this.selector.build());
         } else {
-            return this.$callerComponent.get().existing().findElements(
-                    this.selector instanceof SnXPath ? ((SnXPath) this.selector).build(true) : this.selector.build());
+            return ((SnComponent) this.$callerComponent).existingElement().findElements(this.selector instanceof SnXPath ? ((SnXPath) this.selector).build(true) : this.selector.build());
         }
     }
 
@@ -118,7 +110,7 @@ public class SnComponentCollection<T extends SnComponent> implements Iterable<T>
             component.setWebElement(webElement);
             component.setCallerComponent(this.$callerComponent);
             component.setSelector(this.selector);
-            component.setOwnerPage(this.$ownerPage);
+
             return component;
         } catch (Exception ex) {
             throw new SnComponentCreationException(ex);

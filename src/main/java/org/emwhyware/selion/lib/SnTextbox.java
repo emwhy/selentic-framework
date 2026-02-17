@@ -18,7 +18,7 @@ public class SnTextbox extends SnFormComponent {
     }
 
     public void enterText(CharSequence... text) {
-        final WebElement scrolled = this.scrolled();
+        final WebElement scrolled = this.scrolledElement();
 
         scrolled.clear();
         scrolled.click();

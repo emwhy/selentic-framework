@@ -8,9 +8,7 @@ import org.openqa.selenium.StaleElementReferenceException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -93,8 +91,7 @@ import java.util.regex.Pattern;
  */
 public abstract class SnComponent extends SnAbstractComponent {
     private Optional<SnSelector> selector = Optional.empty();
-    private Optional<SnComponent> $callerComponent = Optional.empty();
-    private SnAbstractPage $ownerPage;
+    private SnAbstractComponent $callerComponent;
     private WebElement webElement;
     private Optional<SnComponentRule> rule = Optional.empty();
 
@@ -129,21 +126,12 @@ public abstract class SnComponent extends SnAbstractComponent {
     }
 
     /**
-     * Internal method to set the owner page of this component.
-     *
-     * @param $page the {@link SnAbstractPage} that contains this component
-     */
-    final void setOwnerPage(SnAbstractPage $page) {
-        this.$ownerPage = $page;
-    }
-
-    /**
      * Returns the page class that contains this instance of the component.
      *
      * @return the {@link SnAbstractPage} that owns this component
      */
     final protected SnAbstractPage ownerPage() {
-        return $ownerPage;
+        return $callerComponent instanceof SnAbstractPage ? (SnAbstractPage) $callerComponent : ((SnComponent) $callerComponent).ownerPage();
     }
 
     /**
@@ -156,12 +144,12 @@ public abstract class SnComponent extends SnAbstractComponent {
     }
 
     /**
-     * Internal method to set the parent component that called this component.
+     * Internal method to set the parent component or page that called this component.
      *
-     * @param $component an {@link Optional} containing the parent component, or empty if this is a page-level component
+     * @param $componentOrPage a calling component or page.
      */
-    final void setCallerComponent(Optional<SnComponent> $component) {
-        this.$callerComponent = $component;
+    final void setCallerComponent(SnAbstractComponent $componentOrPage) {
+        this.$callerComponent = $componentOrPage;
     }
 
     /**
@@ -181,10 +169,10 @@ public abstract class SnComponent extends SnAbstractComponent {
      */
     private WebElement webElement() {
         if (this.webElement == null) {
-            if (this.selector.isPresent() && (this.$callerComponent.isEmpty() || this.selector.get() instanceof SnXPathPage)) {
+            if (this.selector.isPresent() && (this.$callerComponent instanceof SnAbstractPage || this.selector.get().isAbsolute())) {
                 return Selion.driver().findElement(selector.get().build());
             } else if (this.selector.isPresent()) {
-                return selector.get() instanceof SnXPath ? this.$callerComponent.get().existing().findElement(((SnXPath) selector.get()).build(true)) : this.$callerComponent.get().existing().findElement(selector.get().build());
+                return selector.get() instanceof SnXPath ? ((SnComponent) this.$callerComponent).existingElement().findElement(((SnXPath) selector.get()).build(true)) : ((SnComponent) this.$callerComponent).existingElement().findElement(selector.get().build());
             } else {
                 throw new SnElementNotFoundException("Selector is not present.");
             }
@@ -249,7 +237,7 @@ public abstract class SnComponent extends SnAbstractComponent {
      * @return the {@link WebElement} that exists in the DOM
      * @throws SnElementNotFoundException if the element does not exist or becomes stale
      */
-    protected final WebElement existing() {
+    protected final WebElement existingElement() {
         try {
             WebElement element;
 
@@ -272,7 +260,7 @@ public abstract class SnComponent extends SnAbstractComponent {
      * @return the {@link WebElement} that is currently displayed
      * @throws SnElementNotFoundException if the element is not displayed or becomes stale
      */
-    protected final WebElement displayed() {
+    protected final WebElement displayedElement() {
         try {
             this.waitForDisplayed();
             return webElement();
@@ -291,8 +279,8 @@ public abstract class SnComponent extends SnAbstractComponent {
      *
      * @return the {@link WebElement} after scrolling it into view
      */
-    protected final WebElement scrolled() {
-        return this.scrolled(scrollOptions());
+    protected final WebElement scrolledElement() {
+        return this.scrolledElement(scrollOptions());
     }
 
     /**
@@ -307,8 +295,8 @@ public abstract class SnComponent extends SnAbstractComponent {
      * @param options the {@link SnScrollOptions} specifying scroll behavior
      * @return the {@link WebElement} after scrolling it into view
      */
-    protected final WebElement scrolled(SnScrollOptions options) {
-        final WebElement e = displayed();
+    protected final WebElement scrolledElement(SnScrollOptions options) {
+        final WebElement e = displayedElement();
 
         Selion.executeScript("arguments[0].scrollIntoView(arguments[1])", this, options.toString());
         return e;
@@ -341,7 +329,7 @@ public abstract class SnComponent extends SnAbstractComponent {
      * <p>
      * This method can be overridden in subclasses as needed, as sometimes the "isDisplayed" status
      * may depend on other component properties or visibility rules. This method is used in
-     * {@link #waitForDisplayed()} and {@link #displayed()}, affecting their waiting behavior.
+     * {@link #waitForDisplayed()} and {@link #displayedElement()}, affecting their waiting behavior.
      * 
      *
      * @return true if the element is displayed; false otherwise
@@ -360,6 +348,7 @@ public abstract class SnComponent extends SnAbstractComponent {
      * @throws SnComponentNotDisplayedException if the element does not become displayed within the timeout period
      */
     protected void waitForDisplayed() {
+        existingElement();
         SnWait.waitUntil(this.waitTimeout(), this::isDisplayed, SnComponentNotDisplayedException::new);
     }
 
@@ -379,6 +368,7 @@ public abstract class SnComponent extends SnAbstractComponent {
      * @throws SnComponentAnimatingException if the element does not stop animating within the timeout period
      */
     protected final void waitForAnimation() {
+        this.waitForDisplayed();
         SnWait.waitUntil(this.waitTimeout(), () -> (Boolean) Selion.executeScript(
                         """
                             let e = arguments[0];
@@ -414,7 +404,7 @@ public abstract class SnComponent extends SnAbstractComponent {
      * @throws SnElementNotFoundException if the element is not displayed
      */
     protected void click() {
-        this.scrolled().click();
+        this.scrolledElement().click();
     }
 
     /**
@@ -430,7 +420,7 @@ public abstract class SnComponent extends SnAbstractComponent {
     protected void doubleClick() {
         final Actions actions = new Actions(Selion.driver());
 
-        actions.doubleClick(this.scrolled()).perform();
+        actions.doubleClick(this.scrolledElement()).perform();
     }
 
     /**
@@ -449,7 +439,7 @@ public abstract class SnComponent extends SnAbstractComponent {
     protected void clickAt(int x, int y) {
         final Actions actions = new Actions(Selion.driver());
 
-        actions.moveToElement(this.scrolled(), x, y).click().perform();
+        actions.moveToElement(this.scrolledElement(), x, y).click().perform();
     }
 
     /**
@@ -468,7 +458,7 @@ public abstract class SnComponent extends SnAbstractComponent {
     protected void doubleClickAt(int x, int y) {
         final Actions actions = new Actions(Selion.driver());
 
-        actions.moveToElement(this.scrolled(), x, y).doubleClick().perform();
+        actions.moveToElement(this.scrolledElement(), x, y).doubleClick().perform();
     }
 
     /**
@@ -481,7 +471,7 @@ public abstract class SnComponent extends SnAbstractComponent {
      */
     protected void focus() {
         new Actions(Selion.driver())
-                .moveToElement(this.scrolled())
+                .moveToElement(this.scrolledElement())
                 .perform();
     }
 
@@ -491,7 +481,7 @@ public abstract class SnComponent extends SnAbstractComponent {
      * @return the text content of this component
      */
     public String text() {
-        return this.existing().getText().trim();
+        return this.existingElement().getText().trim();
     }
 
     /**
@@ -524,7 +514,7 @@ public abstract class SnComponent extends SnAbstractComponent {
     public final Optional<String> id() {
         String id;
 
-        return (id = this.existing().getAttribute("id")) == null ? Optional.empty() : Optional.of(id);
+        return (id = this.existingElement().getAttribute("id")) == null ? Optional.empty() : Optional.of(id);
     }
 
     /**
@@ -537,7 +527,7 @@ public abstract class SnComponent extends SnAbstractComponent {
      * @return the inner HTML content of this component
      */
     protected final String innerHtml() {
-        return this.existing().getAttribute("innerHTML");
+        return this.existingElement().getAttribute("innerHTML");
     }
 
     /**
@@ -565,7 +555,17 @@ public abstract class SnComponent extends SnAbstractComponent {
      * @return the inner text content of this component
      */
     protected final String innerText() {
-        return this.existing().getAttribute("innerText");
+        return this.existingElement().getAttribute("innerText");
+    }
+
+    /**
+     * Returns a list of classes of this component.
+     * @return classes in this component.
+     */
+    protected final List<String> cssClasses() {
+        final String classes = this.attr("class").orElse("").trim();
+
+        return Arrays.stream(classes.split("\\s+")).toList();
     }
 
     /**
@@ -574,7 +574,7 @@ public abstract class SnComponent extends SnAbstractComponent {
      * @return the tag name (e.g., "div", "button", "input") in lowercase
      */
     public String tag() {
-        return this.existing().getTagName();
+        return this.existingElement().getTagName();
     }
 
     /**
@@ -586,8 +586,11 @@ public abstract class SnComponent extends SnAbstractComponent {
     public Optional<String> attr(String name) {
         String a;
 
-        return (a = this.existing().getDomAttribute(name)) == null ? Optional.empty() : Optional.of(a);
+        return (a = this.existingElement().getDomAttribute(name)) == null ? Optional.empty() : Optional.of(a);
     }
+
+
+
     /**
      * Returns the wait timeout for this component in milliseconds.
      *

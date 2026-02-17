@@ -72,6 +72,15 @@ public abstract sealed class SnSelector permits SnCssSelector, SnXPath {
     }
 
     /**
+     * Returns true if this selector should look at the entire page instead of relatively inside of component.
+     *
+     * @return true if selector should look at the entire page
+     */
+    protected boolean isAbsolute() {
+        return priorSelectorNode.map(SnSelector::isAbsolute).orElseGet(() -> this instanceof SnCssSelectorPage || this instanceof SnXPathPage);
+    }
+
+    /**
      * Returns the text representation of this selector node.
      *
      * @return the text representation of this selector node

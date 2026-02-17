@@ -863,12 +863,7 @@ public abstract class SnAbstractComponent {
 
             $component = containingObject == null ? componentType.getDeclaredConstructor().newInstance() : componentType.getDeclaredConstructor(containingObject.getClass()).newInstance(containingObject);
             $component.setSelector(selector);
-            if (this instanceof SnComponent $this) {
-                $component.setCallerComponent(Optional.of($this));
-                $component.setOwnerPage($this.ownerPage());
-            } else {
-                $component.setOwnerPage((SnAbstractPage) this);
-            }
+            $component.setCallerComponent(this);
             return $component;
         } catch (Exception ex) {
             throw new SnComponentCreationException(ex);
@@ -918,7 +913,7 @@ public abstract class SnAbstractComponent {
 
         $$components.setSelector(selector);
         $$components.setComponentType(componentType);
-        $$components.setOwnerPage(this);
+        $$components.setCallerComponent(this);
 
         return $$components;
     }
@@ -963,7 +958,7 @@ public abstract class SnAbstractComponent {
         $$components.setSelector(selector);
         $$components.setComponentType(componentType);
         $$components.setContainingObject(containingObject);
-        $$components.setOwnerPage(this);
+        $$components.setCallerComponent(this);
 
         return $$components;
     }
@@ -1016,7 +1011,8 @@ public abstract class SnAbstractComponent {
             $$components = componentCollectionType.getDeclaredConstructor().newInstance();
             $$components.setSelector(selector);
             $$components.setComponentType(componentType);
-            $$components.setOwnerPage(this);
+            $$components.setCallerComponent(this);
+
             return $$components;
         } catch (Exception ex) {
             throw new SnComponentCreationException(ex);
@@ -1115,7 +1111,7 @@ public abstract class SnAbstractComponent {
 
         try {
             $frame.waitForDisplayed();
-            webDriver.switchTo().frame($frame.scrolled());
+            webDriver.switchTo().frame($frame.scrolledElement());
 
             $frameContent.waitForPage();
             predicate.inFrame($frameContent);

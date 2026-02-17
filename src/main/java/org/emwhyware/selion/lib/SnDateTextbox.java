@@ -18,7 +18,7 @@ public class SnDateTextbox extends SnTextbox {
 
     @Override
     public void enterText(CharSequence... text) {
-        final WebElement webElement = this.scrolled();
+        final WebElement webElement = this.scrolledElement();
 
         this.focus();
         webElement.clear();
@@ -26,7 +26,7 @@ public class SnDateTextbox extends SnTextbox {
     }
 
     public void enterDate(LocalDate date) {
-        final WebElement webElement = this.scrolled();
+        final WebElement webElement = this.scrolledElement();
 
         this.focus();
         webElement.clear();

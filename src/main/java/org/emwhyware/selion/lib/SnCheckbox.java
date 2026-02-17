@@ -175,11 +175,11 @@ public class SnCheckbox extends SnSelectableComponent {
      *
      * @see #select()
      * @see #isSelected()
-     * @see SnComponent#scrolled()
+     * @see SnComponent#scrolledElement()
      */
     public void deselect() {
         if (this.isSelected()) {
-            this.enabled().click();
+            this.enabledElement().click();
         }
     }
 }

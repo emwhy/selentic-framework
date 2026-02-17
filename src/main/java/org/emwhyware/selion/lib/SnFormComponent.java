@@ -39,6 +39,6 @@ public abstract class SnFormComponent extends SnClickableComponent {
     protected String value() {
         String value;
 
-        return (value = this.existing().getAttribute("value")) == null ? "" : value;
+        return (value = this.existingElement().getAttribute("value")) == null ? "" : value;
     }
 }

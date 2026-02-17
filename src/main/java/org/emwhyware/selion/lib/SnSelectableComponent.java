@@ -55,7 +55,7 @@ public abstract class SnSelectableComponent extends SnFormComponent {
      * @return {@code true} if the element is currently selected; {@code false} otherwise
      */
     public boolean isSelected() {
-        return this.existing().isSelected();
+        return this.existingElement().isSelected();
     }
 
     /**
@@ -79,11 +79,11 @@ public abstract class SnSelectableComponent extends SnFormComponent {
      * }</pre>
      *
      * @see #isSelected()
-     * @see SnFormComponent#scrolled()
+     * @see SnFormComponent#scrolledElement()
      */
     public void select() {
         if (!this.isSelected()) {
-            this.enabled().click();
+            this.enabledElement().click();
         }
     }
 

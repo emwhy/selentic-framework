@@ -59,7 +59,7 @@ public abstract class SnClickableComponent extends SnComponent {
      * @return true if the component exists and is enabled, false otherwise
      */
     public boolean isEnabled() {
-        return this.exists() && this.existing().isEnabled();
+        return this.exists() && this.existingElement().isEnabled();
     }
 
     /**
@@ -81,9 +81,11 @@ public abstract class SnClickableComponent extends SnComponent {
      * @return the scrolled {@link WebElement} that is ready for interaction
      * @throws SnComponentNotEnabledException if the component does not become enabled within the timeout period
      */
-    protected final WebElement enabled() {
+    protected final WebElement enabledElement() {
+        final WebElement scrolled = scrolledElement();
+
         SnWait.waitUntil(this.waitTimeout(), this::isEnabled, SnComponentNotEnabledException::new);
-        return scrolled();
+        return scrolled;
     }
 
     /**
@@ -98,7 +100,7 @@ public abstract class SnClickableComponent extends SnComponent {
      * @throws SnComponentNotEnabledException if the component does not become enabled within the timeout
      */
     public void click() {
-        enabled();
+        enabledElement();
         super.click();
     }
 
@@ -114,7 +116,7 @@ public abstract class SnClickableComponent extends SnComponent {
      * @throws SnComponentNotEnabledException if the component does not become enabled within the timeout
      */
     public void doubleClick() {
-        enabled();
+        enabledElement();
         super.doubleClick();
     }
 
@@ -132,7 +134,7 @@ public abstract class SnClickableComponent extends SnComponent {
      * @throws SnComponentNotEnabledException if the component does not become enabled within the timeout
      */
     public void clickAt(int x, int y) {
-        enabled();
+        enabledElement();
         super.clickAt(x, y);
     }
 
@@ -150,7 +152,7 @@ public abstract class SnClickableComponent extends SnComponent {
      * @throws SnComponentNotEnabledException if the component does not become enabled within the timeout
      */
     public void doubleClickAt(int x, int y) {
-        enabled();
+        enabledElement();
         super.doubleClickAt(x, y);
     }
 }
