@@ -24,6 +24,7 @@ public class SnComponentRulesException extends RuntimeException {
         for (String ruleFailure : ruleFailures) {
             message.append("\n\t").append(ruleFailure);
         }
+        message.append("\n");
         return message.toString();
     }
 }

@@ -29,7 +29,7 @@ public final class SnLogHandler {
     static synchronized void configureLogger() {
         final ch.qos.logback.classic.Logger rootLogger = (ch.qos.logback.classic.Logger) LoggerFactory.getLogger(ch.qos.logback.classic.Logger.ROOT_LOGGER_NAME);
         final ch.qos.logback.classic.Logger apacheHttpLogger = (ch.qos.logback.classic.Logger) LoggerFactory.getLogger("org.apache.hc");
-        final ch.qos.logback.classic.Logger selionLogger = (ch.qos.logback.classic.Logger) LoggerFactory.getLogger("org.selion_framework");
+        final ch.qos.logback.classic.Logger selionLogger = (ch.qos.logback.classic.Logger) LoggerFactory.getLogger("org.emwhyware.selion");
         final SelionConfig selionConfig = SelionConfig.config();
 
         // Set the log level at the root level.

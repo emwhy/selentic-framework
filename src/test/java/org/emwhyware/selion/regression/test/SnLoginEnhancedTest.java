@@ -4,6 +4,7 @@ import org.emwhyware.selion.lib.Selion;
 import org.emwhyware.selion.lib.SnPage;
 import org.emwhyware.selion.lib.SnWithPage;
 import org.emwhyware.selion.regression.page.SnLoginEnhancedPage;
+import org.testng.Assert;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
@@ -25,6 +26,9 @@ public class SnLoginEnhancedTest {
     public void testLogin() {
         loginPage.inPage(p -> {
             p.accountTypeDropdown.select("Viewer");
+
+            Assert.assertEquals(p.accountTypeDropdown.text(), "Viewer");
+
             p.userNameTextbox.enterText("test");
             p.passwordTextbox.enterText("test");
             p.loginButton.click();

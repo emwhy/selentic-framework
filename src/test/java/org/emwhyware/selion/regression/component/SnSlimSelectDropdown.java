@@ -54,7 +54,6 @@ public class SnSlimSelectDropdown extends SnComponent {
         protected void rules(SnComponentRule rule) {
             rule.tag().is("div");
             rule.cssClasses().has("ss-option");
-            rule.attr("role").is("option");
         }
 
         public boolean isSelected() {
