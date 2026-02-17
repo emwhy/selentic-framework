@@ -17,6 +17,7 @@ public class SnSlimSelectDropdown extends SnComponent {
         rule.attr("aria-controls").isPresent();
     }
 
+    private final SnGenericComponent selectedText = $genericComponent(SELECTED_TEXT);
     private final SnArrowButton arrowButton = $component(ARROW_BUTTON, SnArrowButton.class, this);
     private final SnGenericComponent contentPanel = $genericComponent(CONTENT_PANEL);
     private final SnComponentCollection<SnListItem> listItems = $$components(LIST_ITEMS, SnListItem.class, this);
@@ -27,7 +28,7 @@ public class SnSlimSelectDropdown extends SnComponent {
     }
 
     public String selectedText() {
-        return $genericComponent(SELECTED_TEXT).text();
+        return selectedText.isDisplayed() ? selectedText.text() : "";
     }
 
     public void select(String text) {

@@ -25,9 +25,15 @@ public class SnLoginEnhancedTest {
     @Test
     public void testLogin() {
         loginPage.inPage(p -> {
+            Assert.assertEquals(p.accountTypeDropdown.selectedText(), "");
+
             p.accountTypeDropdown.select("Viewer");
 
             Assert.assertEquals(p.accountTypeDropdown.selectedText(), "Viewer");
+
+            p.accountTypeDropdown.select("Editor");
+
+            Assert.assertEquals(p.accountTypeDropdown.selectedText(), "Editor");
 
             p.userNameTextbox.enterText("test");
             p.passwordTextbox.enterText("test");
