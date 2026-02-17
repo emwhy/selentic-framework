@@ -1,1 +1,1 @@
-rootProject.name = "selion-framework"
+rootProject.name = "selentic-framework"

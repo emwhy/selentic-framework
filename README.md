@@ -1,15 +1,15 @@
-# Selion Framework
+# Selentic Framework
 
-Selion Framework is a test automation framework based on Component-Object Model design (COM). It aims to help producing test automation codes that are easy to maintain and read while ramping up the test automation development speed. 
+Selentic Framework is a test automation framework based on Component-Object Model design (COM). It aims to help producing test automation codes that are easy to maintain and read while ramping up the test automation development speed. 
 
 The ease to read and maintain the test automation code is crucial to success of any test automation projects. Software development projects incorporate test automation to cut down on the technical debt. Adding more technical debt by having to maintain complex, illegible code is exactly what we want to avoid.
 
-Selion Framework utilizes ***Selenium*** and is written in ***Java*** (Developed on Java 21). 
+Selentic Framework utilizes ***Selenium*** and is written in ***Java*** (Developed on Java 21). 
 
 ## Feature Highlights
 
 - The Component Object Model design allows custom components that are reusable, minimizing re-writing the code to do same or similar actions or copying-and-pasting, allowing less code to maintain.
-- It was designed to provides library to code in strongly pattern based design that are consistent throughout. It making the codes more predictable, legible, and easy to maintain while making it easier to spot any abnormality that could cause unexpected behaviors.
+- It was designed to provides library to code in strongly pattern based design that are consistent throughout. It makes the codes more predictable, legible, and easy to maintain while making it easier to spot any abnormality that could cause unexpected behaviors.
 - It implements automatic wait allows the code to focus on actions and assertions rather than timing, while allowing custom waits for those more difficult cases.
 - It forces indentations for actions on page, frame, external windows, dialog, etc. making it easy to spot where actions are happening.
 - It includes selector builder. This allows both CSS selector and XPath to be implemented in consistent manner while utilizing code highlighting and code suggestions of IDE. 
@@ -40,11 +40,11 @@ The Component Object Model (COM) in test automation is a design pattern that str
 
 The Component Object Model design pattern is often implemented using a Page Object Model, where a page object acts as a holder for various component objects. This allows test automation engineers to access component-specific action methods via the page object, creating a clear separation of concerns between test logic, page structure, and individual component behavior.  
 
-## Setting up Selion Framework
+## Setting up Selentic Framework
 
-- Download the latest **selion-framework.jar** file from https://github.com/emwhy/selion-framework/releases/. The release also contains ***selion-framework-javadoc.jar*** file that contains detailed documentation. When configured, the documentation can be shown right from IDE (such as IntelliJ).
-- Move the file to appropriate location in your project directory (i.e., ./lib).
-- There are additional packages that Selion depends on. Add reference to these packages. If you are working with Gradle, add dependencies to **build.gradle.kts** file.
+- Download the latest **selentic-framework.jar** file from https://github.com/emwhy/selentic-framework/releases/. The release also contains ***selentic-framework-javadoc.jar*** file that contains detailed documentation. When configured, the documentation can be shown right from IDE (such as IntelliJ).
+- Move the file to appropriate location in a project directory (i.e., ./lib).
+- There are additional packages that Selentic Framework depends on. Add reference to these packages. If you are working with Gradle, add dependencies to **build.gradle.kts** file.
 ```
 dependencies {
     implementation("org.seleniumhq.selenium:selenium-java:4.+")
@@ -54,68 +54,99 @@ dependencies {
     implementation("com.typesafe:config:1.4.+")
 }
 ```
-- **selion-framework-jar** can be added also.
+- **selentic-framework-jar** can be added also.
 ```
-    implementation(files("lib/selion-framework.jar"));
+    implementation(files("lib/selentic-framework.jar"));
 ```
-- Reload your Gradle. You should now be able to use Selion classes.
+- Reload your Gradle. You should now be able to use Selentic classes.
+
+## Configuration File
+
+Selentic configuration file allows setting some configurations before tests start.
+
+Selentic looks for **selentic.conf** file in a classpath. If not found, default values are used.
+
+The following shows the default values that can be modified.
+
+```
+ // Default browser
+ browser = "chrome"  // Options: chrome, firefox, safari, edge
+ 
+ // Wait timeout in milliseconds
+ wait-timeout-millisec = 5000
+ 
+ // Logging configuration
+ log {
+     root-dir = ""              // Default is $user.dir/log. Directory where logs are stored. 
+     root-log-level = "INFO"         // Log level for root logger (TRACE, DEBUG, INFO, WARN, ERROR)
+     selentic-log-level = "DEBUG"      // Log level for Selentic Framework logger (TRACE, DEBUG, INFO, WARN, ERROR)
+     keep-duration-min = 0           // How long to keep logs in minutes (0 = will not keep)
+ }
+
+```
+
 
 ## Writing a Simple Page Class
 
 Below is a simple login page.
 
-[login.htm](readme_files/login.htm)
+![login-page.png](readme_files/login-page.png)
 
-Below is the page class for this login page, written with Selion Framework.
+Below is the page class for this login page, written with Selentic Framework.
 
-```
-(imports and package are omitted)
+```java
+// (imports and package are omitted)
 
-public class SnLoginPage extends SnPage {
-    private static final SnCssSelector USERNAME_TEXTBOX = _cssSelector.descendant(_id("username"));
-    private static final SnCssSelector PASSWORD_TEXTBOX = _cssSelector.descendant(_id("password"));
-    private static final SnCssSelector LOGIN_BUTTON = _cssSelector.descendant(_tag("button"), _type().is("submit"));
+public class ScLoginPage extends ScPage {
+    // Selectors are defined at the top.
+    private static final ScCssSelector USERNAME_TEXTBOX = _cssSelector.descendant(_id("username"));
+    private static final ScCssSelector PASSWORD_TEXTBOX = _cssSelector.descendant(_id("password"));
+    private static final ScCssSelector LOGIN_BUTTON = _cssSelector.descendant(_tag("button"), _type().is("submit"));
     
     @Override
     protected void waitForDisplayed() {
         waitForComponent(userNameTextbox);
     }
     
-    public final SnTextbox userNameTextbox = $textbox(USERNAME_TEXTBOX);
-    public final SnTextbox passwordTextbox = $textbox(PASSWORD_TEXTBOX);
-    public final SnButton loginButton = $button(LOGIN_BUTTON);
+    // Components on this page.
+    public final ScTextbox userNameTextbox = $textbox(USERNAME_TEXTBOX);
+    public final ScTextbox passwordTextbox = $textbox(PASSWORD_TEXTBOX);
+    public final ScButton loginButton = $button(LOGIN_BUTTON);
 }
 ```
 
-- All Selion classes are prefixed with "Sn". This makes it clear about classes that are part of Selion Framework.
-- All page class must extend from **SnPage** or one of its subclass. This provides access to properties and methods for 
+- All Selentic classes are prefixed with "Sc". This makes it clear about classes that are part of Selentic Framework.
+- All page class must extend from **ScPage** or one of its subclass. This provides access to properties and methods for 
  constructing selectors and defining components.
-- Selectors are defined at the top. Selectors can be either **SnCssSelector** or **SnXPath**. Regardless of which is used, the syntax is similar.
+- Selectors are defined at the top. Selectors can be either **ScCssSelector** or **ScXPath**. Regardless of which is used, the syntax is similar.
 Generally CSS selectors are faster while XPath offer more complex features.
-- Since textbox and button are both standard HTML form element, they are already defined in Selion Framework.
-- Both selector object and component object name ends with the component type (i.e., USERNAME_**TEXTBOX**, username**Textbox**). This practice is recommended to keep the test code easily legible.
+- Since textbox and button are both standard HTML form element, they are already defined in Selentic Framework.
+- Both selector object and component object name end with the component type (i.e., USERNAME_**TEXTBOX**, username**Textbox**). This practice is recommended to keep the test code easily legible.
 - Overriding **waitForDisplayed** is optional. The page would automatically wait for the page to complete loading. However, if additional wait is needed (i.e., Ajax based components require more wait to fully load), that can be implemented here. In this case, in addition to waiting for the page to load, it also waits for the username textbox to be displayed.  
 
 Once the page is defined, writing a test is straight forward (Written with TestNG).
 
-```
-(imports and package are omitted)
+```java 
+// (imports and package are omitted)
 
-public class SnExampleTest {
-    private final SnWithPage<SnLoginPage> loginPage = SnPage.with(SnLoginPage.class);
+public class ScExampleTest {
+    // Define the page class.
+    private final ScWithPage<ScLoginPage> loginPage = ScPage.with(ScLoginPage.class);
 
+    // Start web driver, and open the page.
     @BeforeClass
     public void setup() {
-        Selion.open("file://" + System.getProperty("user.dir") + "/build/resources/main/html/login.htm");
+        Selentic.open("file://" + System.getProperty("user.dir") + "/build/resources/main/html/login.htm");
     }
 
     @AfterClass(alwaysRun = true)
     public void finish() {
-        Selion.quit();
+        Selentic.quit();
     }
 
     @Test
     public void testLogin() {
+        // All actions on the page goes inside of "inPage()".
         loginPage.inPage(p -> {
             p.userNameTextbox.enterText("test");
             p.passwordTextbox.enterText("test");
@@ -125,7 +156,7 @@ public class SnExampleTest {
 }
 ```
 
-- The pages being used is defined at the top using **SnWithPage** class. This gives access to the page content by using **inPage()** method.
+- The pages being used is defined at the top using **ScWithPage** class. This gives access to the page content by using **inPage()** method.
 - When entering **inPage()** method, the page waits for the page to load without additional code. If **waitForDisplayed** of the page is overridden, that would also be executed.
 - Because components are defined with respective component type, only relevant methods are available, like *click* for button and *enterText* for textbox.
 - Before actions take place (i.e., click, enterText), the framework automatically checks for component's existence, ensure that it is displayed, check to ensure it is enabled (if needed), then scroll to the component.
@@ -144,58 +175,169 @@ The dropdown on this page is SlimSelect, which is stylized and provides more enh
 Looking at the source doe, while the select element does exist on the page, it is not visible, so any attempt to directly interact with it would throw error. 
 The actual visual elements are div tag under the select.
 
-Because it is not a standard select dropdown, it needs to be defined as shown below.
+Because it is not a standard select dropdown, it needs to be defined.
+
+### Creating the Component Class
+
+To get started, we can start creating a Slim Select component class. It must be extended from ScComponent.
+
+This forces us to implement **rules()** method where we can define what element properties are required.
+
+At this point, it should be fairly clear what web element on the page should be referred as Slim Select component. There should be CSS classes or attributes that define them because those properties are needed to make this dropdown work. We can add them to the rules.
+
+**rules()** method makes **ScComponentRule** object available, which gives fluent grammar to add a set of rules. If something is not right during the runtime, it attempts to give meaningful error messages that points you to what went wrong.
+
+
+```java
+
+// (imports and package are omitted)
+
+public class ScSlimSelectDropdown extends ScComponent {
+    @Override
+    protected void rules(ScComponentRule rule) {
+        rule.tag().is("div");
+        rule.attr("aria-label").is("Combobox");
+        rule.attr("role").is("combobox");
+        rule.attr("aria-controls").isPresent();        
+    }
+}
+```
+### Defining Public Facing Methods
+
+This is a single select dropdown, so primarily, these 2 functionalities will be needed:
+
+- Select from a list of options.
+- Get selected item text.
+
+We can start by adding them as public facing methods. Everything else is going to be private within this class to make these 2 methods work.
+
+```java
+// (imports and package are omitted)
+
+public class ScSlimSelectDropdown extends ScComponent {
+    @Override
+    protected void rules(ScComponentRule rule) {
+        rule.tag().is("div");
+        rule.attr("aria-label").is("Combobox");
+        rule.attr("role").is("combobox");
+        rule.attr("aria-controls").isPresent();
+    }
+    
+    public String selectedText() {
+    }
+
+    public void select(String text) {
+    }
+    
+}
 
 ```
-public class SnSlimSelectDropdown extends SnComponent {
-    private static final SnCssSelector ARROW_BUTTON = _cssSelector.descendant(_tag("svg"), _cssClasses("ss-arrow"));
-    private static final SnCssSelector SELECTED_TEXT = _cssSelector.descendant(_tag("div"), _cssClasses("ss-single"));
-    private static final SnCssSelector CONTENT_PANEL = _cssSelector.page(_tag("div"), _cssClasses("ss-content", "ss-open"));
-    private static final SnCssSelector LIST_ITEMS = CONTENT_PANEL.descendant(_tag("div"), _cssClasses("ss-option"));
+### Defining Selectors
 
+To make these public facing methods work, we need to interact with several internal objects:
+
+- Arrow button that opens the dropdown when clicked.
+- The dropdown panel itself.
+- The list of options.
+- The element that contains the selected text.
+
+All these sits as descendent element to this element except for the dropdown panel and options. These sit at the bottom of the HTML page and appear when triggered (clicking the arrow button).
+
+To indicate that the scope is the entire page rather than with this element, *_cssSelector.page()* method is used.
+
+By using of **_cssSelector**, the CSS selectors are being generated. The limitation of the CSS selectors applies, and the framework makes them clear what properties are available to it. 
+
+If more complex selections are needed, **_xpath** is also available which gives more functionalities (at the cost of potential hit in execution efficiency compared to CSS selector).
+
+```java
+// (imports and package are omitted)
+
+public class ScSlimSelectDropdown extends ScComponent {
+    // Selectors are at the top.
+    private static final ScCssSelector ARROW_BUTTON = _cssSelector.descendant(_tag("svg"), _cssClasses("ss-arrow"));
+    private static final ScCssSelector SELECTED_TEXT = _cssSelector.descendant(_tag("div"), _cssClasses("ss-single"));
+
+    // "page" changes the scope to see the entire page rather than descendent.
+    private static final ScCssSelector CONTENT_PANEL = _cssSelector.page(_tag("div"), _cssClasses("ss-content", "ss-open"));
+
+    // You can concatenate selectors.
+    private static final ScCssSelector LIST_ITEMS = CONTENT_PANEL.descendant(_tag("div"), _cssClasses("ss-option"));
+
+    // Set rules.
     @Override
-    protected void rules(SnComponentRule rule) {
+    protected void rules(ScComponentRule rule) {
         rule.tag().is("div");
         rule.attr("aria-label").is("Combobox");
         rule.attr("role").is("combobox");
         rule.attr("aria-controls").isPresent();
     }
 
-    private SnArrowButton arrowButton = $component(ARROW_BUTTON, SnArrowButton.class, this);
-    private SnGenericComponent contentPanel = $genericComponent(CONTENT_PANEL);
-    private SnComponentCollection<SnListItem> listItems = $$components(LIST_ITEMS, SnListItem.class, this);
-
-    @Override
-    public String text() {
-        return selectedText();
-    }
-
     public String selectedText() {
-        return $genericComponent(SELECTED_TEXT).text();
     }
 
     public void select(String text) {
-        arrowButton.click();
-        SnWait.waitUntil(() -> contentPanel.isDisplayed());
-        listItems.entry(text).click();
-        SnWait.waitUntil(() -> !contentPanel.isDisplayed());
+    }
+}
+```
+
+### Defining Components
+
+Using the selectors, we can now define components. In this particular case, none of the component needs to be exposed to public, so they can remain private.
+
+Both the arrow dropdown and option items must be capable of being clicked. To give them that method, we define internal class for each that overrides abstract **ScClickableComponent** class.
+
+the selected text only needs text property, so it can be defined as **ScGenericComponent** which only exposes text property. *\$genericComponent()* method is a shorthand for *\$component(selector, ScGenericComponent.class)*.
+
+```java
+// (imports and package are omitted)
+
+public class ScSlimSelectDropdown extends ScComponent {
+    // Selectors are at the top.
+    private static final ScCssSelector ARROW_BUTTON = _cssSelector.descendant(_tag("svg"), _cssClasses("ss-arrow"));
+    private static final ScCssSelector SELECTED_TEXT = _cssSelector.descendant(_tag("div"), _cssClasses("ss-single"));
+
+    // "page" changes the scope to see the entire page rather than descendent.
+    private static final ScCssSelector CONTENT_PANEL = _cssSelector.page(_tag("div"), _cssClasses("ss-content", "ss-open"));
+
+    // You can concatenate selectors.
+    private static final ScCssSelector LIST_ITEMS = CONTENT_PANEL.descendant(_tag("div"), _cssClasses("ss-option"));
+
+    // Set rules.
+    @Override
+    protected void rules(ScComponentRule rule) {
+        rule.tag().is("div");
+        rule.attr("aria-label").is("Combobox");
+        rule.attr("role").is("combobox");
+        rule.attr("aria-controls").isPresent();
     }
 
+    public String selectedText() {
+    }
+
+    public void select(String text) {
+    }
+
+    // Components on this component. None of these need to be public.
+    private final ScGenericComponent selectedText = $genericComponent(SELECTED_TEXT);
+    private final ScArrowButton arrowButton = $component(ARROW_BUTTON, ScArrowButton.class, this);
+    private final ScGenericComponent contentPanel = $genericComponent(CONTENT_PANEL);
+    private final ScComponentCollection<ScListItem> listItems = $$components(LIST_ITEMS, ScListItem.class, this);
+    
     /*
         Inner classes.
      */
 
-    public class SnArrowButton extends SnClickableComponent {
+    public class ScArrowButton extends ScClickableComponent {
         @Override
-        protected void rules(SnComponentRule rule) {
+        protected void rules(ScComponentRule rule) {
             rule.tag().is("svg");
             rule.cssClasses().has("ss-arrow");
         }
     }
 
-    public class SnListItem extends SnClickableComponent {
+    public class ScListItem extends ScClickableComponent {
         @Override
-        protected void rules(SnComponentRule rule) {
+        protected void rules(ScComponentRule rule) {
             rule.tag().is("div");
             rule.cssClasses().has("ss-option");
         }
@@ -207,41 +349,124 @@ public class SnSlimSelectDropdown extends SnComponent {
 }
 ```
 
-- Page and component should look very similar in structure, with selectors at the top and defined contained components.
-- **rules()** method must be implemented. This allows you to define what web element properties are required for this component class to be assigned to an element.
-if a wrong type of element is assigned to this component, it would throw error. This also provides a way to search for properties text, so that if a component already exists, you can find it.
-- Overriding **text()** ensures that the text value is a selected text. Otherwise, it would be an inner text of the div tag, which may contain undesired texts.
-- Components that are specific to this component can be defined as inner classes. To do this, you must supply the containing object in $component() or $$components() method calls as a 3rd parameter.
-- *SnArrowButton* and *SnListItem* are both div tag. Extending from **SnClickableComponent** automatically gives them ability to click.
-- The content of the dropdown's list items are attached at the bottom of the page when the arrow is clicked to open the dropdown. Using *_cssSelector.page()* method
-says that the framework should look for the entire page rather than descendent of this component.
+### Implementing Public Methods
 
-Once **SnSlimSelectDropdown** class is defined, it can be used anytime the Slim select appears in the application. Typically, 
-web components are repeatedly used within an application, so while it may take some time to initially build the component, it 
-can easily save time and effort.
+With all internal components in place, we can now implement public methods.
 
-It might look like below when implemented in a test.
+We also override *text()* method, because without that, the returned text would be unfiltered inner text and not useful. We'll just return the selected text.
 
+```java
+// (imports and package are omitted)
+
+public class ScSlimSelectDropdown extends ScComponent {
+    // Selectors are at the top.
+    private static final ScCssSelector ARROW_BUTTON = _cssSelector.descendant(_tag("svg"), _cssClasses("ss-arrow"));
+    private static final ScCssSelector SELECTED_TEXT = _cssSelector.descendant(_tag("div"), _cssClasses("ss-single"));
+
+    // "page" changes the scope to see the entire page rather than descendent.
+    private static final ScCssSelector CONTENT_PANEL = _cssSelector.page(_tag("div"), _cssClasses("ss-content", "ss-open"));
+
+    // You can concatenate selectors.
+    private static final ScCssSelector LIST_ITEMS = CONTENT_PANEL.descendant(_tag("div"), _cssClasses("ss-option"));
+
+    // Set rules.
+    @Override
+    protected void rules(ScComponentRule rule) {
+        rule.tag().is("div");
+        rule.attr("aria-label").is("Combobox");
+        rule.attr("role").is("combobox");
+        rule.attr("aria-controls").isPresent();
+    }
+
+    @Override
+    public String text() {
+        return selectedText();
+    }
+
+    public String selectedText() {
+        // selectedText only appears when there is a selection, 
+        // so check if it's displayed, and return an empty string if not.
+        return selectedText.isDisplayed() ? selectedText.text() : "";
+    }
+
+    public void select(String text) {
+        arrowButton.click();
+        ScWait.waitUntil(() -> contentPanel.isDisplayed());
+        listItems.entry(text).click();
+        ScWait.waitUntil(() -> !contentPanel.isDisplayed());
+    }
+
+    // Components on this component. None of these need to be public.
+    private final ScGenericComponent selectedText = $genericComponent(SELECTED_TEXT);
+    private final ScArrowButton arrowButton = $component(ARROW_BUTTON, ScArrowButton.class, this);
+    private final ScGenericComponent contentPanel = $genericComponent(CONTENT_PANEL);
+    private final ScComponentCollection<ScListItem> listItems = $$components(LIST_ITEMS, ScListItem.class, this);
+    
+    /*
+        Inner classes.
+     */
+
+    public class ScArrowButton extends ScClickableComponent {
+        @Override
+        protected void rules(ScComponentRule rule) {
+            rule.tag().is("svg");
+            rule.cssClasses().has("ss-arrow");
+        }
+    }
+
+    public class ScListItem extends ScClickableComponent {
+        @Override
+        protected void rules(ScComponentRule rule) {
+            rule.tag().is("div");
+            rule.cssClasses().has("ss-option");
+        }
+
+        public boolean isSelected() {
+            return this.cssClasses().contains("ss-selected");
+        }
+    }
+}
 ```
-public class SnLoginEnhancedTest {
-    private final SnWithPage<SnLoginEnhancedPage> loginPage = SnPage.with(SnLoginEnhancedPage.class);
+Page and component should look very similar in structure, with selectors at the top and defined contained components.
+
+Once **ScSlimSelectDropdown** class is defined, it can be used in any places where the Slim Select appears on a page in applications. Typically, 
+the same web components are repeatedly used within an application for consistent look and saving development time. While it may take some time to initially build the component, it 
+can easily pay off in saved time, as more page classes are created.
+
+Note that this is based on Slim Select being a single select dropdown. If this component allows different mode (like multi-select options), it can be implemented within this class, or create a new class for handling it.
+
+### Using the Component in Test
+
+Below is an example test that utilizes the Slim Select (TestNG).
+
+```java 
+// (imports and package are omitted)
+
+public class ScLoginEnhancedTest {
+    private final ScWithPage<ScLoginEnhancedPage> loginPage = ScPage.with(ScLoginEnhancedPage.class);
 
     @BeforeClass
     public void setup() {
-        Selion.open("file://" + System.getProperty("user.dir") + "/build/resources/test/test_file/login-enhanced.htm");
+        Selentic.open("file://" + System.getProperty("user.dir") + "/build/resources/test/test_file/login-enhanced.htm");
     }
 
     @AfterClass(alwaysRun = true)
     public void finish() {
-        Selion.quit();
+        Selentic.quit();
     }
 
     @Test
     public void testLogin() {
         loginPage.inPage(p -> {
+            Assert.assertEquals(p.accountTypeDropdown.selectedText(), "");
+
             p.accountTypeDropdown.select("Viewer");
 
             Assert.assertEquals(p.accountTypeDropdown.selectedText(), "Viewer");
+
+            p.accountTypeDropdown.select("Editor");
+
+            Assert.assertEquals(p.accountTypeDropdown.selectedText(), "Editor");
 
             p.userNameTextbox.enterText("test");
             p.passwordTextbox.enterText("test");
@@ -250,4 +475,5 @@ public class SnLoginEnhancedTest {
     }
 }
 ```
-The test code remains simple and legible despite the complexity of Slim select. 
+The test code remains simple and legible. The design pushes more complex code to the back and with more reusability to
+minimize the amount of code. More reusable code means less code to support and maintain.

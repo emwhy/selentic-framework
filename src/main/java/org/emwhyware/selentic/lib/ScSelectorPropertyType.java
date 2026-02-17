@@ -1,0 +1,9 @@
+package org.emwhyware.selentic.lib;
+
+public interface ScSelectorPropertyType {
+    String build(Types type);
+
+    enum Types {
+        CssSelector, XPath
+    }
+}
