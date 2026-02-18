@@ -46,6 +46,22 @@ public final class ScCssSelectorNextSibling extends ScCssSelector {
     }
 
     /**
+     * Constructs an {@code ScCssSelectorNextSibling} with a prior selector node and optional properties.
+     *
+     * <p>
+     * This constructor is package-private and called internally by the framework. Use the fluent API
+     * method {@link ScCssSelector#nextSibling(ScCssSelectorPropertyType...)} instead.
+     *
+     *
+     * @param tag The HTML/XML tag to target.
+     * @param priorSelectorNode the preceding element selector in the chain
+     * @param selectorProperties optional properties to filter the next sibling element
+     */
+    ScCssSelectorNextSibling(ScCssSelector priorSelectorNode, String tag, ScCssSelectorPropertyType... selectorProperties) {
+        super(priorSelectorNode, tag, selectorProperties);
+    }
+
+    /**
      * Returns the CSS adjacent sibling combinator operator: {@code " + "}.
      *
      * <p>

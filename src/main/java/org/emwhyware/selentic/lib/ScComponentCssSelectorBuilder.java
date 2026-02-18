@@ -42,4 +42,29 @@ public final class ScComponentCssSelectorBuilder extends ScSelectorBuilder {
         this.setSelector(new ScCssSelectorPage(selectorProperties));
         return (ScCssSelector) this.selector();
     }
+
+
+    /**
+     * Sets and returns a CSS selector for a descendant of this component.
+     *
+     * @param tag The HTML/XML tag to target.
+     * @param selectorProperties One or more properties used to define the descendant relationship.
+     * @return The updated {@link ScCssSelector} instance.
+     */
+    public ScCssSelector descendant(String tag, ScCssSelectorPropertyType... selectorProperties) {
+        this.setSelector(new ScCssSelectorDescendant(tag, selectorProperties));
+        return (ScCssSelector) this.selector();
+    }
+
+    /**
+     * Sets and returns a CSS selector, looking at the entire web page.
+     *
+     * @param tag The HTML/XML tag to target.
+     * @param selectorProperties One or more properties used to define the page selector.
+     * @return The updated {@link ScCssSelector} instance.
+     */
+    public ScCssSelector page(String tag, ScCssSelectorPropertyType... selectorProperties) {
+        this.setSelector(new ScCssSelectorPage(tag, selectorProperties));
+        return (ScCssSelector) this.selector();
+    }
 }

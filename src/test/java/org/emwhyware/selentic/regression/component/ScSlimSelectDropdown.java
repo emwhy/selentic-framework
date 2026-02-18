@@ -4,10 +4,10 @@ import org.emwhyware.selentic.lib.*;
 import org.emwhyware.selentic.lib.util.ScWait;
 
 public class ScSlimSelectDropdown extends ScComponent {
-    private static final ScCssSelector ARROW_BUTTON = _cssSelector.descendant(_tag("svg"), _cssClasses("ss-arrow"));
-    private static final ScCssSelector SELECTED_TEXT = _cssSelector.descendant(_tag("div"), _cssClasses("ss-single"));
-    private static final ScCssSelector CONTENT_PANEL = _cssSelector.page(_tag("div"), _cssClasses("ss-content", "ss-open"));
-    private static final ScCssSelector LIST_ITEMS = CONTENT_PANEL.descendant(_tag("div"), _cssClasses("ss-option"));
+    private static final ScCssSelector ARROW_BUTTON = _cssSelector.descendant("svg", _cssClasses("ss-arrow"));
+    private static final ScCssSelector SELECTED_TEXT = _cssSelector.descendant("div", _cssClasses("ss-single"));
+    private static final ScCssSelector CONTENT_PANEL = _cssSelector.page("div", _cssClasses("ss-content", "ss-open"));
+    private static final ScCssSelector LIST_ITEMS = CONTENT_PANEL.descendant("div", _cssClasses("ss-option"));
 
     @Override
     protected void rules(ScComponentRule rule) {

@@ -5,6 +5,10 @@ public final class ScXPathPage extends ScXPath {
         super(tag, selectorProperties);
     }
 
+    ScXPathPage(ScXpathPropertyType... selectorProperties) {
+        super(selectorProperties);
+    }
+
     @Override
     protected String nodeText() {
         return "/descendant::";

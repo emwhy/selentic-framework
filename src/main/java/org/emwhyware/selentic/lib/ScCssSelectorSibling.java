@@ -6,6 +6,10 @@ public final class ScCssSelectorSibling extends ScCssSelector {
         super(priorSelectorNode, selectorProperties);
     }
 
+    ScCssSelectorSibling(ScCssSelector priorSelectorNode, String tag, ScCssSelectorPropertyType... selectorProperties) {
+        super(priorSelectorNode, tag, selectorProperties);
+    }
+
     @Override
     protected String nodeText() {
         return " ~ ";

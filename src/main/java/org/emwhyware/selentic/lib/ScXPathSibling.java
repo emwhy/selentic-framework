@@ -9,6 +9,14 @@ public final class ScXPathSibling extends ScXPath {
         super(priorSelectorNode, tag, selectorProperties);
     }
 
+    ScXPathSibling(ScXpathPropertyType... selectorProperties) {
+        super(selectorProperties);
+    }
+
+    ScXPathSibling(ScXPath priorSelectorNode, ScXpathPropertyType... selectorProperties) {
+        super(priorSelectorNode, selectorProperties);
+    }
+
     @Override
     protected String nodeText() {
         return "/following-sibling::";

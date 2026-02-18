@@ -1,12 +1,12 @@
 package org.emwhyware.selentic.lib;
 
 public final class ScXPathPrecedingSibling extends ScXPath {
-    ScXPathPrecedingSibling(String tag, ScXpathPropertyType... selectorProperties) {
-        super(tag, selectorProperties);
-    }
-
     ScXPathPrecedingSibling(ScXPath priorSelectorNode, String tag, ScXpathPropertyType... selectorProperties) {
         super(priorSelectorNode, tag, selectorProperties);
+    }
+
+    ScXPathPrecedingSibling(ScXPath priorSelectorNode, ScXpathPropertyType... selectorProperties) {
+        super(priorSelectorNode, selectorProperties);
     }
 
     @Override

@@ -13,6 +13,10 @@ public class ScSelectorAttributeCondition {
         return new ScSelectorAttributeProperty(this.prefix, this.attribute, ScSelectorAttributeProperty.Conditions.Is, text);
     }
 
+    public ScSelectorAttributeProperty isPresent() {
+        return new ScSelectorAttributeProperty(this.prefix, this.attribute, ScSelectorAttributeProperty.Conditions.IsPresent, "");
+    }
+
     public ScSelectorAttributeProperty contains(String text) {
         return new ScSelectorAttributeProperty(this.prefix, this.attribute, ScSelectorAttributeProperty.Conditions.Contains, text);
     }

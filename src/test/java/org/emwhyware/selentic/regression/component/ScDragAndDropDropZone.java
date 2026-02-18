@@ -6,7 +6,7 @@ import org.emwhyware.selentic.lib.ScCssSelector;
 import org.emwhyware.selentic.lib.ScGenericComponent;
 
 public class ScDragAndDropDropZone extends ScComponent {
-    private static final ScCssSelector LABEL_TEXT = _cssSelector.descendant(_tag("p"));
+    private static final ScCssSelector LABEL_TEXT = _cssSelector.descendant("p");
     private static final ScCssSelector DRAGGED_ITEM = _cssSelector.descendant(_cssClasses("draggable-item"));
 
     @Override

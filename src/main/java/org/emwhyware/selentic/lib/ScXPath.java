@@ -62,6 +62,40 @@ public sealed abstract class ScXPath extends ScSelector permits ScXPathChild, Sc
     }
 
     /**
+     * Constructs an {@code ScXPath} instance with a specified tag and optional selector properties.
+     *
+     * <p>This constructor is typically called by subclasses to initialize an XPath selector
+     * without a prior selector node (root-level selector).
+     *
+     *
+     * @param selectorProperties variable number of {@link ScXpathPropertyType} objects that define
+     *                           attributes and conditions for the selector (e.g., class, id, text content)
+     */
+    ScXPath(ScXpathPropertyType... selectorProperties) {
+        super();
+        this.tag = "*";
+        this.selectorProperties = selectorProperties;
+    }
+
+    /**
+     * Constructs an {@code ScXPath} instance with a prior selector node and specified tag and properties.
+     *
+     * <p>This constructor is used by subclasses to chain XPath selectors by linking to a
+     * previous selector node, enabling composition of complex XPath expressions.
+     *
+     *
+     * @param priorSelectorNode the previous {@link ScXPath} node in the selector chain; allows
+     *                         building composite XPath expressions
+     * @param selectorProperties variable number of {@link ScXpathPropertyType} objects that define
+     *                           attributes and conditions for the selector
+     */
+    ScXPath(ScXPath priorSelectorNode, ScXpathPropertyType... selectorProperties) {
+        super(priorSelectorNode);
+        this.tag = "*";
+        this.selectorProperties = selectorProperties;
+    }
+
+    /**
      * Returns the string representation of this XPath selector.
      *
      * @return a string representation of the complete XPath expression
@@ -223,6 +257,107 @@ public sealed abstract class ScXPath extends ScSelector permits ScXPathChild, Sc
      */
     public ScXPath preceding(String tag, ScXpathPropertyType... selectorProperties) {
         return new ScXPathPreceding(this, tag, selectorProperties);
+    }
+
+
+    /**
+     * Creates a new {@code ScXPath} selector representing a descendant relationship to an element
+     * with the specified tag and optional properties.
+     *
+     * <p>This method constructs an {@link ScXPathDescendant} selector that represents all descendants
+     * of the current element matching the specified criteria. This is equivalent to the XPath
+     * "//" relationship.
+     *
+     *
+     * @param selectorProperties optional properties to filter descendant elements by attributes or content
+     * @return a new {@code ScXPath} object representing the descendant selector
+     * @see ScXPathDescendant
+     */
+    public ScXPath descendant(ScXpathPropertyType... selectorProperties) {
+        return new ScXPathDescendant(this, selectorProperties);
+    }
+
+    /**
+     * Creates a new {@code ScXPath} selector representing a direct child relationship to an element
+     * with the specified tag and optional properties.
+     *
+     * <p>This method constructs an {@link ScXPathChild} selector that represents only direct children
+     * of the current element matching the specified criteria. This is equivalent to the XPath "/"
+     * relationship.
+     *
+     *
+     * @param selectorProperties optional properties to filter child elements by attributes or content
+     * @return a new {@code ScXPath} object representing the child selector
+     * @see ScXPathChild
+     */
+    public ScXPath child(ScXpathPropertyType... selectorProperties) {
+        return new ScXPathChild(this, selectorProperties);
+    }
+
+    /**
+     * Creates a new {@code ScXPath} selector representing a sibling relationship to an element
+     * with the specified tag and optional properties.
+     *
+     * <p>This method constructs an {@link ScXPathSibling} selector that represents sibling elements
+     * (elements sharing the same parent) matching the specified criteria.
+     *
+     *
+     * @param selectorProperties optional properties to filter sibling elements by attributes or content
+     * @return a new {@code ScXPath} object representing the sibling selector
+     * @see ScXPathSibling
+     */
+    public ScXPath sibling(ScXpathPropertyType... selectorProperties) {
+        return new ScXPathSibling(this, selectorProperties);
+    }
+
+    /**
+     * Creates a new {@code ScXPath} selector representing a preceding sibling relationship to an element
+     * with the specified tag and optional properties.
+     *
+     * <p>This method constructs an {@link ScXPathPrecedingSibling} selector that represents preceding
+     * sibling elements (siblings appearing earlier in the document) matching the specified criteria.
+     *
+     *
+     * @param selectorProperties optional properties to filter preceding sibling elements by attributes or content
+     * @return a new {@code ScXPath} object representing the preceding sibling selector
+     * @see ScXPathPrecedingSibling
+     */
+    public ScXPath precedingSibling(ScXpathPropertyType... selectorProperties) {
+        return new ScXPathPrecedingSibling(this, selectorProperties);
+    }
+
+    /**
+     * Creates a new {@code ScXPath} selector representing a following relationship to an element
+     * with the specified tag and optional properties.
+     *
+     * <p>This method constructs an {@link ScXPathFollowing} selector that represents elements
+     * following the current element in document order that match the specified criteria.
+     * This is equivalent to the XPath "following::" axis.
+     *
+     *
+     * @param selectorProperties optional properties to filter following elements by attributes or content
+     * @return a new {@code ScXPath} object representing the following selector
+     * @see ScXPathFollowing
+     */
+    public ScXPath following(ScXpathPropertyType... selectorProperties) {
+        return new ScXPathFollowing(this, selectorProperties);
+    }
+
+    /**
+     * Creates a new {@code ScXPath} selector representing a preceding relationship to an element
+     * with the specified tag and optional properties.
+     *
+     * <p>This method constructs an {@link ScXPathPreceding} selector that represents elements
+     * preceding the current element in document order that match the specified criteria.
+     * This is equivalent to the XPath "preceding::" axis.
+     *
+     *
+     * @param selectorProperties optional properties to filter preceding elements by attributes or content
+     * @return a new {@code ScXPath} object representing the preceding selector
+     * @see ScXPathPreceding
+     */
+    public ScXPath preceding(ScXpathPropertyType... selectorProperties) {
+        return new ScXPathPreceding(this, selectorProperties);
     }
 
     /**

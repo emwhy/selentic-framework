@@ -32,4 +32,17 @@ public final class ScPageCssSelectorBuilder extends ScSelectorBuilder {
         this.setSelector(new ScCssSelectorDescendant(selectorProperties));
         return (ScCssSelector) this.selector();
     }
+
+    /**
+     * Constructs a descendant CSS selector using the specified property types.
+     *
+     * @param tag The HTML/XML tag to target.
+     * @param selectorProperties A variable number of {@link ScCssSelectorPropertyType}
+     *                           objects to define the selector criteria.
+     * @return The updated {@link ScCssSelector} instance.
+     */
+    public ScCssSelector descendant(String tag, ScCssSelectorPropertyType... selectorProperties) {
+        this.setSelector(new ScCssSelectorDescendant(tag, selectorProperties));
+        return (ScCssSelector) this.selector();
+    }
 }

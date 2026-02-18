@@ -58,6 +58,37 @@ public final class ScCssSelectorDescendant extends ScCssSelector {
         super(priorSelectorNode, selectorProperties);
     }
 
+
+    /**
+     * Constructs an {@code ScCssSelectorDescendant} without a prior selector (root-level selector).
+     *
+     * <p>
+     * Used internally by the framework for creating root descendant selectors.
+     *
+     *
+     * @param tag The HTML/XML tag to target.
+     * @param selectorProperties optional properties to filter descendant elements
+     */
+    ScCssSelectorDescendant(String tag, ScCssSelectorPropertyType... selectorProperties) {
+        super(tag, selectorProperties);
+    }
+
+    /**
+     * Constructs an {@code ScCssSelectorDescendant} with a prior selector node and optional properties.
+     *
+     * <p>
+     * This constructor is package-private and called internally by the framework. Use the fluent API
+     * method {@link ScCssSelector#descendant(ScCssSelectorPropertyType...)} instead.
+     *
+     *
+     * @param priorSelectorNode the parent element selector in the chain
+     * @param tag The HTML/XML tag to target.
+     * @param selectorProperties optional properties to filter descendant elements
+     */
+    ScCssSelectorDescendant(ScCssSelector priorSelectorNode, String tag, ScCssSelectorPropertyType... selectorProperties) {
+        super(priorSelectorNode, tag, selectorProperties);
+    }
+
     /**
      * Returns the CSS descendant combinator operator: a space ({@code " "}).
      *

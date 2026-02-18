@@ -9,8 +9,8 @@ import org.emwhyware.selentic.regression.component.ScSlimSelectDropdown;
 public class ScLoginEnhancedPage extends ScPage {
     private static final ScCssSelector USERNAME_TEXTBOX = _cssSelector.descendant(_id("username"));
     private static final ScCssSelector PASSWORD_TEXTBOX = _cssSelector.descendant(_id("password"));
-    private static final ScCssSelector ACCOUNT_TYPE_DROPDOWN = _cssSelector.descendant(_tag("select"), _id("user-role")).nextSibling(_tag("div"), _attr("role").is("combobox"));
-    private static final ScCssSelector LOGIN_BUTTON = _cssSelector.descendant(_tag("button"), _type().is("submit"));
+    private static final ScCssSelector ACCOUNT_TYPE_DROPDOWN = _cssSelector.descendant("select", _id("user-role")).nextSibling(_tag("div"), _attr("role").is("combobox"));
+    private static final ScCssSelector LOGIN_BUTTON = _cssSelector.descendant("button", _type().is("submit"));
 
     @Override
     protected void waitForDisplayedPage() {

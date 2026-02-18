@@ -18,9 +18,9 @@ public class ScUiComponentPage extends ScPage {
     private static final ScCssSelector TEST_BUTTON = _cssSelector.descendant(_id("test-button"));
     private static final ScCssSelector TEST_BUTTON_INDICATOR_TEXT = _cssSelector.descendant(_id("test-button-indicator"));
     private static final ScCssSelector TEST_IFRAME = _cssSelector.descendant(_id("test-iframe"));
-    private static final ScCssSelector TEST_TABLE_ROWS = _cssSelector.descendant(_id("test-table")).descendant(_tag("tr"), _cssClasses("data"));
+    private static final ScCssSelector TEST_TABLE_ROWS = _cssSelector.descendant(_id("test-table")).descendant("tr", _cssClasses("data"));
     private static final ScCssSelector OPEN_EXTERNAL_WINDOW_LINK = _cssSelector.descendant(_id("test-external-window-link"));
-    private static final ScCssSelector TEST_LONG_COMPONENT_LIST = _cssSelector.descendant(_id("long-component-list")).child(_tag("div"), _cssClasses("long-component-list-entry"));
+    private static final ScCssSelector TEST_LONG_COMPONENT_LIST = _cssSelector.descendant(_id("long-component-list")).child("div", _cssClasses("long-component-list-entry"));
     private static final ScCssSelector TEST_CSV_DOWNLOAD_LINK = _cssSelector.descendant(_id("test-csv-download-link"));
     private static final ScCssSelector TEST_OWN_TEXT = _cssSelector.descendant(_id("test-own-text"));
 

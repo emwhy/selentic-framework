@@ -9,6 +9,14 @@ public final class ScXPathFollowing extends ScXPath {
         super(priorSelectorNode, tag, selectorProperties);
     }
 
+    ScXPathFollowing(ScXpathPropertyType... selectorProperties) {
+        super(selectorProperties);
+    }
+
+    ScXPathFollowing(ScXPath priorSelectorNode, ScXpathPropertyType... selectorProperties) {
+        super(priorSelectorNode, selectorProperties);
+    }
+
     @Override
     protected String nodeText() {
         return "/following::";

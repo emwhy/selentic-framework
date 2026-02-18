@@ -24,6 +24,7 @@ import java.util.Arrays;
  */
 public sealed abstract class ScCssSelector extends ScSelector permits ScCssSelectorChild, ScCssSelectorDescendant, ScCssSelectorSibling, ScCssSelectorNextSibling, ScCssSelectorPage, ScCssSelectorRaw {
     private static final Logger LOG = ScLogHandler.logger(ScCssSelector.class);
+    private final String tag;
     private final ScCssSelectorPropertyType[] selectorProperties;
 
     /**
@@ -38,6 +39,7 @@ public sealed abstract class ScCssSelector extends ScSelector permits ScCssSelec
      */
     ScCssSelector(ScCssSelectorPropertyType... selectorProperties) {
         super();
+        this.tag = "";
         this.selectorProperties = selectorProperties;
     }
 
@@ -55,6 +57,44 @@ public sealed abstract class ScCssSelector extends ScSelector permits ScCssSelec
      */
     ScCssSelector(ScCssSelector priorSelectorNode, ScCssSelectorPropertyType... selectorProperties) {
         super(priorSelectorNode);
+        this.tag = "";
+        this.selectorProperties = selectorProperties;
+    }
+
+
+    /**
+     * Constructs an {@code ScCssSelector} instance with optional selector properties.
+     *
+     * <p>This constructor is typically called by subclasses to initialize a CSS selector
+     * without a prior selector node (root-level selector).
+     *
+     *
+     * @param tag The HTML/XML tag to target.
+     * @param selectorProperties variable number of {@link ScCssSelectorPropertyType} objects that define
+     *                           attributes and conditions for the selector (e.g., class, id, attribute values)
+     */
+    ScCssSelector(String tag, ScCssSelectorPropertyType... selectorProperties) {
+        super();
+        this.tag = tag;
+        this.selectorProperties = selectorProperties;
+    }
+
+    /**
+     * Constructs an {@code ScCssSelector} instance with a prior selector node and optional selector properties.
+     *
+     * <p>This constructor is used by subclasses to chain CSS selectors by linking to a
+     * previous selector node, enabling composition of complex CSS selector expressions.
+     *
+     *
+     * @param priorSelectorNode the previous {@link ScCssSelector} node in the selector chain; allows
+     *                         building composite CSS selector expressions
+     * @param tag The HTML/XML tag to target.
+     * @param selectorProperties variable number of {@link ScCssSelectorPropertyType} objects that define
+     *                           attributes and conditions for the selector
+     */
+    ScCssSelector(ScCssSelector priorSelectorNode, String tag, ScCssSelectorPropertyType... selectorProperties) {
+        super(priorSelectorNode);
+        this.tag = tag;
         this.selectorProperties = selectorProperties;
     }
 
@@ -65,7 +105,7 @@ public sealed abstract class ScCssSelector extends ScSelector permits ScCssSelec
      */
     @Override
     public String toString() {
-        return (priorSelectorNode().map(Object::toString).orElse("")) + nodeText() + String.join("", Arrays.stream(selectorProperties).map(p -> p.build(ScSelectorPropertyType.Types.CssSelector)).toList());
+        return (priorSelectorNode().map(Object::toString).orElse("")) + nodeText() + tag + String.join("", Arrays.stream(selectorProperties).map(p -> p.build(ScSelectorPropertyType.Types.CssSelector)).toList());
     }
 
     /**
@@ -180,5 +220,95 @@ public sealed abstract class ScCssSelector extends ScSelector permits ScCssSelec
      */
     public ScCssSelector page(ScCssSelectorPropertyType... selectorProperties) {
         return new ScCssSelectorPage(selectorProperties);
+    }
+
+
+    /**
+     * Creates a new {@code ScCssSelector} representing a descendant relationship to an element
+     * with the specified properties.
+     *
+     * <p>This method constructs an {@link ScCssSelectorDescendant} selector that represents all descendants
+     * of the current element matching the specified criteria. This is equivalent to the CSS
+     * descendant combinator (space character) relationship.
+     *
+     *
+     * @param tag The HTML/XML tag to target.
+     * @param selectorProperties optional properties to filter descendant elements by attributes or other selectors
+     * @return a new {@code ScCssSelector} object representing the descendant selector
+     * @see ScCssSelectorDescendant
+     */
+    public ScCssSelector descendant(String tag, ScCssSelectorPropertyType... selectorProperties) {
+        return new ScCssSelectorDescendant(this, tag, selectorProperties);
+    }
+
+    /**
+     * Creates a new {@code ScCssSelector} representing a direct child relationship to an element
+     * with the specified properties.
+     *
+     * <p>This method constructs an {@link ScCssSelectorChild} selector that represents only direct children
+     * of the current element matching the specified criteria. This is equivalent to the CSS
+     * child combinator (&#62;) relationship.
+     *
+     *
+     * @param tag The HTML/XML tag to target.
+     * @param selectorProperties optional properties to filter child elements by attributes or other selectors
+     * @return a new {@code ScCssSelector} object representing the child selector
+     * @see ScCssSelectorChild
+     */
+    public ScCssSelector child(String tag, ScCssSelectorPropertyType... selectorProperties) {
+        return new ScCssSelectorChild(this, tag, selectorProperties);
+    }
+
+    /**
+     * Creates a new {@code ScCssSelector} representing a sibling relationship to an element
+     * with the specified properties.
+     *
+     * <p>This method constructs an {@link ScCssSelectorSibling} selector that represents general sibling elements
+     * (any sibling element in the DOM regardless of position) matching the specified criteria.
+     * This is equivalent to the CSS general sibling combinator (~) relationship.
+     *
+     *
+     * @param tag The HTML/XML tag to target.
+     * @param selectorProperties optional properties to filter sibling elements by attributes or other selectors
+     * @return a new {@code ScCssSelector} object representing the sibling selector
+     * @see ScCssSelectorSibling
+     */
+    public ScCssSelector sibling(String tag, ScCssSelectorPropertyType... selectorProperties) {
+        return new ScCssSelectorSibling(this, tag, selectorProperties);
+    }
+
+    /**
+     * Creates a new {@code ScCssSelector} representing a next sibling relationship to an element
+     * with the specified properties.
+     *
+     * <p>This method constructs an {@link ScCssSelectorNextSibling} selector that represents the immediately
+     * following sibling element matching the specified criteria. This is equivalent to the CSS
+     * adjacent sibling combinator (+) relationship.
+     *
+     *
+     * @param tag The HTML/XML tag to target.
+     * @param selectorProperties optional properties to filter the next sibling element by attributes or other selectors
+     * @return a new {@code ScCssSelector} object representing the next sibling selector
+     * @see ScCssSelectorNextSibling
+     */
+    public ScCssSelector nextSibling(String tag, ScCssSelectorPropertyType... selectorProperties) {
+        return new ScCssSelectorNextSibling(this, tag, selectorProperties);
+    }
+
+    /**
+     * Creates a new {@code ScCssSelector} representing a page-level (root) element with the specified properties.
+     *
+     * <p>This method constructs an {@link ScCssSelectorPage} selector that represents a root-level element
+     * in the page DOM, starting a new selector chain not dependent on the current element.
+     * This is useful for initiating independent CSS selector expressions.
+     *
+     *
+     * @param tag The HTML/XML tag to target.
+     * @param selectorProperties optional properties to filter page-level elements by attributes or other selectors
+     * @return a new {@code ScCssSelector} object representing the page-level selector
+     * @see ScCssSelectorPage
+     */
+    public ScCssSelector page(String tag, ScCssSelectorPropertyType... selectorProperties) {
+        return new ScCssSelectorPage(tag, selectorProperties);
     }
 }

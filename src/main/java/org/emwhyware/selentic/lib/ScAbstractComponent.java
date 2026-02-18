@@ -133,7 +133,7 @@ public abstract class ScAbstractComponent {
      * @param selectorProperty the selector property to negate
      * @return a {@link ScSelectorNotProperty} that represents the negation
      */
-    protected ScSelectorProperty _not(ScSelectorProperty selectorProperty) {
+    protected static ScSelectorNotProperty _not(ScSelectorProperty selectorProperty) {
         return new ScSelectorNotProperty(selectorProperty);
     }
 

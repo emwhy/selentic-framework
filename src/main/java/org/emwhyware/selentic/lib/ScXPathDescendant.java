@@ -9,6 +9,14 @@ public final class ScXPathDescendant extends ScXPath {
         super(priorSelectorNode, tag, selectorProperties);
     }
 
+    ScXPathDescendant(ScXpathPropertyType... selectorProperties) {
+        super(selectorProperties);
+    }
+
+    ScXPathDescendant(ScXPath priorSelectorNode, ScXpathPropertyType... selectorProperties) {
+        super(priorSelectorNode, selectorProperties);
+    }
+
     @Override
     protected String nodeText() {
         return "/descendant::";
