@@ -1,8 +1,11 @@
 # Selentic Framework
 
-Selentic Framework is a test automation framework based on Component-Object Model design (COM). It aims to help producing test automation codes that are easy to maintain and read while ramping up the test automation development speed. 
+Selentic Framework is a test automation framework for writing web UI tests. It is designed based on Component-Object Model design (COM). It aims to help producing test automation codes that are easy to maintain and read while enabling ramping up the test automation development speed. 
 
-The ease to read and maintain the test automation code is crucial to success of any test automation projects. Software development projects incorporate test automation to cut down on the technical debt. Adding more technical debt by having to maintain complex, illegible code is exactly what we want to avoid.
+Software development projects incorporate test automation to cut down on the technical debt while increasing the quality of their products. 
+Causing more technical debt to maintain unstable, inconsistent, complicated, hard-to-read test automation code is exactly what we want to avoid.
+This framework was designed and developed to help ensuring the test automation code remains easily readable and consistent without being unstable and flaky. 
+Being able to maintain and manage test automation code efficiently is crucial to the success of any test automation project.
 
 Selentic Framework utilizes ***Selenium*** and is written in ***Java*** (Developed on Java 21). 
 
@@ -42,7 +45,7 @@ The Component Object Model design pattern is often implemented using a Page Obje
 
 ## Setting up Selentic Framework
 
-- Download the latest **selentic-framework.jar** file from https://github.com/emwhy/selentic-framework/releases/. The release also contains ***selentic-framework-javadoc.jar*** file that contains detailed documentation. When configured, the documentation can be shown right from IDE (such as IntelliJ).
+- Download the latest **selentic-framework.jar** file from https://github.com/emwhy/selentic-framework/releases/. The javadoc for the framework is packaged in  ***selentic-framework-javadoc.jar***. When configured, the documentation can be shown right from IDE (such as IntelliJ).
 - Move the file to appropriate location in a project directory (i.e., ./lib).
 - There are additional packages that Selentic Framework depends on. Add reference to these packages. If you are working with Gradle, add dependencies to **build.gradle.kts** file.
 ```
@@ -54,7 +57,7 @@ dependencies {
     implementation("com.typesafe:config:1.4.+")
 }
 ```
-- **selentic-framework-jar** can be added also.
+- **selentic-framework-jar** can be added like this.
 ```
     implementation(files("lib/selentic-framework.jar"));
 ```
