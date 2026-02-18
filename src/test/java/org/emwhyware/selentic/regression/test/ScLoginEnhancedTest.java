@@ -25,19 +25,25 @@ public class ScLoginEnhancedTest {
     @Test
     public void testLogin() {
         loginPage.inPage(p -> {
-            Assert.assertEquals(p.accountTypeDropdown.selectedText(), "");
+            Assert.assertEquals(p.accountTypeDropdown().selectedText(), "");
 
-            p.accountTypeDropdown.select("Viewer");
+            p.accountTypeDropdown().select("Viewer");
 
-            Assert.assertEquals(p.accountTypeDropdown.selectedText(), "Viewer");
+            Assert.assertEquals(p.accountTypeDropdown().selectedText(), "Viewer");
 
-            p.accountTypeDropdown.select("Editor");
+            p.accountTypeDropdown().select("Editor");
 
-            Assert.assertEquals(p.accountTypeDropdown.selectedText(), "Editor");
+            Assert.assertEquals(p.accountTypeDropdown().selectedText(), "Editor");
 
-            p.userNameTextbox.enterText("test");
-            p.passwordTextbox.enterText("test");
-            p.loginButton.click();
+            p.userNameTextbox().enterText("test");
+
+            Assert.assertEquals(p.userNameTextbox().text(), "test");
+
+            p.passwordTextbox().enterText("test123");
+
+            Assert.assertEquals(p.passwordTextbox().text(), "test123");
+
+            p.loginButton().click();
         });
     }
 }

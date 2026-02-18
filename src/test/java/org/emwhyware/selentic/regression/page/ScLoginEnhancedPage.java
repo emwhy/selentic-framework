@@ -13,11 +13,22 @@ public class ScLoginEnhancedPage extends ScPage {
 
     @Override
     protected void waitForDisplayed() {
-        waitForComponent(userNameTextbox);
+        waitForComponent(userNameTextbox());
     }
 
-    public final ScTextbox userNameTextbox = $textbox(USERNAME_TEXTBOX);
-    public final ScTextbox passwordTextbox = $textbox(PASSWORD_TEXTBOX);
-    public final ScSlimSelectDropdown accountTypeDropdown = $component(ACCOUNT_TYPE_DROPDOWN, ScSlimSelectDropdown.class);
-    public final ScButton loginButton = $button(LOGIN_BUTTON);
+    public ScTextbox userNameTextbox() {
+        return $textbox(USERNAME_TEXTBOX);
+    }
+
+    public ScTextbox passwordTextbox() {
+        return $textbox(PASSWORD_TEXTBOX);
+    }
+
+    public ScSlimSelectDropdown accountTypeDropdown() {
+        return $component(ACCOUNT_TYPE_DROPDOWN, ScSlimSelectDropdown.class);
+    }
+
+    public ScButton loginButton() {
+        return $button(LOGIN_BUTTON);
+    }
 }

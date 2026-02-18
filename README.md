@@ -102,16 +102,24 @@ public class ScLoginPage extends ScPage {
     private static final ScCssSelector USERNAME_TEXTBOX = _cssSelector.descendant(_id("username"));
     private static final ScCssSelector PASSWORD_TEXTBOX = _cssSelector.descendant(_id("password"));
     private static final ScCssSelector LOGIN_BUTTON = _cssSelector.descendant(_tag("button"), _type().is("submit"));
-    
+
     @Override
     protected void waitForDisplayed() {
         waitForComponent(userNameTextbox);
     }
-    
+
     // Components on this page.
-    public final ScTextbox userNameTextbox = $textbox(USERNAME_TEXTBOX);
-    public final ScTextbox passwordTextbox = $textbox(PASSWORD_TEXTBOX);
-    public final ScButton loginButton = $button(LOGIN_BUTTON);
+    public ScTextbox userNameTextbox() {
+        return $textbox(USERNAME_TEXTBOX);
+    }
+
+    public ScTextbox passwordTextbox() {
+        return $textbox(PASSWORD_TEXTBOX);
+    }
+
+    public ScButton loginButton() {
+        return $button(LOGIN_BUTTON);
+    }
 }
 ```
 
@@ -318,11 +326,21 @@ public class ScSlimSelectDropdown extends ScComponent {
     }
 
     // Components on this component. None of these need to be public.
-    private final ScGenericComponent selectedText = $genericComponent(SELECTED_TEXT);
-    private final ScArrowButton arrowButton = $component(ARROW_BUTTON, ScArrowButton.class, this);
-    private final ScGenericComponent contentPanel = $genericComponent(CONTENT_PANEL);
-    private final ScComponentCollection<ScListItem> listItems = $$components(LIST_ITEMS, ScListItem.class, this);
-    
+    private ScGenericComponent selectedText() {
+        return $genericComponent(SELECTED_TEXT);
+    }
+
+    private ScArrowButton arrowButton() {
+        return $component(ARROW_BUTTON, ScArrowButton.class, this);
+    }
+
+    private ScGenericComponent contentPanel() {
+        return $genericComponent(CONTENT_PANEL);
+    }
+
+    private ScComponentCollection<ScListItem> listItems() {
+        return $$components(LIST_ITEMS, ScListItem.class, this);
+    }    
     /*
         Inner classes.
      */
@@ -397,10 +415,21 @@ public class ScSlimSelectDropdown extends ScComponent {
     }
 
     // Components on this component. None of these need to be public.
-    private final ScGenericComponent selectedText = $genericComponent(SELECTED_TEXT);
-    private final ScArrowButton arrowButton = $component(ARROW_BUTTON, ScArrowButton.class, this);
-    private final ScGenericComponent contentPanel = $genericComponent(CONTENT_PANEL);
-    private final ScComponentCollection<ScListItem> listItems = $$components(LIST_ITEMS, ScListItem.class, this);
+    private ScGenericComponent selectedText() {
+        return $genericComponent(SELECTED_TEXT);
+    }
+
+    private ScArrowButton arrowButton() {
+        return $component(ARROW_BUTTON, ScArrowButton.class, this);
+    }
+
+    private ScGenericComponent contentPanel() {
+        return $genericComponent(CONTENT_PANEL);
+    }
+
+    private ScComponentCollection<ScListItem> listItems() {
+        return $$components(LIST_ITEMS, ScListItem.class, this);
+    }    
     
     /*
         Inner classes.
@@ -458,22 +487,26 @@ public class ScLoginEnhancedTest {
     @Test
     public void testLogin() {
         loginPage.inPage(p -> {
-            Assert.assertEquals(p.accountTypeDropdown.selectedText(), "");
+            Assert.assertEquals(p.accountTypeDropdown().selectedText(), "");
 
-            p.accountTypeDropdown.select("Viewer");
+            p.accountTypeDropdown().select("Viewer");
 
-            Assert.assertEquals(p.accountTypeDropdown.selectedText(), "Viewer");
+            Assert.assertEquals(p.accountTypeDropdown().selectedText(), "Viewer");
 
-            p.accountTypeDropdown.select("Editor");
+            p.accountTypeDropdown().select("Editor");
 
-            Assert.assertEquals(p.accountTypeDropdown.selectedText(), "Editor");
+            Assert.assertEquals(p.accountTypeDropdown().selectedText(), "Editor");
 
-            p.userNameTextbox.enterText("test");
-            p.passwordTextbox.enterText("test");
-            p.loginButton.click();
+            p.userNameTextbox().enterText("test");
+
+            Assert.assertEquals(p.userNameTextbox().text(), "test");
+
+            p.passwordTextbox().enterText("test123");
+
+            Assert.assertEquals(p.passwordTextbox().text(), "test123");
+
+            p.loginButton().click();
         });
     }
 }
 ```
-The test code remains simple and legible. The design pushes more complex code to the back and with more reusability to
-minimize the amount of code. More reusable code means less code to support and maintain.
