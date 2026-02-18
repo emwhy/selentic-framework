@@ -10,8 +10,8 @@ public class ScExternalPage extends ScPage {
     private static final ScXPath TEST_CLOSE_CURRENT_WINDOW_BUTTON = _xpath.descendant("button", _id().is("test-external-close-window-button"));
 
     @Override
-    protected void waitForDisplayed() {
-        waitForComponent(testExternalTextbox());
+    protected void waitForDisplayedPage() {
+        waitForComponent(testExternalTextbox(), ScWaitCondition.ToBeDisplayed);
     }
 
     public ScTextbox testExternalTextbox() {

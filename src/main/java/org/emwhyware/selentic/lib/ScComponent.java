@@ -1,6 +1,5 @@
 package org.emwhyware.selentic.lib;
 
-import org.emwhyware.selentic.lib.config.SelelenticConfig;
 import org.emwhyware.selentic.lib.exception.*;
 import org.emwhyware.selentic.lib.util.ScWait;
 import org.openqa.selenium.NoSuchElementException;
@@ -8,7 +7,10 @@ import org.openqa.selenium.StaleElementReferenceException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -262,7 +264,7 @@ public abstract class ScComponent extends ScAbstractComponent {
      */
     protected final WebElement displayedElement() {
         try {
-            this.waitForDisplayed();
+            this.waitForComponent(ScWaitCondition.ToBeDisplayed);
             return webElement();
         } catch (ScWaitTimeoutException ex) {
             throw new ScElementNotFoundException("Element is not displayed.", ex);
@@ -329,7 +331,7 @@ public abstract class ScComponent extends ScAbstractComponent {
      * <p>
      * This method can be overridden in subclasses as needed, as sometimes the "isDisplayed" status
      * may depend on other component properties or visibility rules. This method is used in
-     * {@link #waitForDisplayed()} and {@link #displayedElement()}, affecting their waiting behavior.
+     * {@link #waitForComponent(ScWaitCondition)} ()} and {@link #displayedElement()}, affecting their waiting behavior.
      * 
      *
      * @return true if the element is displayed; false otherwise
@@ -339,45 +341,16 @@ public abstract class ScComponent extends ScAbstractComponent {
     }
 
     /**
-     * Waits for the component to be displayed, as defined by {@link #isDisplayed()}.
+     * Waits for this component to meet the condition.
      *
      * <p>
-     * This method blocks until the component becomes visible or a timeout occurs.
-     * 
+     * This method blocks until this component meets the given condition.
      *
-     * @throws ScComponentNotDisplayedException if the element does not become displayed within the timeout period
+     *
+     * @throws ScComponentWaitException if the element does not meet the condition within the timeout period
      */
-    protected void waitForDisplayed() {
-        existingElement();
-        ScWait.waitUntil(this.waitTimeout(), this::isDisplayed, ScComponentNotDisplayedException::new);
-    }
-
-    /**
-     * Waits for the component to finish animating.
-     *
-     * <p>
-     * This method blocks until the component is no longer animated or a timeout occurs.
-     * 
-     *
-     * <p>
-     * <strong>Limitation</strong>: This method only recognizes animations that are created using {@code element.animate()}
-     * JavaScript function, which can be recognized by {@code document.getAnimations()}. CSS based manual animations (often
-     * implemented by using {@code setInterval()} function) is not recognized by this method.
-     * 
-     *
-     * @throws ScComponentAnimatingException if the element does not stop animating within the timeout period
-     */
-    protected final void waitForAnimation() {
-        this.waitForDisplayed();
-        ScWait.waitUntil(this.waitTimeout(), () -> (Boolean) Selentic.executeScript(
-                        """
-                            let e = arguments[0];
-                            return !e.getAnimations().some(a => a.playState === 'running' || a.playState === 'pending');
-                        """,
-                        this
-                ),
-                ScComponentAnimatingException::new
-        );
+    protected final void waitForComponent(ScWaitCondition waitCondition) {
+        this.waitForComponent(this, waitCondition);
     }
 
     /**
@@ -587,27 +560,6 @@ public abstract class ScComponent extends ScAbstractComponent {
         String a;
 
         return (a = this.existingElement().getDomAttribute(name)) == null ? Optional.empty() : Optional.of(a);
-    }
-
-
-
-    /**
-     * Returns the wait timeout for this component in milliseconds.
-     *
-     * <p>
-     * The wait timeout determines how long the component will wait for operations like
-     * element existence, visibility, or animation to complete before throwing a timeout exception.
-     * 
-     *
-     * <p>
-     * The default wait timeout is as defined in {@link SelelenticConfig}. It can be changed only for this component
-     * by overriding this method and providing another value.
-     * 
-     *
-     * @return the wait timeout in milliseconds
-     */
-    protected long waitTimeout() {
-        return SelelenticConfig.config().waitTimeoutMilliseconds();
     }
 
     /**

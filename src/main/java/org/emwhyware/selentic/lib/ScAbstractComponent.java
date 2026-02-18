@@ -1,8 +1,11 @@
 package org.emwhyware.selentic.lib;
 
+import org.emwhyware.selentic.lib.config.SelelenticConfig;
 import org.emwhyware.selentic.lib.exception.ScComponentCreationException;
+import org.emwhyware.selentic.lib.exception.ScComponentWaitException;
 import org.emwhyware.selentic.lib.exception.ScElementNotFoundException;
 import org.emwhyware.selentic.lib.util.ScLogHandler;
+import org.emwhyware.selentic.lib.util.ScWait;
 import org.openqa.selenium.WebDriver;
 import org.slf4j.Logger;
 
@@ -40,6 +43,77 @@ import org.slf4j.Logger;
  */
 public abstract class ScAbstractComponent {
     private static final Logger LOG = ScLogHandler.logger(ScAbstractComponent.class);
+
+    protected enum ScWaitCondition {
+        ToExist, ToBeDisplayed, ToBeEnabled, ToBeDisabled, ToBeHidden, ToNotExist, ToStopAnimating;
+    }
+
+    /**
+     * Returns the wait timeout for this component in milliseconds.
+     *
+     * <p>
+     * The wait timeout determines how long the component will wait for operations like
+     * element existence, visibility, or animation to complete before throwing a timeout exception.
+     *
+     *
+     * <p>
+     * The default wait timeout is as defined in {@link SelelenticConfig}. It can be changed only for this component
+     * by overriding this method and providing another value.
+     *
+     *
+     * @return the wait timeout in milliseconds
+     */
+    protected long waitTimeout() {
+        return SelelenticConfig.config().waitTimeoutMilliseconds();
+    }
+
+    /**
+     * Waits for the given component to meet the condition.
+     *
+     * <p>
+     * This method blocks until the given component meets the given condition.
+     *
+     *
+     * @throws ScComponentWaitException if the element does not meet the condition within the timeout period
+     */
+    protected final void waitForComponent(ScComponent component, ScWaitCondition waitType) {
+        switch (waitType) {
+            case ToExist -> {
+                ScWait.waitUntil(waitTimeout(), component::exists, ex -> new ScComponentWaitException("Component does not exist.", ex));
+            }
+            case ToBeDisplayed -> {
+                ScWait.waitUntil(waitTimeout(), component::isDisplayed, ex -> new ScComponentWaitException("Component is not displayed.", ex));
+            }
+            case ToBeEnabled -> {
+                if (component instanceof ScClickableComponent clickableComponent) {
+                    ScWait.waitUntil(waitTimeout(), clickableComponent::isEnabled, ex -> new ScComponentWaitException("Component is not enabled.", ex));
+                }
+            }
+            case ToBeDisabled -> {
+                if (component instanceof ScClickableComponent clickableComponent) {
+                    ScWait.waitUntil(() -> !clickableComponent.isEnabled(), ex -> new ScComponentWaitException("Component is not disabled.", ex));
+                }
+            }
+            case ToBeHidden -> {
+                ScWait.waitUntil(waitTimeout(), () -> !component.isDisplayed(), ex -> new ScComponentWaitException("Component is still displayed.", ex));
+            }
+            case ToNotExist -> {
+                ScWait.waitUntil(waitTimeout(), () -> !component.exists(), ex -> new ScComponentWaitException("Component still exists.", ex));
+            }
+            case ToStopAnimating -> {
+                ScWait.waitUntil(waitTimeout(), component::isDisplayed, ex -> new ScComponentWaitException("Component is not displayed.", ex));
+                ScWait.waitUntil(waitTimeout(), () -> (Boolean) Selentic.executeScript(
+                                """
+                                    let e = arguments[0];
+                                    return !e.getAnimations().some(a => a.playState === 'running' || a.playState === 'pending');
+                                """,
+                                this
+                        ),
+                        ex -> new ScComponentWaitException("Component is still animating.", ex)
+                );
+            }
+        }
+    }
 
     /**
      * Creates a negation of the provided selector property.
@@ -789,7 +863,7 @@ public abstract class ScAbstractComponent {
      * @see ScComponent#waitForDisplayed()
      * @see ScAbstractPage#waitForComponent(ScComponent)
      */
-    protected void waitForDisplayed() {}
+//    protected void waitForDisplayed() {}
 
     /**
      * Creates a component instance of the specified type with the given selector.
@@ -1108,7 +1182,7 @@ public abstract class ScAbstractComponent {
         }
 
         try {
-            $frame.waitForDisplayed();
+            waitForComponent($frame, ScWaitCondition.ToBeDisplayed);
             webDriver.switchTo().frame($frame.scrolledElement());
 
             $frameContent.waitForPage();
@@ -1198,10 +1272,10 @@ public abstract class ScAbstractComponent {
     protected <T extends ScDialog> void $dialog(ScSelector selector, Class<T> componentType, ScAbstractComponent containingObject, ScDialogAction<T> predicate) {
         final T $dialog = containingObject == null ? this.$component(selector, componentType) : this.$component(selector, componentType, containingObject);
 
-        $dialog.waitForDisplayed();
+        $dialog.waitForDisplayedDialog();
         LOG.debug("Open dialog: {}", $dialog.getClass().getSimpleName());
         predicate.in($dialog);
-        $dialog.waitForHidden();
+        $dialog.waitForHiddenDialog();
         LOG.debug("Close dialog: {}", $dialog.getClass().getSimpleName());
     }
 }

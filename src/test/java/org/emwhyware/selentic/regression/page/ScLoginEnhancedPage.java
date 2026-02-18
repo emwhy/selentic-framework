@@ -1,6 +1,7 @@
 package org.emwhyware.selentic.regression.page;
 
-import org.emwhyware.selentic.lib.*;
+import org.emwhyware.selentic.lib.ScButton;
+import org.emwhyware.selentic.lib.ScCssSelector;
 import org.emwhyware.selentic.lib.ScPage;
 import org.emwhyware.selentic.lib.ScTextbox;
 import org.emwhyware.selentic.regression.component.ScSlimSelectDropdown;
@@ -12,8 +13,8 @@ public class ScLoginEnhancedPage extends ScPage {
     private static final ScCssSelector LOGIN_BUTTON = _cssSelector.descendant(_tag("button"), _type().is("submit"));
 
     @Override
-    protected void waitForDisplayed() {
-        waitForComponent(userNameTextbox());
+    protected void waitForDisplayedPage() {
+        waitForComponent(userNameTextbox(), ScWaitCondition.ToBeDisplayed);
     }
 
     public ScTextbox userNameTextbox() {

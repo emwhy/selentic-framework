@@ -17,10 +17,17 @@ public class ScSlimSelectDropdown extends ScComponent {
         rule.attr("aria-controls").isPresent();
     }
 
-    private final ScGenericComponent selectedText = $genericComponent(SELECTED_TEXT);
-    private final ScArrowButton arrowButton = $component(ARROW_BUTTON, ScArrowButton.class, this);
-    private final ScGenericComponent contentPanel = $genericComponent(CONTENT_PANEL);
-    private final ScComponentCollection<ScListItem> listItems = $$components(LIST_ITEMS, ScListItem.class, this);
+    private ScArrowButton arrowButton() {
+        return $component(ARROW_BUTTON, ScArrowButton.class, this);
+    }
+
+    private ScGenericComponent contentPanel() {
+        return $genericComponent(CONTENT_PANEL);
+    }
+
+    private ScComponentCollection<ScListItem> listItems() {
+        return $$components(LIST_ITEMS, ScListItem.class, this);
+    }
 
     @Override
     public String text() {
@@ -28,14 +35,16 @@ public class ScSlimSelectDropdown extends ScComponent {
     }
 
     public String selectedText() {
+        final ScGenericComponent selectedText = $genericComponent(SELECTED_TEXT);
+
         return selectedText.isDisplayed() ? selectedText.text() : "";
     }
 
     public void select(String text) {
-        arrowButton.click();
-        ScWait.waitUntil(() -> contentPanel.isDisplayed());
-        listItems.entry(text).click();
-        ScWait.waitUntil(() -> !contentPanel.isDisplayed());
+        arrowButton().click();
+        waitForComponent(contentPanel(), ScWaitCondition.ToBeDisplayed);
+        listItems().entry(text).click();
+        waitForComponent(contentPanel(), ScWaitCondition.ToBeHidden);
     }
 
     /*

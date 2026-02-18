@@ -1,10 +1,10 @@
 package org.emwhyware.selentic.regression.test;
 
 import org.emwhyware.selentic.lib.ScButton;
-import org.emwhyware.selentic.lib.Selentic;
 import org.emwhyware.selentic.lib.ScPage;
 import org.emwhyware.selentic.lib.ScWithPage;
-import org.emwhyware.selentic.lib.exception.ScComponentAnimatingException;
+import org.emwhyware.selentic.lib.Selentic;
+import org.emwhyware.selentic.lib.exception.ScComponentWaitException;
 import org.emwhyware.selentic.lib.exception.ScElementNotFoundException;
 import org.emwhyware.selentic.lib.exception.ScWaitTimeoutException;
 import org.emwhyware.selentic.lib.exception.ScWindowException;
@@ -430,7 +430,7 @@ public class ScUiComponentTest {
 
             try {
                 p.testNonExistingLink().click();
-            } catch (ScElementNotFoundException ex) {
+            } catch (ScComponentWaitException ex) {
                 // Expected.
             }
 
@@ -465,7 +465,7 @@ public class ScUiComponentTest {
             try {
                 testAnimation(p.animatedBox(), p.animateLongButton());
                 fail("Should not get here because it should throw exception.");
-            } catch (ScComponentAnimatingException ex) {
+            } catch (ScComponentWaitException ex) {
 
             }
         });

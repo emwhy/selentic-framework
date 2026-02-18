@@ -46,8 +46,8 @@ public class ScUiComponentPage extends ScPage {
     private static final ScCssSelector OPEN_DRAG_AND_DROP_PAGE_LINK = _cssSelector.descendant(_id("open-drag-and-drop-page"));
 
     @Override
-    protected void waitForDisplayed() {
-        waitForComponent(testTextbox());
+    protected void waitForDisplayedPage() {
+        waitForComponent(testTextbox(), ScWaitCondition.ToBeDisplayed);
     }
 
     public ScTextbox testTextbox() {

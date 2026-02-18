@@ -104,8 +104,8 @@ public class ScLoginPage extends ScPage {
     private static final ScCssSelector LOGIN_BUTTON = _cssSelector.descendant(_tag("button"), _type().is("submit"));
 
     @Override
-    protected void waitForDisplayed() {
-        waitForComponent(userNameTextbox);
+    protected void waitForDisplayedPage() {
+        waitForComponent(userNameTextbox, ScWaitCondition.ToBeDisplayed);
     }
 
     // Components on this page.
@@ -130,7 +130,7 @@ public class ScLoginPage extends ScPage {
 Generally CSS selectors are faster while XPath offer more complex features.
 - Since textbox and button are both standard HTML form element, they are already defined in Selentic Framework.
 - Both selector object and component object name end with the component type (i.e., USERNAME_**TEXTBOX**, username**Textbox**). This practice is recommended to keep the test code easily legible.
-- Overriding **waitForDisplayed** is optional. The page would automatically wait for the page to complete loading. However, if additional wait is needed (i.e., Ajax based components require more wait to fully load), that can be implemented here. In this case, in addition to waiting for the page to load, it also waits for the username textbox to be displayed.  
+- Overriding **waitForDisplayedPage** is optional. The page would automatically wait for the page to complete loading. However, if additional wait is needed (i.e., Ajax based components require more wait to fully load), that can be implemented here. In this case, in addition to waiting for the page to load, it also waits for the username textbox to be displayed.  
 
 Once the page is defined, writing a test is straight forward (Written with TestNG).
 
@@ -326,10 +326,6 @@ public class ScSlimSelectDropdown extends ScComponent {
     }
 
     // Components on this component. None of these need to be public.
-    private ScGenericComponent selectedText() {
-        return $genericComponent(SELECTED_TEXT);
-    }
-
     private ScArrowButton arrowButton() {
         return $component(ARROW_BUTTON, ScArrowButton.class, this);
     }
@@ -401,24 +397,6 @@ public class ScSlimSelectDropdown extends ScComponent {
         return selectedText();
     }
 
-    public String selectedText() {
-        // selectedText only appears when there is a selection, 
-        // so check if it's displayed, and return an empty string if not.
-        return selectedText.isDisplayed() ? selectedText.text() : "";
-    }
-
-    public void select(String text) {
-        arrowButton.click();
-        ScWait.waitUntil(() -> contentPanel.isDisplayed());
-        listItems.entry(text).click();
-        ScWait.waitUntil(() -> !contentPanel.isDisplayed());
-    }
-
-    // Components on this component. None of these need to be public.
-    private ScGenericComponent selectedText() {
-        return $genericComponent(SELECTED_TEXT);
-    }
-
     private ScArrowButton arrowButton() {
         return $component(ARROW_BUTTON, ScArrowButton.class, this);
     }
@@ -429,8 +407,21 @@ public class ScSlimSelectDropdown extends ScComponent {
 
     private ScComponentCollection<ScListItem> listItems() {
         return $$components(LIST_ITEMS, ScListItem.class, this);
-    }    
-    
+    }
+
+    public String selectedText() {
+        final ScGenericComponent selectedText = $genericComponent(SELECTED_TEXT);
+
+        return selectedText.isDisplayed() ? selectedText.text() : "";
+    }
+
+    public void select(String text) {
+        arrowButton().click();
+        waitForComponent(contentPanel(), ScWaitCondition.ToBeDisplayed);
+        listItems().entry(text).click();
+        waitForComponent(contentPanel(), ScWaitCondition.ToBeHidden);
+    }
+
     /*
         Inner classes.
      */

@@ -1,8 +1,8 @@
 package org.emwhyware.selentic.regression.test;
 
 import org.emwhyware.selentic.lib.ScPage;
-import org.emwhyware.selentic.lib.Selentic;
 import org.emwhyware.selentic.lib.ScWithPage;
+import org.emwhyware.selentic.lib.Selentic;
 import org.emwhyware.selentic.regression.page.ScLoginEnhancedPage;
 import org.testng.Assert;
 import org.testng.annotations.AfterClass;

@@ -1,8 +1,7 @@
 package org.emwhyware.selentic.lib;
 
 import org.emwhyware.selentic.lib.config.SelelenticConfig;
-import org.emwhyware.selentic.lib.exception.ScComponentNotEnabledException;
-import org.emwhyware.selentic.lib.util.ScWait;
+import org.emwhyware.selentic.lib.exception.ScComponentWaitException;
 import org.openqa.selenium.WebElement;
 
 /**
@@ -18,7 +17,7 @@ import org.openqa.selenium.WebElement;
  * <ul>
  *   <li><strong>Enabled State Validation</strong>: All click operations wait for the element to be enabled</li>
  *   <li><strong>Automatic Scrolling</strong>: Elements are automatically scrolled into view before clicking</li>
- *   <li><strong>Error Handling</strong>: Throws {@link ScComponentNotEnabledException} if element doesn't become enabled</li>
+ *   <li><strong>Error Handling</strong>: Throws {@link ScComponentWaitException} if element doesn't become enabled</li>
  *   <li><strong>Multiple Click Types</strong>: Supports single click, double click, and positioned clicks</li>
  * </ul>
  *
@@ -38,7 +37,7 @@ import org.openqa.selenium.WebElement;
  *   <li>Scroll element into view</li>
  *   <li>Perform the click action</li>
  * </ol>
- * If the element fails to become enabled within the timeout period, a {@link ScComponentNotEnabledException}
+ * If the element fails to become enabled within the timeout period, a {@link ScComponentWaitException}
  * is thrown immediately, preventing invalid interactions with disabled elements.
  *
  *
@@ -74,17 +73,17 @@ public abstract class ScClickableComponent extends ScComponent {
      * 
      * <p>
      * The wait operation uses the framework's default timeout configuration.
-     * If the element does not become enabled within this timeout, a {@link ScComponentNotEnabledException}
+     * If the element does not become enabled within this timeout, a {@link ScComponentWaitException}
      * is thrown.
      * 
      *
      * @return the scrolled {@link WebElement} that is ready for interaction
-     * @throws ScComponentNotEnabledException if the component does not become enabled within the timeout period
+     * @throws ScComponentWaitException if the component does not become enabled within the timeout period
      */
     protected final WebElement enabledElement() {
         final WebElement scrolled = scrolledElement();
 
-        ScWait.waitUntil(this.waitTimeout(), this::isEnabled, ScComponentNotEnabledException::new);
+        waitForComponent(ScWaitCondition.ToBeEnabled);
         return scrolled;
     }
 
@@ -93,11 +92,11 @@ public abstract class ScClickableComponent extends ScComponent {
      * <p>
      * This method waits for the component to become enabled before performing the click action.
      * The click is executed on the scrolled (into view) element. If the component fails to become
-     * enabled within the default timeout, a {@link ScComponentNotEnabledException} is thrown
+     * enabled within the default timeout, a {@link ScComponentWaitException} is thrown
      * and the click is not performed.
      * 
      *
-     * @throws ScComponentNotEnabledException if the component does not become enabled within the timeout
+     * @throws ScComponentWaitException if the component does not become enabled within the timeout
      */
     public void click() {
         enabledElement();
@@ -109,11 +108,11 @@ public abstract class ScClickableComponent extends ScComponent {
      * <p>
      * This method waits for the component to become enabled before performing the double click action.
      * The double click is executed on the scrolled (into view) element. If the component fails to become
-     * enabled within the default timeout, a {@link ScComponentNotEnabledException} is thrown
+     * enabled within the default timeout, a {@link ScComponentWaitException} is thrown
      * and the double click is not performed.
      * 
      *
-     * @throws ScComponentNotEnabledException if the component does not become enabled within the timeout
+     * @throws ScComponentWaitException if the component does not become enabled within the timeout
      */
     public void doubleClick() {
         enabledElement();
@@ -126,12 +125,12 @@ public abstract class ScClickableComponent extends ScComponent {
      * This method waits for the component to become enabled before performing the click action at the
      * specified coordinates relative to the element's top-left corner. The click is executed on the
      * scrolled (into view) element. If the component fails to become enabled within the default timeout,
-     * a {@link ScComponentNotEnabledException} is thrown and the click is not performed.
+     * a {@link ScComponentWaitException} is thrown and the click is not performed.
      * 
      *
      * @param x the x-coordinate offset from the element's top-left corner
      * @param y the y-coordinate offset from the element's top-left corner
-     * @throws ScComponentNotEnabledException if the component does not become enabled within the timeout
+     * @throws ScComponentWaitException if the component does not become enabled within the timeout
      */
     public void clickAt(int x, int y) {
         enabledElement();
@@ -144,12 +143,12 @@ public abstract class ScClickableComponent extends ScComponent {
      * This method waits for the component to become enabled before performing the double click action at the
      * specified coordinates relative to the element's top-left corner. The double click is executed on the
      * scrolled (into view) element. If the component fails to become enabled within the default timeout,
-     * a {@link ScComponentNotEnabledException} is thrown and the double click is not performed.
+     * a {@link ScComponentWaitException} is thrown and the double click is not performed.
      * 
      *
      * @param x the x-coordinate offset from the element's top-left corner
      * @param y the y-coordinate offset from the element's top-left corner
-     * @throws ScComponentNotEnabledException if the component does not become enabled within the timeout
+     * @throws ScComponentWaitException if the component does not become enabled within the timeout
      */
     public void doubleClickAt(int x, int y) {
         enabledElement();
