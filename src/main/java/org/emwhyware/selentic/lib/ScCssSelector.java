@@ -42,8 +42,6 @@ public sealed abstract class ScCssSelector extends ScSelector permits ScCssSelec
         super();
         this.tag = "";
         this.selectorProperties = selectorProperties;
-
-        validateSelector(this.tag, this.selectorProperties);
     }
 
     /**
@@ -62,8 +60,6 @@ public sealed abstract class ScCssSelector extends ScSelector permits ScCssSelec
         super(priorSelectorNode);
         this.tag = "";
         this.selectorProperties = selectorProperties;
-
-        validateSelector(this.tag, this.selectorProperties);
     }
 
 
@@ -82,8 +78,6 @@ public sealed abstract class ScCssSelector extends ScSelector permits ScCssSelec
         super();
         this.tag = tag.trim();
         this.selectorProperties = selectorProperties;
-
-        validateSelector(this.tag, this.selectorProperties);
     }
 
     /**
@@ -103,8 +97,6 @@ public sealed abstract class ScCssSelector extends ScSelector permits ScCssSelec
         super(priorSelectorNode);
         this.tag = tag.trim();
         this.selectorProperties = selectorProperties;
-
-        validateSelector(this.tag, this.selectorProperties);
     }
 
     /**
@@ -125,6 +117,7 @@ public sealed abstract class ScCssSelector extends ScSelector permits ScCssSelec
      */
     @Override
     public String toString() {
+        validateSelector(this.tag, this.selectorProperties);
         return (priorSelectorNode().map(Object::toString).orElse("")) + nodeText() + tag + String.join("", Arrays.stream(selectorProperties).map(p -> p.build(ScSelectorPropertyType.Types.CssSelector)).toList());
     }
 

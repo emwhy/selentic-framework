@@ -9,15 +9,15 @@ public final class ScSelectorCssClassesProperty extends ScSelectorProperty imple
 
     ScSelectorCssClassesProperty(String... cssClasses) {
         this.cssClasses = cssClasses;
-
-        if (Arrays.stream(this.cssClasses).anyMatch(c -> c.trim().contains(" "))) {
-            throw new ScSelectorException("One or more CSS classes contain a space character. This can yield unexpected results.");
-        }
     }
 
     @Override
     public String build(Types type) {
         final StringBuilder selector = new StringBuilder();
+
+        if (Arrays.stream(this.cssClasses).anyMatch(c -> c.trim().contains(" "))) {
+            throw new ScSelectorException("One or more CSS classes contain a space character. This can yield unexpected results.");
+        }
 
         if (type == Types.XPath) {
             for (final String cssClass : this.cssClasses) {

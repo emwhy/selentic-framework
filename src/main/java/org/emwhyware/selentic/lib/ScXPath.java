@@ -41,8 +41,6 @@ public sealed abstract class ScXPath extends ScSelector permits ScXPathChild, Sc
         super();
         this.tag = tag.trim();
         this.selectorProperties = selectorProperties;
-
-        validateSelector(this.tag, this.selectorProperties);
     }
 
     /**
@@ -62,8 +60,6 @@ public sealed abstract class ScXPath extends ScSelector permits ScXPathChild, Sc
         super(priorSelectorNode);
         this.tag = tag.trim();
         this.selectorProperties = selectorProperties;
-
-        validateSelector(this.tag, this.selectorProperties);
     }
 
     /**
@@ -80,8 +76,6 @@ public sealed abstract class ScXPath extends ScSelector permits ScXPathChild, Sc
         super();
         this.tag = "*";
         this.selectorProperties = selectorProperties;
-
-        validateSelector(this.tag, this.selectorProperties);
     }
 
     /**
@@ -100,8 +94,6 @@ public sealed abstract class ScXPath extends ScSelector permits ScXPathChild, Sc
         super(priorSelectorNode);
         this.tag = "*";
         this.selectorProperties = selectorProperties;
-
-        validateSelector(this.tag, this.selectorProperties);
     }
 
     /**
@@ -124,6 +116,7 @@ public sealed abstract class ScXPath extends ScSelector permits ScXPathChild, Sc
      */
     @Override
     public String toString() {
+        validateSelector(this.tag, this.selectorProperties);
         return (priorSelectorNode().map(Object::toString).orElse("")) + nodeText() + tag + String.join("", Arrays.stream(selectorProperties).map(p -> p.build(ScSelectorPropertyType.Types.XPath)).toList());
     }
 

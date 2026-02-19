@@ -14,15 +14,15 @@ public final class ScSelectorAttributeProperty extends ScSelectorProperty implem
         this.attribute = attribute;
         this.condition = condition;
         this.text = text;
-
-        if (this.attribute.contains(" ")) {
-            throw new ScSelectorException("Attribute contains space character. This can yield unexpected results.");
-        }
     }
 
     @Override
     public String build(Types type) {
         String selector = "";
+
+        if (this.attribute.contains(" ")) {
+            throw new ScSelectorException("Attribute contains space character. This can yield unexpected results.");
+        }
 
         if (type == Types.XPath) {
             switch (this.condition) {
