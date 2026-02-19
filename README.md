@@ -443,14 +443,61 @@ public class ScSlimSelectDropdown extends ScComponent {
             rule.tag().is("div");
             rule.cssClasses().has("ss-option");
         }
-
-        public boolean isSelected() {
-            return this.cssClasses().contains("ss-selected");
-        }
     }
 }
 ```
-Page and component should look very similar in structure, with selectors at the top and defined contained components.
+But it is a little cumbersome to have to define a new class, just so we can do a click. To address that, there is **clickGenericComponent()** method. Use of that can completely eliminate the need to define new inner class in this case, making the code a ittle cleaner.
+
+```java
+// (imports and package are omitted)
+
+public class ScSlimSelectDropdown extends ScComponent {
+    private static final ScCssSelector ARROW_BUTTON = _cssSelector.descendant("svg", _cssClasses("ss-arrow"));
+    private static final ScCssSelector SELECTED_TEXT = _cssSelector.descendant("div", _cssClasses("ss-single"));
+    private static final ScCssSelector CONTENT_PANEL = _cssSelector.page("div", _cssClasses("ss-content", "ss-open"));
+    private static final ScCssSelector LIST_ITEMS = CONTENT_PANEL.descendant("div", _cssClasses("ss-option"));
+
+    @Override
+    protected void rules(ScComponentRule rule) {
+        rule.tag().is("div");
+        rule.attr("aria-label").is("Combobox");
+        rule.attr("role").is("combobox");
+        rule.attr("aria-controls").isPresent();
+    }
+
+    private ScGenericComponent arrowButton() {
+        return $component(ARROW_BUTTON, ScGenericComponent.class);
+    }
+
+    private ScGenericComponent contentPanel() {
+        return $genericComponent(CONTENT_PANEL);
+    }
+
+    private ScComponentCollection<ScGenericComponent> listItems() {
+        return $$components(LIST_ITEMS, ScGenericComponent.class);
+    }
+
+    @Override
+    public String text() {
+        return selectedText();
+    }
+
+    public String selectedText() {
+        final ScGenericComponent selectedText = $genericComponent(SELECTED_TEXT);
+
+        return selectedText.isDisplayed() ? selectedText.text() : "";
+    }
+
+    public void select(String text) {
+        // Click the arrow button.
+        clickGenericComponent(arrowButton());
+        waitForComponent(contentPanel(), ScWaitCondition.ToBeDisplayed);
+        // Click the list item.
+        clickGenericComponent(listItems().entry(text));
+        waitForComponent(contentPanel(), ScWaitCondition.ToBeHidden);
+    }
+}
+```
 
 Once **ScSlimSelectDropdown** class is defined, it can be used in any places where the Slim Select appears on a page in applications. Typically, 
 the same web components are repeatedly used within an application for consistent look and saving development time. While it may take some time to initially build the component, it 

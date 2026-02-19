@@ -17,16 +17,16 @@ public class ScSlimSelectDropdown extends ScComponent {
         rule.attr("aria-controls").isPresent();
     }
 
-    private ScArrowButton arrowButton() {
-        return $component(ARROW_BUTTON, ScArrowButton.class, this);
+    private ScGenericComponent arrowButton() {
+        return $component(ARROW_BUTTON, ScGenericComponent.class);
     }
 
     private ScGenericComponent contentPanel() {
         return $genericComponent(CONTENT_PANEL);
     }
 
-    private ScComponentCollection<ScListItem> listItems() {
-        return $$components(LIST_ITEMS, ScListItem.class, this);
+    private ScComponentCollection<ScGenericComponent> listItems() {
+        return $$components(LIST_ITEMS, ScGenericComponent.class);
     }
 
     @Override
@@ -41,34 +41,10 @@ public class ScSlimSelectDropdown extends ScComponent {
     }
 
     public void select(String text) {
-        arrowButton().click();
+        clickGenericComponent(arrowButton());
         waitForComponent(contentPanel(), ScWaitCondition.ToBeDisplayed);
-        listItems().entry(text).click();
+        clickGenericComponent(listItems().entry(text));
         waitForComponent(contentPanel(), ScWaitCondition.ToBeHidden);
-    }
-
-    /*
-        Inner classes.
-     */
-
-    public class ScArrowButton extends ScClickableComponent {
-        @Override
-        protected void rules(ScComponentRule rule) {
-            rule.tag().is("svg");
-            rule.cssClasses().has("ss-arrow");
-        }
-    }
-
-    public class ScListItem extends ScClickableComponent {
-        @Override
-        protected void rules(ScComponentRule rule) {
-            rule.tag().is("div");
-            rule.cssClasses().has("ss-option");
-        }
-
-        public boolean isSelected() {
-            return this.cssClasses().contains("ss-selected");
-        }
     }
 }
 

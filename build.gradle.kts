@@ -25,3 +25,7 @@ dependencies {
 tasks.test {
     useTestNG()
 }
+
+tasks.javadoc {
+    options.overview = "src/main/javadoc/overview.html"
+}

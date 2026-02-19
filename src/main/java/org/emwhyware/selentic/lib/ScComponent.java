@@ -572,6 +572,111 @@ public abstract class ScComponent extends ScAbstractComponent {
     }
 
     /**
+     * Allows clicking an instance of {@link ScGenericComponent}.
+     *
+     * <p>
+     * {@link #click()} method is protected method. This is to ensure that only intended component classes would have
+     * the clicking capability exposed purposefully.
+     * <p>
+     * Unfortunately this sometimes causes issue when trying to implement certain actions within a subclass of component
+     * that require clicking another component. Because {@link #click()} is not public, a simple click would require a
+     * new component defined with {@link #click()} exposed.
+     * <p>
+     * This method is there to simplify the implementation while keeping {@link #click()} still protected by default.
+     *
+     * <p>
+     * <strong>Example:</strong> Consider the following example code. A new internal classes had to be defined just so
+     * the arrow button and the listbox item can be clicked. This works fine, but it's cumbersome.
+     * <pre>{@code
+     * // (Some part of the code is omitted for clarity)
+     *
+     * public class ScSlimSelectDropdown extends ScComponent {
+     *         // Selectors are at the top.
+     *         private static final ScCssSelector ARROW_BUTTON = _cssSelector.descendant(_tag("svg"), _cssClasses("ss-arrow"));
+     *         private static final ScCssSelector SELECTED_TEXT = _cssSelector.descendant(_tag("div"), _cssClasses("ss-single"));
+     *
+     *         // "page" changes the scope to see the entire page rather than descendent.
+     *         private static final ScCssSelector CONTENT_PANEL = _cssSelector.page(_tag("div"), _cssClasses("ss-content", "ss-open"));
+     *
+     *         // You can concatenate selectors.
+     *         private static final ScCssSelector LIST_ITEMS = CONTENT_PANEL.descendant(_tag("div"), _cssClasses("ss-option"));
+     *
+     *         private ScArrowButton arrowButton() {
+     *             return $component(ARROW_BUTTON, ScArrowButton.class, this);
+     *         }
+     *
+     *         private ScGenericComponent contentPanel() {
+     *             return $genericComponent(CONTENT_PANEL);
+     *         }
+     *
+     *         private ScComponentCollection<ScListItem> listItems() {
+     *             return $$components(LIST_ITEMS, ScListItem.class, this);
+     *         }
+     *
+     *         public String selectedText() {
+     *             final ScGenericComponent selectedText = $genericComponent(SELECTED_TEXT);
+     *
+     *             return selectedText.isDisplayed() ? selectedText.text() : "";
+     *         }
+     *
+     *         public void select(String text) {
+     *             arrowButton().click();
+     *             waitForComponent(contentPanel(), ScWaitCondition.ToBeDisplayed);
+     *             listItems().entry(text).click();
+     *             waitForComponent(contentPanel(), ScWaitCondition.ToBeHidden);
+     *         }
+     *
+     *         public class ScArrowButton extends ScClickableComponent {
+     *             @Override
+     *             protected void rules(ScComponentRule rule) {
+     *                 rule.tag().is("svg");
+     *                 rule.cssClasses().has("ss-arrow");
+     *             }
+     *         }
+     *
+     *         public class ScListItem extends ScClickableComponent {
+     *             @Override
+     *             protected void rules(ScComponentRule rule) {
+     *                 rule.tag().is("div");
+     *                 rule.cssClasses().has("ss-option");
+     *             }
+     *         }
+     *     }
+     *
+     * }</pre>
+     *
+     * <p>
+     * Instead, we can write <b>public void select(String text)</b> method using {@link #clickGenericComponent(ScGenericComponent)}.
+     * Then there is no need to define a new component class just to be able to click, saving lines of code compared to
+     * the previous method.
+     *
+     * <pre>{@code
+     *         // Define these as ScGenericComponent
+     *         private ScGenericComponent arrowButton() {
+     *             return $component(ARROW_BUTTON, ScGenericComponent.class);
+     *         }
+     *
+     *         private ScComponentCollection<ScGenericComponent> listItems() {
+     *             return $$components(LIST_ITEMS, ScGenericComponent.class);
+     *         }
+     *
+     *         ...
+     *
+     *         public void select(String text) {
+     *             clickGenericComponent(arrowButton());
+     *             waitForComponent(contentPanel(), ScWaitCondition.ToBeDisplayed);
+     *             clickGenericComponent(listItems().entry(text));
+     *             waitForComponent(contentPanel(), ScWaitCondition.ToBeHidden);
+     *         }
+     * }</pre>
+     *
+     * @param $genericComponent a {@link ScGenericComponent} to click
+     */
+    protected final void clickGenericComponent(ScGenericComponent $genericComponent) {
+        $genericComponent.click();
+    }
+
+    /**
      * A static utility class that computes and extracts "own text" from HTML content.
      *
      * <p>
