@@ -2,7 +2,6 @@ package org.emwhyware.selentic.regression.test;
 
 import org.emwhyware.selentic.lib.*;
 import org.emwhyware.selentic.regression.page.ScXPathTestPage;
-import org.emwhyware.selentic.regression.page.ScXPathTestPage;
 import org.testng.Assert;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
@@ -54,11 +53,13 @@ public class ScXPathTest {
     @Test
     public void testXPathAttr() {
         selectorTestPage.inPage(p -> {
+            final ScComponentCollection<ScGenericComponent> componentsIs = p.xPathAttrTestIsTexts();
             final ScComponentCollection<ScGenericComponent> componentsStartWith = p.xPathAttrStartWithTestTexts();
             final ScComponentCollection<ScGenericComponent> componentsContains = p.xPathAttrContainsTestTexts();
             final ScComponentCollection<ScGenericComponent> componentsEndsWith = p.xPathAttrEndsWithTestTexts();
             final ScComponentCollection<ScGenericComponent> componentsWholeWords = p.xPathAttrWholeWordTestTexts();
 
+            Assert.assertEquals(componentsIs.texts(), List.of("CATEGORY", "STATUS", "DETAILS (NESTED)"));
             Assert.assertEquals(componentsStartWith.texts(), List.of("CATEGORY", "STATUS", "DETAILS (NESTED)"));
             Assert.assertEquals(componentsEndsWith.texts(), List.of("CATEGORY", "STATUS", "DETAILS (NESTED)"));
             Assert.assertEquals(componentsContains.texts(), List.of("CATEGORY", "STATUS", "DETAILS (NESTED)"));
@@ -75,6 +76,22 @@ public class ScXPathTest {
         });
     }
 
+    @Test
+    public void testXPathText() {
+        selectorTestPage.inPage(p -> {
+            final ScComponentCollection<ScGenericComponent> componentsIs = p.xPathTextTestIsTexts();
+            final ScComponentCollection<ScGenericComponent> componentsStartWith = p.xPathTextTestStartsWithTexts();
+            final ScComponentCollection<ScGenericComponent> componentsContains = p.xPathTextTestContainsTexts();
+            final ScComponentCollection<ScGenericComponent> componentsEndsWith = p.xPathTextTestEndsWithTexts();
+            final ScComponentCollection<ScGenericComponent> componentsWholeWords = p.xPathTextTestWholeWordTexts();
+
+            Assert.assertEquals(componentsIs.texts(), List.of("Primary Alpha", "Quaternary Delta", "Septary Eta", "Nonary Iota", "Node Mu"));
+            Assert.assertEquals(componentsStartWith.texts(), List.of("Primary Alpha", "Quaternary Delta", "Septary Eta", "Nonary Iota", "Node Mu"));
+            Assert.assertEquals(componentsEndsWith.texts(), List.of("Tertiary Gamma", "Hexary Zeta"));
+            Assert.assertEquals(componentsContains.texts(), List.of("Pentary Epsilon"));
+            Assert.assertEquals(componentsWholeWords.texts(), List.of("Quaternary Delta"));
+        });
+    }
 
     @Test
     public void testXPathDescendent() {

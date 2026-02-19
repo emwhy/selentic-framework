@@ -606,7 +606,7 @@ public abstract class ScComponent extends ScAbstractComponent {
             Matcher matcher;
             String resultText = originalHtmlText.replaceAll("\\s+", " ");
 
-            for (String voidedPattern : voidedPatterns()) {
+            for (final String voidedPattern : voidedPatterns()) {
                 resultText = resultText.replaceAll(voidedPattern, "");
             }
 

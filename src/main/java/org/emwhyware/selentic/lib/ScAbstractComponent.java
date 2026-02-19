@@ -966,7 +966,7 @@ public abstract class ScAbstractComponent {
      * public final ScComponentCollection<ScTableRow> rows = $$components(TABLE_ROWS, ScTableRow.class);
      *
      * // In test code
-     * for (ScTableRow row : page.rows) {
+     * for (final ScTableRow row : page.rows) {
      *     System.out.println(row.text());
      * }
      * }</pre>

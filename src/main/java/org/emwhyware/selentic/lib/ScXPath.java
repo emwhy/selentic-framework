@@ -1,5 +1,6 @@
 package org.emwhyware.selentic.lib;
 
+import org.emwhyware.selentic.lib.exception.ScSelectorException;
 import org.emwhyware.selentic.lib.util.ScLogHandler;
 import org.openqa.selenium.By;
 import org.slf4j.Logger;
@@ -38,8 +39,10 @@ public sealed abstract class ScXPath extends ScSelector permits ScXPathChild, Sc
      */
     ScXPath(String tag, ScXpathPropertyType... selectorProperties) {
         super();
-        this.tag = tag;
+        this.tag = tag.trim();
         this.selectorProperties = selectorProperties;
+
+        validateSelector(this.tag, this.selectorProperties);
     }
 
     /**
@@ -57,8 +60,10 @@ public sealed abstract class ScXPath extends ScSelector permits ScXPathChild, Sc
      */
     ScXPath(ScXPath priorSelectorNode, String tag, ScXpathPropertyType... selectorProperties) {
         super(priorSelectorNode);
-        this.tag = tag;
+        this.tag = tag.trim();
         this.selectorProperties = selectorProperties;
+
+        validateSelector(this.tag, this.selectorProperties);
     }
 
     /**
@@ -75,6 +80,8 @@ public sealed abstract class ScXPath extends ScSelector permits ScXPathChild, Sc
         super();
         this.tag = "*";
         this.selectorProperties = selectorProperties;
+
+        validateSelector(this.tag, this.selectorProperties);
     }
 
     /**
@@ -93,6 +100,21 @@ public sealed abstract class ScXPath extends ScSelector permits ScXPathChild, Sc
         super(priorSelectorNode);
         this.tag = "*";
         this.selectorProperties = selectorProperties;
+
+        validateSelector(this.tag, this.selectorProperties);
+    }
+
+    /**
+     * Validate the selector input.
+     */
+    private static void validateSelector(String tag, ScXpathPropertyType... selectorProperties) {
+        if (tag.isEmpty()) {
+            throw new ScSelectorException("Tag text should not be empty string.");
+        } else if (tag.equals("*") && selectorProperties.length == 0) {
+            throw new ScSelectorException("No properties were provided. This would have matched with every tag on the page.");
+        } else if (tag.contains(" ")) {
+            throw new ScSelectorException("Tag text should not contain space characters.");
+        }
     }
 
     /**

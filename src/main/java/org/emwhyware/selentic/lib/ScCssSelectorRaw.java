@@ -9,7 +9,7 @@ public final class ScCssSelectorRaw extends ScCssSelector {
     private final String selectorText;
 
     ScCssSelectorRaw(String selectorText) {
-        super();
+        super("RAW");
         this.selectorText = selectorText;
     }
 

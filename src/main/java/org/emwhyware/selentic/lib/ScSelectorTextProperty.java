@@ -15,38 +15,22 @@ public final class ScSelectorTextProperty extends ScSelectorProperty implements 
         final String property = "text()";
         String selector = "";
 
-        if (type == Types.XPath) {
-            switch (this.condition) {
-                case Is -> selector = property + "='" + this.text + "'";
-                case Contains -> selector = "contains(" + property + ", '" + this.text + "'";
-                case StartsWith -> selector = "starts-width(" + property + "='" + this.text + "'";
-                case EndsWith -> selector = "substring(" + property + ", string-length(" + property + ") - string-length('" + this.text + "')+1) = '" + this.text + "'";
-            }
-
-            if (this.negated()) {
-                selector = "not(" + selector + ")";
-            }
-            return "[" + selector + "]";
-        } else if (type == Types.CssSelector) {
-            switch (this.condition) {
-                case Is -> selector = property + "='" + this.text + "'";
-                case Contains -> selector = property + "*='" + this.text + "'";
-                case StartsWith -> selector = property + "^='" + this.text + "'";
-                case EndsWith -> selector = property + "$='" + this.text + "'";
-            }
-
-            if (this.negated()) {
-                return ":not([" + selector + "])";
-            } else {
-                return "[" + selector + "]";
-            }
-        } else {
-            throw new RuntimeException();
+        switch (this.condition) {
+            case Is -> selector = property + "='" + this.text + "'";
+            case Contains -> selector = "contains(" + property + ",'" + this.text + "')";
+            case StartsWith -> selector = "starts-with(" + property + ",'" + this.text + "')";
+            case EndsWith -> selector = "substring(" + property + ", string-length(" + property + ") - string-length('" + this.text + "')+1) = '" + this.text + "'";
+            case WholeWord -> selector = "contains(concat(' ', normalize-space(text()), ' '), ' " + this.text + " ')";
         }
+
+        if (this.negated()) {
+            selector = "not(" + selector + ")";
+        }
+        return "[" + selector + "]";
     }
 
     enum Conditions {
-        Is, Contains, StartsWith, EndsWith;
+        Is, Contains, StartsWith, EndsWith, WholeWord;
     }
 
 }

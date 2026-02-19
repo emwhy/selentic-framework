@@ -1,6 +1,8 @@
 package org.emwhyware.selentic.lib;
 
 
+import org.emwhyware.selentic.lib.exception.ScSelectorException;
+
 public final class ScSelectorAttributeProperty extends ScSelectorProperty implements ScXpathPropertyType, ScCssSelectorPropertyType {
     private final String prefix;
     private final String attribute;
@@ -12,6 +14,10 @@ public final class ScSelectorAttributeProperty extends ScSelectorProperty implem
         this.attribute = attribute;
         this.condition = condition;
         this.text = text;
+
+        if (this.attribute.contains(" ")) {
+            throw new ScSelectorException("Attribute contains space character. This can yield unexpected results.");
+        }
     }
 
     @Override

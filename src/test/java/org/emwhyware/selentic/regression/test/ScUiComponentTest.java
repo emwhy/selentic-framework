@@ -376,7 +376,7 @@ public class ScUiComponentTest {
 
             Assert.assertEquals(p.longComponentEntries().size(), 500);
 
-            for (ScLongListEntryComponent entry : p.longComponentEntries()) {
+            for (final ScLongListEntryComponent entry : p.longComponentEntries()) {
                 i++;
 
                 Assert.assertEquals(entry.titleText.text(), "Long List Entry " + i);

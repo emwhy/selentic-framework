@@ -9,7 +9,7 @@ public final class ScXPathRaw extends ScXPath {
     private final String selectorText;
 
     ScXPathRaw(String selectorText) {
-        super("");
+        super("RAW");
         this.selectorText = selectorText;
     }
 

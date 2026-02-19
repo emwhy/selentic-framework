@@ -23,7 +23,7 @@ public class ScComponentRulesException extends RuntimeException {
 
         message.append(componentType.getName());
 
-        for (String ruleFailure : ruleFailures) {
+        for (final String ruleFailure : ruleFailures) {
             message.append("\n . ").append(ruleFailure);
         }
         return message.toString();
