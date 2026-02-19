@@ -116,7 +116,10 @@ public sealed abstract class ScXPath extends ScSelector permits ScXPathChild, Sc
      */
     @Override
     public String toString() {
-        validateSelector(this.tag, this.selectorProperties);
+        // A parent node contains no properties. Skipping validation.
+        if (!(this instanceof ScXPathParent)) {
+            validateSelector(this.tag, this.selectorProperties);
+        }
         return (priorSelectorNode().map(Object::toString).orElse("")) + nodeText() + tag + String.join("", Arrays.stream(selectorProperties).map(p -> p.build(ScSelectorPropertyType.Types.XPath)).toList());
     }
 
