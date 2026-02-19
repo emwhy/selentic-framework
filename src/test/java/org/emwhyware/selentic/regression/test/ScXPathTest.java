@@ -1,7 +1,8 @@
 package org.emwhyware.selentic.regression.test;
 
 import org.emwhyware.selentic.lib.*;
-import org.emwhyware.selentic.regression.page.ScSelectorTestPage;
+import org.emwhyware.selentic.regression.page.ScXPathTestPage;
+import org.emwhyware.selentic.regression.page.ScXPathTestPage;
 import org.testng.Assert;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
@@ -10,11 +11,11 @@ import org.testng.annotations.Test;
 import java.util.List;
 
 public class ScXPathTest {
-    private final ScWithPage<ScSelectorTestPage> selectorTestPage = ScPage.with(ScSelectorTestPage.class);
+    private final ScWithPage<ScXPathTestPage> selectorTestPage = ScPage.with(ScXPathTestPage.class);
 
     @BeforeClass
     public void setup() {
-        Selentic.open("file://" + System.getProperty("user.dir") + "/build/resources/test/test_file/selectortest.htm");
+        Selentic.open("file://" + System.getProperty("user.dir") + "/build/resources/test/test_file/selector-test.htm");
     }
 
     @AfterClass(alwaysRun = true)
@@ -23,9 +24,9 @@ public class ScXPathTest {
     }
 
     @Test
-    public void testCssSelectorId() {
+    public void testXPathId() {
         selectorTestPage.inPage(p -> {
-            final ScGenericComponent component = p.cssSelectorIdTestText();
+            final ScGenericComponent component = p.xPathIdTestText();
 
             Assert.assertTrue(component.isDisplayed());
             Assert.assertEquals(component.id().orElse(null), "outer-table-1");
@@ -33,30 +34,30 @@ public class ScXPathTest {
     }
 
     @Test
-    public void testCssSelectorTag() {
+    public void testXPathTag() {
         selectorTestPage.inPage(p -> {
-            final ScComponentCollection<ScGenericComponent> components = p.cssSelectorTagTestTexts();
+            final ScComponentCollection<ScGenericComponent> components = p.xPathTagTestTexts();
 
             Assert.assertEquals(components.texts(), List.of("Main Data Grid", "Auxiliary Reference"));
         });
     }
 
     @Test
-    public void testCssSelectorCssClasses() {
+    public void testXPathXPathClasses() {
         selectorTestPage.inPage(p -> {
-            final ScComponentCollection<ScGenericComponent> components = p.cssSelectorCssClassesTestTexts();
+            final ScComponentCollection<ScGenericComponent> components = p.xPathCssClassesTestTexts();
 
             Assert.assertEquals(components.texts(), List.of("Active", "Active", "Active", "Active", "Active"));
         });
     }
 
     @Test
-    public void testCssSelectorAttr() {
+    public void testXPathAttr() {
         selectorTestPage.inPage(p -> {
-            final ScComponentCollection<ScGenericComponent> componentsStartWith = p.cssSelectorAttrStartWithTestTexts();
-            final ScComponentCollection<ScGenericComponent> componentsContains = p.cssSelectorAttrContainsTestTexts();
-            final ScComponentCollection<ScGenericComponent> componentsEndsWith = p.cssSelectorAttrEndsWithTestTexts();
-            final ScComponentCollection<ScGenericComponent> componentsWholeWords = p.cssSelectorAttrWholeWordTestTexts();
+            final ScComponentCollection<ScGenericComponent> componentsStartWith = p.xPathAttrStartWithTestTexts();
+            final ScComponentCollection<ScGenericComponent> componentsContains = p.xPathAttrContainsTestTexts();
+            final ScComponentCollection<ScGenericComponent> componentsEndsWith = p.xPathAttrEndsWithTestTexts();
+            final ScComponentCollection<ScGenericComponent> componentsWholeWords = p.xPathAttrWholeWordTestTexts();
 
             Assert.assertEquals(componentsStartWith.texts(), List.of("CATEGORY", "STATUS", "DETAILS (NESTED)"));
             Assert.assertEquals(componentsEndsWith.texts(), List.of("CATEGORY", "STATUS", "DETAILS (NESTED)"));
@@ -66,85 +67,84 @@ public class ScXPathTest {
     }
 
     @Test
-    public void testCssSelectorOfType() {
+    public void testXPathIndex() {
         selectorTestPage.inPage(p -> {
-            final ScGenericComponent componentNthOfType = p.cssSelectorNthOfTypeTestText();
-            final ScGenericComponent componentNthLastOfType = p.cssSelectorNthLastOfTypeTestText();
-            final ScGenericComponent componentLastOfType = p.cssSelectorLastOfTypeTestText();
-            final ScGenericComponent componentLastOfTypeNested = p.cssSelectorLastOfTypeNestedTestText();
+            final ScComponentCollection<ScGenericComponent> components = p.xPathIndexTestTexts();
 
-            Assert.assertEquals(componentNthOfType.text(), "Auxiliary Reference");
-            Assert.assertEquals(componentNthLastOfType.text(), "Main Data Grid");
-            Assert.assertEquals(componentLastOfType.text(), "System Logs Backup Status");
-            Assert.assertEquals(componentLastOfTypeNested.text(), "Backup Status");
+            Assert.assertEquals(components.texts(), List.of("Quaternary Delta", "Pentary Epsilon", "Hexary Zeta", "Septary Eta", "Octary Theta", "Nonary Iota", "Decary Kappa"));
         });
     }
 
-    @Test
-    public void testCssSelectorChild() {
-        selectorTestPage.inPage(p -> {
-            final ScGenericComponent componentNthChild = p.cssSelectorNthChildTestText();
-            final ScGenericComponent componentNthLastChild = p.cssSelectorNthLastChildTestText();
-            final ScGenericComponent componentLastChild = p.cssSelectorLastChildTestText();
-
-            Assert.assertEquals(componentNthChild.text(), "Main Data Grid");
-            Assert.assertEquals(componentNthLastChild.text(), "Auxiliary Reference");
-            Assert.assertEquals(componentLastChild.text(), "System Logs Backup Status");
-        });
-    }
 
     @Test
-    public void testCssDescendent() {
+    public void testXPathDescendent() {
         selectorTestPage.inPage(p -> {
-            final ScComponentCollection<ScGenericComponent> components = p.cssSelectorDescendentTestTexts();
-
-            Assert.assertEquals(components.texts(), List.of("CATEGORY", "STATUS", "DETAILS (NESTED)"));
-        });
-    }
-
-    @Test
-    public void testCssChild() {
-        selectorTestPage.inPage(p -> {
-            final ScComponentCollection<ScGenericComponent> components = p.cssSelectorChildTestTexts();
+            final ScComponentCollection<ScGenericComponent> components = p.xPathDescendentTestTexts();
 
             Assert.assertEquals(components.texts(), List.of("System Logs", "Backup Status"));
         });
     }
 
     @Test
-    public void testCssSibling() {
+    public void testXPathChild() {
         selectorTestPage.inPage(p -> {
-            final ScComponentCollection<ScGenericComponent> components = p.cssSelectorSiblingTestTexts();
+            final ScComponentCollection<ScGenericComponent> components = p.xPathChildTestTexts();
 
-            Assert.assertEquals(components.texts(), List.of("Standard Entry"));
+            Assert.assertEquals(components.texts(), List.of("System Logs", "Backup Status"));
         });
     }
 
     @Test
-    public void testCssNextSibling() {
+    public void testXPathSibling() {
         selectorTestPage.inPage(p -> {
-            final ScGenericComponent component = p.cssSelectorNextSiblingTestText();
+            final ScComponentCollection<ScGenericComponent> components = p.xPathSiblingTestTexts();
 
-            Assert.assertEquals(component.text(), "Pending");
+            Assert.assertEquals(components.texts(), List.of("Septary Eta", "Octary Theta", "Nonary Iota", "Decary Kappa", "Unit Lambda", "Node Mu"));
         });
     }
 
     @Test
-    public void testCssNot() {
+    public void testXPathPrecedingSibling() {
         selectorTestPage.inPage(p -> {
-            final ScComponentCollection<ScGenericComponent> components = p.cssSelectorNotTestTexts();
+            final ScComponentCollection<ScGenericComponent> components = p.xPathPrecedingSiblingTestTexts();
 
-            Assert.assertEquals(components.stream().map(c -> c.id().orElse("")).toList(), List.of("outer-table-1", "outer-table-2"));
+            Assert.assertEquals(components.texts(), List.of("Primary Alpha", "Secondary Beta", "Tertiary Gamma", "Quaternary Delta", "Pentary Epsilon"));
         });
     }
 
     @Test
-    public void testCssRaw() {
+    public void testXPathFollowing() {
         selectorTestPage.inPage(p -> {
-            final ScComponentCollection<ScGenericComponent> components = p.cssSelectorRawTestTexts();
+            final ScComponentCollection<ScGenericComponent> components = p.xPathFollowingTestTexts();
+
+            Assert.assertEquals(components.texts(), List.of("Septary Eta", "Octary Theta", "Error Code", "Nonary Iota", "Decary Kappa", "Unit Lambda", "Node Mu", "Throughput", "System Logs"));
+        });
+    }
+
+    @Test
+    public void testXPathPreceding() {
+        selectorTestPage.inPage(p -> {
+            final ScComponentCollection<ScGenericComponent> components = p.xPathPrecedingTestTexts();
+
+            Assert.assertEquals(components.texts(), List.of("Primary Alpha", "Sub-Part A1", "Sub-Part A2", "Secondary Beta", "Tertiary Gamma", "Sensor 04", "Quaternary Delta", "Pentary Epsilon", "Voltage", "Hexary Zeta", "Septary Eta", "Octary Theta", "Error Code", "Nonary Iota", "Decary Kappa", "Unit Lambda", "Node Mu", "Throughput"));
+        });
+    }
+
+    @Test
+    public void testXPathNot() {
+        selectorTestPage.inPage(p -> {
+            final ScComponentCollection<ScGenericComponent> components = p.xPathNotTestTexts();
+
+            Assert.assertEquals(components.texts(), List.of("Main Data Grid", "Auxiliary Reference"));
+        });
+    }
+
+    @Test
+    public void testXPathRaw() {
+        selectorTestPage.inPage(p -> {
+            final ScComponentCollection<ScGenericComponent> components = p.xPathRawTestTexts();
 
             Assert.assertEquals(components.texts(), List.of("Main Data Grid", "Auxiliary Reference"));
         });
     }
 }
-//             System.out.println("\"" + String.join("\", \"", components.texts()) + "\"");

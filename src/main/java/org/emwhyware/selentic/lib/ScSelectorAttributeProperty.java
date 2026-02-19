@@ -22,10 +22,10 @@ public final class ScSelectorAttributeProperty extends ScSelectorProperty implem
             switch (this.condition) {
                 case Is -> selector = this.prefix + this.attribute + "='" + this.text + "'";
                 case IsPresent -> selector = this.prefix + this.attribute;
-                case Contains -> selector = "contains(" + this.prefix + this.attribute + ", '" + this.text + "'";
-                case StartsWith -> selector = "starts-width(" + this.prefix + this.attribute + "='" + this.text + "'";
+                case Contains -> selector = "contains(" + this.prefix + this.attribute + ",'" + this.text + "')";
+                case StartsWith -> selector = "starts-with(" + this.prefix + this.attribute + ",'" + this.text + "')";
                 case EndsWith -> selector = "substring(" + this.prefix + this.attribute + ", string-length(" + this.prefix + this.attribute + ") - string-length('" + this.text + "')+1) = '" + this.text + "'";
-                case WholeWord -> selector = "[contains(concat(' ', normalize-space(" + this.prefix + this.attribute + "), ' '), ' " + this.text + " ')]";
+                case WholeWord -> selector = "contains(concat(' ', normalize-space(" + this.prefix + this.attribute + "), ' '), ' " + this.text + " ')";
             }
 
             if (this.negated()) {

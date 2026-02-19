@@ -1,7 +1,7 @@
 package org.emwhyware.selentic.regression.test;
 
 import org.emwhyware.selentic.lib.*;
-import org.emwhyware.selentic.regression.page.ScSelectorTestPage;
+import org.emwhyware.selentic.regression.page.ScCssSelectorTestPage;
 import org.testng.Assert;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
@@ -10,11 +10,11 @@ import org.testng.annotations.Test;
 import java.util.List;
 
 public class ScCssSelectorTest {
-    private final ScWithPage<ScSelectorTestPage> selectorTestPage = ScPage.with(ScSelectorTestPage.class);
+    private final ScWithPage<ScCssSelectorTestPage> selectorTestPage = ScPage.with(ScCssSelectorTestPage.class);
 
     @BeforeClass
     public void setup() {
-        Selentic.open("file://" + System.getProperty("user.dir") + "/build/resources/test/test_file/selectortest.htm");
+        Selentic.open("file://" + System.getProperty("user.dir") + "/build/resources/test/test_file/selector-test.htm");
     }
 
     @AfterClass(alwaysRun = true)
@@ -66,7 +66,7 @@ public class ScCssSelectorTest {
     }
 
     @Test
-    public void testCssSelectorOfType() {
+    public void testCssSelectorNthOfType() {
         selectorTestPage.inPage(p -> {
             final ScGenericComponent componentNthOfType = p.cssSelectorNthOfTypeTestText();
             final ScGenericComponent componentNthLastOfType = p.cssSelectorNthLastOfTypeTestText();
@@ -81,7 +81,7 @@ public class ScCssSelectorTest {
     }
 
     @Test
-    public void testCssSelectorChild() {
+    public void testCssSelectorNthChild() {
         selectorTestPage.inPage(p -> {
             final ScGenericComponent componentNthChild = p.cssSelectorNthChildTestText();
             final ScGenericComponent componentNthLastChild = p.cssSelectorNthLastChildTestText();
@@ -94,7 +94,7 @@ public class ScCssSelectorTest {
     }
 
     @Test
-    public void testCssDescendent() {
+    public void testCssSelectorDescendent() {
         selectorTestPage.inPage(p -> {
             final ScComponentCollection<ScGenericComponent> components = p.cssSelectorDescendentTestTexts();
 
@@ -103,7 +103,7 @@ public class ScCssSelectorTest {
     }
 
     @Test
-    public void testCssChild() {
+    public void testCssSelectorChild() {
         selectorTestPage.inPage(p -> {
             final ScComponentCollection<ScGenericComponent> components = p.cssSelectorChildTestTexts();
 
@@ -112,7 +112,7 @@ public class ScCssSelectorTest {
     }
 
     @Test
-    public void testCssSibling() {
+    public void testCssSelectorSibling() {
         selectorTestPage.inPage(p -> {
             final ScComponentCollection<ScGenericComponent> components = p.cssSelectorSiblingTestTexts();
 
@@ -121,7 +121,7 @@ public class ScCssSelectorTest {
     }
 
     @Test
-    public void testCssNextSibling() {
+    public void testCssSelectorNextSibling() {
         selectorTestPage.inPage(p -> {
             final ScGenericComponent component = p.cssSelectorNextSiblingTestText();
 
@@ -130,7 +130,7 @@ public class ScCssSelectorTest {
     }
 
     @Test
-    public void testCssNot() {
+    public void testCssSelectorNot() {
         selectorTestPage.inPage(p -> {
             final ScComponentCollection<ScGenericComponent> components = p.cssSelectorNotTestTexts();
 
@@ -139,7 +139,7 @@ public class ScCssSelectorTest {
     }
 
     @Test
-    public void testCssRaw() {
+    public void testCssSelectorRaw() {
         selectorTestPage.inPage(p -> {
             final ScComponentCollection<ScGenericComponent> components = p.cssSelectorRawTestTexts();
 

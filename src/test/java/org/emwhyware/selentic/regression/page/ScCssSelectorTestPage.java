@@ -5,7 +5,7 @@ import org.emwhyware.selentic.lib.ScCssSelector;
 import org.emwhyware.selentic.lib.ScGenericComponent;
 import org.emwhyware.selentic.lib.ScPage;
 
-public class ScSelectorTestPage extends ScPage {
+public class ScCssSelectorTestPage extends ScPage {
     private static final ScCssSelector CSS_SELECTOR_ID_TEST_TEXT = _cssSelector.descendant(_id("outer-table-1"));
     private static final ScCssSelector CSS_SELECTOR_TAG_TEST_TEXTS = _cssSelector.descendant("h2");
     private static final ScCssSelector CSS_SELECTOR_CSS_CLASSES_TEST_TEXTS = _cssSelector.descendant(_cssClasses("status", "active"));
@@ -13,8 +13,8 @@ public class ScSelectorTestPage extends ScPage {
     private static final ScCssSelector CSS_SELECTOR_ATTR_ENDS_WITH_TEST_TEXTS = _cssSelector.descendant(_attr("scope").endsWith("ol"));
     private static final ScCssSelector CSS_SELECTOR_ATTR_CONTAINS_TEST_TEXTS = _cssSelector.descendant(_attr("scope").contains("ol"));
     private static final ScCssSelector CSS_SELECTOR_ATTR_WHOLE_WORD_TEST_TEXTS = _cssSelector.descendant(_attr("class").wholeWord("status"));
-    private static final ScCssSelector CSS_SELECTOR_NTH_OF_TYPE_TEST_TEXT = _cssSelector.descendant("body").child(_tag("h2"), _nthOfType(1));
-    private static final ScCssSelector CSS_SELECTOR_NTH_LAST_OF_TYPE_TEST_TEXT = _cssSelector.descendant("body").child(_tag("h2"), _nthLastOfType(1));
+    private static final ScCssSelector CSS_SELECTOR_NTH_OF_TYPE_TEST_TEXT = _cssSelector.descendant("body").child("h2", _nthOfType(1));
+    private static final ScCssSelector CSS_SELECTOR_NTH_LAST_OF_TYPE_TEST_TEXT = _cssSelector.descendant("body").child("h2", _nthLastOfType(1));
     private static final ScCssSelector CSS_SELECTOR_LAST_OF_TYPE_TEST_TEXT = _cssSelector.descendant("body").child(_attr("id").isPresent(), _lastOfType());
     private static final ScCssSelector CSS_SELECTOR_NTH_CHILD_TEST_TEXT = _cssSelector.descendant("body").child(_nthChild(0));
     private static final ScCssSelector CSS_SELECTOR_NTH_LAST_CHILD_TEST_TEXT = _cssSelector.descendant("body").child(_nthLastChild(1));
