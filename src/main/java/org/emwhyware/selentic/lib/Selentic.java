@@ -60,9 +60,7 @@ import java.util.Optional;
  */
 public final class Selentic {
     private static final Logger LOG = ScLogHandler.logger(Selentic.class);
-    private static final HashMap<Long, WebDriver> DRIVERS = new HashMap<>();
-    private static final ScWebDriverOptions WEBDRIVER_OPTIONS = new ScWebDriverOptions();
-    private static Optional<WebDriverListener> webDriverListener = Optional.empty();
+    private static final ThreadLocal<SelenticWebDriverContext> CONTEXT = ThreadLocal.withInitial(SelenticWebDriverContext::new);
 
     /**
      * Private constructor to prevent instantiation of this utility class.
@@ -95,7 +93,7 @@ public final class Selentic {
      * @see SelelenticConfig#browser()
      */
     public static synchronized WebDriver driver() {
-        return driver(SelelenticConfig.config().browser());
+        return CONTEXT.get().driver(SelelenticConfig.config().browser());
     }
 
     /**
@@ -136,26 +134,7 @@ public final class Selentic {
      * @see ScBrowser
      */
     public static synchronized WebDriver driver(ScBrowser browser) {
-        final long threadId = Thread.currentThread().threadId();
-
-        if (!DRIVERS.containsKey(threadId)) {
-            WebDriver driver = null;
-
-            switch (browser) {
-                case Chrome -> driver = new ChromeDriver(WEBDRIVER_OPTIONS.chromeOptions());
-                case Firefox -> driver = new FirefoxDriver(WEBDRIVER_OPTIONS.firefoxOptions());
-                case Safari -> driver = new SafariDriver();
-                case Edge -> driver = new EdgeDriver(WEBDRIVER_OPTIONS.edgeOptions());
-            }
-
-            // Add listener class, if available.
-            if (webDriverListener.isPresent()) {
-                driver = new EventFiringDecorator<>(webDriverListener.get()).decorate(driver);
-            }
-            DRIVERS.put(threadId, driver);
-        }
-
-        return DRIVERS.get(threadId);
+        return CONTEXT.get().driver(browser);
     }
 
     /**
@@ -194,9 +173,7 @@ public final class Selentic {
      * @see #withEdgeOptions(ScWebDriverOptions.EdgeOptionSetup)
      */
     public static synchronized void withChromeOptions(ScWebDriverOptions.ChromeOptionSetup optionSetup) {
-        optionSetup.options(WEBDRIVER_OPTIONS.chromeOptions(), WEBDRIVER_OPTIONS.chromePrefs());
-
-        WEBDRIVER_OPTIONS.chromeOptions().setExperimentalOption("pref", WEBDRIVER_OPTIONS.chromePrefs());
+        CONTEXT.get().withChromeOptions(optionSetup);
     }
 
     /**
@@ -231,7 +208,7 @@ public final class Selentic {
      * @see #withEdgeOptions(ScWebDriverOptions.EdgeOptionSetup)
      */
     public static synchronized void withFirefoxOptions(ScWebDriverOptions.FirefoxOptionSetup optionSetup) {
-        optionSetup.options(WEBDRIVER_OPTIONS.firefoxOptions());
+        CONTEXT.get().withFirefoxOptions(optionSetup);
     }
 
     /**
@@ -267,9 +244,7 @@ public final class Selentic {
      * @see #withFirefoxOptions(ScWebDriverOptions.FirefoxOptionSetup)
      */
     public static synchronized void withEdgeOptions(ScWebDriverOptions.EdgeOptionSetup optionSetup) {
-        optionSetup.options(WEBDRIVER_OPTIONS.edgeOptions(), WEBDRIVER_OPTIONS.edgePrefs());
-
-        WEBDRIVER_OPTIONS.edgeOptions().setExperimentalOption("pref", WEBDRIVER_OPTIONS.edgeOptions());
+        CONTEXT.get().withEdgeOptions(optionSetup);
     }
 
     /**
@@ -298,7 +273,7 @@ public final class Selentic {
      * @see #withFirefoxOptions(ScWebDriverOptions.FirefoxOptionSetup)
      */
     public static synchronized void withSafariOptions(ScWebDriverOptions.SafariOptionSetup optionSetup) {
-        optionSetup.options(WEBDRIVER_OPTIONS.safariOptions());
+        CONTEXT.get().withSafariOptions(optionSetup);
     }
 
     /**
@@ -337,7 +312,7 @@ public final class Selentic {
      * @see #driver()
      */
     public static void setWebDriverListener(WebDriverListener listener) {
-        webDriverListener = Optional.of(listener);
+        CONTEXT.get().setWebDriverListener(listener);
     }
 
     /**
@@ -402,12 +377,8 @@ public final class Selentic {
      * @see #driver()
      */
     public static synchronized void quit() {
-        final long threadId = Thread.currentThread().threadId();
-
-        if (DRIVERS.containsKey(threadId)) {
-            DRIVERS.get(threadId).quit();
-            DRIVERS.remove(threadId);
-        }
+        driver().quit();
+        CONTEXT.remove();
     }
 
     /**

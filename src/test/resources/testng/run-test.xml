@@ -1,0 +1,12 @@
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd" >
+<suite name="MyParallelSuite" parallel="classes" thread-count="4">
+
+    <test name="ParallelClassesTest">
+        <classes>
+            <class name="org.emwhyware.selentic.regression.test.ScCssSelectorTest"/>
+            <class name="org.emwhyware.selentic.regression.test.ScXPathTest"/>
+            <class name="org.emwhyware.selentic.regression.test.ScUiComponentTest"/>
+            <class name="org.emwhyware.selentic.regression.test.ScUserDefinedComponentTest"/>
+        </classes>
+    </test>
+</suite>
