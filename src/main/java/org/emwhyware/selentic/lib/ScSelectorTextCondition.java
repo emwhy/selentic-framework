@@ -20,4 +20,8 @@ public class ScSelectorTextCondition {
     public ScSelectorTextProperty endsWith(String text) {
         return new ScSelectorTextProperty(ScSelectorTextProperty.Conditions.EndsWith, text);
     }
+
+    public ScSelectorTextProperty wholeWord(String text) {
+        return new ScSelectorTextProperty(ScSelectorTextProperty.Conditions.WholeWord, text);
+    }
 }

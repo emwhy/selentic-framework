@@ -59,9 +59,6 @@ public abstract class ScAbstractPage extends ScAbstractComponent {
      * @param c the {@link ScComponent} to wait for
      * @throws ScWaitTimeoutException if the component does not become displayed within the timeout period
      */
-    protected void waitForComponent(ScComponent c) {
-        c.waitForDisplayed();
-    }
 
     /**
      * Waits for the page to be fully loaded and ready for interaction.
@@ -69,17 +66,23 @@ public abstract class ScAbstractPage extends ScAbstractComponent {
      * @throws ScUnexpectedPageException if an error occurs while waiting for the page to load,
      *                                    or if the page does not load within the timeout period
      */
-    protected final void waitForPage() {
+    final void waitForPage() {
         try {
             waitUntil(() -> {
                 final String readyState = String.valueOf(Selentic.executeScript("return document.readyState"));
 
                 return readyState != null && readyState.equals("complete");
             });
-            this.waitForDisplayed();
+            this.waitForDisplayedPage();
             LOGGER.debug("Page URL: {}", Selentic.driver().getCurrentUrl());
         } catch (Throwable th) {
             throw new ScUnexpectedPageException(this.getClass().getCanonicalName(), th);
         }
+    }
+
+    /**
+     * Can be overridden to allow additional wait for the page.
+     */
+    protected void waitForDisplayedPage() {
     }
 }

@@ -65,7 +65,7 @@ public final class ScWindow {
         // Make sure that the actual window count matches expected count.
         if (beforeCloseAttemptCount == driver.getWindowHandles().size()) {
             ScWait.waitUntil(() -> {
-                for (String handle : driver.getWindowHandles()) {
+                for (final String handle : driver.getWindowHandles()) {
                     if (handle.equals(newWindowHandle)) {
                         driver.switchTo().window(newWindowHandle);
                         driver.close();
@@ -132,7 +132,7 @@ public final class ScWindow {
                 // Parent window index will be 0 initially
                 // Adding + 2 because comparing size with index
                 if (driver.getWindowHandles().size() == windowHandles.indexOf(currentHandle) + 2) {
-                    for (String handle : driver.getWindowHandles()) {
+                    for (final String handle : driver.getWindowHandles()) {
                         if (!windowHandles.contains(handle)) {
                             windowHandles.add(handle);
                         }

@@ -40,6 +40,21 @@ public final class ScCssSelectorPage extends ScCssSelector {
     }
 
     /**
+     * Constructs an {@code ScCssSelectorPage} with optional properties.
+     *
+     * <p>
+     * This constructor is package-private and called internally by the framework. Use the fluent API
+     * method {@link ScCssSelector#page(ScCssSelectorPropertyType...)} instead.
+     *
+     *
+     * @param tag The HTML/XML tag to target.
+     * @param selectorProperties optional properties to filter page-level elements
+     */
+    ScCssSelectorPage(String tag, ScCssSelectorPropertyType... selectorProperties) {
+        super(tag, selectorProperties);
+    }
+
+    /**
      * Returns an empty string as there is no combinator for root-level selectors.
      *
      * <p>

@@ -19,7 +19,7 @@ public class ScMultiSelect extends ScFormComponent {
         final Select select = new Select(this.scrolledElement());
         final List<String> notFoundTexts = new ArrayList<>();
 
-        for (String text : texts) {
+        for (final String text : texts) {
             if (optionTexts().contains(text)) {
                 select.selectByVisibleText(text);
             } else {

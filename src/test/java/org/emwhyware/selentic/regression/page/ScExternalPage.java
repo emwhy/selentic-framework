@@ -10,15 +10,23 @@ public class ScExternalPage extends ScPage {
     private static final ScXPath TEST_CLOSE_CURRENT_WINDOW_BUTTON = _xpath.descendant("button", _id().is("test-external-close-window-button"));
 
     @Override
-    protected void waitForDisplayed() {
-        waitForComponent(testExternalTextbox);
+    protected void waitForDisplayedPage() {
+        waitForComponent(testExternalTextbox(), ScWaitCondition.ToBeDisplayed);
     }
 
-    public final ScTextbox testExternalTextbox = $component(TEST_EXTERNAL_TEXTBOX, ScTextbox.class);
+    public ScTextbox testExternalTextbox() {
+        return $component(TEST_EXTERNAL_TEXTBOX, ScTextbox.class);
+    }
 
-    public final ScComponentCollection<ScTestTableRow> testExternalTableRows = $$components(TEST_EXTERNAL_ROWS, ScTestTableRow.class);
+    public ScComponentCollection<ScTestTableRow> testExternalTableRows() {
+        return $$components(TEST_EXTERNAL_ROWS, ScTestTableRow.class);
+    }
 
-    public final ScLink openExternalWindowLink = $component(TEST_EXTERNAL_WINDOW_LINK, ScLink.class);
+    public ScLink openExternalWindowLink() {
+        return $component(TEST_EXTERNAL_WINDOW_LINK, ScLink.class);
+    }
 
-    public final ScButton closeCurrentWindowButton = $component(TEST_CLOSE_CURRENT_WINDOW_BUTTON, ScButton.class);
+    public ScButton closeCurrentWindowButton() {
+        return $component(TEST_CLOSE_CURRENT_WINDOW_BUTTON, ScButton.class);
+    }
 }

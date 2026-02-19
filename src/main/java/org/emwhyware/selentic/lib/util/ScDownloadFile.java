@@ -152,7 +152,7 @@ public class ScDownloadFile {
         };
 
         ScWait.waitUntil(60000, () -> {
-            for (Iterator<File> it = FileUtils.iterateFiles(ScLogHandler.downloadDirectory(), fileFilter, TrueFileFilter.INSTANCE); it.hasNext(); ) {
+            for (final Iterator<File> it = FileUtils.iterateFiles(ScLogHandler.downloadDirectory(), fileFilter, TrueFileFilter.INSTANCE); it.hasNext(); ) {
                 file.set(it.next());
                 break;
             }
@@ -189,7 +189,7 @@ public class ScDownloadFile {
             }
         };
         ScWait.waitUntil(60000, () -> {
-            for (Iterator<File> it = FileUtils.iterateFiles(ScLogHandler.downloadDirectory(), fileFilter, TrueFileFilter.INSTANCE); it.hasNext(); ) {
+            for (final Iterator<File> it = FileUtils.iterateFiles(ScLogHandler.downloadDirectory(), fileFilter, TrueFileFilter.INSTANCE); it.hasNext(); ) {
                 file.set(it.next());
                 break;
             }

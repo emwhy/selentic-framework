@@ -9,6 +9,14 @@ public final class ScXPathPreceding extends ScXPath {
         super(priorSelectorNode, tag, selectorProperties);
     }
 
+    ScXPathPreceding(ScXpathPropertyType... selectorProperties) {
+        super(selectorProperties);
+    }
+
+    ScXPathPreceding(ScXPath priorSelectorNode, ScXpathPropertyType... selectorProperties) {
+        super(priorSelectorNode, selectorProperties);
+    }
+
     @Override
     protected String nodeText() {
         return "/preceding::";

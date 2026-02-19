@@ -36,4 +36,20 @@ public final class ScPageXPathBuilder extends ScSelectorBuilder {
         this.setSelector(new ScXPathPage(tag, selectorProperties));
         return (ScXPath) this.selector();
     }
+
+
+    /**
+     * Creates a page-level descendant XPath selector for the specified tag and properties.
+     * <p>
+     * Note: This method internally instantiates {@link ScXPathPage} to ensure the
+     * selector is rooted correctly for page-level scope.
+     *
+     *
+     * @param selectorProperties Optional properties or attributes used to filter the tag.
+     * @return The updated {@link ScXPath} instance.
+     */
+    public ScXPath descendant(ScXpathPropertyType... selectorProperties) {
+        this.setSelector(new ScXPathPage(selectorProperties));
+        return (ScXPath) this.selector();
+    }
 }

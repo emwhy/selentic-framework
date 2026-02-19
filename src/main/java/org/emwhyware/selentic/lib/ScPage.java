@@ -160,7 +160,7 @@ public abstract class ScPage extends ScAbstractPage {
      * <ul>
      *   <li>Refreshes the current page using the browser's navigation API</li>
      *   <li>Waits for the document ready state to be "complete"</li>
-     *   <li>Waits for page-specific components to be displayed (as defined in {@link #waitForDisplayed()})</li>
+     *   <li>Waits for page-specific components to be displayed (as defined in {@link #waitForDisplayedPage()})</li>
      * </ul>
      * 
      *

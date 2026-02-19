@@ -91,8 +91,6 @@ public abstract sealed class ScSelector permits ScCssSelector, ScXPath {
      * Builds and returns a Selenium {@link By} locator for this selector.
      *
      * @return a {@link By} locator constructed from this selector and its chain
-     * @see org.openqa.selenium.WebDriver#findElement(By)
-     * @see org.openqa.selenium.WebDriver#findElements(By)
      */
     protected abstract By build();
 }

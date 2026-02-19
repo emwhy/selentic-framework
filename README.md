@@ -1,8 +1,11 @@
 # Selentic Framework
 
-Selentic Framework is a test automation framework based on Component-Object Model design (COM). It aims to help producing test automation codes that are easy to maintain and read while ramping up the test automation development speed. 
+Selentic Framework is a test automation framework for writing web UI tests. It is designed based on Component-Object Model design (COM). It aims to help producing test automation codes that are easy to maintain and read while enabling ramping up the test automation development speed. 
 
-The ease to read and maintain the test automation code is crucial to success of any test automation projects. Software development projects incorporate test automation to cut down on the technical debt. Adding more technical debt by having to maintain complex, illegible code is exactly what we want to avoid.
+Software development projects incorporate test automation to cut down on the technical debt while increasing the quality of their products. 
+Causing more technical debt to maintain unstable, inconsistent, complicated, hard-to-read test automation code is exactly what we want to avoid.
+This framework was designed and developed to help ensuring the test automation code remains easily readable and consistent without being unstable and flaky. 
+Being able to maintain and manage test automation code efficiently is crucial to the success of any test automation project.
 
 Selentic Framework utilizes ***Selenium*** and is written in ***Java*** (Developed on Java 21). 
 
@@ -42,7 +45,7 @@ The Component Object Model design pattern is often implemented using a Page Obje
 
 ## Setting up Selentic Framework
 
-- Download the latest **selentic-framework.jar** file from https://github.com/emwhy/selentic-framework/releases/. The release also contains ***selentic-framework-javadoc.jar*** file that contains detailed documentation. When configured, the documentation can be shown right from IDE (such as IntelliJ).
+- Download the latest **selentic-framework.jar** file from https://github.com/emwhy/selentic-framework/releases/. The javadoc for the framework is packaged in  ***selentic-framework-javadoc.jar***. When configured, the documentation can be shown right from IDE (such as IntelliJ).
 - Move the file to appropriate location in a project directory (i.e., ./lib).
 - There are additional packages that Selentic Framework depends on. Add reference to these packages. If you are working with Gradle, add dependencies to **build.gradle.kts** file.
 ```
@@ -54,7 +57,7 @@ dependencies {
     implementation("com.typesafe:config:1.4.+")
 }
 ```
-- **selentic-framework-jar** can be added also.
+- **selentic-framework-jar** can be added like this.
 ```
     implementation(files("lib/selentic-framework.jar"));
 ```
@@ -102,16 +105,24 @@ public class ScLoginPage extends ScPage {
     private static final ScCssSelector USERNAME_TEXTBOX = _cssSelector.descendant(_id("username"));
     private static final ScCssSelector PASSWORD_TEXTBOX = _cssSelector.descendant(_id("password"));
     private static final ScCssSelector LOGIN_BUTTON = _cssSelector.descendant(_tag("button"), _type().is("submit"));
-    
+
     @Override
-    protected void waitForDisplayed() {
-        waitForComponent(userNameTextbox);
+    protected void waitForDisplayedPage() {
+        waitForComponent(userNameTextbox, ScWaitCondition.ToBeDisplayed);
     }
-    
+
     // Components on this page.
-    public final ScTextbox userNameTextbox = $textbox(USERNAME_TEXTBOX);
-    public final ScTextbox passwordTextbox = $textbox(PASSWORD_TEXTBOX);
-    public final ScButton loginButton = $button(LOGIN_BUTTON);
+    public ScTextbox userNameTextbox() {
+        return $textbox(USERNAME_TEXTBOX);
+    }
+
+    public ScTextbox passwordTextbox() {
+        return $textbox(PASSWORD_TEXTBOX);
+    }
+
+    public ScButton loginButton() {
+        return $button(LOGIN_BUTTON);
+    }
 }
 ```
 
@@ -122,7 +133,7 @@ public class ScLoginPage extends ScPage {
 Generally CSS selectors are faster while XPath offer more complex features.
 - Since textbox and button are both standard HTML form element, they are already defined in Selentic Framework.
 - Both selector object and component object name end with the component type (i.e., USERNAME_**TEXTBOX**, username**Textbox**). This practice is recommended to keep the test code easily legible.
-- Overriding **waitForDisplayed** is optional. The page would automatically wait for the page to complete loading. However, if additional wait is needed (i.e., Ajax based components require more wait to fully load), that can be implemented here. In this case, in addition to waiting for the page to load, it also waits for the username textbox to be displayed.  
+- Overriding **waitForDisplayedPage** is optional. The page would automatically wait for the page to complete loading. However, if additional wait is needed (i.e., Ajax based components require more wait to fully load), that can be implemented here. In this case, in addition to waiting for the page to load, it also waits for the username textbox to be displayed.  
 
 Once the page is defined, writing a test is straight forward (Written with TestNG).
 
@@ -318,11 +329,17 @@ public class ScSlimSelectDropdown extends ScComponent {
     }
 
     // Components on this component. None of these need to be public.
-    private final ScGenericComponent selectedText = $genericComponent(SELECTED_TEXT);
-    private final ScArrowButton arrowButton = $component(ARROW_BUTTON, ScArrowButton.class, this);
-    private final ScGenericComponent contentPanel = $genericComponent(CONTENT_PANEL);
-    private final ScComponentCollection<ScListItem> listItems = $$components(LIST_ITEMS, ScListItem.class, this);
-    
+    private ScArrowButton arrowButton() {
+        return $component(ARROW_BUTTON, ScArrowButton.class, this);
+    }
+
+    private ScGenericComponent contentPanel() {
+        return $genericComponent(CONTENT_PANEL);
+    }
+
+    private ScComponentCollection<ScListItem> listItems() {
+        return $$components(LIST_ITEMS, ScListItem.class, this);
+    }    
     /*
         Inner classes.
      */
@@ -383,25 +400,31 @@ public class ScSlimSelectDropdown extends ScComponent {
         return selectedText();
     }
 
+    private ScArrowButton arrowButton() {
+        return $component(ARROW_BUTTON, ScArrowButton.class, this);
+    }
+
+    private ScGenericComponent contentPanel() {
+        return $genericComponent(CONTENT_PANEL);
+    }
+
+    private ScComponentCollection<ScListItem> listItems() {
+        return $$components(LIST_ITEMS, ScListItem.class, this);
+    }
+
     public String selectedText() {
-        // selectedText only appears when there is a selection, 
-        // so check if it's displayed, and return an empty string if not.
+        final ScGenericComponent selectedText = $genericComponent(SELECTED_TEXT);
+
         return selectedText.isDisplayed() ? selectedText.text() : "";
     }
 
     public void select(String text) {
-        arrowButton.click();
-        ScWait.waitUntil(() -> contentPanel.isDisplayed());
-        listItems.entry(text).click();
-        ScWait.waitUntil(() -> !contentPanel.isDisplayed());
+        arrowButton().click();
+        waitForComponent(contentPanel(), ScWaitCondition.ToBeDisplayed);
+        listItems().entry(text).click();
+        waitForComponent(contentPanel(), ScWaitCondition.ToBeHidden);
     }
 
-    // Components on this component. None of these need to be public.
-    private final ScGenericComponent selectedText = $genericComponent(SELECTED_TEXT);
-    private final ScArrowButton arrowButton = $component(ARROW_BUTTON, ScArrowButton.class, this);
-    private final ScGenericComponent contentPanel = $genericComponent(CONTENT_PANEL);
-    private final ScComponentCollection<ScListItem> listItems = $$components(LIST_ITEMS, ScListItem.class, this);
-    
     /*
         Inner classes.
      */
@@ -420,14 +443,61 @@ public class ScSlimSelectDropdown extends ScComponent {
             rule.tag().is("div");
             rule.cssClasses().has("ss-option");
         }
-
-        public boolean isSelected() {
-            return this.cssClasses().contains("ss-selected");
-        }
     }
 }
 ```
-Page and component should look very similar in structure, with selectors at the top and defined contained components.
+But it is a little cumbersome to have to define a new class, just so we can do a click. To address that, there is **clickGenericComponent()** method. Use of that can completely eliminate the need to define new inner class in this case, making the code a ittle cleaner.
+
+```java
+// (imports and package are omitted)
+
+public class ScSlimSelectDropdown extends ScComponent {
+    private static final ScCssSelector ARROW_BUTTON = _cssSelector.descendant("svg", _cssClasses("ss-arrow"));
+    private static final ScCssSelector SELECTED_TEXT = _cssSelector.descendant("div", _cssClasses("ss-single"));
+    private static final ScCssSelector CONTENT_PANEL = _cssSelector.page("div", _cssClasses("ss-content", "ss-open"));
+    private static final ScCssSelector LIST_ITEMS = CONTENT_PANEL.descendant("div", _cssClasses("ss-option"));
+
+    @Override
+    protected void rules(ScComponentRule rule) {
+        rule.tag().is("div");
+        rule.attr("aria-label").is("Combobox");
+        rule.attr("role").is("combobox");
+        rule.attr("aria-controls").isPresent();
+    }
+
+    private ScGenericComponent arrowButton() {
+        return $component(ARROW_BUTTON, ScGenericComponent.class);
+    }
+
+    private ScGenericComponent contentPanel() {
+        return $genericComponent(CONTENT_PANEL);
+    }
+
+    private ScComponentCollection<ScGenericComponent> listItems() {
+        return $$components(LIST_ITEMS, ScGenericComponent.class);
+    }
+
+    @Override
+    public String text() {
+        return selectedText();
+    }
+
+    public String selectedText() {
+        final ScGenericComponent selectedText = $genericComponent(SELECTED_TEXT);
+
+        return selectedText.isDisplayed() ? selectedText.text() : "";
+    }
+
+    public void select(String text) {
+        // Click the arrow button.
+        clickGenericComponent(arrowButton());
+        waitForComponent(contentPanel(), ScWaitCondition.ToBeDisplayed);
+        // Click the list item.
+        clickGenericComponent(listItems().entry(text));
+        waitForComponent(contentPanel(), ScWaitCondition.ToBeHidden);
+    }
+}
+```
 
 Once **ScSlimSelectDropdown** class is defined, it can be used in any places where the Slim Select appears on a page in applications. Typically, 
 the same web components are repeatedly used within an application for consistent look and saving development time. While it may take some time to initially build the component, it 
@@ -458,22 +528,26 @@ public class ScLoginEnhancedTest {
     @Test
     public void testLogin() {
         loginPage.inPage(p -> {
-            Assert.assertEquals(p.accountTypeDropdown.selectedText(), "");
+            Assert.assertEquals(p.accountTypeDropdown().selectedText(), "");
 
-            p.accountTypeDropdown.select("Viewer");
+            p.accountTypeDropdown().select("Viewer");
 
-            Assert.assertEquals(p.accountTypeDropdown.selectedText(), "Viewer");
+            Assert.assertEquals(p.accountTypeDropdown().selectedText(), "Viewer");
 
-            p.accountTypeDropdown.select("Editor");
+            p.accountTypeDropdown().select("Editor");
 
-            Assert.assertEquals(p.accountTypeDropdown.selectedText(), "Editor");
+            Assert.assertEquals(p.accountTypeDropdown().selectedText(), "Editor");
 
-            p.userNameTextbox.enterText("test");
-            p.passwordTextbox.enterText("test");
-            p.loginButton.click();
+            p.userNameTextbox().enterText("test");
+
+            Assert.assertEquals(p.userNameTextbox().text(), "test");
+
+            p.passwordTextbox().enterText("test123");
+
+            Assert.assertEquals(p.passwordTextbox().text(), "test123");
+
+            p.loginButton().click();
         });
     }
 }
 ```
-The test code remains simple and legible. The design pushes more complex code to the back and with more reusability to
-minimize the amount of code. More reusable code means less code to support and maintain.

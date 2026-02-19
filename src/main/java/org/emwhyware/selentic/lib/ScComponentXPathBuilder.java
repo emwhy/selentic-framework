@@ -107,6 +107,86 @@ public final class ScComponentXPathBuilder extends ScSelectorBuilder {
         return (ScXPath) this.selector();
     }
 
+
+    /**
+     * Creates a descendant XPath selector for the specified tag and properties.
+     *
+     * @param selectorProperties Optional properties/attributes to filter the tag.
+     * @return The updated {@link ScXPath} instance.
+     */
+    public ScXPath descendant(ScXpathPropertyType... selectorProperties) {
+        this.setSelector(new ScXPathDescendant(selectorProperties));
+        return (ScXPath) this.selector();
+    }
+
+    /**
+     * Creates a direct child XPath selector for the specified tag and properties.
+     *
+     * @param selectorProperties Optional properties/attributes to filter the tag.
+     * @return The updated {@link ScXPath} instance.
+     */
+    public ScXPath child(ScXpathPropertyType... selectorProperties) {
+        this.setSelector(new ScXPathChild(selectorProperties));
+        return (ScXPath) this.selector();
+    }
+
+    /**
+     * Creates a sibling XPath selector for the specified tag and properties.
+     *
+     * @param selectorProperties Optional properties/attributes to filter the tag.
+     * @return The updated {@link ScXPath} instance.
+     */
+    public ScXPath sibling(ScXpathPropertyType... selectorProperties) {
+        this.setSelector(new ScXPathSibling(selectorProperties));
+        return (ScXPath) this.selector();
+    }
+
+    /**
+     * Creates a preceding sibling XPath selector.
+     * <i>Note: Implementation uses {@link ScXPathFollowing} internally.</i>
+     *
+     * @param selectorProperties Optional properties/attributes to filter the tag.
+     * @return The updated {@link ScXPath} instance.
+     */
+    public ScXPath precedingSibling(ScXpathPropertyType... selectorProperties) {
+        this.setSelector(new ScXPathFollowing(selectorProperties));
+        return (ScXPath) this.selector();
+    }
+
+    /**
+     * Creates a following XPath selector.
+     * <i>Note: Implementation uses {@link ScXPathSibling} internally.</i>
+     *
+     * @param selectorProperties Optional properties/attributes to filter the tag.
+     * @return The updated {@link ScXPath} instance.
+     */
+    public ScXPath following(ScXpathPropertyType... selectorProperties) {
+        this.setSelector(new ScXPathSibling(selectorProperties));
+        return (ScXPath) this.selector();
+    }
+
+    /**
+     * Creates a preceding XPath selector for the specified tag and properties.
+     *
+     * @param selectorProperties Optional properties/attributes to filter the tag.
+     * @return The updated {@link ScXPath} instance.
+     */
+    public ScXPath preceding(ScXpathPropertyType... selectorProperties) {
+        this.setSelector(new ScXPathPreceding(selectorProperties));
+        return (ScXPath) this.selector();
+    }
+
+    /**
+     * Creates a page-level XPath selector starting from the root.
+     *
+     * @param selectorProperties Optional properties/attributes to filter the tag.
+     * @return The updated {@link ScXPath} instance.
+     */
+    public ScXPath page(ScXpathPropertyType... selectorProperties) {
+        this.setSelector(new ScXPathPage(selectorProperties));
+        return (ScXPath) this.selector();
+    }
+
     /**
      * Creates an XPath selector targeting the immediate parent of the current node.
      *

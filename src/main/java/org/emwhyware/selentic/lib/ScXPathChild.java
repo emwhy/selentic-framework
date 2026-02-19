@@ -9,6 +9,14 @@ public final class ScXPathChild extends ScXPath {
         super(priorSelectorNode, tag, selectorProperties);
     }
 
+    ScXPathChild(ScXpathPropertyType... selectorProperties) {
+        super(selectorProperties);
+    }
+
+    ScXPathChild(ScXPath priorSelectorNode, ScXpathPropertyType... selectorProperties) {
+        super(priorSelectorNode, selectorProperties);
+    }
+
     @Override
     protected String nodeText() {
         return "/child::";

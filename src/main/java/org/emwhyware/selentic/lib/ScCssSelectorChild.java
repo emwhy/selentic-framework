@@ -45,6 +45,22 @@ public final class ScCssSelectorChild extends ScCssSelector {
         super(priorSelectorNode, selectorProperties);
     }
 
+
+    /**
+     * Constructs an {@code ScCssSelectorChild} with a prior selector node and optional properties.
+     *
+     * <p>
+     * This constructor is package-private and called internally by the framework. Use the fluent API
+     * method {@link ScCssSelector#child(ScCssSelectorPropertyType...)} instead.
+     *
+     *
+     * @param priorSelectorNode the parent element selector in the chain
+     * @param selectorProperties optional properties to filter child elements
+     */
+    ScCssSelectorChild(ScCssSelector priorSelectorNode, String tag, ScCssSelectorPropertyType... selectorProperties) {
+        super(priorSelectorNode, tag, selectorProperties);
+    }
+
     /**
      * Returns the CSS child combinator operator: {@code " > "}.
      *

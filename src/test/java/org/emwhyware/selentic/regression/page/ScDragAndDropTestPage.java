@@ -10,7 +10,15 @@ public class ScDragAndDropTestPage extends ScPage {
     private static final ScCssSelector DROP_ZONE1 = _cssSelector.descendant(_id("target-zone1"));
     private static final ScCssSelector DROP_ZONE2 = _cssSelector.descendant(_id("target-zone2"));
 
-    public final ScDraggedItem draggedItem = $component(DRAGGED_ITEM, ScDraggedItem.class);
-    public final ScDragAndDropDropZone dropZone1 = $component(DROP_ZONE1, ScDragAndDropDropZone.class);
-    public final ScDragAndDropDropZone dropZone2 = $component(DROP_ZONE2, ScDragAndDropDropZone.class);
+    public ScDraggedItem draggedItem() {
+        return $component(DRAGGED_ITEM, ScDraggedItem.class);
+    }
+
+    public ScDragAndDropDropZone dropZone1() {
+        return $component(DROP_ZONE1, ScDragAndDropDropZone.class);
+    }
+
+    public ScDragAndDropDropZone dropZone2() {
+        return $component(DROP_ZONE2, ScDragAndDropDropZone.class);
+    }
 }

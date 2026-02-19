@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Advanced Nested Table Layout - Expanded</title>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f4f7f6; padding: 20px; color: #333; }
+
+        /* Base Table Styles */
+        table { border-collapse: collapse; width: 100%; margin-bottom: 30px; background: white; box-shadow: 0 4px 8px rgba(0,0,0,0.1); border-radius: 8px; overflow: hidden; }
+        th, td { border: 1px solid #ddd; padding: 12px; text-align: center; }
+        th { background-color: #2c3e50; color: white; text-transform: uppercase; font-size: 0.9em; letter-spacing: 1px; }
+
+        /* Zebra Striping & Hover Effects */
+        tbody tr:nth-child(even) { background-color: #f9f9f9; }
+        tbody tr:hover { background-color: #f1f4f6; transition: background 0.2s ease; }
+
+        /* Nested Table Styling */
+        .nested-container { padding: 0; background: #ecf0f1; }
+        .inner-table { width: 100%; border: none; margin: 0; box-shadow: none; background: transparent; }
+        .inner-table td { border: 1px dashed #bdc3c7; font-size: 0.85em; padding: 8px; color: #7f8c8d; }
+        .inner-table tr:hover { background-color: rgba(255,255,255,0.5); }
+
+        /* Unique ID Selectors */
+        #main-r1-c1 { background-color: #e8f4fd; font-weight: bold; }
+        #nest-r1-c2 { color: #e74c3c; font-style: italic; }
+        #main-r2-c3 { border: 3px solid #27ae60; }
+
+        /* Utility Classes for Status */
+        .status.active { color: #27ae60; font-weight: bold; }
+        .status.pending { color: #f39c12; font-weight: bold; }
+        .status.critical { color: #e74c3c; font-weight: bold; }
+    </style>
+</head>
+<body>
+
+<h2>Main Data Grid</h2>
+<table id="outer-table-1">
+    <thead>
+    <tr>
+        <th scope="col">Category</th>
+        <th scope="col">Status</th>
+        <th scope="col">Details (Nested)</th>
+    </tr>
+    </thead>
+    <tbody>
+    <!-- Original Row 1 -->
+    <tr>
+        <td id="main-r1-c1">Primary Alpha</td>
+        <td id="main-r1-c2" class="status active">Active</td>
+        <td class="nested-container" id="main-r1-c3">
+            <table class="inner-table" id="inner-table-a">
+                <tr>
+                    <td id="nest-r1-c1">Sub-Part A1</td>
+                    <td id="nest-r1-c2">Critical Value</td>
+                </tr>
+                <tr>
+                    <td id="nest-r2-c1">Sub-Part A2</td>
+                    <td id="nest-r2-c2">Nominal</td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+    <!-- Original Row 2 -->
+    <tr>
+        <td id="main-r2-c1">Secondary Beta</td>
+        <td id="main-r2-c2" class="status pending">Pending</td>
+        <td id="main-r2-c3">Standard Entry</td>
+    </tr>
+    <!-- Row 3 -->
+    <tr>
+        <td id="main-r3-c1">Tertiary Gamma</td>
+        <td id="main-r3-c2">Standby</td>
+        <td class="nested-container" id="main-r3-c3">
+            <table class="inner-table" id="inner-table-b">
+                <tr>
+                    <td id="nest-r3-c1">Sensor 04</td>
+                    <td id="nest-r3-c2">Offline</td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+    <!-- Row 4 -->
+    <tr>
+        <td id="main-r4-c1">Quaternary Delta</td>
+        <td id="main-r4-c2" class="status active">Active</td>
+        <td id="main-r4-c3">Encryption Enabled</td>
+    </tr>
+    <!-- Row 5 -->
+    <tr>
+        <td id="main-r5-c1">Pentary Epsilon</td>
+        <td id="main-r5-c2" class="status pending">Warning</td>
+        <td class="nested-container" id="main-r5-c3">
+            <table class="inner-table" id="inner-table-c">
+                <tr>
+                    <td id="nest-r5-c1">Voltage</td>
+                    <td id="nest-r5-c2">Fluctuating</td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+    <!-- Row 6 -->
+    <tr>
+        <td id="main-r6-c1">Hexary Zeta</td>
+        <td id="main-r6-c2">Standby</td>
+        <td id="main-r6-c3">Awaiting Command</td>
+    </tr>
+    <!-- Row 7 -->
+    <tr>
+        <td id="main-r7-c1">Septary Eta</td>
+        <td id="main-r7-c2" class="status active">Active</td>
+        <td id="main-r7-c3">Signal Strength: 98%</td>
+    </tr>
+    <!-- Row 8 -->
+    <tr>
+        <td id="main-r8-c1">Octary Theta</td>
+        <td id="main-r8-c2" class="status critical">Critical</td>
+        <td class="nested-container" id="main-r8-c3">
+            <table class="inner-table" id="inner-table-d">
+                <tr>
+                    <td id="nest-r8-c1">Error Code</td>
+                    <td id="nest-r8-c2">0xDEADC0DE</td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+    <!-- Row 9 -->
+    <tr>
+        <td id="main-r9-c1">Nonary Iota</td>
+        <td id="main-r9-c2" class="status active">Active</td>
+        <td id="main-r9-c3">Nodes Syncing</td>
+    </tr>
+    <!-- Row 10 -->
+    <tr>
+        <td id="main-r10-c1">Decary Kappa</td>
+        <td id="main-r10-c2">Locked</td>
+        <td id="main-r10-c3">Access Restricted</td>
+    </tr>
+    <!-- Row 11 -->
+    <tr>
+        <td id="main-r11-c1">Unit Lambda</td>
+        <td id="main-r11-c2">Idle</td>
+        <td id="main-r11-c3">Power Save Mode</td>
+    </tr>
+    <!-- Row 12 -->
+    <tr>
+        <td id="main-r12-c1">Node Mu</td>
+        <td id="main-r12-c2" class="status active">Active</td>
+        <td class="nested-container" id="main-r12-c3">
+            <table class="inner-table" id="inner-table-e">
+                <tr>
+                    <td id="nest-r12-c1">Throughput</td>
+                    <td id="nest-r12-c2">1.2 GB/s</td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+    </tbody>
+</table>
+
+<h2>Auxiliary Reference</h2>
+<table id="outer-table-2">
+    <tr>
+        <td id="aux-r1-c1">System Logs</td>
+        <td id="aux-r1-c2">Backup Status</td>
+    </tr>
+</table>
+
+</body>
+</html>

@@ -18,10 +18,7 @@ public class ScAnimatedBox extends ScComponent {
         return 5000;
     }
 
-    /**
-     * Exposing {@link #waitForAnimation()} for testing the method.
-     */
     public void exposedWaitForAnimation() {
-        super.waitForAnimation();
+        super.waitForComponent(ScWaitCondition.ToStopAnimating);
     }
 }

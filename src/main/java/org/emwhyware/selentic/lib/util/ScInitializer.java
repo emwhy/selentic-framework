@@ -21,10 +21,10 @@ final class ScInitializer {
         final long keepLogDuration = 60 * 1000 * config.keepLogDurationMinutes();
 
         if (logsDir.exists()) {
-            File[] directories = logsDir.listFiles((dir, name) -> name.startsWith("log-"));
+            final File[] directories = logsDir.listFiles((dir, name) -> name.startsWith("log-"));
 
             if (directories != null) {
-                for (File directory : directories) {
+                for (final File directory : directories) {
                     // Clean up old log directories.
                     if (directory.lastModified() + keepLogDuration < System.currentTimeMillis()) {
                         try {

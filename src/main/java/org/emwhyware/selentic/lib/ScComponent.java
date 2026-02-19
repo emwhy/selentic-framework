@@ -1,6 +1,5 @@
 package org.emwhyware.selentic.lib;
 
-import org.emwhyware.selentic.lib.config.SelelenticConfig;
 import org.emwhyware.selentic.lib.exception.*;
 import org.emwhyware.selentic.lib.util.ScWait;
 import org.openqa.selenium.NoSuchElementException;
@@ -8,7 +7,10 @@ import org.openqa.selenium.StaleElementReferenceException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -262,7 +264,7 @@ public abstract class ScComponent extends ScAbstractComponent {
      */
     protected final WebElement displayedElement() {
         try {
-            this.waitForDisplayed();
+            this.waitForComponent(ScWaitCondition.ToBeDisplayed);
             return webElement();
         } catch (ScWaitTimeoutException ex) {
             throw new ScElementNotFoundException("Element is not displayed.", ex);
@@ -329,7 +331,7 @@ public abstract class ScComponent extends ScAbstractComponent {
      * <p>
      * This method can be overridden in subclasses as needed, as sometimes the "isDisplayed" status
      * may depend on other component properties or visibility rules. This method is used in
-     * {@link #waitForDisplayed()} and {@link #displayedElement()}, affecting their waiting behavior.
+     * {@link #waitForComponent(ScWaitCondition)} ()} and {@link #displayedElement()}, affecting their waiting behavior.
      * 
      *
      * @return true if the element is displayed; false otherwise
@@ -339,45 +341,16 @@ public abstract class ScComponent extends ScAbstractComponent {
     }
 
     /**
-     * Waits for the component to be displayed, as defined by {@link #isDisplayed()}.
+     * Waits for this component to meet the condition.
      *
      * <p>
-     * This method blocks until the component becomes visible or a timeout occurs.
-     * 
+     * This method blocks until this component meets the given condition.
      *
-     * @throws ScComponentNotDisplayedException if the element does not become displayed within the timeout period
+     *
+     * @throws ScComponentWaitException if the element does not meet the condition within the timeout period
      */
-    protected void waitForDisplayed() {
-        existingElement();
-        ScWait.waitUntil(this.waitTimeout(), this::isDisplayed, ScComponentNotDisplayedException::new);
-    }
-
-    /**
-     * Waits for the component to finish animating.
-     *
-     * <p>
-     * This method blocks until the component is no longer animated or a timeout occurs.
-     * 
-     *
-     * <p>
-     * <strong>Limitation</strong>: This method only recognizes animations that are created using {@code element.animate()}
-     * JavaScript function, which can be recognized by {@code document.getAnimations()}. CSS based manual animations (often
-     * implemented by using {@code setInterval()} function) is not recognized by this method.
-     * 
-     *
-     * @throws ScComponentAnimatingException if the element does not stop animating within the timeout period
-     */
-    protected final void waitForAnimation() {
-        this.waitForDisplayed();
-        ScWait.waitUntil(this.waitTimeout(), () -> (Boolean) Selentic.executeScript(
-                        """
-                            let e = arguments[0];
-                            return !e.getAnimations().some(a => a.playState === 'running' || a.playState === 'pending');
-                        """,
-                        this
-                ),
-                ScComponentAnimatingException::new
-        );
+    protected final void waitForComponent(ScWaitCondition waitCondition) {
+        this.waitForComponent(this, waitCondition);
     }
 
     /**
@@ -589,27 +562,6 @@ public abstract class ScComponent extends ScAbstractComponent {
         return (a = this.existingElement().getDomAttribute(name)) == null ? Optional.empty() : Optional.of(a);
     }
 
-
-
-    /**
-     * Returns the wait timeout for this component in milliseconds.
-     *
-     * <p>
-     * The wait timeout determines how long the component will wait for operations like
-     * element existence, visibility, or animation to complete before throwing a timeout exception.
-     * 
-     *
-     * <p>
-     * The default wait timeout is as defined in {@link SelelenticConfig}. It can be changed only for this component
-     * by overriding this method and providing another value.
-     * 
-     *
-     * @return the wait timeout in milliseconds
-     */
-    protected long waitTimeout() {
-        return SelelenticConfig.config().waitTimeoutMilliseconds();
-    }
-
     /**
      * Returns {@link Actions}.
      *
@@ -617,6 +569,111 @@ public abstract class ScComponent extends ScAbstractComponent {
      */
     protected final Actions actions() {
         return new Actions(Selentic.driver());
+    }
+
+    /**
+     * Allows clicking an instance of {@link ScGenericComponent}.
+     *
+     * <p>
+     * {@link #click()} method is protected method. This is to ensure that only intended component classes would have
+     * the clicking capability exposed purposefully.
+     * <p>
+     * Unfortunately this sometimes causes issue when trying to implement certain actions within a subclass of component
+     * that require clicking another component. Because {@link #click()} is not public, a simple click would require a
+     * new component defined with {@link #click()} exposed.
+     * <p>
+     * This method is there to simplify the implementation while keeping {@link #click()} still protected by default.
+     *
+     * <p>
+     * <strong>Example:</strong> Consider the following example code. A new internal classes had to be defined just so
+     * the arrow button and the listbox item can be clicked. This works fine, but it's cumbersome.
+     * <pre>{@code
+     * // (Some part of the code is omitted for clarity)
+     *
+     * public class ScSlimSelectDropdown extends ScComponent {
+     *         // Selectors are at the top.
+     *         private static final ScCssSelector ARROW_BUTTON = _cssSelector.descendant(_tag("svg"), _cssClasses("ss-arrow"));
+     *         private static final ScCssSelector SELECTED_TEXT = _cssSelector.descendant(_tag("div"), _cssClasses("ss-single"));
+     *
+     *         // "page" changes the scope to see the entire page rather than descendent.
+     *         private static final ScCssSelector CONTENT_PANEL = _cssSelector.page(_tag("div"), _cssClasses("ss-content", "ss-open"));
+     *
+     *         // You can concatenate selectors.
+     *         private static final ScCssSelector LIST_ITEMS = CONTENT_PANEL.descendant(_tag("div"), _cssClasses("ss-option"));
+     *
+     *         private ScArrowButton arrowButton() {
+     *             return $component(ARROW_BUTTON, ScArrowButton.class, this);
+     *         }
+     *
+     *         private ScGenericComponent contentPanel() {
+     *             return $genericComponent(CONTENT_PANEL);
+     *         }
+     *
+     *         private ScComponentCollection<ScListItem> listItems() {
+     *             return $$components(LIST_ITEMS, ScListItem.class, this);
+     *         }
+     *
+     *         public String selectedText() {
+     *             final ScGenericComponent selectedText = $genericComponent(SELECTED_TEXT);
+     *
+     *             return selectedText.isDisplayed() ? selectedText.text() : "";
+     *         }
+     *
+     *         public void select(String text) {
+     *             arrowButton().click();
+     *             waitForComponent(contentPanel(), ScWaitCondition.ToBeDisplayed);
+     *             listItems().entry(text).click();
+     *             waitForComponent(contentPanel(), ScWaitCondition.ToBeHidden);
+     *         }
+     *
+     *         public class ScArrowButton extends ScClickableComponent {
+     *             @Override
+     *             protected void rules(ScComponentRule rule) {
+     *                 rule.tag().is("svg");
+     *                 rule.cssClasses().has("ss-arrow");
+     *             }
+     *         }
+     *
+     *         public class ScListItem extends ScClickableComponent {
+     *             @Override
+     *             protected void rules(ScComponentRule rule) {
+     *                 rule.tag().is("div");
+     *                 rule.cssClasses().has("ss-option");
+     *             }
+     *         }
+     *     }
+     *
+     * }</pre>
+     *
+     * <p>
+     * Instead, we can write <b>public void select(String text)</b> method using {@link #clickGenericComponent(ScGenericComponent)}.
+     * Then there is no need to define a new component class just to be able to click, saving lines of code compared to
+     * the previous method.
+     *
+     * <pre>{@code
+     *         // Define these as ScGenericComponent
+     *         private ScGenericComponent arrowButton() {
+     *             return $component(ARROW_BUTTON, ScGenericComponent.class);
+     *         }
+     *
+     *         private ScComponentCollection<ScGenericComponent> listItems() {
+     *             return $$components(LIST_ITEMS, ScGenericComponent.class);
+     *         }
+     *
+     *         ...
+     *
+     *         public void select(String text) {
+     *             clickGenericComponent(arrowButton());
+     *             waitForComponent(contentPanel(), ScWaitCondition.ToBeDisplayed);
+     *             clickGenericComponent(listItems().entry(text));
+     *             waitForComponent(contentPanel(), ScWaitCondition.ToBeHidden);
+     *         }
+     * }</pre>
+     *
+     * @param $genericComponent a {@link ScGenericComponent} to click
+     */
+    protected final void clickGenericComponent(ScGenericComponent $genericComponent) {
+        $genericComponent.click();
     }
 
     /**
@@ -654,7 +711,7 @@ public abstract class ScComponent extends ScAbstractComponent {
             Matcher matcher;
             String resultText = originalHtmlText.replaceAll("\\s+", " ");
 
-            for (String voidedPattern : voidedPatterns()) {
+            for (final String voidedPattern : voidedPatterns()) {
                 resultText = resultText.replaceAll(voidedPattern, "");
             }
 

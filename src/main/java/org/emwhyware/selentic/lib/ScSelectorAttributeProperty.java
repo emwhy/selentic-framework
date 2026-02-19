@@ -1,6 +1,8 @@
 package org.emwhyware.selentic.lib;
 
 
+import org.emwhyware.selentic.lib.exception.ScSelectorException;
+
 public final class ScSelectorAttributeProperty extends ScSelectorProperty implements ScXpathPropertyType, ScCssSelectorPropertyType {
     private final String prefix;
     private final String attribute;
@@ -18,13 +20,18 @@ public final class ScSelectorAttributeProperty extends ScSelectorProperty implem
     public String build(Types type) {
         String selector = "";
 
+        if (this.attribute.contains(" ")) {
+            throw new ScSelectorException("Attribute contains space character. This can yield unexpected results.");
+        }
+
         if (type == Types.XPath) {
             switch (this.condition) {
                 case Is -> selector = this.prefix + this.attribute + "='" + this.text + "'";
-                case Contains -> selector = "contains(" + this.prefix + this.attribute + ", '" + this.text + "'";
-                case StartsWith -> selector = "starts-width(" + this.prefix + this.attribute + "='" + this.text + "'";
+                case IsPresent -> selector = this.prefix + this.attribute;
+                case Contains -> selector = "contains(" + this.prefix + this.attribute + ",'" + this.text + "')";
+                case StartsWith -> selector = "starts-with(" + this.prefix + this.attribute + ",'" + this.text + "')";
                 case EndsWith -> selector = "substring(" + this.prefix + this.attribute + ", string-length(" + this.prefix + this.attribute + ") - string-length('" + this.text + "')+1) = '" + this.text + "'";
-                case WholeWord -> selector = "[contains(concat(' ', normalize-space(" + this.prefix + this.attribute + "), ' '), ' " + this.text + " ')]";
+                case WholeWord -> selector = "contains(concat(' ', normalize-space(" + this.prefix + this.attribute + "), ' '), ' " + this.text + " ')";
             }
 
             if (this.negated()) {
@@ -34,6 +41,7 @@ public final class ScSelectorAttributeProperty extends ScSelectorProperty implem
         } else if (type == Types.CssSelector) {
             switch (this.condition) {
                 case Is -> selector = this.attribute + "='" + this.text + "'";
+                case IsPresent -> selector = this.attribute;
                 case Contains -> selector = this.attribute + "*='" + this.text + "'";
                 case StartsWith -> selector = this.attribute + "^='" + this.text + "'";
                 case EndsWith -> selector = this.attribute + "$='" + this.text + "'";
@@ -51,7 +59,7 @@ public final class ScSelectorAttributeProperty extends ScSelectorProperty implem
     }
 
     enum Conditions {
-        Is, Contains, StartsWith, EndsWith, WholeWord;
+        Is, IsPresent, Contains, StartsWith, EndsWith, WholeWord;
     }
 
 }
