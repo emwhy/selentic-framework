@@ -5,6 +5,7 @@ import com.typesafe.config.Config;
 import com.typesafe.config.ConfigException;
 import com.typesafe.config.ConfigFactory;
 import org.emwhyware.selentic.lib.ScBrowser;
+import org.emwhyware.selentic.lib.ScWebDriverOptions;
 import org.emwhyware.selentic.lib.util.ScLogHandler;
 import org.slf4j.Logger;
 
@@ -143,7 +144,13 @@ public class SelelenticConfig {
         int defaultConfigCount = 0;
 
         try {
-            this.browser = ScBrowser.toEnum(config.getString("browser"));
+            final ScBrowser browser = ScBrowser.toEnum(config.getString("browser"));
+
+            if (browser == null) {
+                LOG.warn("'browser' value in selentic.conf file is invalid. Using the default value: {}", this.browser.toString());
+            } else {
+                this.browser = browser;
+            }
             LOG.info("browser = '{}'", this.browser.toString().toLowerCase());
         } catch (ConfigException ex) {
             LOG.info("browser = '{}' (default)", this.browser.toString().toLowerCase());
@@ -151,7 +158,9 @@ public class SelelenticConfig {
         }
 
         try {
-            this.waitTimeoutMilliseconds = config.getLong("wait-timeout-millisec");
+            final long timeoutMilliseconds = config.getLong("wait-timeout-millisec");
+
+            this.waitTimeoutMilliseconds = timeoutMilliseconds < 0 ? 0 : timeoutMilliseconds;
             LOG.info("wait-timeout-millisec = {}", this.waitTimeoutMilliseconds);
         } catch (ConfigException ex) {
             LOG.info("wait-timeout-millisec = {} (default)", this.waitTimeoutMilliseconds);
@@ -159,7 +168,13 @@ public class SelelenticConfig {
         }
 
         try {
-            this.logRootDir = new File(config.getString("log.root-dir"));
+            final File logRootDir = new File(config.getString("log.root-dir").trim());
+
+            if (!logRootDir.exists()) {
+                LOG.warn("'log.root-dir' was invalid in selentic.conf file. Using the default value: {}", parseDir(this.logRootDir.getAbsolutePath()));
+            } else {
+                this.logRootDir = logRootDir;
+            }
             LOG.info("log.root-dir = '{}'", parseDir(this.logRootDir.getAbsolutePath()));
         } catch (ConfigException ex) {
             LOG.info("log.root-dir = '{}' (default)", parseDir(this.logRootDir.getAbsolutePath()));
@@ -167,7 +182,7 @@ public class SelelenticConfig {
         }
 
         try {
-            this.rootLogLevel = Level.toLevel(config.getString("log.root-log-level").toUpperCase());
+            this.rootLogLevel = Level.toLevel(config.getString("log.root-log-level").toUpperCase(), Level.INFO);
             LOG.info("log.root-log-level = {}", this.rootLogLevel.toString().toUpperCase());
         } catch (ConfigException ex) {
             LOG.info("log.root-log-level = {} (default)", this.rootLogLevel.toString().toUpperCase());
@@ -175,7 +190,7 @@ public class SelelenticConfig {
         }
 
         try {
-            this.selenticLogLevel = Level.toLevel(config.getString("log.selentic-log-level").toUpperCase());
+            this.selenticLogLevel = Level.toLevel(config.getString("log.selentic-log-level").toUpperCase(), Level.DEBUG);
             LOG.info("log.selentic-log-level = {}", this.selenticLogLevel.toString().toUpperCase());
         } catch (ConfigException ex) {
             LOG.info("log.selentic-log-level = {} (default)", this.selenticLogLevel.toString().toUpperCase());
@@ -183,7 +198,9 @@ public class SelelenticConfig {
         }
 
         try {
-            this.keepLogDurationMinutes = config.getLong("log.keep-duration-min");
+            final long durationMinutes = config.getLong("log.keep-duration-min");
+
+            this.keepLogDurationMinutes = durationMinutes < 0 ? 0 : durationMinutes;
             LOG.info("log.keep-duration-min = {}", this.keepLogDurationMinutes);
         } catch (ConfigException ex) {
             LOG.info("log.keep-duration-min = {} (default)", this.keepLogDurationMinutes);

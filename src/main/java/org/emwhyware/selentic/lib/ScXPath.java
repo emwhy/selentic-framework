@@ -167,7 +167,7 @@ public sealed abstract class ScXPath extends ScSelector permits ScXPathChild, Sc
     protected By build(boolean withPrefix) {
         final String s = (withPrefix ? "." : "") + toString();
 
-        LOG.debug("XPath: {}", s);
+        LOG.debug("XPath: \"{}\"", s);
         return By.xpath(s);
     }
 

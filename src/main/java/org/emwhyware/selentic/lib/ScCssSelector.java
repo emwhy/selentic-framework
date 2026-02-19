@@ -147,7 +147,7 @@ public sealed abstract class ScCssSelector extends ScSelector permits ScCssSelec
     protected By build() {
         final String s = toString();
 
-        LOG.debug("CSS Selector: {}", s);
+        LOG.debug("CSS Selector: \"{}\"", s);
         return By.cssSelector(s);
     }
 
