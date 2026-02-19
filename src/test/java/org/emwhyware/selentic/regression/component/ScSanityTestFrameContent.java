@@ -11,9 +11,14 @@ public class ScSanityTestFrameContent extends ScFrameContent {
 
     @Override
     protected void waitForDisplayedPage() {
-        waitForComponent(testExternalTextbox, ScWaitCondition.ToBeDisplayed);
+        waitForComponent(testExternalTextbox(), ScWaitCondition.ToBeDisplayed);
     }
 
-    public final ScTextbox testExternalTextbox = $component(TEST_EXTERNAL_TEXTBOX, ScTextbox.class);
-    public final ScComponentCollection<ScTestTableRow> testExternalTableRows = $$components(TEST_EXTERNAL_ROWS, ScTestTableRow.class);
+    public ScTextbox testExternalTextbox() {
+        return $component(TEST_EXTERNAL_TEXTBOX, ScTextbox.class);
+    }
+
+    public ScComponentCollection<ScTestTableRow> testExternalTableRows() {
+        return $$components(TEST_EXTERNAL_ROWS, ScTestTableRow.class);
+    }
 }

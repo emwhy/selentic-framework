@@ -9,14 +9,45 @@ import java.util.Arrays;
 
 /**
  * An abstract class that represents a CSS selector.
+ * <p>
+ * This class is used in {@link ScPage} and {@link ScComponent} to define CSS selectors. It provides consistent way
+ * to build selector.
  *
- * <p>ScCssSelector extends {@link ScSelector} and provides CSS selector-specific navigation and
+ * <pre>{@code
+ *
+ *     private static final ScCssSelector CSS_SELECTOR_ID_TEST_TEXT = _cssSelector.descendant(_id("outer-table-1"));
+ *     private static final ScCssSelector CSS_SELECTOR_TAG_TEST_TEXTS = _cssSelector.descendant("h2");
+ *     private static final ScCssSelector CSS_SELECTOR_CSS_CLASSES_TEST_TEXTS = _cssSelector.descendant(_cssClasses("status", "active"));
+ *     private static final ScCssSelector CSS_SELECTOR_ATTR_START_WITH_TEST_TEXTS = _cssSelector.descendant(_attr("scope").startsWith("co"));
+ *     private static final ScCssSelector CSS_SELECTOR_ATTR_ENDS_WITH_TEST_TEXTS = _cssSelector.descendant(_attr("scope").endsWith("ol"));
+ *     private static final ScCssSelector CSS_SELECTOR_ATTR_CONTAINS_TEST_TEXTS = _cssSelector.descendant(_attr("scope").contains("ol"));
+ *     private static final ScCssSelector CSS_SELECTOR_ATTR_WHOLE_WORD_TEST_TEXTS = _cssSelector.descendant(_attr("class").wholeWord("status"));
+ *     private static final ScCssSelector CSS_SELECTOR_NTH_OF_TYPE_TEST_TEXT = _cssSelector.descendant("body").child("h2", _nthOfType(1));
+ *     private static final ScCssSelector CSS_SELECTOR_NTH_LAST_OF_TYPE_TEST_TEXT = _cssSelector.descendant("body").child("h2", _nthLastOfType(1));
+ *     private static final ScCssSelector CSS_SELECTOR_LAST_OF_TYPE_TEST_TEXT = _cssSelector.descendant("body").child(_attr("id").isPresent(), _lastOfType());
+ *     private static final ScCssSelector CSS_SELECTOR_NTH_CHILD_TEST_TEXT = _cssSelector.descendant("body").child(_nthChild(0));
+ *     private static final ScCssSelector CSS_SELECTOR_NTH_LAST_CHILD_TEST_TEXT = _cssSelector.descendant("body").child(_nthLastChild(1));
+ *     private static final ScCssSelector CSS_SELECTOR_LAST_CHILD_TEST_TEXT = _cssSelector.descendant("body").child(_lastChild());
+ *     private static final ScCssSelector CSS_SELECTOR_LAST_OF_TYPE_NESTED_TEST_TEXT = CSS_SELECTOR_LAST_OF_TYPE_TEST_TEXT.child("tbody").descendant(_nthChild(1));
+ *     private static final ScCssSelector CSS_SELECTOR_SIBLING_TEST_TEXTS = _cssSelector.descendant(_id("main-r2-c1")).sibling("td", _not(_attr("class").isPresent()));
+ *     private static final ScCssSelector CSS_SELECTOR_NEXT_SIBLING_TEST_TEXT = _cssSelector.descendant(_id("main-r2-c1")).nextSibling("td");
+ *     private static final ScCssSelector CSS_SELECTOR_DESCENDANT_TEST_TEXTS = _cssSelector.descendant("th");
+ *     private static final ScCssSelector CSS_SELECTOR_CHILD_TEST_TEXTS = _cssSelector.descendant(_id("outer-table-2")).child("tbody").child("tr").child("td");
+ *     private static final ScCssSelector CSS_SELECTOR_NOT_TEST_TEXTS = _cssSelector.descendant("body").child(_not(_tag("h2")));
+ *     private static final ScCssSelector CSS_SELECTOR_RAW_TEST_TEXTS = _cssSelector.raw("body > :not(table)");
+ *
+ * }</pre>
+ *
+ * <p>
+ * ScCssSelector extends {@link ScSelector} and provides CSS selector-specific navigation and
  * selection methods. The class builds complex CSS selector expressions by chaining method calls,
  * allowing intuitive construction of element selectors with support for various CSS combinators
  * (descendant, child, sibling, and next sibling relationships).
- * 
  *
- * @see ScSelector
+ *
+ * @see ScXPath
+ * @see ScPage
+ * @see ScComponent
  * @see ScCssSelectorChild
  * @see ScCssSelectorDescendant
  * @see ScCssSelectorSibling

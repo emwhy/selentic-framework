@@ -1,5 +1,9 @@
 package org.emwhyware.selentic.lib;
 
+/**
+ * Extending this component adds a quick way to drag a component to a target component.
+ *
+ */
 public abstract class ScDraggableComponent extends ScClickableComponent {
 
     public ScDragAction drag() {

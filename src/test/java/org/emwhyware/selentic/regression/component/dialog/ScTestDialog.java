@@ -12,7 +12,11 @@ public class ScTestDialog extends ScDialog {
         rule.id().is("test-dialog");
     }
 
+    public ScTextbox textbox() {
+        return $component(TEXTBOX, ScTextbox.class);
+    }
 
-    public final ScTextbox textbox = $component(TEXTBOX, ScTextbox.class);
-    public final ScButton closeButton = $component(CLOSE_BUTTON, ScButton.class);
+    public ScButton closeButton() {
+        return $component(CLOSE_BUTTON, ScButton.class);
+    }
 }

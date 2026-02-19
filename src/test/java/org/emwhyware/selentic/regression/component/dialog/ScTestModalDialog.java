@@ -12,6 +12,11 @@ public class ScTestModalDialog extends ScDialog {
         rule.id().is("test-modal-dialog");
     }
 
-    public final ScTextbox textbox = $component(TEXTBOX, ScTextbox.class);
-    public final ScButton closeButton = $component(CLOSE_BUTTON, ScButton.class);
+    public ScTextbox textbox() {
+        return $component(TEXTBOX, ScTextbox.class);
+    }
+
+    public ScButton closeButton() {
+        return $component(CLOSE_BUTTON, ScButton.class);
+    }
 }

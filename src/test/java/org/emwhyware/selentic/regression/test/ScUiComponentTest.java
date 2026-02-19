@@ -244,17 +244,17 @@ public class ScUiComponentTest {
     public void testFrame() {
         testPage.inPage(p -> {
             p.inSanityTestInnerFrame(frameContent -> {
-                Assert.assertEquals(frameContent.testExternalTextbox.text(), "external textbox text");
+                Assert.assertEquals(frameContent.testExternalTextbox().text(), "external textbox text");
 
-                Assert.assertEquals(frameContent.testExternalTableRows.size(), 3);
+                Assert.assertEquals(frameContent.testExternalTableRows().size(), 3);
 
-                Assert.assertEquals(frameContent.testExternalTableRows.at(0).text(), "External SanityTest 1");
-                Assert.assertEquals(frameContent.testExternalTableRows.at(1).text(), "External SanityTest 2");
-                Assert.assertEquals(frameContent.testExternalTableRows.at(2).text(), "External SanityTest 3");
+                Assert.assertEquals(frameContent.testExternalTableRows().at(0).text(), "External SanityTest 1");
+                Assert.assertEquals(frameContent.testExternalTableRows().at(1).text(), "External SanityTest 2");
+                Assert.assertEquals(frameContent.testExternalTableRows().at(2).text(), "External SanityTest 3");
 
-                Assert.assertEquals(frameContent.testExternalTableRows.entry("External SanityTest 1").serialNumberText.text(), "#EX-TDD987");
-                Assert.assertEquals(frameContent.testExternalTableRows.entry("External SanityTest 2").serialNumberText.text(), "#EX-AEV974");
-                Assert.assertEquals(frameContent.testExternalTableRows.entry("External SanityTest 3").serialNumberText.text(), "#EX-CCA106");
+                Assert.assertEquals(frameContent.testExternalTableRows().entry("External SanityTest 1").serialNumberText.text(), "#EX-TDD987");
+                Assert.assertEquals(frameContent.testExternalTableRows().entry("External SanityTest 2").serialNumberText.text(), "#EX-AEV974");
+                Assert.assertEquals(frameContent.testExternalTableRows().entry("External SanityTest 3").serialNumberText.text(), "#EX-CCA106");
             });
         });
     }
@@ -264,13 +264,13 @@ public class ScUiComponentTest {
         testPage.inPage(p -> {
             p.openSanityTestDialogButton().click();
             p.inSanityTestDialog(dialog -> {
-                Assert.assertEquals(dialog.textbox.text(), "test dialog text");
+                Assert.assertEquals(dialog.textbox().text(), "test dialog text");
 
-                dialog.textbox.enterText("Test text in dialog");
+                dialog.textbox().enterText("Test text in dialog");
 
-                Assert.assertEquals(dialog.textbox.text(), "Test text in dialog");
+                Assert.assertEquals(dialog.textbox().text(), "Test text in dialog");
 
-                dialog.closeButton.click();
+                dialog.closeButton().click();
             });
         });
 
@@ -281,13 +281,13 @@ public class ScUiComponentTest {
         testPage.inPage(p -> {
             p.openSanityTestModalDialogButton().click();
             p.inSanityTestModalDialog(dialog -> {
-                Assert.assertEquals(dialog.textbox.text(), "test modal dialog text");
+                Assert.assertEquals(dialog.textbox().text(), "test modal dialog text");
 
-                dialog.textbox.enterText("Test test in modal dialog");
+                dialog.textbox().enterText("Test test in modal dialog");
 
-                Assert.assertEquals(dialog.textbox.text(), "Test test in modal dialog");
+                Assert.assertEquals(dialog.textbox().text(), "Test test in modal dialog");
 
-                dialog.closeButton.click();
+                dialog.closeButton().click();
             });
         });
 
