@@ -1,11 +1,13 @@
 package org.emwhyware.selentic.lib.exception;
 
+import org.checkerframework.checker.nullness.qual.NonNull;
+
 public class ScLoggerException extends RuntimeException {
-    public ScLoggerException(String text, Throwable th) {
+    public ScLoggerException(@NonNull String text, @NonNull Throwable th) {
         super(text, th);
     }
 
-    public ScLoggerException(String text) {
+    public ScLoggerException(@NonNull String text) {
         super(text);
     }
 }

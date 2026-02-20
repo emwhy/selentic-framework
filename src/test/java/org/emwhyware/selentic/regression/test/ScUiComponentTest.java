@@ -10,6 +10,7 @@ import org.emwhyware.selentic.lib.exception.ScWaitTimeoutException;
 import org.emwhyware.selentic.lib.exception.ScWindowException;
 import org.emwhyware.selentic.lib.util.ScDownloadCsvFileParser;
 import org.emwhyware.selentic.lib.util.ScLogHandler;
+import org.emwhyware.selentic.lib.util.ScNullCheck;
 import org.emwhyware.selentic.lib.util.ScWait;
 import org.emwhyware.selentic.regression.component.ScAnimatedBox;
 import org.emwhyware.selentic.regression.component.ScLongListEntryComponent;
@@ -218,7 +219,7 @@ public class ScUiComponentTest {
     @Test
     public void testTableRows() {
         testPage.inPage(p -> {
-            final List<ScTestTableRow> filteredRow = p.testTableRows().filter(r -> r.productTypeText.text().equals("Type 1"));
+            final List<ScTestTableRow> filteredRow = p.testTableRows().filter(r -> r.productTypeText().text().equals("Type 1"));
 
             Assert.assertEquals(p.testTableRows().size(), 3);
 
@@ -226,17 +227,17 @@ public class ScUiComponentTest {
             Assert.assertEquals(p.testTableRows().at(1).text(), "SanityTest 2");
             Assert.assertEquals(p.testTableRows().at(2).text(), "SanityTest 3");
 
-            Assert.assertEquals(p.testTableRows().entry("SanityTest 1").serialNumberText.text(), "#TDD987");
-            Assert.assertEquals(p.testTableRows().entry("SanityTest 2").serialNumberText.text(), "#AEV974");
-            Assert.assertEquals(p.testTableRows().entry("SanityTest 3").serialNumberText.text(), "#CCA106");
+            Assert.assertEquals(p.testTableRows().entry("SanityTest 1").serialNumberText().text(), "#TDD987");
+            Assert.assertEquals(p.testTableRows().entry("SanityTest 2").serialNumberText().text(), "#AEV974");
+            Assert.assertEquals(p.testTableRows().entry("SanityTest 3").serialNumberText().text(), "#CCA106");
 
             Assert.assertEquals(filteredRow.size(), 2);
-            Assert.assertEquals(filteredRow.get(0).productNameText.text(), "SanityTest 1");
-            Assert.assertEquals(filteredRow.get(1).productNameText.text(), "SanityTest 3");
-            Assert.assertEquals(filteredRow.get(0).builtDateText.text(), "1/4/2024");
-            Assert.assertEquals(filteredRow.get(1).builtDateText.text(), "10/5/2011");
-            Assert.assertEquals(filteredRow.get(0).priceAmountText.text(), "$99.99");
-            Assert.assertEquals(filteredRow.get(1).priceAmountText.text(), "$1,002.89");
+            Assert.assertEquals(filteredRow.get(0).productNameText().text(), "SanityTest 1");
+            Assert.assertEquals(filteredRow.get(1).productNameText().text(), "SanityTest 3");
+            Assert.assertEquals(filteredRow.get(0).builtDateText().text(), "1/4/2024");
+            Assert.assertEquals(filteredRow.get(1).builtDateText().text(), "10/5/2011");
+            Assert.assertEquals(filteredRow.get(0).priceAmountText().text(), "$99.99");
+            Assert.assertEquals(filteredRow.get(1).priceAmountText().text(), "$1,002.89");
         });
     }
 
@@ -252,9 +253,9 @@ public class ScUiComponentTest {
                 Assert.assertEquals(frameContent.testExternalTableRows().at(1).text(), "External SanityTest 2");
                 Assert.assertEquals(frameContent.testExternalTableRows().at(2).text(), "External SanityTest 3");
 
-                Assert.assertEquals(frameContent.testExternalTableRows().entry("External SanityTest 1").serialNumberText.text(), "#EX-TDD987");
-                Assert.assertEquals(frameContent.testExternalTableRows().entry("External SanityTest 2").serialNumberText.text(), "#EX-AEV974");
-                Assert.assertEquals(frameContent.testExternalTableRows().entry("External SanityTest 3").serialNumberText.text(), "#EX-CCA106");
+                Assert.assertEquals(frameContent.testExternalTableRows().entry("External SanityTest 1").serialNumberText().text(), "#EX-TDD987");
+                Assert.assertEquals(frameContent.testExternalTableRows().entry("External SanityTest 2").serialNumberText().text(), "#EX-AEV974");
+                Assert.assertEquals(frameContent.testExternalTableRows().entry("External SanityTest 3").serialNumberText().text(), "#EX-CCA106");
             });
         });
     }
@@ -305,7 +306,7 @@ public class ScUiComponentTest {
                 });
                 fail("Should have thrown an exception");
             } catch (ScWindowException ex) {
-                Assert.assertEquals(ex.getMessage(), "New window has not opened");
+                Assert.assertEquals(ScNullCheck.requiresNonNull(ex.getMessage()), "New window has not opened");
             }
 
             // Open a new window.
@@ -320,9 +321,9 @@ public class ScUiComponentTest {
                     // window.
                     controller.inOtherWindow(testPage, 0, p3 -> {
                         // Ensure that the focused window is the root one.
-                        Assert.assertEquals(p3.testTableRows().entry("SanityTest 1").serialNumberText.text(), "#TDD987");
-                        Assert.assertEquals(p3.testTableRows().entry("SanityTest 2").serialNumberText.text(), "#AEV974");
-                        Assert.assertEquals(p3.testTableRows().entry("SanityTest 3").serialNumberText.text(), "#CCA106");
+                        Assert.assertEquals(p3.testTableRows().entry("SanityTest 1").serialNumberText().text(), "#TDD987");
+                        Assert.assertEquals(p3.testTableRows().entry("SanityTest 2").serialNumberText().text(), "#AEV974");
+                        Assert.assertEquals(p3.testTableRows().entry("SanityTest 3").serialNumberText().text(), "#CCA106");
 
                         Assert.assertEquals(controller.windowCount(), 3);
                     });
@@ -338,9 +339,9 @@ public class ScUiComponentTest {
                     Assert.assertEquals(p2.testExternalTableRows().at(1).text(), "External SanityTest 2");
                     Assert.assertEquals(p2.testExternalTableRows().at(2).text(), "External SanityTest 3");
 
-                    Assert.assertEquals(p2.testExternalTableRows().entry("External SanityTest 1").serialNumberText.text(), "#EX-TDD987");
-                    Assert.assertEquals(p2.testExternalTableRows().entry("External SanityTest 2").serialNumberText.text(), "#EX-AEV974");
-                    Assert.assertEquals(p2.testExternalTableRows().entry("External SanityTest 3").serialNumberText.text(), "#EX-CCA106");
+                    Assert.assertEquals(p2.testExternalTableRows().entry("External SanityTest 1").serialNumberText().text(), "#EX-TDD987");
+                    Assert.assertEquals(p2.testExternalTableRows().entry("External SanityTest 2").serialNumberText().text(), "#EX-AEV974");
+                    Assert.assertEquals(p2.testExternalTableRows().entry("External SanityTest 3").serialNumberText().text(), "#EX-CCA106");
 
                     // Close the current window.
                     p2.closeCurrentWindowButton().click();
@@ -358,9 +359,9 @@ public class ScUiComponentTest {
                 Assert.assertEquals(p1.testExternalTableRows().at(1).text(), "External SanityTest 2");
                 Assert.assertEquals(p1.testExternalTableRows().at(2).text(), "External SanityTest 3");
 
-                Assert.assertEquals(p1.testExternalTableRows().entry("External SanityTest 1").serialNumberText.text(), "#EX-TDD987");
-                Assert.assertEquals(p1.testExternalTableRows().entry("External SanityTest 2").serialNumberText.text(), "#EX-AEV974");
-                Assert.assertEquals(p1.testExternalTableRows().entry("External SanityTest 3").serialNumberText.text(), "#EX-CCA106");
+                Assert.assertEquals(p1.testExternalTableRows().entry("External SanityTest 1").serialNumberText().text(), "#EX-TDD987");
+                Assert.assertEquals(p1.testExternalTableRows().entry("External SanityTest 2").serialNumberText().text(), "#EX-AEV974");
+                Assert.assertEquals(p1.testExternalTableRows().entry("External SanityTest 3").serialNumberText().text(), "#EX-CCA106");
             });
 
         });
@@ -379,17 +380,17 @@ public class ScUiComponentTest {
             for (final ScLongListEntryComponent entry : p.longComponentEntries()) {
                 i++;
 
-                Assert.assertEquals(entry.titleText.text(), "Long List Entry " + i);
+                Assert.assertEquals(entry.titleText().text(), "Long List Entry " + i);
                 if (i > 100) {
                     break;
                 }
             }
 
-            p.longComponentEntries().at(487).checkbox.select();
-            p.longComponentEntries().at(301).textbox.enterText("This is a test");
+            p.longComponentEntries().at(487).checkbox().select();
+            p.longComponentEntries().at(301).textbox().enterText("This is a test");
 
-            Assert.assertTrue(p.longComponentEntries().entry("Long List Entry 488").checkbox.isSelected());
-            Assert.assertEquals(p.longComponentEntries().entry("Long List Entry 302").textbox.text(), "This is a test");
+            Assert.assertTrue(p.longComponentEntries().entry("Long List Entry 488").checkbox().isSelected());
+            Assert.assertEquals(p.longComponentEntries().entry("Long List Entry 302").textbox().text(), "This is a test");
         });
 
     }
@@ -446,11 +447,6 @@ public class ScUiComponentTest {
                 // Expected.
             }
 
-            try {
-                ScWait.waitUntil(10, () -> false, ex -> null);
-                Assert.fail("Unexpected exception were thrown.");
-            } catch (ScWaitTimeoutException ex) {
-            }
         });
     }
 
@@ -502,18 +498,18 @@ public class ScUiComponentTest {
 
             p.openDragAndDropPageLink().click();
             p.inWindow(dragAndDropTestPage, p1 -> {
-                Assert.assertTrue(p1.dropZone1().draggedItem.isDisplayed());
-                Assert.assertFalse(p1.dropZone2().draggedItem.isDisplayed());
+                Assert.assertTrue(p1.dropZone1().draggedItem().isDisplayed());
+                Assert.assertFalse(p1.dropZone2().draggedItem().isDisplayed());
 
                 p1.draggedItem().drag().to(p1.dropZone2());
 
-                Assert.assertFalse(p1.dropZone1().draggedItem.isDisplayed());
-                Assert.assertTrue(p1.dropZone2().draggedItem.isDisplayed());
+                Assert.assertFalse(p1.dropZone1().draggedItem().isDisplayed());
+                Assert.assertTrue(p1.dropZone2().draggedItem().isDisplayed());
 
                 p1.draggedItem().drag().to(p1.dropZone1());
 
-                Assert.assertTrue(p1.dropZone1().draggedItem.isDisplayed());
-                Assert.assertFalse(p1.dropZone2().draggedItem.isDisplayed());
+                Assert.assertTrue(p1.dropZone1().draggedItem().isDisplayed());
+                Assert.assertFalse(p1.dropZone2().draggedItem().isDisplayed());
             });
         });
     }

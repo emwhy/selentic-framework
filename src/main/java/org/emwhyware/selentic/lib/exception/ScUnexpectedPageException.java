@@ -1,11 +1,13 @@
 package org.emwhyware.selentic.lib.exception;
 
+import org.checkerframework.checker.nullness.qual.NonNull;
+
 public class ScUnexpectedPageException extends RuntimeException {
-    public ScUnexpectedPageException(String expectedPageClassName, Throwable th) {
+    public ScUnexpectedPageException(@NonNull String expectedPageClassName, @NonNull Throwable th) {
         super(errorMessage(expectedPageClassName), th);
     }
 
-    private static String errorMessage(String expectedPageClassName) {
+    private static String errorMessage(@NonNull String expectedPageClassName) {
         final String errorMessage = """
                 Expected page was not loaded. The possible reason may be:
                     - The previous action is behaving unexpectedly.

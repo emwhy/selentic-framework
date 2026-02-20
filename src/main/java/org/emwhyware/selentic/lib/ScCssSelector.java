@@ -1,5 +1,6 @@
 package org.emwhyware.selentic.lib;
 
+import org.checkerframework.checker.nullness.qual.NonNull;
 import org.emwhyware.selentic.lib.exception.ScSelectorException;
 import org.emwhyware.selentic.lib.util.ScLogHandler;
 import org.openqa.selenium.By;
@@ -69,7 +70,7 @@ public sealed abstract class ScCssSelector extends ScSelector permits ScCssSelec
      * @param selectorProperties variable number of {@link ScCssSelectorPropertyType} objects that define
      *                           attributes and conditions for the selector (e.g., class, id, attribute values)
      */
-    ScCssSelector(ScCssSelectorPropertyType... selectorProperties) {
+    ScCssSelector(@NonNull ScCssSelectorPropertyType... selectorProperties) {
         super();
         this.tag = "";
         this.selectorProperties = selectorProperties;
@@ -87,7 +88,7 @@ public sealed abstract class ScCssSelector extends ScSelector permits ScCssSelec
      * @param selectorProperties variable number of {@link ScCssSelectorPropertyType} objects that define
      *                           attributes and conditions for the selector
      */
-    ScCssSelector(ScCssSelector priorSelectorNode, ScCssSelectorPropertyType... selectorProperties) {
+    ScCssSelector(@NonNull ScCssSelector priorSelectorNode, @NonNull ScCssSelectorPropertyType... selectorProperties) {
         super(priorSelectorNode);
         this.tag = "";
         this.selectorProperties = selectorProperties;
@@ -105,7 +106,7 @@ public sealed abstract class ScCssSelector extends ScSelector permits ScCssSelec
      * @param selectorProperties variable number of {@link ScCssSelectorPropertyType} objects that define
      *                           attributes and conditions for the selector (e.g., class, id, attribute values)
      */
-    ScCssSelector(String tag, ScCssSelectorPropertyType... selectorProperties) {
+    ScCssSelector(@NonNull String tag, @NonNull ScCssSelectorPropertyType... selectorProperties) {
         super();
         this.tag = tag.trim();
         this.selectorProperties = selectorProperties;
@@ -124,7 +125,7 @@ public sealed abstract class ScCssSelector extends ScSelector permits ScCssSelec
      * @param selectorProperties variable number of {@link ScCssSelectorPropertyType} objects that define
      *                           attributes and conditions for the selector
      */
-    ScCssSelector(ScCssSelector priorSelectorNode, String tag, ScCssSelectorPropertyType... selectorProperties) {
+    ScCssSelector(@NonNull ScCssSelector priorSelectorNode, @NonNull String tag, @NonNull ScCssSelectorPropertyType... selectorProperties) {
         super(priorSelectorNode);
         this.tag = tag.trim();
         this.selectorProperties = selectorProperties;
@@ -133,7 +134,7 @@ public sealed abstract class ScCssSelector extends ScSelector permits ScCssSelec
     /**
      * Validate the selector input.
      */
-    private static void validateSelector(String tag, ScCssSelectorPropertyType... selectorProperties) {
+    private static void validateSelector(@NonNull String tag, @NonNull ScCssSelectorPropertyType... selectorProperties) {
         if ((tag.equals("*") || tag.isEmpty()) && selectorProperties.length == 0) {
             throw new ScSelectorException("No properties were provided. This would have matched with every tag on the page.");
         } else if (tag.contains(" ")) {
@@ -195,7 +196,7 @@ public sealed abstract class ScCssSelector extends ScSelector permits ScCssSelec
      * @return a new {@code ScCssSelector} object representing the descendant selector
      * @see ScCssSelectorDescendant
      */
-    public ScCssSelector descendant(ScCssSelectorPropertyType... selectorProperties) {
+    public ScCssSelector descendant(@NonNull ScCssSelectorPropertyType... selectorProperties) {
         return new ScCssSelectorDescendant(this, selectorProperties);
     }
 
@@ -212,7 +213,7 @@ public sealed abstract class ScCssSelector extends ScSelector permits ScCssSelec
      * @return a new {@code ScCssSelector} object representing the child selector
      * @see ScCssSelectorChild
      */
-    public ScCssSelector child(ScCssSelectorPropertyType... selectorProperties) {
+    public ScCssSelector child(@NonNull ScCssSelectorPropertyType... selectorProperties) {
         return new ScCssSelectorChild(this, selectorProperties);
     }
 
@@ -229,7 +230,7 @@ public sealed abstract class ScCssSelector extends ScSelector permits ScCssSelec
      * @return a new {@code ScCssSelector} object representing the sibling selector
      * @see ScCssSelectorSibling
      */
-    public ScCssSelector sibling(ScCssSelectorPropertyType... selectorProperties) {
+    public ScCssSelector sibling(@NonNull ScCssSelectorPropertyType... selectorProperties) {
         return new ScCssSelectorSibling(this, selectorProperties);
     }
 
@@ -246,7 +247,7 @@ public sealed abstract class ScCssSelector extends ScSelector permits ScCssSelec
      * @return a new {@code ScCssSelector} object representing the next sibling selector
      * @see ScCssSelectorNextSibling
      */
-    public ScCssSelector nextSibling(ScCssSelectorPropertyType... selectorProperties) {
+    public ScCssSelector nextSibling(@NonNull ScCssSelectorPropertyType... selectorProperties) {
         return new ScCssSelectorNextSibling(this, selectorProperties);
     }
 
@@ -262,7 +263,7 @@ public sealed abstract class ScCssSelector extends ScSelector permits ScCssSelec
      * @return a new {@code ScCssSelector} object representing the page-level selector
      * @see ScCssSelectorPage
      */
-    public ScCssSelector page(ScCssSelectorPropertyType... selectorProperties) {
+    public ScCssSelector page(@NonNull ScCssSelectorPropertyType... selectorProperties) {
         return new ScCssSelectorPage(selectorProperties);
     }
 
@@ -281,7 +282,7 @@ public sealed abstract class ScCssSelector extends ScSelector permits ScCssSelec
      * @return a new {@code ScCssSelector} object representing the descendant selector
      * @see ScCssSelectorDescendant
      */
-    public ScCssSelector descendant(String tag, ScCssSelectorPropertyType... selectorProperties) {
+    public ScCssSelector descendant(@NonNull String tag, @NonNull ScCssSelectorPropertyType... selectorProperties) {
         return new ScCssSelectorDescendant(this, tag, selectorProperties);
     }
 
@@ -299,7 +300,7 @@ public sealed abstract class ScCssSelector extends ScSelector permits ScCssSelec
      * @return a new {@code ScCssSelector} object representing the child selector
      * @see ScCssSelectorChild
      */
-    public ScCssSelector child(String tag, ScCssSelectorPropertyType... selectorProperties) {
+    public ScCssSelector child(@NonNull String tag, @NonNull ScCssSelectorPropertyType... selectorProperties) {
         return new ScCssSelectorChild(this, tag, selectorProperties);
     }
 
@@ -317,7 +318,7 @@ public sealed abstract class ScCssSelector extends ScSelector permits ScCssSelec
      * @return a new {@code ScCssSelector} object representing the sibling selector
      * @see ScCssSelectorSibling
      */
-    public ScCssSelector sibling(String tag, ScCssSelectorPropertyType... selectorProperties) {
+    public ScCssSelector sibling(@NonNull String tag, @NonNull ScCssSelectorPropertyType... selectorProperties) {
         return new ScCssSelectorSibling(this, tag, selectorProperties);
     }
 
@@ -335,7 +336,7 @@ public sealed abstract class ScCssSelector extends ScSelector permits ScCssSelec
      * @return a new {@code ScCssSelector} object representing the next sibling selector
      * @see ScCssSelectorNextSibling
      */
-    public ScCssSelector nextSibling(String tag, ScCssSelectorPropertyType... selectorProperties) {
+    public ScCssSelector nextSibling(@NonNull String tag, @NonNull ScCssSelectorPropertyType... selectorProperties) {
         return new ScCssSelectorNextSibling(this, tag, selectorProperties);
     }
 
@@ -352,7 +353,7 @@ public sealed abstract class ScCssSelector extends ScSelector permits ScCssSelec
      * @return a new {@code ScCssSelector} object representing the page-level selector
      * @see ScCssSelectorPage
      */
-    public ScCssSelector page(String tag, ScCssSelectorPropertyType... selectorProperties) {
+    public ScCssSelector page(@NonNull String tag, @NonNull ScCssSelectorPropertyType... selectorProperties) {
         return new ScCssSelectorPage(tag, selectorProperties);
     }
 }

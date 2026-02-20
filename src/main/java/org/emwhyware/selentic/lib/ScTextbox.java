@@ -1,5 +1,6 @@
 package org.emwhyware.selentic.lib;
 
+import org.checkerframework.checker.nullness.qual.NonNull;
 import org.openqa.selenium.WebElement;
 
 public class ScTextbox extends ScFormComponent {
@@ -17,7 +18,7 @@ public class ScTextbox extends ScFormComponent {
         return this.value();
     }
 
-    public void enterText(CharSequence... text) {
+    public void enterText(@NonNull CharSequence... text) {
         final WebElement scrolled = this.scrolledElement();
 
         scrolled.clear();

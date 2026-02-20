@@ -1,15 +1,17 @@
 package org.emwhyware.selentic.lib;
 
+import org.checkerframework.checker.nullness.qual.NonNull;
+
 public class ScSelectorAttributeCondition {
     private final String prefix;
     private final String attribute;
 
-    ScSelectorAttributeCondition(String prefix, String attribute) {
+    ScSelectorAttributeCondition(@NonNull String prefix, @NonNull String attribute) {
         this.prefix = prefix;
         this.attribute = attribute;
     }
 
-    public ScSelectorAttributeProperty is(String text) {
+    public ScSelectorAttributeProperty is(@NonNull String text) {
         return new ScSelectorAttributeProperty(this.prefix, this.attribute, ScSelectorAttributeProperty.Conditions.Is, text);
     }
 
@@ -17,19 +19,19 @@ public class ScSelectorAttributeCondition {
         return new ScSelectorAttributeProperty(this.prefix, this.attribute, ScSelectorAttributeProperty.Conditions.IsPresent, "");
     }
 
-    public ScSelectorAttributeProperty contains(String text) {
+    public ScSelectorAttributeProperty contains(@NonNull String text) {
         return new ScSelectorAttributeProperty(this.prefix, this.attribute, ScSelectorAttributeProperty.Conditions.Contains, text);
     }
 
-    public ScSelectorAttributeProperty startsWith(String text) {
+    public ScSelectorAttributeProperty startsWith(@NonNull String text) {
         return new ScSelectorAttributeProperty(this.prefix, this.attribute, ScSelectorAttributeProperty.Conditions.StartsWith, text);
     }
 
-    public ScSelectorAttributeProperty endsWith(String text) {
+    public ScSelectorAttributeProperty endsWith(@NonNull String text) {
         return new ScSelectorAttributeProperty(this.prefix, this.attribute, ScSelectorAttributeProperty.Conditions.EndsWith, text);
     }
 
-    public ScSelectorAttributeProperty wholeWord(String text) {
+    public ScSelectorAttributeProperty wholeWord(@NonNull String text) {
         return new ScSelectorAttributeProperty(this.prefix, this.attribute, ScSelectorAttributeProperty.Conditions.WholeWord, text);
     }
 }

@@ -1,11 +1,13 @@
 package org.emwhyware.selentic.lib;
 
+import org.checkerframework.checker.nullness.qual.NonNull;
+
 public final class ScXPathPage extends ScXPath {
-    ScXPathPage(String tag, ScXpathPropertyType... selectorProperties) {
+    ScXPathPage(@NonNull String tag, @NonNull ScXpathPropertyType... selectorProperties) {
         super(tag, selectorProperties);
     }
 
-    ScXPathPage(ScXpathPropertyType... selectorProperties) {
+    ScXPathPage(@NonNull ScXpathPropertyType... selectorProperties) {
         super(selectorProperties);
     }
 

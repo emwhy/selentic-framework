@@ -1,5 +1,7 @@
 package org.emwhyware.selentic.lib;
 
+import org.checkerframework.checker.nullness.qual.NonNull;
+
 /**
  * {@code ScCssSelectorNextSibling} represents a CSS selector using the adjacent sibling combinator ({@code +}).
  *
@@ -41,7 +43,7 @@ public final class ScCssSelectorNextSibling extends ScCssSelector {
      * @param priorSelectorNode the preceding element selector in the chain
      * @param selectorProperties optional properties to filter the next sibling element
      */
-    ScCssSelectorNextSibling(ScCssSelector priorSelectorNode, ScCssSelectorPropertyType... selectorProperties) {
+    ScCssSelectorNextSibling(@NonNull ScCssSelector priorSelectorNode, @NonNull ScCssSelectorPropertyType... selectorProperties) {
         super(priorSelectorNode, selectorProperties);
     }
 
@@ -57,7 +59,7 @@ public final class ScCssSelectorNextSibling extends ScCssSelector {
      * @param priorSelectorNode the preceding element selector in the chain
      * @param selectorProperties optional properties to filter the next sibling element
      */
-    ScCssSelectorNextSibling(ScCssSelector priorSelectorNode, String tag, ScCssSelectorPropertyType... selectorProperties) {
+    ScCssSelectorNextSibling(@NonNull ScCssSelector priorSelectorNode, @NonNull String tag, @NonNull ScCssSelectorPropertyType... selectorProperties) {
         super(priorSelectorNode, tag, selectorProperties);
     }
 

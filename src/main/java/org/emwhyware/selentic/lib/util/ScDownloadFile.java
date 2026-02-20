@@ -4,6 +4,7 @@ import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.filefilter.IOFileFilter;
 import org.apache.commons.io.filefilter.TrueFileFilter;
+import org.checkerframework.checker.nullness.qual.NonNull;
 import org.emwhyware.selentic.lib.exception.ScDownloadFileException;
 
 import java.io.File;
@@ -20,7 +21,7 @@ public class ScDownloadFile {
      * @param startsWithFileName
      * @return
      */
-    public synchronized static ScDownloadFile file(String startsWithFileName) {
+    public synchronized static ScDownloadFile file(@NonNull String startsWithFileName) {
         return new ScDownloadFile(getDownloadFile(startsWithFileName, ""));
     }
 
@@ -30,7 +31,7 @@ public class ScDownloadFile {
      * @param extension
      * @return
      */
-    public synchronized static ScDownloadFile file(String startsWithFileName, String extension) {
+    public synchronized static ScDownloadFile file(@NonNull String startsWithFileName, @NonNull String extension) {
         return new ScDownloadFile(getDownloadFile(startsWithFileName, extension));
     }
 
@@ -39,7 +40,7 @@ public class ScDownloadFile {
      * @param pattern
      * @return
      */
-    public synchronized static ScDownloadFile file(Pattern pattern) {
+    public synchronized static ScDownloadFile file(@NonNull Pattern pattern) {
         return new ScDownloadFile(getDownloadFile(pattern, ""));
     }
 
@@ -59,7 +60,7 @@ public class ScDownloadFile {
      * @param downloadFile
      * @return
      */
-    public synchronized static ScDownloadFile from(File downloadFile) {
+    public synchronized static ScDownloadFile from(@NonNull File downloadFile) {
         try {
             if (downloadFile.exists()) {
                 FileUtils.copyFile(downloadFile, new File(ScLogHandler.downloadDirectory(), downloadFile.getName()));
@@ -73,7 +74,7 @@ public class ScDownloadFile {
     /**
      * constructor.
      */
-    protected ScDownloadFile(File file) {
+    protected ScDownloadFile(@NonNull File file) {
         this.file = file;
     }
 
@@ -92,7 +93,7 @@ public class ScDownloadFile {
      * @return
      * @param <T>
      */
-    public <T extends ScDownloadFileParser> T parse(Class<T> downloadFileParser) {
+    public <T extends ScDownloadFileParser> T parse(@NonNull Class<T> downloadFileParser) {
         try {
             final T downloadFile = downloadFileParser.getDeclaredConstructor().newInstance();
 
@@ -133,7 +134,7 @@ public class ScDownloadFile {
      * @param extension
      * @return
      */
-    private static File getDownloadFile(String startWithFileName, String extension) {
+    private static File getDownloadFile(@NonNull String startWithFileName, @NonNull String extension) {
         final AtomicReference<File> file = new AtomicReference<>();
         final IOFileFilter fileFilter = new IOFileFilter() {
             @Override
@@ -171,7 +172,7 @@ public class ScDownloadFile {
      * @param extension
      * @return
      */
-    private static File getDownloadFile(Pattern fileNamePattern, String extension) {
+    private static File getDownloadFile(@NonNull Pattern fileNamePattern, @NonNull String extension) {
         final AtomicReference<File> file = new AtomicReference<>();
         final IOFileFilter fileFilter = new IOFileFilter() {
             @Override

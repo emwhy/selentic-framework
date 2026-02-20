@@ -28,7 +28,7 @@ public class ScCssSelectorTest {
             final ScGenericComponent component = p.cssSelectorIdTestText();
 
             Assert.assertTrue(component.isDisplayed());
-            Assert.assertEquals(component.id().orElse(null), "outer-table-1");
+            Assert.assertEquals(component.id().orElse(""), "outer-table-1");
         });
     }
 

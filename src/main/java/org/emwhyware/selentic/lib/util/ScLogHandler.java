@@ -5,6 +5,8 @@ import ch.qos.logback.classic.LoggerContext;
 import ch.qos.logback.classic.encoder.PatternLayoutEncoder;
 import ch.qos.logback.classic.spi.ILoggingEvent;
 import ch.qos.logback.core.FileAppender;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.emwhyware.selentic.lib.config.SelelenticConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,14 +14,14 @@ import org.slf4j.LoggerFactory;
 import java.io.File;
 
 public final class ScLogHandler {
-    private static File logDirectory;
+    private static @Nullable File logDirectory;
 
     // By putting this in static, ensure that setting up log starts before anything else.
     static {
         ScInitializer.init();
     }
 
-    public static Logger logger(Class<?> loggedClass) {
+    public static Logger logger(@NonNull Class<?> loggedClass) {
         return LoggerFactory.getLogger(loggedClass);
     }
 
@@ -69,11 +71,11 @@ public final class ScLogHandler {
         return fileAppender;
     }
 
-    static void setLogDirectory(File logDirectory) {
+    static void setLogDirectory(@NonNull File logDirectory) {
         ScLogHandler.logDirectory = logDirectory;
     }
 
-    public static File logDirectory() {
+    public static @Nullable File logDirectory() {
         return logDirectory;
     }
 

@@ -1,5 +1,7 @@
 package org.emwhyware.selentic.lib;
 
+import org.checkerframework.checker.nullness.qual.NonNull;
+
 /**
  * A builder class for constructing CSS selector.
  * <p>
@@ -17,7 +19,7 @@ public final class ScComponentCssSelectorBuilder extends ScSelectorBuilder {
      * @return A {@link ScCssSelector} representing the raw text provided.
      */
     @Override
-    public ScCssSelector raw(String selectorText) {
+    public @org.jspecify.annotations.NonNull ScCssSelector raw(@NonNull String selectorText) {
         return new ScCssSelectorRaw(selectorText);
     }
 
@@ -27,7 +29,7 @@ public final class ScComponentCssSelectorBuilder extends ScSelectorBuilder {
      * @param selectorProperties One or more properties used to define the descendant relationship.
      * @return The updated {@link ScCssSelector} instance.
      */
-    public ScCssSelector descendant(ScCssSelectorPropertyType... selectorProperties) {
+    public ScCssSelector descendant(@NonNull ScCssSelectorPropertyType... selectorProperties) {
         this.setSelector(new ScCssSelectorDescendant(selectorProperties));
         return (ScCssSelector) this.selector();
     }
@@ -38,7 +40,7 @@ public final class ScComponentCssSelectorBuilder extends ScSelectorBuilder {
      * @param selectorProperties One or more properties used to define the page selector.
      * @return The updated {@link ScCssSelector} instance.
      */
-    public ScCssSelector page(ScCssSelectorPropertyType... selectorProperties) {
+    public ScCssSelector page(@NonNull ScCssSelectorPropertyType... selectorProperties) {
         this.setSelector(new ScCssSelectorPage(selectorProperties));
         return (ScCssSelector) this.selector();
     }
@@ -51,7 +53,7 @@ public final class ScComponentCssSelectorBuilder extends ScSelectorBuilder {
      * @param selectorProperties One or more properties used to define the descendant relationship.
      * @return The updated {@link ScCssSelector} instance.
      */
-    public ScCssSelector descendant(String tag, ScCssSelectorPropertyType... selectorProperties) {
+    public ScCssSelector descendant(@NonNull String tag, @NonNull ScCssSelectorPropertyType... selectorProperties) {
         this.setSelector(new ScCssSelectorDescendant(tag, selectorProperties));
         return (ScCssSelector) this.selector();
     }
@@ -63,7 +65,7 @@ public final class ScComponentCssSelectorBuilder extends ScSelectorBuilder {
      * @param selectorProperties One or more properties used to define the page selector.
      * @return The updated {@link ScCssSelector} instance.
      */
-    public ScCssSelector page(String tag, ScCssSelectorPropertyType... selectorProperties) {
+    public ScCssSelector page(@NonNull String tag, @NonNull ScCssSelectorPropertyType... selectorProperties) {
         this.setSelector(new ScCssSelectorPage(tag, selectorProperties));
         return (ScCssSelector) this.selector();
     }

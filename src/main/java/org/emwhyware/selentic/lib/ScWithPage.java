@@ -1,5 +1,6 @@
 package org.emwhyware.selentic.lib;
 
+import org.checkerframework.checker.nullness.qual.NonNull;
 import org.emwhyware.selentic.lib.exception.ScPageCreationException;
 import org.emwhyware.selentic.lib.exception.ScUnexpectedPageException;
 
@@ -72,7 +73,7 @@ public final class ScWithPage<T extends ScPage> {
      *                                    <li>Other reflection-related errors</li>
      *                                  </ul>
      */
-    ScWithPage(Class<T> pageType) {
+    ScWithPage(@NonNull Class<T> pageType) {
         try {
             this.page = pageType.getDeclaredConstructor().newInstance();
         } catch (InvocationTargetException | InstantiationException | IllegalAccessException | NoSuchMethodException ex) {
@@ -116,7 +117,7 @@ public final class ScWithPage<T extends ScPage> {
      * @see ScPage#waitForPage()
      * @see InPageAction
      */
-    public void inPage(InPageAction<T> action) {
+    public void inPage(@NonNull InPageAction<T> action) {
         this.page.waitForPage();
         action.inPage(this.page);
     }
@@ -139,6 +140,6 @@ public final class ScWithPage<T extends ScPage> {
          *
          * @param page the fully loaded page instance; guaranteed to be non-null and ready for use
          */
-        void inPage(T page);
+        void inPage(@NonNull T page);
     }
 }

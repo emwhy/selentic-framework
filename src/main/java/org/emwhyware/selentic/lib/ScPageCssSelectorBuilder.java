@@ -1,5 +1,7 @@
 package org.emwhyware.selentic.lib;
 
+import org.checkerframework.checker.nullness.qual.NonNull;
+
 /**
  * A builder class  for constructing CSS selectors specifically from a page.
  * <p>
@@ -17,7 +19,7 @@ public final class ScPageCssSelectorBuilder extends ScSelectorBuilder {
      * @return A {@link ScCssSelector} instance representing the raw selector.
      */
     @Override
-    public ScCssSelector raw(String selectorText) {
+    public @org.jspecify.annotations.NonNull ScCssSelector raw(@NonNull String selectorText) {
         return new ScCssSelectorRaw(selectorText);
     }
 
@@ -28,7 +30,7 @@ public final class ScPageCssSelectorBuilder extends ScSelectorBuilder {
      *                           objects to define the selector criteria.
      * @return The updated {@link ScCssSelector} instance.
      */
-    public ScCssSelector descendant(ScCssSelectorPropertyType... selectorProperties) {
+    public ScCssSelector descendant(@NonNull ScCssSelectorPropertyType... selectorProperties) {
         this.setSelector(new ScCssSelectorDescendant(selectorProperties));
         return (ScCssSelector) this.selector();
     }
@@ -41,7 +43,7 @@ public final class ScPageCssSelectorBuilder extends ScSelectorBuilder {
      *                           objects to define the selector criteria.
      * @return The updated {@link ScCssSelector} instance.
      */
-    public ScCssSelector descendant(String tag, ScCssSelectorPropertyType... selectorProperties) {
+    public ScCssSelector descendant(@NonNull String tag, @NonNull ScCssSelectorPropertyType... selectorProperties) {
         this.setSelector(new ScCssSelectorDescendant(tag, selectorProperties));
         return (ScCssSelector) this.selector();
     }

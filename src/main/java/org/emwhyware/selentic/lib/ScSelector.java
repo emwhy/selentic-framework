@@ -1,5 +1,6 @@
 package org.emwhyware.selentic.lib;
 
+import org.checkerframework.checker.nullness.qual.NonNull;
 import org.openqa.selenium.By;
 
 import java.util.Optional;
@@ -47,7 +48,7 @@ public abstract sealed class ScSelector permits ScCssSelector, ScXPath {
      * @param priorSelectorNode the previous selector in the chain, must not be null
      * @throws NullPointerException if priorSelectorNode is null
      */
-    protected ScSelector(ScSelector priorSelectorNode) {
+    protected ScSelector(@NonNull ScSelector priorSelectorNode) {
         this.priorSelectorNode = Optional.of(priorSelectorNode);
     }
 

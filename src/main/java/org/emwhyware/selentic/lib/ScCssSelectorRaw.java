@@ -1,5 +1,6 @@
 package org.emwhyware.selentic.lib;
 
+import org.checkerframework.checker.nullness.qual.NonNull;
 import org.emwhyware.selentic.lib.util.ScLogHandler;
 import org.openqa.selenium.By;
 import org.slf4j.Logger;
@@ -14,7 +15,7 @@ public final class ScCssSelectorRaw extends ScCssSelector {
     private static final Logger LOG = ScLogHandler.logger(ScCssSelectorRaw.class);
     private final String selectorText;
 
-    ScCssSelectorRaw(String selectorText) {
+    ScCssSelectorRaw(@NonNull String selectorText) {
         super("RAW");
         this.selectorText = selectorText;
     }

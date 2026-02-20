@@ -1,5 +1,7 @@
 package org.emwhyware.selentic.lib;
 
+import org.checkerframework.checker.nullness.qual.NonNull;
+
 public final class ScSelectorIndexProperty extends ScSelectorProperty implements ScXpathPropertyType {
     private final Conditions condition;
     private final int index;
@@ -15,7 +17,7 @@ public final class ScSelectorIndexProperty extends ScSelectorProperty implements
     }
 
     @Override
-    public String build(Types type) {
+    public String build(@NonNull Types type) {
         String selector = "";
 
         switch (this.condition) {

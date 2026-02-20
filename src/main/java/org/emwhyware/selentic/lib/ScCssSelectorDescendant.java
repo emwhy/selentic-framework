@@ -1,5 +1,7 @@
 package org.emwhyware.selentic.lib;
 
+import org.checkerframework.checker.nullness.qual.NonNull;
+
 /**
  * {@code ScCssSelectorDescendant} represents a CSS selector using the descendant combinator (space).
  *
@@ -39,7 +41,7 @@ public final class ScCssSelectorDescendant extends ScCssSelector {
      *
      * @param selectorProperties optional properties to filter descendant elements
      */
-    ScCssSelectorDescendant(ScCssSelectorPropertyType... selectorProperties) {
+    ScCssSelectorDescendant(@NonNull ScCssSelectorPropertyType... selectorProperties) {
         super(selectorProperties);
     }
 
@@ -54,7 +56,7 @@ public final class ScCssSelectorDescendant extends ScCssSelector {
      * @param priorSelectorNode the parent element selector in the chain
      * @param selectorProperties optional properties to filter descendant elements
      */
-    ScCssSelectorDescendant(ScCssSelector priorSelectorNode, ScCssSelectorPropertyType... selectorProperties) {
+    ScCssSelectorDescendant(@NonNull ScCssSelector priorSelectorNode, @NonNull ScCssSelectorPropertyType... selectorProperties) {
         super(priorSelectorNode, selectorProperties);
     }
 
@@ -69,7 +71,7 @@ public final class ScCssSelectorDescendant extends ScCssSelector {
      * @param tag The HTML/XML tag to target.
      * @param selectorProperties optional properties to filter descendant elements
      */
-    ScCssSelectorDescendant(String tag, ScCssSelectorPropertyType... selectorProperties) {
+    ScCssSelectorDescendant(@NonNull String tag, @NonNull ScCssSelectorPropertyType... selectorProperties) {
         super(tag, selectorProperties);
     }
 
@@ -85,7 +87,7 @@ public final class ScCssSelectorDescendant extends ScCssSelector {
      * @param tag The HTML/XML tag to target.
      * @param selectorProperties optional properties to filter descendant elements
      */
-    ScCssSelectorDescendant(ScCssSelector priorSelectorNode, String tag, ScCssSelectorPropertyType... selectorProperties) {
+    ScCssSelectorDescendant(@NonNull ScCssSelector priorSelectorNode, @NonNull String tag, @NonNull ScCssSelectorPropertyType... selectorProperties) {
         super(priorSelectorNode, tag, selectorProperties);
     }
 

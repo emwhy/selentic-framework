@@ -1,5 +1,7 @@
 package org.emwhyware.selentic.lib;
 
+import org.checkerframework.checker.nullness.qual.NonNull;
+
 /**
  * This interface allows content of {@link ScFrame} actions.
  *
@@ -9,5 +11,5 @@ package org.emwhyware.selentic.lib;
  * @see ScFrameContent
  */
 public interface ScFrameAction<T extends ScFrameContent> {
-    void inFrame(T frameContent);
+    void inFrame(@NonNull T frameContent);
 }

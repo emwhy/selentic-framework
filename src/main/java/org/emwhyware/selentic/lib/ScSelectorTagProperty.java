@@ -1,5 +1,6 @@
 package org.emwhyware.selentic.lib;
 
+import org.checkerframework.checker.nullness.qual.NonNull;
 import org.emwhyware.selentic.lib.exception.ScSelectorException;
 
 public final class ScSelectorTagProperty extends ScSelectorProperty implements ScCssSelectorPropertyType {
@@ -10,7 +11,7 @@ public final class ScSelectorTagProperty extends ScSelectorProperty implements S
     }
 
     @Override
-    public String build(Types type) {
+    public String build(@NonNull Types type) {
         if (this.tag.contains(" ")) {
             throw new ScSelectorException("Tag contains space character. This can yield unexpected results.");
         }

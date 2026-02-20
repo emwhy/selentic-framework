@@ -1,6 +1,7 @@
 package org.emwhyware.selentic.lib;
 
 
+import org.checkerframework.checker.nullness.qual.NonNull;
 import org.emwhyware.selentic.lib.exception.ScSelectorException;
 
 public final class ScSelectorAttributeProperty extends ScSelectorProperty implements ScXpathPropertyType, ScCssSelectorPropertyType {
@@ -9,7 +10,7 @@ public final class ScSelectorAttributeProperty extends ScSelectorProperty implem
     private final Conditions condition;
     private final String text;
 
-    ScSelectorAttributeProperty(String prefix, String attribute, Conditions condition, String text) {
+    ScSelectorAttributeProperty(@NonNull String prefix, @NonNull String attribute, @NonNull Conditions condition, @NonNull String text) {
         this.prefix = prefix;
         this.attribute = attribute;
         this.condition = condition;
@@ -17,7 +18,7 @@ public final class ScSelectorAttributeProperty extends ScSelectorProperty implem
     }
 
     @Override
-    public String build(Types type) {
+    public String build(@NonNull Types type) {
         String selector = "";
 
         if (this.attribute.contains(" ")) {

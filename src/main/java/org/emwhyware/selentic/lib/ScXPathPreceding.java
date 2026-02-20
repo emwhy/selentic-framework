@@ -1,19 +1,21 @@
 package org.emwhyware.selentic.lib;
 
+import org.checkerframework.checker.nullness.qual.NonNull;
+
 public final class ScXPathPreceding extends ScXPath {
-    ScXPathPreceding(String tag, ScXpathPropertyType... selectorProperties) {
+    ScXPathPreceding(@NonNull String tag, @NonNull ScXpathPropertyType... selectorProperties) {
         super(tag, selectorProperties);
     }
 
-    ScXPathPreceding(ScXPath priorSelectorNode, String tag, ScXpathPropertyType... selectorProperties) {
+    ScXPathPreceding(@NonNull ScXPath priorSelectorNode, @NonNull String tag, @NonNull ScXpathPropertyType... selectorProperties) {
         super(priorSelectorNode, tag, selectorProperties);
     }
 
-    ScXPathPreceding(ScXpathPropertyType... selectorProperties) {
+    ScXPathPreceding(@NonNull ScXpathPropertyType... selectorProperties) {
         super(selectorProperties);
     }
 
-    ScXPathPreceding(ScXPath priorSelectorNode, ScXpathPropertyType... selectorProperties) {
+    ScXPathPreceding(@NonNull ScXPath priorSelectorNode, @NonNull ScXpathPropertyType... selectorProperties) {
         super(priorSelectorNode, selectorProperties);
     }
 

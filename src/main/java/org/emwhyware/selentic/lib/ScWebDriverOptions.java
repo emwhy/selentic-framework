@@ -1,5 +1,6 @@
 package org.emwhyware.selentic.lib;
 
+import org.checkerframework.checker.nullness.qual.NonNull;
 import org.emwhyware.selentic.lib.util.ScLogHandler;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.edge.EdgeOptions;
@@ -25,7 +26,7 @@ public final class ScWebDriverOptions {
         initializeFirefoxOptions(downloadDirectory);
     }
 
-    private void initializeChromeOptions(File downloadDirectory) {
+    private void initializeChromeOptions(@NonNull File downloadDirectory) {
         edgePrefs.put("download.default_directory", downloadDirectory.getAbsolutePath());
         edgePrefs.put("download.prompt_for_download", false);
         edgePrefs.put("download.directory_upgrade", true);
@@ -40,7 +41,7 @@ public final class ScWebDriverOptions {
         chromeOptions.addArguments("--disable-features=DownloadBubble,DownloadBubbleV2");
     }
 
-    private void initializeEdgeOptions(File downloadDirectory) {
+    private void initializeEdgeOptions(@NonNull File downloadDirectory) {
         chromePrefs.put("download.default_directory", downloadDirectory.getAbsolutePath());
         chromePrefs.put("download.prompt_for_download", false);
         chromePrefs.put("download.directory_upgrade", true);
@@ -55,7 +56,7 @@ public final class ScWebDriverOptions {
         edgeOptions.addArguments("--disable-features=DownloadBubble,DownloadBubbleV2");
     }
 
-    private void initializeFirefoxOptions(File downloadDirectory) {
+    private void initializeFirefoxOptions(@NonNull File downloadDirectory) {
         firefoxOptions.addPreference("browser.helperApps.neverAsk.saveToDisk", "text/comma-separated-values,application/vnd.ms-excel,application/msword,application/csv,application/ris,text/csv,image/png,application/pdf,text/plain,application/zip,application/x-zip,application/x-zip-compressed,application/download,application/octet-stream");
         firefoxOptions.addPreference("browser.helperApps.alwaysAsk.force", false);
         firefoxOptions.addPreference("browser.download.dir", downloadDirectory.getAbsolutePath());

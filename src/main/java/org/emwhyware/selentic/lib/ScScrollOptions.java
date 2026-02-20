@@ -1,5 +1,7 @@
 package org.emwhyware.selentic.lib;
 
+import org.checkerframework.checker.nullness.qual.NonNull;
+
 /**
  * Configuration class for customizing element scroll behavior for {@link ScComponent}.
  * <p>
@@ -82,7 +84,7 @@ public class ScScrollOptions {
      * @return this {@code ScScrollOptions} instance for method chaining
      * @throws NullPointerException if behavior is null
      */
-    public ScScrollOptions behavior(Behavior behavior) {
+    public ScScrollOptions behavior(@NonNull Behavior behavior) {
         this.behavior = behavior;
         return this;
     }
@@ -103,7 +105,7 @@ public class ScScrollOptions {
      * @return this {@code ScScrollOptions} instance for method chaining
      * @throws NullPointerException if block is null
      */
-    public ScScrollOptions block(Block block) {
+    public ScScrollOptions block(@NonNull Block block) {
         this.block = block;
         return this;
     }
@@ -124,7 +126,7 @@ public class ScScrollOptions {
      * @return this {@code ScScrollOptions} instance for method chaining
      * @throws NullPointerException if inline is null
      */
-    public ScScrollOptions inline(Inline inline) {
+    public ScScrollOptions inline(@NonNull Inline inline) {
         this.inline = inline;
         return this;
     }

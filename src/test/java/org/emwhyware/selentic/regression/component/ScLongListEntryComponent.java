@@ -15,10 +15,18 @@ public class ScLongListEntryComponent extends ScComponent {
 
     @Override
     public String text() {
-        return titleText.text();
+        return titleText().text();
     }
 
-    public final ScGenericComponent titleText = $genericComponent(TITLE_TEXT);
-    public final ScCheckbox checkbox = $component(CHECKBOX, ScCheckbox.class);
-    public final ScTextbox textbox = $component(TEXTBOX, ScTextbox.class);
+    public ScGenericComponent titleText() {
+        return $genericComponent(TITLE_TEXT);
+    }
+
+    public ScCheckbox checkbox() {
+        return $component(CHECKBOX, ScCheckbox.class);
+    }
+
+    public ScTextbox textbox() {
+        return $component(TEXTBOX, ScTextbox.class);
+    }
 }

@@ -1,5 +1,6 @@
 package org.emwhyware.selentic.lib;
 
+import org.checkerframework.checker.nullness.qual.NonNull;
 import org.emwhyware.selentic.lib.exception.ScEntryNotFoundException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.Select;
@@ -15,7 +16,7 @@ public class ScMultiSelect extends ScFormComponent {
         rule.attr("multiple").isPresent();
     }
 
-    public void select(String... texts) {
+    public void select(@NonNull String... texts) {
         final Select select = new Select(this.scrolledElement());
         final List<String> notFoundTexts = new ArrayList<>();
 
@@ -32,7 +33,7 @@ public class ScMultiSelect extends ScFormComponent {
         }
     }
 
-    public void select(Pattern pattern) {
+    public void select(@NonNull Pattern pattern) {
         final List<String> matchedOptions = optionTexts().stream().filter(option -> pattern.matcher(option).matches()).toList();
 
         if (matchedOptions.isEmpty()) {
@@ -42,7 +43,7 @@ public class ScMultiSelect extends ScFormComponent {
         }
     }
 
-    public void deselect(String... texts) {
+    public void deselect(@NonNull String... texts) {
         final Select select = new Select(this.scrolledElement());
         final List<String> notFoundTexts = new ArrayList<>();
 
@@ -59,7 +60,7 @@ public class ScMultiSelect extends ScFormComponent {
         }
     }
 
-    public void deselect(Pattern pattern) {
+    public void deselect(@NonNull Pattern pattern) {
         final List<String> matchedOptions = optionTexts().stream().filter(option -> pattern.matcher(option).matches()).toList();
 
         if (matchedOptions.isEmpty()) {

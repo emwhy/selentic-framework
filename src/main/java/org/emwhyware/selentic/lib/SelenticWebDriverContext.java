@@ -1,5 +1,6 @@
 package org.emwhyware.selentic.lib;
 
+import org.checkerframework.checker.nullness.qual.NonNull;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.edge.EdgeDriver;
@@ -12,7 +13,7 @@ import java.util.Optional;
 
 public final class SelenticWebDriverContext {
     private final ScWebDriverOptions webDriverOptions = new ScWebDriverOptions();
-    private WebDriver driver;
+    private Optional<WebDriver> driver = Optional.empty();
     private Optional<WebDriverListener> webDriverListener = Optional.empty();
 
     SelenticWebDriverContext() {}
@@ -54,25 +55,23 @@ public final class SelenticWebDriverContext {
      * @see Selentic#driver()
      * @see ScBrowser
      */
-    synchronized WebDriver driver(ScBrowser browser) {
-        if (this.driver == null) {
-            WebDriver driver = null;
-
-            switch (browser) {
-                case Chrome -> driver = new ChromeDriver(webDriverOptions.chromeOptions());
-                case Firefox -> driver = new FirefoxDriver(webDriverOptions.firefoxOptions());
-                case Safari -> driver = new SafariDriver();
-                case Edge -> driver = new EdgeDriver(webDriverOptions.edgeOptions());
-            }
+    synchronized WebDriver driver(@NonNull ScBrowser browser) {
+        if (this.driver.isEmpty()) {
+            WebDriver driver = switch (browser) {
+                case Chrome -> new ChromeDriver(webDriverOptions.chromeOptions());
+                case Firefox -> new FirefoxDriver(webDriverOptions.firefoxOptions());
+                case Safari -> new SafariDriver();
+                case Edge -> new EdgeDriver(webDriverOptions.edgeOptions());
+            };
 
             // Add listener class, if available.
             if (webDriverListener.isPresent()) {
                 driver = new EventFiringDecorator<>(webDriverListener.get()).decorate(driver);
             }
-            this.driver = driver;
+            this.driver = Optional.of(driver);
             return driver;
         } else {
-            return this.driver;
+            return this.driver.get();
         }
     }
 
@@ -254,7 +253,7 @@ public final class SelenticWebDriverContext {
      * @see WebDriverListener
      * @see Selentic#driver()
      */
-    synchronized void setWebDriverListener(WebDriverListener listener) {
+    synchronized void setWebDriverListener(@NonNull WebDriverListener listener) {
         this.webDriverListener = Optional.of(listener);
     }
 

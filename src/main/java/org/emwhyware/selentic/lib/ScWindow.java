@@ -1,8 +1,11 @@
 package org.emwhyware.selentic.lib;
 
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.emwhyware.selentic.lib.exception.ScWaitTimeoutException;
 import org.emwhyware.selentic.lib.exception.ScWindowException;
 import org.emwhyware.selentic.lib.util.ScLogHandler;
+import org.emwhyware.selentic.lib.util.ScNullCheck;
 import org.emwhyware.selentic.lib.util.ScWait;
 import org.openqa.selenium.NoSuchWindowException;
 import org.openqa.selenium.WebDriver;
@@ -10,6 +13,7 @@ import org.slf4j.Logger;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * ScWindow handles inside additional browser window. It handles moving controls to a window, and closing it when done.
@@ -89,7 +93,7 @@ public final class ScWindow {
      * Switch the control to the top window, and perform the actions in predicate.
      * @param predicate
      */
-    public <T extends ScPage> void inWindow(ScWithPage<T> withPage, ScWindowAction<T> predicate) {
+    public <T extends ScPage> void inWindow(@NonNull ScWithPage<T> withPage, @NonNull ScWindowAction<T> predicate) {
         inWindow(withPage, predicate, null);
     }
 
@@ -98,7 +102,7 @@ public final class ScWindow {
      * "controller" is provided as parameter.
      * @param predicate
      */
-    public <T extends ScPage> void inWindow(ScWithPage<T> withPage, ScWindowActionWithController<T> predicate) {
+    public <T extends ScPage> void inWindow(@NonNull ScWithPage<T> withPage, @NonNull ScWindowActionWithController<T> predicate) {
         inWindow(withPage, null, predicate);
     }
 
@@ -107,12 +111,12 @@ public final class ScWindow {
      * @param predicate
      * @param controllerPredicate
      */
-    private <T extends ScPage> void inWindow(ScWithPage<T> withPage, ScWindowAction<T> predicate, ScWindowActionWithController<T> controllerPredicate) {
-        final WebDriver driver = Selentic.driver();
-        final String mainWindowHandle = driver.getWindowHandle();
-        final List<String> windowHandles = getWindowHandles(driver);
-        final String newWindowHandle = switchToTopWindow(driver, windowHandles);
-        int beforeCloseAttemptCount;
+    private <T extends ScPage> void inWindow(@NonNull ScWithPage<T> withPage, @Nullable ScWindowAction<T> predicate, @Nullable ScWindowActionWithController<T> controllerPredicate) {
+        final @NonNull WebDriver driver = Selentic.driver();
+        final @NonNull String mainWindowHandle = driver.getWindowHandle();
+        final @NonNull List<String> windowHandles = getWindowHandles(driver);
+        final @NonNull String newWindowHandle = switchToTopWindow(driver, windowHandles);
+        int beforeCloseAttemptCount = 0;
 
         try {
             if (predicate != null) {
@@ -132,6 +136,8 @@ public final class ScWindow {
 
         // Make sure that the actual window count matches expected count.
         if (beforeCloseAttemptCount == driver.getWindowHandles().size()) {
+            final AtomicInteger beforeCloseAttemptCountAtomic = new AtomicInteger(beforeCloseAttemptCount);
+
             ScWait.waitUntil(() -> {
                 for (final String handle : driver.getWindowHandles()) {
                     if (handle.equals(newWindowHandle)) {
@@ -143,7 +149,7 @@ public final class ScWindow {
                     }
                 }
 
-                return beforeCloseAttemptCount == windowHandles.size() + 1;
+                return beforeCloseAttemptCountAtomic.get() == windowHandles.size() + 1;
             });
 
             if (driver.getWindowHandles().size() != windowHandles.size()) {
@@ -159,7 +165,7 @@ public final class ScWindow {
         try {
             driver.switchTo().window(mainWindowHandle);
             ScWait.waitUntil(() -> driver.getWindowHandle().equals(mainWindowHandle));
-            LOG.debug("Return to window :'{}' [{}]", driver.getTitle(), mainWindowHandle);
+            LOG.debug("Return to window :'{}' [{}]", ScNullCheck.requiresNonNull(driver.getTitle()), ScNullCheck.requiresNonNull(mainWindowHandle));
         } catch (NoSuchWindowException ex) {
             LOG.warn("Encountered NoSuchWindowException: count = {} [{}]", driver.getWindowHandles().size(), String.join(", ", driver.getWindowHandles()));
             LOG.warn("Exception", ex);
@@ -172,7 +178,7 @@ public final class ScWindow {
      * @param windowHandles
      * @return
      */
-    private String switchToTopWindow(WebDriver driver, List<String> windowHandles) {
+    private String switchToTopWindow(@NonNull WebDriver driver, @NonNull List<String> windowHandles) {
         final String topHandle = windowHandles.getLast();
         final String currentHandle = driver.getWindowHandle();
 
@@ -181,7 +187,7 @@ public final class ScWindow {
         }
         // Switching to last opened window
         driver.switchTo().window(topHandle);
-        LOG.debug("Switched to window :'{}' [{}]", driver.getTitle(), topHandle);
+        LOG.debug("Switched to window :'{}' [{}]", ScNullCheck.requiresNonNull(driver.getTitle()), ScNullCheck.requiresNonNull(topHandle));
         return topHandle;
     }
 
@@ -190,7 +196,7 @@ public final class ScWindow {
      * @param driver
      * @return
      */
-    private List<String> getWindowHandles(WebDriver driver) {
+    private List<String> getWindowHandles(@NonNull WebDriver driver) {
         String currentHandle = driver.getWindowHandle();
         List<String> windowHandles = new ArrayList<>(driver.getWindowHandles());
 
@@ -228,13 +234,13 @@ public final class ScWindow {
          * @param index
          * @param predicate
          */
-        public <T extends ScPage> void inOtherWindow(ScWithPage<T> withPage, int index, ScWindowAction<T> predicate) {
+        public <T extends ScPage> void inOtherWindow(@NonNull ScWithPage<T> withPage, int index, @NonNull ScWindowAction<T> predicate) {
             final List<String> handles = webDriver.getWindowHandles().stream().toList();
 
             try {
                 webDriver.switchTo().window(handles.get(index));
                 Selentic.executeScript("window.focus()");
-                LOG.debug("Temporary switch to window: {} '{}' [{}]", index, webDriver.getTitle(), handles.get(index));
+                LOG.debug("Temporary switch to window: {} '{}' [{}]", index, ScNullCheck.requiresNonNull(webDriver.getTitle()), ScNullCheck.requiresNonNull(handles.get(index)));
 
                 withPage.inPage(p -> predicate.inWindow(p));
 
@@ -242,7 +248,7 @@ public final class ScWindow {
                 webDriver.switchTo().window(currentHandle);
                 ScWait.waitUntil(() -> webDriver.getWindowHandle().equals(currentHandle));
                 Selentic.executeScript("window.focus()");
-                LOG.debug("Return to window :'{}' [{}]", webDriver.getTitle(), currentHandle);
+                LOG.debug("Return to window :'{}' [{}]", ScNullCheck.requiresNonNull(webDriver.getTitle()), ScNullCheck.requiresNonNull(currentHandle));
             }
         }
 
@@ -256,10 +262,10 @@ public final class ScWindow {
     }
 
     public interface ScWindowAction<T extends ScPage> {
-        void inWindow(T page);
+        void inWindow(@NonNull T page);
     }
 
     public interface ScWindowActionWithController<T extends ScPage> {
-        void inWindow(T page, ScWindowController controller);
+        void inWindow(@NonNull T page, @NonNull ScWindowController controller);
     }
 }

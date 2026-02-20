@@ -1,7 +1,10 @@
 package org.emwhyware.selentic.lib;
 
+import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
+import org.checkerframework.checker.nullness.qual.NonNull;
 import org.emwhyware.selentic.lib.exception.ScComponentCreationException;
 import org.emwhyware.selentic.lib.exception.ScEntryNotFoundException;
+import org.emwhyware.selentic.lib.util.ScNullCheck;
 import org.openqa.selenium.WebElement;
 
 import java.util.*;
@@ -22,9 +25,9 @@ import java.util.stream.StreamSupport;
  */
 public class ScComponentCollection<T extends ScComponent> implements Iterable<T> {
 
-    private ScSelector selector;
-    private Class<T> componentType;
-    private ScAbstractComponent $callerComponent;
+    private @MonotonicNonNull ScSelector selector;
+    private @MonotonicNonNull Class<T> componentType;
+    private @MonotonicNonNull ScAbstractComponent $callerComponent;
     private Optional<ScAbstractComponent> containingObject = Optional.empty();
 
     /**
@@ -46,7 +49,7 @@ public class ScComponentCollection<T extends ScComponent> implements Iterable<T>
      *
      * @param $componentOrPage a calling component or page.
      */
-    final void setCallerComponent(ScAbstractComponent $componentOrPage) {
+    final void setCallerComponent(@NonNull ScAbstractComponent $componentOrPage) {
         this.$callerComponent = $componentOrPage;
     }
 
@@ -55,7 +58,7 @@ public class ScComponentCollection<T extends ScComponent> implements Iterable<T>
      *
      * @param componentType The Class object of the component type.
      */
-    final void setComponentType(Class<T> componentType) {
+    final void setComponentType(@NonNull Class<T> componentType) {
         this.componentType = componentType;
     }
 
@@ -64,7 +67,7 @@ public class ScComponentCollection<T extends ScComponent> implements Iterable<T>
      *
      * @param containingObject The containing {@link ScAbstractComponent}.
      */
-    final void setContainingObject(ScAbstractComponent containingObject) {
+    final void setContainingObject(@NonNull ScAbstractComponent containingObject) {
         this.containingObject = Optional.ofNullable(containingObject);
     }
 
@@ -74,7 +77,9 @@ public class ScComponentCollection<T extends ScComponent> implements Iterable<T>
      * @return The owner page instance.
      */
     final protected ScAbstractPage ownerPage() {
-        return $callerComponent instanceof ScAbstractPage ? (ScAbstractPage) $callerComponent : ((ScComponent) $callerComponent).ownerPage();
+        final ScAbstractComponent $c = ScNullCheck.requiresNonNull(this.$callerComponent, ScAbstractComponent.class);
+
+        return $c instanceof ScAbstractPage ? (ScAbstractPage) $c : ((ScComponent) $c).ownerPage();
     }
 
     /**
@@ -83,10 +88,13 @@ public class ScComponentCollection<T extends ScComponent> implements Iterable<T>
      * @return A list of live WebElements.
      */
     private List<WebElement> webElements() {
-        if (this.$callerComponent instanceof ScAbstractPage || this.selector.isAbsolute()) {
-            return Selentic.driver().findElements(this.selector.build());
+        final ScSelector selector = ScNullCheck.requiresNonNull(this.selector, ScSelector.class);
+        final ScAbstractComponent $c = ScNullCheck.requiresNonNull(this.$callerComponent, ScAbstractComponent.class);
+
+        if ($c instanceof ScAbstractPage || selector.isAbsolute()) {
+            return Selentic.driver().findElements(selector.build());
         } else {
-            return ((ScComponent) this.$callerComponent).existingElement().findElements(this.selector instanceof ScXPath ? ((ScXPath) this.selector).build(true) : this.selector.build());
+            return ((ScComponent) $c).existingElement().findElements(selector instanceof ScXPath ? ((ScXPath) selector).build(true) : selector.build());
         }
     }
 
@@ -99,7 +107,7 @@ public class ScComponentCollection<T extends ScComponent> implements Iterable<T>
      * @return A new instance of type T.
      * @throws ScComponentCreationException if reflection-based instantiation fails.
      */
-    private T $componentFromElement(WebElement webElement, Class<T> componentType, Optional<ScAbstractComponent> containingObject) {
+    private T $componentFromElement(@NonNull WebElement webElement, @NonNull Class<T> componentType, @NonNull Optional<ScAbstractComponent> containingObject) {
         try {
             T component;
             if (containingObject.isEmpty()) {
@@ -108,8 +116,8 @@ public class ScComponentCollection<T extends ScComponent> implements Iterable<T>
                 component = componentType.getDeclaredConstructor(containingObject.get().getClass()).newInstance(containingObject.get());
             }
             component.setWebElement(webElement);
-            component.setCallerComponent(this.$callerComponent);
-            component.setSelector(this.selector);
+            component.setCallerComponent(ScNullCheck.requiresNonNull(this.$callerComponent, ScAbstractComponent.class));
+            component.setSelector(ScNullCheck.requiresNonNull(this.selector, ScSelector.class));
 
             return component;
         } catch (Exception ex) {
@@ -138,13 +146,32 @@ public class ScComponentCollection<T extends ScComponent> implements Iterable<T>
     }
 
     /**
+     * Retrieve the first component.
+     *
+     * @return The first component in the list.
+     */
+    public T first() {
+        return this.at(0);
+    }
+
+    /**
+     * Retrieve the last component.
+     *
+     * @return The last component in the list.
+     */
+    public T last() {
+        return this.stream().toList().getLast();
+    }
+
+
+    /**
      * Retrieves a component by its unique key.
      *
      * @param key The key string to match.
      * @return The matching component.
      * @throws ScEntryNotFoundException if no component matches the key.
      */
-    public T entry(String key) {
+    public T entry(@NonNull String key) {
         return this.stream().filter(c -> c.key().equals(key)).findFirst().orElseThrow(() -> new ScEntryNotFoundException(key));
     }
 
@@ -181,7 +208,7 @@ public class ScComponentCollection<T extends ScComponent> implements Iterable<T>
      * @param key The key to look for.
      * @return true if a match is found.
      */
-    public boolean containsKey(String key) {
+    public boolean containsKey(@NonNull String key) {
         return this.stream().anyMatch(c -> c.key().equals(key));
     }
 
@@ -191,7 +218,7 @@ public class ScComponentCollection<T extends ScComponent> implements Iterable<T>
      * @param predicate The condition to filter by.
      * @return A list of components that match the predicate.
      */
-    public List<T> filter(Predicate<T> predicate) {
+    public List<T> filter(@NonNull Predicate<T> predicate) {
         return this.stream().filter(predicate).toList();
     }
 
@@ -202,8 +229,13 @@ public class ScComponentCollection<T extends ScComponent> implements Iterable<T>
      * @return An {@link Iterator}.
      */
     @Override
-    public Iterator<T> iterator() {
+    public @NonNull Iterator<T> iterator() {
         final List<WebElement> webElements = webElements();
+        final Class<T> componentType = this.componentType;
+
+        if (componentType == null) {
+            throw new IllegalStateException("Component type is not set.");
+        }
         return webElements.stream().map($e -> this.$componentFromElement($e, componentType, this.containingObject)).iterator();
     }
 }

@@ -1,5 +1,6 @@
 package org.emwhyware.selentic.lib;
 
+import org.checkerframework.checker.nullness.qual.NonNull;
 import org.openqa.selenium.WebElement;
 
 import java.time.LocalDate;
@@ -17,7 +18,7 @@ public class ScDateTextbox extends ScTextbox {
     }
 
     @Override
-    public void enterText(CharSequence... text) {
+    public void enterText(@NonNull CharSequence... text) {
         final WebElement webElement = this.scrolledElement();
 
         this.focus();
@@ -25,7 +26,7 @@ public class ScDateTextbox extends ScTextbox {
         webElement.sendKeys(text);
     }
 
-    public void enterDate(LocalDate date) {
+    public void enterDate(@NonNull LocalDate date) {
         final WebElement webElement = this.scrolledElement();
 
         this.focus();
@@ -46,7 +47,7 @@ public class ScDateTextbox extends ScTextbox {
         }
     }
 
-    public ScDateTextbox withInputFormatter(DateTimeFormatter inputFormatter) {
+    public ScDateTextbox withInputFormatter(@NonNull DateTimeFormatter inputFormatter) {
         this.inputFormatter = inputFormatter;
         return this;
     }

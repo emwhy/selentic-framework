@@ -1,5 +1,7 @@
 package org.emwhyware.selentic.lib;
 
+import org.checkerframework.checker.nullness.qual.NonNull;
+
 /**
  * A builder class for constructing XPath selectors.
  * <p>
@@ -17,7 +19,7 @@ public final class ScComponentXPathBuilder extends ScSelectorBuilder {
      * @return A {@link ScXPath} representing the raw text provided.
      */
     @Override
-    public ScXPath raw(String selectorText) {
+    public @org.jspecify.annotations.NonNull ScXPath raw(@NonNull String selectorText) {
         return new ScXPathRaw(selectorText);
     }
 
@@ -28,7 +30,7 @@ public final class ScComponentXPathBuilder extends ScSelectorBuilder {
      * @param selectorProperties Optional properties/attributes to filter the tag.
      * @return The updated {@link ScXPath} instance.
      */
-    public ScXPath descendant(String tag, ScXpathPropertyType... selectorProperties) {
+    public ScXPath descendant(@NonNull String tag, @NonNull ScXpathPropertyType... selectorProperties) {
         this.setSelector(new ScXPathDescendant(tag, selectorProperties));
         return (ScXPath) this.selector();
     }
@@ -40,7 +42,7 @@ public final class ScComponentXPathBuilder extends ScSelectorBuilder {
      * @param selectorProperties Optional properties/attributes to filter the tag.
      * @return The updated {@link ScXPath} instance.
      */
-    public ScXPath child(String tag, ScXpathPropertyType... selectorProperties) {
+    public ScXPath child(@NonNull String tag, @NonNull ScXpathPropertyType... selectorProperties) {
         this.setSelector(new ScXPathChild(tag, selectorProperties));
         return (ScXPath) this.selector();
     }
@@ -52,7 +54,7 @@ public final class ScComponentXPathBuilder extends ScSelectorBuilder {
      * @param selectorProperties Optional properties/attributes to filter the tag.
      * @return The updated {@link ScXPath} instance.
      */
-    public ScXPath sibling(String tag, ScXpathPropertyType... selectorProperties) {
+    public ScXPath sibling(@NonNull String tag, @NonNull ScXpathPropertyType... selectorProperties) {
         this.setSelector(new ScXPathSibling(tag, selectorProperties));
         return (ScXPath) this.selector();
     }
@@ -65,7 +67,7 @@ public final class ScComponentXPathBuilder extends ScSelectorBuilder {
      * @param selectorProperties Optional properties/attributes to filter the tag.
      * @return The updated {@link ScXPath} instance.
      */
-    public ScXPath precedingSibling(String tag, ScXpathPropertyType... selectorProperties) {
+    public ScXPath precedingSibling(@NonNull String tag, @NonNull ScXpathPropertyType... selectorProperties) {
         this.setSelector(new ScXPathFollowing(tag, selectorProperties));
         return (ScXPath) this.selector();
     }
@@ -78,7 +80,7 @@ public final class ScComponentXPathBuilder extends ScSelectorBuilder {
      * @param selectorProperties Optional properties/attributes to filter the tag.
      * @return The updated {@link ScXPath} instance.
      */
-    public ScXPath following(String tag, ScXpathPropertyType... selectorProperties) {
+    public ScXPath following(@NonNull String tag, @NonNull ScXpathPropertyType... selectorProperties) {
         this.setSelector(new ScXPathSibling(tag, selectorProperties));
         return (ScXPath) this.selector();
     }
@@ -90,7 +92,7 @@ public final class ScComponentXPathBuilder extends ScSelectorBuilder {
      * @param selectorProperties Optional properties/attributes to filter the tag.
      * @return The updated {@link ScXPath} instance.
      */
-    public ScXPath preceding(String tag, ScXpathPropertyType... selectorProperties) {
+    public ScXPath preceding(@NonNull String tag, @NonNull ScXpathPropertyType... selectorProperties) {
         this.setSelector(new ScXPathPreceding(tag, selectorProperties));
         return (ScXPath) this.selector();
     }
@@ -102,7 +104,7 @@ public final class ScComponentXPathBuilder extends ScSelectorBuilder {
      * @param selectorProperties Optional properties/attributes to filter the tag.
      * @return The updated {@link ScXPath} instance.
      */
-    public ScXPath page(String tag, ScXpathPropertyType... selectorProperties) {
+    public ScXPath page(@NonNull String tag, @NonNull ScXpathPropertyType... selectorProperties) {
         this.setSelector(new ScXPathPage(tag, selectorProperties));
         return (ScXPath) this.selector();
     }
@@ -114,7 +116,7 @@ public final class ScComponentXPathBuilder extends ScSelectorBuilder {
      * @param selectorProperties Optional properties/attributes to filter the tag.
      * @return The updated {@link ScXPath} instance.
      */
-    public ScXPath descendant(ScXpathPropertyType... selectorProperties) {
+    public ScXPath descendant(@NonNull ScXpathPropertyType... selectorProperties) {
         this.setSelector(new ScXPathDescendant(selectorProperties));
         return (ScXPath) this.selector();
     }
@@ -125,7 +127,7 @@ public final class ScComponentXPathBuilder extends ScSelectorBuilder {
      * @param selectorProperties Optional properties/attributes to filter the tag.
      * @return The updated {@link ScXPath} instance.
      */
-    public ScXPath child(ScXpathPropertyType... selectorProperties) {
+    public ScXPath child(@NonNull ScXpathPropertyType... selectorProperties) {
         this.setSelector(new ScXPathChild(selectorProperties));
         return (ScXPath) this.selector();
     }
@@ -136,7 +138,7 @@ public final class ScComponentXPathBuilder extends ScSelectorBuilder {
      * @param selectorProperties Optional properties/attributes to filter the tag.
      * @return The updated {@link ScXPath} instance.
      */
-    public ScXPath sibling(ScXpathPropertyType... selectorProperties) {
+    public ScXPath sibling(@NonNull ScXpathPropertyType... selectorProperties) {
         this.setSelector(new ScXPathSibling(selectorProperties));
         return (ScXPath) this.selector();
     }
@@ -148,7 +150,7 @@ public final class ScComponentXPathBuilder extends ScSelectorBuilder {
      * @param selectorProperties Optional properties/attributes to filter the tag.
      * @return The updated {@link ScXPath} instance.
      */
-    public ScXPath precedingSibling(ScXpathPropertyType... selectorProperties) {
+    public ScXPath precedingSibling(@NonNull ScXpathPropertyType... selectorProperties) {
         this.setSelector(new ScXPathFollowing(selectorProperties));
         return (ScXPath) this.selector();
     }
@@ -160,7 +162,7 @@ public final class ScComponentXPathBuilder extends ScSelectorBuilder {
      * @param selectorProperties Optional properties/attributes to filter the tag.
      * @return The updated {@link ScXPath} instance.
      */
-    public ScXPath following(ScXpathPropertyType... selectorProperties) {
+    public ScXPath following(@NonNull ScXpathPropertyType... selectorProperties) {
         this.setSelector(new ScXPathSibling(selectorProperties));
         return (ScXPath) this.selector();
     }
@@ -171,7 +173,7 @@ public final class ScComponentXPathBuilder extends ScSelectorBuilder {
      * @param selectorProperties Optional properties/attributes to filter the tag.
      * @return The updated {@link ScXPath} instance.
      */
-    public ScXPath preceding(ScXpathPropertyType... selectorProperties) {
+    public ScXPath preceding(@NonNull ScXpathPropertyType... selectorProperties) {
         this.setSelector(new ScXPathPreceding(selectorProperties));
         return (ScXPath) this.selector();
     }
@@ -182,7 +184,7 @@ public final class ScComponentXPathBuilder extends ScSelectorBuilder {
      * @param selectorProperties Optional properties/attributes to filter the tag.
      * @return The updated {@link ScXPath} instance.
      */
-    public ScXPath page(ScXpathPropertyType... selectorProperties) {
+    public ScXPath page(@NonNull ScXpathPropertyType... selectorProperties) {
         this.setSelector(new ScXPathPage(selectorProperties));
         return (ScXPath) this.selector();
     }

@@ -1,5 +1,7 @@
 package org.emwhyware.selentic.lib;
 
+import org.checkerframework.checker.nullness.qual.NonNull;
+
 public final class ScSelectorNthOfTypeProperty extends ScSelectorProperty implements ScCssSelectorPropertyType {
     private final int index;
 
@@ -8,7 +10,7 @@ public final class ScSelectorNthOfTypeProperty extends ScSelectorProperty implem
     }
 
     @Override
-    public String build(Types type) {
+    public String build(@NonNull Types type) {
         String selector = ":nth-of-type(" + index + ")";
 
         if (this.negated()) {

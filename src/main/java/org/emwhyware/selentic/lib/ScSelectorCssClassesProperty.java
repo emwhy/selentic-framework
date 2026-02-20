@@ -1,5 +1,6 @@
 package org.emwhyware.selentic.lib;
 
+import org.checkerframework.checker.nullness.qual.NonNull;
 import org.emwhyware.selentic.lib.exception.ScSelectorException;
 
 import java.util.Arrays;
@@ -7,12 +8,12 @@ import java.util.Arrays;
 public final class ScSelectorCssClassesProperty extends ScSelectorProperty implements ScXpathPropertyType, ScCssSelectorPropertyType {
     private final String[] cssClasses;
 
-    ScSelectorCssClassesProperty(String... cssClasses) {
+    ScSelectorCssClassesProperty(@NonNull String... cssClasses) {
         this.cssClasses = cssClasses;
     }
 
     @Override
-    public String build(Types type) {
+    public String build(@NonNull Types type) {
         final StringBuilder selector = new StringBuilder();
 
         if (Arrays.stream(this.cssClasses).anyMatch(c -> c.trim().contains(" "))) {

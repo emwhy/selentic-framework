@@ -20,5 +20,7 @@ public class ScDragAndDropDropZone extends ScComponent {
         return $genericComponent(LABEL_TEXT).text();
     }
 
-    public final ScGenericComponent draggedItem = $component(DRAGGED_ITEM, ScGenericComponent.class);
+    public ScGenericComponent draggedItem() {
+        return $component(DRAGGED_ITEM, ScGenericComponent.class);
+    }
 }

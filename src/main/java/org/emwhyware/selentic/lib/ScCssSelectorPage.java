@@ -1,5 +1,7 @@
 package org.emwhyware.selentic.lib;
 
+import org.checkerframework.checker.nullness.qual.NonNull;
+
 /**
  * {@code ScCssSelectorPage} represents a root-level CSS selector that starts a new selector chain.
  *
@@ -35,7 +37,7 @@ public final class ScCssSelectorPage extends ScCssSelector {
      *
      * @param selectorProperties optional properties to filter page-level elements
      */
-    ScCssSelectorPage(ScCssSelectorPropertyType... selectorProperties) {
+    ScCssSelectorPage(@NonNull ScCssSelectorPropertyType... selectorProperties) {
         super(selectorProperties);
     }
 
@@ -50,7 +52,7 @@ public final class ScCssSelectorPage extends ScCssSelector {
      * @param tag The HTML/XML tag to target.
      * @param selectorProperties optional properties to filter page-level elements
      */
-    ScCssSelectorPage(String tag, ScCssSelectorPropertyType... selectorProperties) {
+    ScCssSelectorPage(@NonNull String tag, @NonNull ScCssSelectorPropertyType... selectorProperties) {
         super(tag, selectorProperties);
     }
 

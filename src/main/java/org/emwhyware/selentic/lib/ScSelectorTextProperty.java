@@ -1,17 +1,19 @@
 package org.emwhyware.selentic.lib;
 
 
+import org.checkerframework.checker.nullness.qual.NonNull;
+
 public final class ScSelectorTextProperty extends ScSelectorProperty implements ScXpathPropertyType {
     private final Conditions condition;
     private final String text;
 
-    ScSelectorTextProperty(Conditions condition, String text) {
+    ScSelectorTextProperty(@NonNull Conditions condition, String text) {
         this.condition = condition;
         this.text = text;
     }
 
     @Override
-    public String build(Types type) {
+    public String build(@NonNull Types type) {
         final String property = "text()";
         String selector = "";
 

@@ -4,8 +4,9 @@ import ch.qos.logback.classic.Level;
 import com.typesafe.config.Config;
 import com.typesafe.config.ConfigException;
 import com.typesafe.config.ConfigFactory;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.emwhyware.selentic.lib.ScBrowser;
-import org.emwhyware.selentic.lib.ScWebDriverOptions;
 import org.emwhyware.selentic.lib.util.ScLogHandler;
 import org.slf4j.Logger;
 
@@ -111,15 +112,16 @@ public class SelelenticConfig {
      * This constructor should not be called directly. Use {@link #config()} to access the singleton instance.
      * 
      */
+    @SuppressWarnings("nullness")
     private SelelenticConfig() {
         try {
             final Config config = ConfigFactory.load("selentic.conf");
 
             loadFromFile(config);
         } catch (Throwable th) {
-            LOG.error("Error while attempting to load 'selentic.conf' file. There are errors while parsing it.", th);
-            LOG.error("Using default configuration values for this run:");
-            LOG.error("""
+            LOG.warn("Error while attempting to load 'selentic.conf' file. There are errors while parsing it.", th);
+            LOG.warn("Using default configuration values for this run:");
+            LOG.warn("""
                     
                     
                     browser = '{}'
@@ -140,17 +142,16 @@ public class SelelenticConfig {
      *
      * @param config the {@link Config} object containing configuration properties
      */
-    private void loadFromFile(Config config) {
+    private void loadFromFile(@Nullable Config config) {
         int defaultConfigCount = 0;
 
-        try {
-            final ScBrowser browser = ScBrowser.toEnum(config.getString("browser"));
+        if (config == null) {
+            return;
+        }
 
-            if (browser == null) {
-                LOG.warn("'browser' value in selentic.conf file is invalid. Using the default value: {}", this.browser.toString());
-            } else {
-                this.browser = browser;
-            }
+        try {
+            this.browser = ScBrowser.toEnum(config.getString("browser"));
+
             LOG.info("browser = '{}'", this.browser.toString().toLowerCase());
         } catch (ConfigException ex) {
             LOG.info("browser = '{}' (default)", this.browser.toString().toLowerCase());
@@ -372,7 +373,7 @@ public class SelelenticConfig {
      * @param originalDir the original directory path string to parse
      * @return the normalized directory path with platform-specific separators converted to forward slashes
      */
-    private static String parseDir(String originalDir) {
+    private static String parseDir(@NonNull String originalDir) {
         if (originalDir.contains(":")) {
             return originalDir.split(":")[1].replace("\\", "/");
         } else {

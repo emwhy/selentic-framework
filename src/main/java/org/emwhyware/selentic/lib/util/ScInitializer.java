@@ -30,7 +30,7 @@ final class ScInitializer {
                         try {
                             FileUtils.forceDelete(directory);
                         } catch (IOException ex) {
-                            LOG.error(ex.getMessage(), ex);
+                            LOG.error(ex.getMessage() == null ? "" : ex.getMessage(), ex);
                         }
                     }
                 }

@@ -1,5 +1,7 @@
 package org.emwhyware.selentic.lib;
 
+import org.checkerframework.checker.nullness.qual.NonNull;
+
 /**
  * A builder class for constructing XPath selectors from a page.
  * <p>
@@ -17,7 +19,7 @@ public final class ScPageXPathBuilder extends ScSelectorBuilder {
      * @return A {@link ScXPath} representing the raw text provided.
      */
     @Override
-    public ScXPath raw(String selectorText) {
+    public @org.jspecify.annotations.NonNull ScXPath raw(@NonNull String selectorText) {
         return new ScXPathRaw(selectorText);
     }
 
@@ -32,7 +34,7 @@ public final class ScPageXPathBuilder extends ScSelectorBuilder {
      * @param selectorProperties Optional properties or attributes used to filter the tag.
      * @return The updated {@link ScXPath} instance.
      */
-    public ScXPath descendant(String tag, ScXpathPropertyType... selectorProperties) {
+    public ScXPath descendant(@NonNull String tag, @NonNull ScXpathPropertyType... selectorProperties) {
         this.setSelector(new ScXPathPage(tag, selectorProperties));
         return (ScXPath) this.selector();
     }
@@ -48,7 +50,7 @@ public final class ScPageXPathBuilder extends ScSelectorBuilder {
      * @param selectorProperties Optional properties or attributes used to filter the tag.
      * @return The updated {@link ScXPath} instance.
      */
-    public ScXPath descendant(ScXpathPropertyType... selectorProperties) {
+    public ScXPath descendant(@NonNull ScXpathPropertyType... selectorProperties) {
         this.setSelector(new ScXPathPage(selectorProperties));
         return (ScXPath) this.selector();
     }

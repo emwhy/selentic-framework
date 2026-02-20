@@ -1,5 +1,7 @@
 package org.emwhyware.selentic.lib.util;
 
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.emwhyware.selentic.lib.config.SelelenticConfig;
 import org.emwhyware.selentic.lib.exception.ScWaitTimeoutException;
 
@@ -70,7 +72,7 @@ public class ScWait {
      * @throws ScWaitTimeoutException if the condition does not become true within the default timeout
      * @throws NullPointerException if waitTrueCondition is null
      */
-    public static void waitUntil(ScWaitTrueCondition waitTrueCondition) {
+    public static void waitUntil(@NonNull ScWaitTrueCondition waitTrueCondition) {
         waitUntil(SelelenticConfig.config().waitTimeoutMilliseconds(), waitTrueCondition);
     }
 
@@ -86,7 +88,7 @@ public class ScWait {
      * @throws RuntimeException the exception returned by the onTimeout handler, or {@link ScWaitTimeoutException} if handler returns null
      * @throws NullPointerException if waitTrueCondition is null
      */
-    public static void waitUntil(ScWaitTrueCondition waitTrueCondition, ScOnTimeout onTimeout) {
+    public static void waitUntil(@NonNull ScWaitTrueCondition waitTrueCondition, ScOnTimeout onTimeout) {
         waitUntil(SelelenticConfig.config().waitTimeoutMilliseconds(), waitTrueCondition, onTimeout);
     }
 
@@ -101,7 +103,7 @@ public class ScWait {
      * @throws ScWaitTimeoutException if the condition does not become true within maxWaitMilliseconds
      * @throws NullPointerException if waitTrueCondition is null
      */
-    public static void waitUntil(long maxWaitMilliseconds, ScWaitTrueCondition waitTrueCondition) {
+    public static void waitUntil(long maxWaitMilliseconds, @NonNull ScWaitTrueCondition waitTrueCondition) {
         final ScWait wait = new ScWait(maxWaitMilliseconds);
 
         wait.doWaitTrue(waitTrueCondition);
@@ -120,7 +122,7 @@ public class ScWait {
      * @throws RuntimeException the exception returned by the onTimeout handler, or {@link ScWaitTimeoutException} if handler returns null or onTimeout is null
      * @throws NullPointerException if waitTrueCondition is null
      */
-    public static void waitUntil(long maxWaitMilliseconds, ScWaitTrueCondition waitTrueCondition, ScOnTimeout onTimeout) {
+    public static void waitUntil(long maxWaitMilliseconds, @NonNull ScWaitTrueCondition waitTrueCondition, ScOnTimeout onTimeout) {
         final ScWait wait = new ScWait(maxWaitMilliseconds);
 
         wait.doWaitTrue(waitTrueCondition, onTimeout);
@@ -139,7 +141,7 @@ public class ScWait {
      * @throws ScWaitTimeoutException if no non-null value is obtained within the default timeout
      * @throws NullPointerException if waitPresenceCondition is null
      */
-    public static <T> T waitUntilNonNull(ScWaitNonNullCondition<T> waitPresenceCondition) {
+    public static <T> @NonNull T waitUntilNonNull(@NonNull ScWaitNonNullCondition<T> waitPresenceCondition) {
         return ScWait.waitUntilNonNull(SelelenticConfig.config().waitTimeoutMilliseconds(), waitPresenceCondition);
     }
 
@@ -156,7 +158,7 @@ public class ScWait {
      * @throws ScWaitTimeoutException if no non-null value is obtained within maxWaitMilliseconds
      * @throws NullPointerException if waitPresenceCondition is null
      */
-    public static <T> T waitUntilNonNull(long maxWaitMilliseconds, ScWaitNonNullCondition<T> waitPresenceCondition) {
+    public static <T> @NonNull T waitUntilNonNull(long maxWaitMilliseconds, @NonNull ScWaitNonNullCondition<T> waitPresenceCondition) {
         final ScWait wait = new ScWait(maxWaitMilliseconds);
 
         return wait.doWaitNonNull(waitPresenceCondition);
@@ -187,7 +189,7 @@ public class ScWait {
      *
      * @param waitTrueCondition the condition to evaluate
      */
-    private void doWaitTrue(ScWaitTrueCondition waitTrueCondition) {
+    private void doWaitTrue(@NonNull ScWaitTrueCondition waitTrueCondition) {
         this.doWaitTrue(waitTrueCondition, null);
     }
 
@@ -203,7 +205,7 @@ public class ScWait {
      * @param onTimeout the optional timeout handler
      * @throws RuntimeException if timeout occurs and handler is invoked, or {@link ScWaitTimeoutException} otherwise
      */
-    private void doWaitTrue(ScWaitTrueCondition waitTrueCondition, ScOnTimeout onTimeout) {
+    private void doWaitTrue(@NonNull ScWaitTrueCondition waitTrueCondition, @Nullable ScOnTimeout onTimeout) {
         while (!waitTrueCondition.waitTrue()) {
             if (isTimedOut()) {
                 if (onTimeout == null) {
@@ -230,8 +232,9 @@ public class ScWait {
      * @return the non-null value from the condition
      * @throws ScWaitTimeoutException if the condition consistently returns null until timeout
      */
-    private <T> T doWaitNonNull(ScWaitNonNullCondition<T> waitNonNullCondition) {
-        Object value = null;
+    @SuppressWarnings("unchecked")
+    private <T> @NonNull T doWaitNonNull(@NonNull ScWaitNonNullCondition<T> waitNonNullCondition) {
+        Object value;
 
         while ((value = waitNonNullCondition.waitNonNull()) == null) {
             if (isTimedOut()) {
@@ -239,7 +242,7 @@ public class ScWait {
             }
             threadSleep((this.intervalMilliseconds));
         }
-        return (T) value;
+        return (@NonNull T) value;
     }
 
     /**
@@ -290,7 +293,7 @@ public class ScWait {
          *
          * @return the value being waited for, or null if not yet available
          */
-        T waitNonNull();
+        @Nullable T waitNonNull();
     }
 
     /**
@@ -308,6 +311,6 @@ public class ScWait {
          * @param timeoutException the {@link ScWaitTimeoutException} that triggered the timeout
          * @return a custom exception to throw, or null to throw the default timeout exception
          */
-        RuntimeException doOnTimeout(ScWaitTimeoutException timeoutException);
+        RuntimeException doOnTimeout(@NonNull ScWaitTimeoutException timeoutException);
     }
 }

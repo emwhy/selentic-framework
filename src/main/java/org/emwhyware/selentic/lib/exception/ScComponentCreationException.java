@@ -1,11 +1,13 @@
 package org.emwhyware.selentic.lib.exception;
 
+import org.checkerframework.checker.nullness.qual.NonNull;
+
 public class ScComponentCreationException extends RuntimeException {
-    public ScComponentCreationException(Throwable th) {
+    public ScComponentCreationException(@NonNull Throwable th) {
         super("Error while creating instance of a component.", th);
     }
 
-    public ScComponentCreationException(String text) {
+    public ScComponentCreationException(@NonNull String text) {
         super("Error while creating instance of a component: " + text);
     }
 }

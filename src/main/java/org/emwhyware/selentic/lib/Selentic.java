@@ -1,12 +1,11 @@
 package org.emwhyware.selentic.lib;
 
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.emwhyware.selentic.lib.config.SelelenticConfig;
 import org.emwhyware.selentic.lib.util.ScLogHandler;
+import org.emwhyware.selentic.lib.util.ScNullCheck;
 import org.openqa.selenium.*;
-import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.edge.EdgeDriver;
-import org.openqa.selenium.firefox.FirefoxDriver;
-import org.openqa.selenium.safari.SafariDriver;
 import org.openqa.selenium.support.events.EventFiringDecorator;
 import org.openqa.selenium.support.events.WebDriverListener;
 import org.slf4j.Logger;
@@ -15,9 +14,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Optional;
 
 /**
  * {@code Selentic} is the central gateway class for the Selentic Framework, providing access to
@@ -60,7 +57,7 @@ import java.util.Optional;
  */
 public final class Selentic {
     private static final Logger LOG = ScLogHandler.logger(Selentic.class);
-    private static final ThreadLocal<SelenticWebDriverContext> CONTEXT = ThreadLocal.withInitial(SelenticWebDriverContext::new);
+    private static final ThreadLocal<@Nullable SelenticWebDriverContext> CONTEXT = ThreadLocal.withInitial(SelenticWebDriverContext::new);
 
     /**
      * Private constructor to prevent instantiation of this utility class.
@@ -93,7 +90,7 @@ public final class Selentic {
      * @see SelelenticConfig#browser()
      */
     public static synchronized WebDriver driver() {
-        return CONTEXT.get().driver(SelelenticConfig.config().browser());
+        return context().driver(SelelenticConfig.config().browser());
     }
 
     /**
@@ -133,8 +130,8 @@ public final class Selentic {
      * @see #driver()
      * @see ScBrowser
      */
-    public static synchronized WebDriver driver(ScBrowser browser) {
-        return CONTEXT.get().driver(browser);
+    public static synchronized WebDriver driver(@NonNull ScBrowser browser) {
+        return context().driver(browser);
     }
 
     /**
@@ -173,7 +170,7 @@ public final class Selentic {
      * @see #withEdgeOptions(ScWebDriverOptions.EdgeOptionSetup)
      */
     public static synchronized void withChromeOptions(ScWebDriverOptions.ChromeOptionSetup optionSetup) {
-        CONTEXT.get().withChromeOptions(optionSetup);
+        context().withChromeOptions(optionSetup);
     }
 
     /**
@@ -208,7 +205,7 @@ public final class Selentic {
      * @see #withEdgeOptions(ScWebDriverOptions.EdgeOptionSetup)
      */
     public static synchronized void withFirefoxOptions(ScWebDriverOptions.FirefoxOptionSetup optionSetup) {
-        CONTEXT.get().withFirefoxOptions(optionSetup);
+        context().withFirefoxOptions(optionSetup);
     }
 
     /**
@@ -244,7 +241,7 @@ public final class Selentic {
      * @see #withFirefoxOptions(ScWebDriverOptions.FirefoxOptionSetup)
      */
     public static synchronized void withEdgeOptions(ScWebDriverOptions.EdgeOptionSetup optionSetup) {
-        CONTEXT.get().withEdgeOptions(optionSetup);
+        context().withEdgeOptions(optionSetup);
     }
 
     /**
@@ -273,7 +270,7 @@ public final class Selentic {
      * @see #withFirefoxOptions(ScWebDriverOptions.FirefoxOptionSetup)
      */
     public static synchronized void withSafariOptions(ScWebDriverOptions.SafariOptionSetup optionSetup) {
-        CONTEXT.get().withSafariOptions(optionSetup);
+        context().withSafariOptions(optionSetup);
     }
 
     /**
@@ -311,8 +308,8 @@ public final class Selentic {
      * @see WebDriverListener
      * @see #driver()
      */
-    public static void setWebDriverListener(WebDriverListener listener) {
-        CONTEXT.get().setWebDriverListener(listener);
+    public static void setWebDriverListener(@NonNull WebDriverListener listener) {
+        context().setWebDriverListener(listener);
     }
 
     /**
@@ -412,7 +409,7 @@ public final class Selentic {
      * @see #executeAsyncScript(String, Object...)
      * @see JavascriptExecutor
      */
-    public static Object executeScript(String script, Object... params) {
+    public static @Nullable Object executeScript(@NonNull String script, @NonNull Object... params) {
         final JavascriptExecutor executor = (JavascriptExecutor) driver();
         final Object[] objects = Arrays.stream(params).map(o -> o instanceof ScComponent ? ((ScComponent) o).existingElement() : o).toArray();
 
@@ -441,11 +438,11 @@ public final class Selentic {
      * @param script the asynchronous JavaScript code to execute
      * @param params variable number of parameters to pass to the script;
      *              {@link ScComponent} instances are converted to {@link WebElement}
-     * @return the result of asynchronous JavaScript execution as a String, or null if no value is returned
+     * @return the result of asynchronous JavaScript execution, or null if no value is returned
      * @see #executeScript(String, Object...)
      * @see JavascriptExecutor
      */
-    public static String executeAsyncScript(String script, Object... params) {
+    public static @Nullable Object executeAsyncScript(@NonNull String script, @NonNull Object... params) {
         final JavascriptExecutor executor = (JavascriptExecutor) driver();
         final List<Object> objects = Arrays.stream(params).map(o -> o instanceof ScComponent ? ((ScComponent) o).existingElement() : o).toList();
 
@@ -531,7 +528,7 @@ public final class Selentic {
      * @see ScLogHandler#screenshotDirectory()
      * @see TakesScreenshot
      */
-    public static void screenshot(String screenshotName) {
+    public static void screenshot(@NonNull String screenshotName) {
         if (!screenshotName.isEmpty()) {
             screenshotName = "-" + screenshotName;
         }
@@ -546,5 +543,13 @@ public final class Selentic {
         } catch (IOException ex) {
             LOG.error("Error while taking screenshot." , ex);
         }
+    }
+
+    /**
+     * Get context for this thread.
+     * @return a context
+     */
+    private static @NonNull SelenticWebDriverContext context() {
+        return ScNullCheck.requiresNonNull(CONTEXT.get(), SelenticWebDriverContext.class);
     }
 }

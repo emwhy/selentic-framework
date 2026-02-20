@@ -1,5 +1,7 @@
 package org.emwhyware.selentic.lib;
 
+import org.checkerframework.checker.nullness.qual.NonNull;
+
 /**
  * {@code ScCssSelectorChild} represents a CSS selector using the child combinator ({@code >}).
  *
@@ -41,7 +43,7 @@ public final class ScCssSelectorChild extends ScCssSelector {
      * @param priorSelectorNode the parent element selector in the chain
      * @param selectorProperties optional properties to filter child elements
      */
-    ScCssSelectorChild(ScCssSelector priorSelectorNode, ScCssSelectorPropertyType... selectorProperties) {
+    ScCssSelectorChild(@NonNull ScCssSelector priorSelectorNode, @NonNull ScCssSelectorPropertyType... selectorProperties) {
         super(priorSelectorNode, selectorProperties);
     }
 
@@ -57,7 +59,7 @@ public final class ScCssSelectorChild extends ScCssSelector {
      * @param priorSelectorNode the parent element selector in the chain
      * @param selectorProperties optional properties to filter child elements
      */
-    ScCssSelectorChild(ScCssSelector priorSelectorNode, String tag, ScCssSelectorPropertyType... selectorProperties) {
+    ScCssSelectorChild(@NonNull ScCssSelector priorSelectorNode, @NonNull String tag, @NonNull ScCssSelectorPropertyType... selectorProperties) {
         super(priorSelectorNode, tag, selectorProperties);
     }
 
