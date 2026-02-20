@@ -110,7 +110,7 @@ public final class SelenticWebDriverContext {
      * @see #withFirefoxOptions(ScWebDriverOptions.FirefoxOptionSetup)
      * @see #withEdgeOptions(ScWebDriverOptions.EdgeOptionSetup)
      */
-    synchronized void withChromeOptions(ScWebDriverOptions.ChromeOptionSetup optionSetup) {
+    synchronized void withChromeOptions(ScWebDriverOptions.@NonNull ChromeOptionSetup optionSetup) {
         optionSetup.options(webDriverOptions.chromeOptions(), webDriverOptions.chromePrefs());
 
         webDriverOptions.chromeOptions().setExperimentalOption("pref", webDriverOptions.chromePrefs());
@@ -147,7 +147,7 @@ public final class SelenticWebDriverContext {
      * @see #withChromeOptions(ScWebDriverOptions.ChromeOptionSetup)
      * @see #withEdgeOptions(ScWebDriverOptions.EdgeOptionSetup)
      */
-    synchronized void withFirefoxOptions(ScWebDriverOptions.FirefoxOptionSetup optionSetup) {
+    synchronized void withFirefoxOptions(ScWebDriverOptions.@NonNull FirefoxOptionSetup optionSetup) {
         optionSetup.options(webDriverOptions.firefoxOptions());
     }
 
@@ -183,7 +183,7 @@ public final class SelenticWebDriverContext {
      * @see #withChromeOptions(ScWebDriverOptions.ChromeOptionSetup)
      * @see #withFirefoxOptions(ScWebDriverOptions.FirefoxOptionSetup)
      */
-    synchronized void withEdgeOptions(ScWebDriverOptions.EdgeOptionSetup optionSetup) {
+    synchronized void withEdgeOptions(ScWebDriverOptions.@NonNull EdgeOptionSetup optionSetup) {
         optionSetup.options(webDriverOptions.edgeOptions(), webDriverOptions.edgePrefs());
 
         webDriverOptions.edgeOptions().setExperimentalOption("pref", webDriverOptions.edgeOptions());
@@ -214,7 +214,7 @@ public final class SelenticWebDriverContext {
      * @see #withChromeOptions(ScWebDriverOptions.ChromeOptionSetup)
      * @see #withFirefoxOptions(ScWebDriverOptions.FirefoxOptionSetup)
      */
-    synchronized void withSafariOptions(ScWebDriverOptions.SafariOptionSetup optionSetup) {
+    synchronized void withSafariOptions(ScWebDriverOptions.@NonNull SafariOptionSetup optionSetup) {
         optionSetup.options(webDriverOptions.safariOptions());
     }
 

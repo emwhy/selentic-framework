@@ -169,7 +169,7 @@ public final class Selentic {
      * @see #withFirefoxOptions(ScWebDriverOptions.FirefoxOptionSetup)
      * @see #withEdgeOptions(ScWebDriverOptions.EdgeOptionSetup)
      */
-    public static synchronized void withChromeOptions(ScWebDriverOptions.ChromeOptionSetup optionSetup) {
+    public static synchronized void withChromeOptions(ScWebDriverOptions.@NonNull ChromeOptionSetup optionSetup) {
         context().withChromeOptions(optionSetup);
     }
 
@@ -204,7 +204,7 @@ public final class Selentic {
      * @see #withChromeOptions(ScWebDriverOptions.ChromeOptionSetup)
      * @see #withEdgeOptions(ScWebDriverOptions.EdgeOptionSetup)
      */
-    public static synchronized void withFirefoxOptions(ScWebDriverOptions.FirefoxOptionSetup optionSetup) {
+    public static synchronized void withFirefoxOptions(ScWebDriverOptions.@NonNull FirefoxOptionSetup optionSetup) {
         context().withFirefoxOptions(optionSetup);
     }
 
@@ -240,7 +240,7 @@ public final class Selentic {
      * @see #withChromeOptions(ScWebDriverOptions.ChromeOptionSetup)
      * @see #withFirefoxOptions(ScWebDriverOptions.FirefoxOptionSetup)
      */
-    public static synchronized void withEdgeOptions(ScWebDriverOptions.EdgeOptionSetup optionSetup) {
+    public static synchronized void withEdgeOptions(ScWebDriverOptions.@NonNull EdgeOptionSetup optionSetup) {
         context().withEdgeOptions(optionSetup);
     }
 
@@ -269,7 +269,7 @@ public final class Selentic {
      * @see #withChromeOptions(ScWebDriverOptions.ChromeOptionSetup)
      * @see #withFirefoxOptions(ScWebDriverOptions.FirefoxOptionSetup)
      */
-    public static synchronized void withSafariOptions(ScWebDriverOptions.SafariOptionSetup optionSetup) {
+    public static synchronized void withSafariOptions(ScWebDriverOptions.@NonNull SafariOptionSetup optionSetup) {
         context().withSafariOptions(optionSetup);
     }
 
@@ -331,7 +331,7 @@ public final class Selentic {
      * @see #open()
      * @see #driver()
      */
-    public static void open(String url) {
+    public static void open(@NonNull String url) {
         driver().get(url);
     }
 
