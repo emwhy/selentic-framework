@@ -1,5 +1,6 @@
 package org.emwhyware.selentic.lib;
 
+import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.emwhyware.selentic.lib.config.SelelenticConfig;
 import org.openqa.selenium.WebDriver;
@@ -10,13 +11,11 @@ import org.openqa.selenium.safari.SafariDriver;
 import org.openqa.selenium.support.events.EventFiringDecorator;
 import org.openqa.selenium.support.events.WebDriverListener;
 
-import java.util.Optional;
-
 public final class SelenticWebDriverContext {
     private final ScWebDriverOptions webDriverOptions = new ScWebDriverOptions();
     private @NonNull ScBrowser browser = SelelenticConfig.config().browser();
-    private Optional<WebDriver> driver = Optional.empty();
-    private Optional<WebDriverListener> webDriverListener = Optional.empty();
+    private @MonotonicNonNull WebDriver driver;
+    private @MonotonicNonNull WebDriverListener webDriverListener;
 
     SelenticWebDriverContext() {}
 
@@ -60,8 +59,8 @@ public final class SelenticWebDriverContext {
      * @see Selentic#driver()
      * @see ScBrowser
      */
-    synchronized WebDriver driver() {
-        if (this.driver.isEmpty()) {
+    synchronized @NonNull WebDriver driver() {
+        if (this.driver == null) {
             if (SelelenticConfig.config().isHeadless()) {
                 Selentic.enableHeadless();
             }
@@ -73,17 +72,17 @@ public final class SelenticWebDriverContext {
                 case Chrome -> new ChromeDriver(webDriverOptions.chromeOptions());
                 case Edge -> new EdgeDriver(webDriverOptions.edgeOptions());
                 case Firefox -> new FirefoxDriver(webDriverOptions.firefoxOptions());
-                case Safari -> new SafariDriver();
+                case Safari -> new SafariDriver(webDriverOptions.safariOptions());
             };
 
             // Add listener class, if available.
-            if (webDriverListener.isPresent()) {
-                driver = new EventFiringDecorator<>(webDriverListener.get()).decorate(driver);
+            if (webDriverListener != null) {
+                driver = new EventFiringDecorator<>(webDriverListener).decorate(driver);
             }
-            this.driver = Optional.of(driver);
+            this.driver = driver;
             return driver;
         } else {
-            return this.driver.get();
+            return this.driver;
         }
     }
 
@@ -262,7 +261,7 @@ public final class SelenticWebDriverContext {
      * @see Selentic#driver()
      */
     synchronized void setWebDriverListener(@NonNull WebDriverListener listener) {
-        this.webDriverListener = Optional.of(listener);
+        this.webDriverListener = listener;
     }
 
 }
