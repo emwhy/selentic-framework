@@ -62,6 +62,9 @@ public final class SelenticWebDriverContext {
      */
     synchronized WebDriver driver() {
         if (this.driver.isEmpty()) {
+            if (SelelenticConfig.config().isHeadless()) {
+                Selentic.enableHeadless();
+            }
             // Set preferences.
             webDriverOptions.chromeOptions().setExperimentalOption("prefs", webDriverOptions.chromePrefs());
             webDriverOptions.edgeOptions().setExperimentalOption("prefs", webDriverOptions.edgePrefs());

@@ -36,6 +36,9 @@ import java.io.File;
  * // Default browser
  * browser = "chrome"  // Options: chrome, firefox, safari, edge
  *
+ * // Set headless execution
+ * headless = false
+ *
  * // Wait timeout in milliseconds
  * wait-timeout-millisec = 5000
  *
@@ -51,6 +54,7 @@ import java.io.File;
  * <h2>Default Configuration Values</h2>
  * <ul>
  *   <li><strong>browser:</strong> Chrome</li>
+ *   <li><strong>headless:</strong> false</li>
  *   <li><strong>wait-timeout-millisec:</strong> 5000 (5 seconds)</li>
  *   <li><strong>log.root-dir:</strong> {@code {user.dir}/log}</li>
  *   <li><strong>log.root-log-level:</strong> INFO</li>
@@ -76,6 +80,7 @@ public class SelelenticConfig {
     private static final SelelenticConfig GLOBAL_CONFIG = new SelelenticConfig();
 
     private ScBrowser browser = ScBrowser.Chrome;
+    private boolean headless = false;
     private long waitTimeoutMilliseconds = 5000;
     private Level rootLogLevel = Level.INFO;
     private Level selenticLogLevel = Level.DEBUG;
@@ -125,6 +130,7 @@ public class SelelenticConfig {
                     
                     
                     browser = '{}'
+                    headless = {}
                     wait-timeout-millisec = {}
                     log {
                         root-dir = '{}'
@@ -133,7 +139,7 @@ public class SelelenticConfig {
                         keep-duration-min = {}
                     }
 
-                    """, this.browser.toString().toLowerCase(), this.waitTimeoutMilliseconds, parseDir(this.logRootDir.getAbsolutePath()), this.rootLogLevel.toString().toUpperCase(), this.selenticLogLevel.toString().toUpperCase(), this.keepLogDurationMinutes);
+                    """, this.browser.toString().toLowerCase(), this.headless, this.waitTimeoutMilliseconds, parseDir(this.logRootDir.getAbsolutePath()), this.rootLogLevel.toString().toUpperCase(), this.selenticLogLevel.toString().toUpperCase(), this.keepLogDurationMinutes);
         }
     }
 
@@ -155,6 +161,15 @@ public class SelelenticConfig {
             LOG.info("browser = '{}'", this.browser.toString().toLowerCase());
         } catch (ConfigException ex) {
             LOG.info("browser = '{}' (default)", this.browser.toString().toLowerCase());
+            defaultConfigCount++;
+        }
+
+        try {
+            this.headless = config.getBoolean("headless");
+
+            LOG.info("headless = '{}'", this.headless);
+        } catch (ConfigException ex) {
+            LOG.info("headless = '{}' (default)", this.headless);
             defaultConfigCount++;
         }
 
@@ -208,13 +223,14 @@ public class SelelenticConfig {
             defaultConfigCount++;
         }
 
-        if (defaultConfigCount >= 6) {
+        if (defaultConfigCount >= 7) {
             LOG.info("You can control the configuration values by adding 'selentic.conf' file to one of classpath locations.");
             LOG.info("""
                     
                     
                     // 'selentic.conf' file content. You can copy and paste.
                     browser = '{}'
+                    headless = {}
                     wait-timeout-millisec = {}
                     log {
                         root-dir = '{}'
@@ -223,8 +239,16 @@ public class SelelenticConfig {
                         keep-duration-min = {}
                     }
 
-                    """, this.browser.toString().toLowerCase(), this.waitTimeoutMilliseconds, parseDir(this.logRootDir.getAbsolutePath()), this.rootLogLevel.toString().toUpperCase(), this.selenticLogLevel.toString().toUpperCase(), this.keepLogDurationMinutes);
+                    """, this.browser.toString().toLowerCase(), this.headless, this.waitTimeoutMilliseconds, parseDir(this.logRootDir.getAbsolutePath()), this.rootLogLevel.toString().toUpperCase(), this.selenticLogLevel.toString().toUpperCase(), this.keepLogDurationMinutes);
         }
+    }
+
+    /**
+     * Returns if the test is set to run in headless mode from configuration file.
+     * @return true if the configuration file sets headless value to true
+     */
+    public boolean isHeadless() {
+        return this.headless;
     }
 
     /**

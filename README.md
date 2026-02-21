@@ -75,6 +75,9 @@ The following shows the default values that can be modified.
  // Default browser
  browser = "chrome"  // Options: chrome, firefox, safari, edge
  
+ // Default headless configuration
+ headless = false
+ 
  // Wait timeout in milliseconds
  wait-timeout-millisec = 5000
  
