@@ -17,14 +17,16 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- * {@code Selentic} is the central gateway class for the Selentic Framework, providing access to
- * WebDriver instances and browser automation functionality.
- *
+ * {@code Selentic} is the central gateway class for the Selentic Framework, providing access to context that has
+ * WebDriver instances and web driver options.
  * <p>
- * <strong>Etymology:</strong> "Selentic" is a medieval term for a strip of land between two furrows.
- * Why it works: It evokes a clear, defined path or "strip." In a modular web component architecture,
- * you are testing individual "strips" (components) that make up the whole field (the page).
- * 
+ * The context ({@link SelenticWebDriverContext}) exists separately for each thread if running in multi-thread run, making
+ * it possible to run different configuration for each thread (like running different browsers in each thread).
+ * <p>
+ * Any changes to options must be done before calling the web driver for the first time in a thread. Changes after the
+ * web driver is created will be ignored.
+ * <p>
+ * Many of typically recommended options for each browser type is already set up. It's possible to add more options.
  *
  * <h2>Core Responsibilities</h2>
  * <ul>
@@ -54,6 +56,7 @@ import java.util.List;
  * @see ScWebDriverOptions
  * @see WebDriver
  * @see WebDriverListener
+ * @see SelenticWebDriverContext
  */
 public final class Selentic {
     private static final Logger LOG = ScLogHandler.logger(Selentic.class);
@@ -64,6 +67,32 @@ public final class Selentic {
      */
     private Selentic() {
         // Utility class - no instances
+    }
+
+    /**
+     * Allows setting a browser and override config value during run time.
+     * @param browser browser type
+     */
+    public synchronized static void setBrowser(ScBrowser browser) {
+        context().setBrowser(browser);
+    }
+
+    /**
+     * Enable headless mode for all browser types.
+     */
+    public synchronized static void enableHeadless() {
+        withChromeOptions((options, prefs) -> {
+            options.addArguments("--headless=new");
+        });
+        withEdgeOptions(((options, prefs) -> {
+            options.addArguments("--headless=new");
+        }));
+        withFirefoxOptions(options -> {
+            options.addArguments("--headless");
+        });
+        withSafariOptions(options -> {
+            options.setCapability("webkit:headless", true);
+        });
     }
 
     /**
@@ -84,54 +113,13 @@ public final class Selentic {
      * <strong>Browser Selection:</strong> The browser type is determined by the configuration setting
      * {@code browser} in the {@code selentic.conf} file. The default is Chrome.
      * 
-     *     *
+     *
      * @return the {@link WebDriver} instance for the current thread
-     * @see #driver(ScBrowser)
+     * @see #driver()
      * @see SelelenticConfig#browser()
      */
     public static synchronized WebDriver driver() {
-        return context().driver(SelelenticConfig.config().browser());
-    }
-
-    /**
-     * Returns the WebDriver instance for the current thread using the specified browser.
-     *
-     * <p>
-     * This method retrieves or creates a WebDriver instance for the calling thread with the specified
-     * browser type. If a driver already exists for the current thread and browser combination, it is
-     * reused. Otherwise, a new WebDriver instance is created and initialized with the appropriate
-     * browser options.
-     * 
-     *
-     * <p>
-     * <strong>Thread Safety:</strong> This method is synchronized to ensure thread-safe access.
-     * Multiple threads can safely call this method concurrently, each receiving their own driver instance.
-     * 
-     *
-     * <p>
-     * <strong>WebDriver Listener Support:</strong> If a custom {@link WebDriverListener} has been set via
-     * {@link #setWebDriverListener(WebDriverListener)}, the WebDriver will be wrapped with an
-     * {@link EventFiringDecorator} to capture WebDriver events.
-     * 
-     *
-     * <p>
-     * <strong>Browser Options:</strong> Each browser is initialized with default options. These can be
-     * customized before calling this method using the {@code withXxxOptions()} methods:
-     * <ul>
-     *   <li>{@link #withChromeOptions(ScWebDriverOptions.ChromeOptionSetup)}</li>
-     *   <li>{@link #withFirefoxOptions(ScWebDriverOptions.FirefoxOptionSetup)}</li>
-     *   <li>{@link #withEdgeOptions(ScWebDriverOptions.EdgeOptionSetup)}</li>
-     *   <li>{@link #withSafariOptions(ScWebDriverOptions.SafariOptionSetup)}</li>
-     * </ul>
-     *
-     *
-     * @param browser the {@link ScBrowser} type to use for creating the WebDriver
-     * @return the {@link WebDriver} instance for the current thread with the specified browser
-     * @see #driver()
-     * @see ScBrowser
-     */
-    public static synchronized WebDriver driver(@NonNull ScBrowser browser) {
-        return context().driver(browser);
+        return context().driver();
     }
 
     /**
@@ -145,7 +133,7 @@ public final class Selentic {
      *
      * <p>
      * <strong>Important:</strong> This method must be called BEFORE calling {@link #driver()} or
-     * {@link #driver(ScBrowser)} to ensure the options are applied to the new ChromeDriver instance.
+     * {@link #driver()} to ensure the options are applied to the new ChromeDriver instance.
      * 
      *
      * <p>
@@ -184,7 +172,7 @@ public final class Selentic {
      *
      * <p>
      * <strong>Important:</strong> This method must be called BEFORE calling {@link #driver()} or
-     * {@link #driver(ScBrowser)} to ensure the options are applied to the new FirefoxDriver instance.
+     * {@link #driver()} to ensure the options are applied to the new FirefoxDriver instance.
      * 
      *
      * <p>
@@ -219,7 +207,7 @@ public final class Selentic {
      *
      * <p>
      * <strong>Important:</strong> This method must be called BEFORE calling {@link #driver()} or
-     * {@link #driver(ScBrowser)} to ensure the options are applied to the new EdgeDriver instance.
+     * {@link #driver()} to ensure the options are applied to the new EdgeDriver instance.
      * 
      *
      * <p>
@@ -255,7 +243,7 @@ public final class Selentic {
      *
      * <p>
      * <strong>Important:</strong> This method must be called BEFORE calling {@link #driver()} or
-     * {@link #driver(ScBrowser)} to ensure the options are applied to the new SafariDriver instance.
+     * {@link #driver()} to ensure the options are applied to the new SafariDriver instance.
      * 
      *
      * <p>

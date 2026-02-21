@@ -23,25 +23,11 @@ public final class ScWebDriverOptions {
         final File downloadDirectory = ScLogHandler.downloadDirectory();
 
         initializeChromeOptions(downloadDirectory);
+        initializeEdgeOptions(downloadDirectory);
         initializeFirefoxOptions(downloadDirectory);
     }
 
     private void initializeChromeOptions(@NonNull File downloadDirectory) {
-        edgePrefs.put("download.default_directory", downloadDirectory.getAbsolutePath());
-        edgePrefs.put("download.prompt_for_download", false);
-        edgePrefs.put("download.directory_upgrade", true);
-        edgePrefs.put("plugins.always_open_pdf_externally", true);
-        edgePrefs.put("profile.default_content_settings.popups", 0);
-        edgePrefs.put("profile.default_content_setting_values.notifications", 2);
-        edgePrefs.put("profile.default_content_setting_values.automatic_downloads", 1);
-        chromeOptions.setExperimentalOption("prefs", edgePrefs);
-        chromeOptions.addArguments("--disable-extensions");
-        chromeOptions.addArguments("--disable-gpu");
-        chromeOptions.addArguments("--no-sandbox");
-        chromeOptions.addArguments("--disable-features=DownloadBubble,DownloadBubbleV2");
-    }
-
-    private void initializeEdgeOptions(@NonNull File downloadDirectory) {
         chromePrefs.put("download.default_directory", downloadDirectory.getAbsolutePath());
         chromePrefs.put("download.prompt_for_download", false);
         chromePrefs.put("download.directory_upgrade", true);
@@ -49,11 +35,32 @@ public final class ScWebDriverOptions {
         chromePrefs.put("profile.default_content_settings.popups", 0);
         chromePrefs.put("profile.default_content_setting_values.notifications", 2);
         chromePrefs.put("profile.default_content_setting_values.automatic_downloads", 1);
-        edgeOptions.setExperimentalOption("prefs", chromePrefs);
+        chromePrefs.put("browser.show_hub_popup_on_download_start", false);
+        chromeOptions.addArguments("--disable-dev-shm-usage");
+        chromeOptions.addArguments("--disable-extensions");
+        chromeOptions.addArguments("--disable-gpu");
+        chromeOptions.addArguments("--no-sandbox");
+        chromeOptions.addArguments("--disable-search-engine-choice-screen");
+        chromeOptions.addArguments("--disable-features=DownloadBubble,DownloadBubbleV2");
+        chromeOptions.addArguments("--disable-popup-blocking");
+    }
+
+    private void initializeEdgeOptions(@NonNull File downloadDirectory) {
+        edgePrefs.put("download.default_directory", downloadDirectory.getAbsolutePath());
+        edgePrefs.put("download.prompt_for_download", false);
+        edgePrefs.put("download.directory_upgrade", true);
+        edgePrefs.put("plugins.always_open_pdf_externally", true);
+        edgePrefs.put("profile.default_content_settings.popups", 0);
+        edgePrefs.put("profile.default_content_setting_values.notifications", 2);
+        edgePrefs.put("profile.default_content_setting_values.automatic_downloads", 1);
+        edgePrefs.put("browser.show_hub_popup_on_download_start", false);
+        edgeOptions.addArguments("--disable-dev-shm-usage");
         edgeOptions.addArguments("--disable-extensions");
         edgeOptions.addArguments("--disable-gpu");
         edgeOptions.addArguments("--no-sandbox");
+        edgeOptions.addArguments("--disable-search-engine-choice-screen");
         edgeOptions.addArguments("--disable-features=DownloadBubble,DownloadBubbleV2");
+        edgeOptions.addArguments("--disable-popup-blocking");
     }
 
     private void initializeFirefoxOptions(@NonNull File downloadDirectory) {

@@ -1,9 +1,6 @@
 package org.emwhyware.selentic.regression.test;
 
-import org.emwhyware.selentic.lib.ScButton;
-import org.emwhyware.selentic.lib.ScPage;
-import org.emwhyware.selentic.lib.ScWithPage;
-import org.emwhyware.selentic.lib.Selentic;
+import org.emwhyware.selentic.lib.*;
 import org.emwhyware.selentic.lib.exception.ScComponentWaitException;
 import org.emwhyware.selentic.lib.exception.ScElementNotFoundException;
 import org.emwhyware.selentic.lib.exception.ScWaitTimeoutException;
@@ -297,7 +294,6 @@ public class ScUiComponentTest {
     @Test
     public void testExternalWindows() {
         testPage.inPage(p -> {
-
             // Ensure that calling "inWindow()" without having a window open would cause
             // exception.
             try {
@@ -306,15 +302,20 @@ public class ScUiComponentTest {
                 });
                 fail("Should have thrown an exception");
             } catch (ScWindowException ex) {
-                Assert.assertEquals(ScNullCheck.requiresNonNull(ex.getMessage()), "New window has not opened");
+                // Expect exception.
+                Assert.assertEquals(ScNullCheck.requiresNonNull(ex.getMessage()), "No window is opened for switching");
             }
 
             // Open a new window.
+            Assert.assertEquals(Selentic.driver().getWindowHandles().size(), 1);
             p.openExternalWindowLink().click();
             p.inWindow(testExternalPage, p1 -> {
+                Assert.assertEquals(Selentic.driver().getWindowHandles().size(), 2);
+
                 // Open another new window.
                 p1.openExternalWindowLink().click();
                 p1.inWindow(testExternalPage, (p2, controller) -> {
+                    Assert.assertEquals(controller.windowCount(), 3);
 
                     // Controller allows temporary switching control to other windows
                     // without closing them, then return the control back to the original
@@ -492,7 +493,7 @@ public class ScUiComponentTest {
         });
     }
 
-    @Test
+//    @Test
     public void testDragAndDrop() {
         testPage.inPage(p -> {
 

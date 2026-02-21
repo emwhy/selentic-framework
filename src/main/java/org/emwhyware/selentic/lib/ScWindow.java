@@ -116,7 +116,6 @@ public final class ScWindow {
         final @NonNull String mainWindowHandle = driver.getWindowHandle();
         final @NonNull List<String> windowHandles = getWindowHandles(driver);
         final @NonNull String newWindowHandle = switchToTopWindow(driver, windowHandles);
-        int beforeCloseAttemptCount = 0;
 
         try {
             if (predicate != null) {
@@ -128,47 +127,43 @@ public final class ScWindow {
                 throw new ScWindowException("No predicate defined.");
             }
         } catch (Throwable th) {
-            driver.switchTo().window(mainWindowHandle);
-            ScWait.waitUntil(() -> driver.getWindowHandle().equals(mainWindowHandle));
             throw new ScWindowException("Error while in external window.", th);
-        }
-        beforeCloseAttemptCount = windowHandles.size();
+        } finally {
+            if (driver.getWindowHandles().stream().toList().getLast().equals(newWindowHandle)) {
+                final AtomicInteger beforeCloseAttemptCountAtomic = new AtomicInteger(windowHandles.size());
 
-        // Make sure that the actual window count matches expected count.
-        if (beforeCloseAttemptCount == driver.getWindowHandles().size()) {
-            final AtomicInteger beforeCloseAttemptCountAtomic = new AtomicInteger(beforeCloseAttemptCount);
+                ScWait.waitUntil(() -> {
+                    for (final String handle : driver.getWindowHandles()) {
+                        if (handle.equals(newWindowHandle)) {
+                            driver.switchTo().window(newWindowHandle);
 
-            ScWait.waitUntil(() -> {
-                for (final String handle : driver.getWindowHandles()) {
-                    if (handle.equals(newWindowHandle)) {
-                        driver.switchTo().window(newWindowHandle);
-                        driver.close();
-                        LOG.debug("Closed window [{}]", newWindowHandle);
-                        windowHandles.remove(newWindowHandle);
-                        break;
+                            try {
+                                driver.close();
+                                LOG.debug("Closed window [{}]", newWindowHandle);
+                            } catch (Throwable th) {
+                                LOG.warn("Window close attempt failed.", th);
+                            }
+                            windowHandles.remove(newWindowHandle);
+                            break;
+                        }
                     }
-                }
 
-                return beforeCloseAttemptCountAtomic.get() == windowHandles.size() + 1;
-            });
-
-            if (driver.getWindowHandles().size() != windowHandles.size()) {
-                String exceptionText = "Unexpected window count: previous window handle = " + newWindowHandle;
-
-                exceptionText += " actual = " + driver.getWindowHandles().size() + " [" + String.join(", ", driver.getWindowHandles()) + "]";
-                exceptionText += " expected = " + windowHandles.size() + " [" + String.join(", ", windowHandles) + "]";
-                throw new ScWindowException(exceptionText);
+                    return beforeCloseAttemptCountAtomic.get() > windowHandles.size();
+                });
             }
-        }
 
-        // Switch back window control to the previous window.
-        try {
-            driver.switchTo().window(mainWindowHandle);
-            ScWait.waitUntil(() -> driver.getWindowHandle().equals(mainWindowHandle));
-            LOG.debug("Return to window :'{}' [{}]", ScNullCheck.requiresNonNull(driver.getTitle()), ScNullCheck.requiresNonNull(mainWindowHandle));
-        } catch (NoSuchWindowException ex) {
-            LOG.warn("Encountered NoSuchWindowException: count = {} [{}]", driver.getWindowHandles().size(), String.join(", ", driver.getWindowHandles()));
-            LOG.warn("Exception", ex);
+            // Switch back window control to the previous window.
+            try {
+                final String targetWindow = driver.getWindowHandles().stream().toList().getLast();
+
+                driver.switchTo().window(targetWindow);
+                ScWait.waitUntil(() -> driver.getWindowHandle().equals(targetWindow));
+                LOG.debug("Return to window :'{}' [{}]", ScNullCheck.requiresNonNull(driver.getTitle()), ScNullCheck.requiresNonNull(targetWindow));
+            } catch (NoSuchWindowException ex) {
+                LOG.warn("Encountered NoSuchWindowException: count = {} [{}]", driver.getWindowHandles().size(), String.join(", ", driver.getWindowHandles()));
+                LOG.warn("Exception", ex);
+            }
+
         }
     }
 
@@ -197,15 +192,14 @@ public final class ScWindow {
      * @return
      */
     private List<String> getWindowHandles(@NonNull WebDriver driver) {
-        String currentHandle = driver.getWindowHandle();
-        List<String> windowHandles = new ArrayList<>(driver.getWindowHandles());
+        final String currentHandle = driver.getWindowHandle();
+        final List<String> windowHandles = new ArrayList<>(driver.getWindowHandles());
 
         // Wait until an additional window has been added.
         try {
+            LOG.debug("Current window handle: {}", currentHandle);
             return ScWait.waitUntilNonNull(() -> {
-                // Parent window index will be 0 initially
-                // Adding + 2 because comparing size with index
-                if (driver.getWindowHandles().size() == windowHandles.indexOf(currentHandle) + 2) {
+                if (driver.getWindowHandles().size() == windowHandles.size()) {
                     for (final String handle : driver.getWindowHandles()) {
                         if (!windowHandles.contains(handle)) {
                             windowHandles.add(handle);
@@ -220,6 +214,9 @@ public final class ScWindow {
         }
     }
 
+    /**
+     * The controller to allow moving to another opened window.
+     */
     public final class ScWindowController {
         private final WebDriver webDriver;
         private final String currentHandle;
@@ -261,10 +258,18 @@ public final class ScWindow {
         }
     }
 
+    /**
+     * Interface to allow window action.
+     * @param <T>
+     */
     public interface ScWindowAction<T extends ScPage> {
         void inWindow(@NonNull T page);
     }
 
+    /**
+     * Interface to allow window action with controller.
+     * @param <T>
+     */
     public interface ScWindowActionWithController<T extends ScPage> {
         void inWindow(@NonNull T page, @NonNull ScWindowController controller);
     }
