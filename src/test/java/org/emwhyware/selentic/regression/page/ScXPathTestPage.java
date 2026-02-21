@@ -14,7 +14,10 @@ public class ScXPathTestPage extends ScPage {
     private static final ScXPath XPATH_ATTR_ENDS_WITH_TEST_TEXTS = _xpath.descendant(_attr("scope").endsWith("ol"));
     private static final ScXPath XPATH_ATTR_CONTAINS_TEST_TEXTS = _xpath.descendant(_attr("scope").contains("ol"));
     private static final ScXPath XPATH_ATTR_WHOLE_WORD_TEST_TEXTS = _xpath.descendant(_attr("class").wholeWord("status"));
+
     private static final ScXPath XPATH_INDEX_TEST_TEXTS = _xpath.descendant(_id().is("outer-table-1")).child("tbody").child("tr", _indexFrom(3), _indexTo(6)).child("td", _indexAt(0));
+    private static final ScXPath XPATH_FIRST_TEST_TEXT = _xpath.descendant(_id().is("outer-table-1")).child("tbody").child("tr", _first()).child("td", _indexAt(0));
+    private static final ScXPath XPATH_LAST_TEST_TEXT = _xpath.descendant(_id().is("outer-table-1")).child("tbody").child("tr", _last()).child("td", _indexAt(0));
 
     private static final ScXPath XPATH_TEXT_TEST_IS_TEXTS = _xpath.descendant(_text().is("Active")).precedingSibling("td");
     private static final ScXPath XPATH_TEXT_TEST_STARTS_WITH_TEXTS = _xpath.descendant(_text().startsWith("Act")).precedingSibling("td");
@@ -65,6 +68,14 @@ public class ScXPathTestPage extends ScPage {
 
     public ScComponentCollection<ScGenericComponent> xPathIndexTestTexts() {
         return $$components(XPATH_INDEX_TEST_TEXTS, ScGenericComponent.class);
+    }
+
+    public ScGenericComponent xPathFirstText() {
+        return $genericComponent(XPATH_FIRST_TEST_TEXT);
+    }
+
+    public ScGenericComponent xPathLastText() {
+        return $genericComponent(XPATH_LAST_TEST_TEXT);
     }
 
     public ScComponentCollection<ScGenericComponent> xPathTextTestIsTexts() {

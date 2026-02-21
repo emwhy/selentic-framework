@@ -6,6 +6,7 @@ import org.emwhyware.selentic.lib.config.SelelenticConfig;
 import org.emwhyware.selentic.lib.util.ScLogHandler;
 import org.emwhyware.selentic.lib.util.ScNullCheck;
 import org.openqa.selenium.*;
+import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.events.WebDriverListener;
 import org.slf4j.Logger;
 
@@ -101,7 +102,13 @@ public final class Selentic {
      * This method retrieves or creates a WebDriver instance for the calling thread. If no driver exists
      * for the current thread, a new one is created using the browser configured in {@link SelelenticConfig}.
      * The WebDriver instance is reused for subsequent calls from the same thread.
-     * 
+     *
+     * <p>
+     * Generally, the accessing the driver directly should be limited when implementing tests, pages, and components.
+     * The Selentic Frame implements many cases where the WebDriver class is often directly accessed, such as
+     * window switching ({@link ScWindow}, frame switching ({@link ScFrame}, {@link ScFrameContent}),
+     * JavaScript execution ({@link #executeScript(String, Object...)}, {@link #executeAsyncScript(String, Object...)}), accessing {@link Actions}
+     * object ({@link ScComponent#actions()}), handling {@link Alert} ({@link ScPage#inAlert(ScPage.ScAlertAction)}), etc.
      *
      * <p>
      * <strong>Thread Safety:</strong> This method is synchronized to ensure thread-safe access. Each thread
@@ -110,12 +117,21 @@ public final class Selentic {
      *
      * <p>
      * <strong>Browser Selection:</strong> The browser type is determined by the configuration setting
-     * {@code browser} in the {@code selentic.conf} file. The default is Chrome.
+     * {@code browser} in the {@code selentic.conf} file. The default is Chrome. It can also be set in code using
+     * {@link #setBrowser(ScBrowser)} before the web driver starts.
      * 
      *
      * @return the {@link WebDriver} instance for the current thread
      * @see #driver()
      * @see SelelenticConfig#browser()
+     * @see #setBrowser(ScBrowser)
+     * @see ScWindow
+     * @see ScFrame
+     * @see ScFrameContent
+     * @see #executeScript(String, Object...)
+     * @see #executeAsyncScript(String, Object...)
+     * @see ScComponent#actions()
+     * @see ScPage#inAlert(ScPage.ScAlertAction)
      */
     public static synchronized WebDriver driver() {
         return context().driver();
@@ -152,9 +168,9 @@ public final class Selentic {
      *
      * @param optionSetup a {@link ScWebDriverOptions.ChromeOptionSetup} functional interface that receives
      *                   the Chrome options and preferences for configuration
-     * @see ScWebDriverOptions.ChromeOptionSetup
      * @see #withFirefoxOptions(ScWebDriverOptions.FirefoxOptionSetup)
      * @see #withEdgeOptions(ScWebDriverOptions.EdgeOptionSetup)
+     * @see #enableHeadless()
      */
     public static synchronized void withChromeOptions(ScWebDriverOptions.@NonNull ChromeOptionSetup optionSetup) {
         context().withChromeOptions(optionSetup);
@@ -187,9 +203,9 @@ public final class Selentic {
      *
      * @param optionSetup a {@link ScWebDriverOptions.FirefoxOptionSetup} functional interface that receives
      *                   the Firefox options for configuration
-     * @see ScWebDriverOptions.FirefoxOptionSetup
      * @see #withChromeOptions(ScWebDriverOptions.ChromeOptionSetup)
      * @see #withEdgeOptions(ScWebDriverOptions.EdgeOptionSetup)
+     * @see #enableHeadless()
      */
     public static synchronized void withFirefoxOptions(ScWebDriverOptions.@NonNull FirefoxOptionSetup optionSetup) {
         context().withFirefoxOptions(optionSetup);
@@ -223,9 +239,9 @@ public final class Selentic {
      *
      * @param optionSetup a {@link ScWebDriverOptions.EdgeOptionSetup} functional interface that receives
      *                   the Edge options and preferences for configuration
-     * @see ScWebDriverOptions.EdgeOptionSetup
      * @see #withChromeOptions(ScWebDriverOptions.ChromeOptionSetup)
      * @see #withFirefoxOptions(ScWebDriverOptions.FirefoxOptionSetup)
+     * @see #enableHeadless()
      */
     public static synchronized void withEdgeOptions(ScWebDriverOptions.@NonNull EdgeOptionSetup optionSetup) {
         context().withEdgeOptions(optionSetup);
@@ -252,9 +268,9 @@ public final class Selentic {
      *
      * @param optionSetup a {@link ScWebDriverOptions.SafariOptionSetup} functional interface that receives
      *                   the Safari options for configuration
-     * @see ScWebDriverOptions.SafariOptionSetup
      * @see #withChromeOptions(ScWebDriverOptions.ChromeOptionSetup)
      * @see #withFirefoxOptions(ScWebDriverOptions.FirefoxOptionSetup)
+     * @see #enableHeadless()
      */
     public static synchronized void withSafariOptions(ScWebDriverOptions.@NonNull SafariOptionSetup optionSetup) {
         context().withSafariOptions(optionSetup);
@@ -303,7 +319,7 @@ public final class Selentic {
      * Navigates to the specified URL.
      *
      * <p>
-     * This method is a convenience wrapper around {@link WebDriver#get(String)} that navigates the
+     * This method starts the web driver, then navigates the
      * current browser to the specified URL.
      * 
      *
@@ -326,7 +342,7 @@ public final class Selentic {
      * Navigates to a blank page.
      *
      * <p>
-     * This method navigates the current browser to about:blank, which is useful for clearing the browser
+     * This method starts the web driver, then navigates the current browser to about:blank, which is useful for clearing the browser
      * state or initializing a clean slate before test execution.
      * 
      *
@@ -351,7 +367,9 @@ public final class Selentic {
      * This method terminates the WebDriver session for the calling thread, closes all associated browser
      * windows and tabs, and removes the driver from the thread-local storage. After calling this method,
      * a new WebDriver instance will be created the next time {@link #driver()} is called.
-     * 
+     * <p>
+     * To ensure WebDriver state and thread integrity, it is highly recommended to call this method rather than
+     * calling {@link WebDriver#quit()} directly by accessing the web driver object.
      *
      * <p>
      * <strong>Thread Safety:</strong> This method is synchronized to ensure thread-safe access to the
@@ -361,8 +379,11 @@ public final class Selentic {
      * @see #driver()
      */
     public static synchronized void quit() {
-        driver().quit();
-        CONTEXT.remove();
+        try {
+            driver().quit();
+        } finally {
+            CONTEXT.remove();
+        }
     }
 
     /**

@@ -33,7 +33,7 @@ import java.util.regex.Pattern;
 import static org.testng.AssertJUnit.assertTrue;
 import static org.testng.AssertJUnit.fail;
 
-public class ScUiComponentTest {
+public class ScUiComponentTest extends ScBaseTest {
     private static final Logger LOG = ScLogHandler.logger(ScUiComponentTest.class);
 
     private final ScWithPage<ScUiComponentPage> testPage = ScPage.with(ScUiComponentPage.class);

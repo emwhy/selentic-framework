@@ -9,7 +9,7 @@ import org.testng.annotations.Test;
 
 import java.util.List;
 
-public class ScXPathTest {
+public class ScXPathTest extends ScBaseTest {
     private final ScWithPage<ScXPathTestPage> selectorTestPage = ScPage.with(ScXPathTestPage.class);
 
     @BeforeClass
@@ -71,8 +71,12 @@ public class ScXPathTest {
     public void testXPathIndex() {
         selectorTestPage.inPage(p -> {
             final ScComponentCollection<ScGenericComponent> components = p.xPathIndexTestTexts();
+            final ScGenericComponent componentFirst = p.xPathFirstText();
+            final ScGenericComponent componentLast = p.xPathLastText();
 
             Assert.assertEquals(components.texts(), List.of("Quaternary Delta", "Pentary Epsilon", "Hexary Zeta", "Septary Eta", "Octary Theta", "Nonary Iota", "Decary Kappa"));
+            Assert.assertEquals(componentFirst.text(), "Primary Alpha");
+            Assert.assertEquals(componentLast.text(), "Node Mu");
         });
     }
 

@@ -9,7 +9,7 @@ import org.testng.annotations.Test;
 
 import java.util.List;
 
-public class ScCssSelectorTest {
+public class ScCssSelectorTest extends ScBaseTest {
     private final ScWithPage<ScCssSelectorTestPage> selectorTestPage = ScPage.with(ScCssSelectorTestPage.class);
 
     @BeforeClass

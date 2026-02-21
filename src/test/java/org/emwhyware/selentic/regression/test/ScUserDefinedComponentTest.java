@@ -9,7 +9,7 @@ import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
-public class ScUserDefinedComponentTest {
+public class ScUserDefinedComponentTest extends ScBaseTest {
     private final ScWithPage<ScLoginEnhancedPage> loginPage = ScPage.with(ScLoginEnhancedPage.class);
 
     @BeforeClass

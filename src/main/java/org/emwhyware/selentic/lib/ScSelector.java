@@ -19,6 +19,7 @@ import java.util.Optional;
  */
 public abstract sealed class ScSelector permits ScCssSelector, ScXPath {
     private final @Nullable ScSelector priorSelectorNode;
+    private @NonNull String cache = "";
 
     /**
      * Constructs a root selector with no prior selector node.
@@ -70,6 +71,34 @@ public abstract sealed class ScSelector permits ScCssSelector, ScXPath {
      */
     protected boolean isAbsolute() {
         return priorSelectorNode == null ? this instanceof ScCssSelectorPage || this instanceof ScXPathPage : priorSelectorNode.isAbsolute();
+    }
+
+    /**
+     * Check if the selector text was previously generated and is cached.
+     *
+     * @return true if cached
+     */
+    protected boolean isCached() {
+        return !this.cache.isEmpty();
+    }
+
+    /**
+     * Store generated selector into cache.
+     *
+     * @param cachedSelectorText selector to be cached
+     */
+    protected void setCache(@NonNull String cachedSelectorText) {
+        this.cache = cachedSelectorText;
+    }
+
+    /**
+     * Override to return cached selector text.
+     *
+     * @return cached text.
+     */
+    @Override
+    public String toString() {
+        return this.cache;
     }
 
     /**

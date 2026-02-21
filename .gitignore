@@ -35,8 +35,11 @@ bin/
 /dist/
 /nbdist/
 /.nb-gradle/
+
+### Selentic specific ###
 /log/
 *.conf
+*.log
 
 ### VS Code ###
 .vscode/

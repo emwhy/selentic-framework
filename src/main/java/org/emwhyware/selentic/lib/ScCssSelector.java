@@ -149,8 +149,11 @@ public sealed abstract class ScCssSelector extends ScSelector permits ScCssSelec
      */
     @Override
     public String toString() {
-        validateSelector(this.tag, this.selectorProperties);
-        return (priorSelectorNode().map(Object::toString).orElse("")) + nodeText() + tag + String.join("", Arrays.stream(selectorProperties).map(p -> p.build(ScSelectorPropertyType.Types.CssSelector)).toList());
+        if (!isCached()) {
+            validateSelector(this.tag, this.selectorProperties);
+            setCache((priorSelectorNode().map(Object::toString).orElse("")) + nodeText() + tag + String.join("", Arrays.stream(selectorProperties).map(p -> p.build(ScSelectorPropertyType.Types.CssSelector)).toList()));
+        }
+        return super.toString();
     }
 
     /**
