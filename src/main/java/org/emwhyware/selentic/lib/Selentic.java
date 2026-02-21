@@ -6,7 +6,6 @@ import org.emwhyware.selentic.lib.config.SelelenticConfig;
 import org.emwhyware.selentic.lib.util.ScLogHandler;
 import org.emwhyware.selentic.lib.util.ScNullCheck;
 import org.openqa.selenium.*;
-import org.openqa.selenium.support.events.EventFiringDecorator;
 import org.openqa.selenium.support.events.WebDriverListener;
 import org.slf4j.Logger;
 

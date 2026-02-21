@@ -1,6 +1,7 @@
 package org.emwhyware.selentic.lib;
 
 import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.openqa.selenium.By;
 
 import java.util.Optional;
@@ -17,39 +18,29 @@ import java.util.Optional;
  * @see org.openqa.selenium.By
  */
 public abstract sealed class ScSelector permits ScCssSelector, ScXPath {
-    private final Optional<ScSelector> priorSelectorNode;
+    private final @Nullable ScSelector priorSelectorNode;
 
     /**
      * Constructs a root selector with no prior selector node.
      * <p>
      * This constructor is typically used when creating the first selector in a chain
      * or when creating a standalone selector that does not reference any prior selector.
-     * 
-     * <p>
-     * The {@code priorSelectorNode} will be {@link Optional#empty() empty}.
-     * 
      */
     protected ScSelector() {
-        this.priorSelectorNode = Optional.empty();
+        this.priorSelectorNode = null;
     }
 
     /**
      * Constructs a selector that references a prior selector node.
      * <p>
      * This constructor is used when chaining selectors together, allowing the creation
-     * of complex hierarchical selector structures. The prior selector node is stored as
-     * an {@link Optional} reference and can be retrieved via {@link #priorSelectorNode()}.
-     * 
-     * <p>
-     * This pattern enables flexible selector composition while maintaining references to
-     * the selector hierarchy.
-     * 
-     *
+     * of complex hierarchical selector structures.
+     **
      * @param priorSelectorNode the previous selector in the chain, must not be null
      * @throws NullPointerException if priorSelectorNode is null
      */
     protected ScSelector(@NonNull ScSelector priorSelectorNode) {
-        this.priorSelectorNode = Optional.of(priorSelectorNode);
+        this.priorSelectorNode = priorSelectorNode;
     }
 
     /**
@@ -69,7 +60,7 @@ public abstract sealed class ScSelector permits ScCssSelector, ScXPath {
      * @see Optional
      */
     protected Optional<ScSelector> priorSelectorNode() {
-        return priorSelectorNode;
+        return Optional.ofNullable(priorSelectorNode);
     }
 
     /**
@@ -78,7 +69,7 @@ public abstract sealed class ScSelector permits ScCssSelector, ScXPath {
      * @return true if selector should look at the entire page
      */
     protected boolean isAbsolute() {
-        return priorSelectorNode.map(ScSelector::isAbsolute).orElseGet(() -> this instanceof ScCssSelectorPage || this instanceof ScXPathPage);
+        return priorSelectorNode == null ? this instanceof ScCssSelectorPage || this instanceof ScXPathPage : priorSelectorNode.isAbsolute();
     }
 
     /**

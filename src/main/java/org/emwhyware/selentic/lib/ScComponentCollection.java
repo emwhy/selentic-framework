@@ -2,12 +2,16 @@ package org.emwhyware.selentic.lib;
 
 import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
 import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.emwhyware.selentic.lib.exception.ScComponentCreationException;
 import org.emwhyware.selentic.lib.exception.ScEntryNotFoundException;
 import org.emwhyware.selentic.lib.util.ScNullCheck;
 import org.openqa.selenium.WebElement;
 
-import java.util.*;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Spliterator;
+import java.util.Spliterators;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
@@ -28,7 +32,7 @@ public class ScComponentCollection<T extends ScComponent> implements Iterable<T>
     private @MonotonicNonNull ScSelector selector;
     private @MonotonicNonNull Class<T> componentType;
     private @MonotonicNonNull ScAbstractComponent $callerComponent;
-    private Optional<ScAbstractComponent> containingObject = Optional.empty();
+    private @MonotonicNonNull ScAbstractComponent containingObject;
 
     /**
      * Protected constructor used by the framework for internal instantiation.
@@ -68,7 +72,7 @@ public class ScComponentCollection<T extends ScComponent> implements Iterable<T>
      * @param containingObject The containing {@link ScAbstractComponent}.
      */
     final void setContainingObject(@NonNull ScAbstractComponent containingObject) {
-        this.containingObject = Optional.ofNullable(containingObject);
+        this.containingObject = containingObject;
     }
 
     /**
@@ -107,13 +111,14 @@ public class ScComponentCollection<T extends ScComponent> implements Iterable<T>
      * @return A new instance of type T.
      * @throws ScComponentCreationException if reflection-based instantiation fails.
      */
-    private T $componentFromElement(@NonNull WebElement webElement, @NonNull Class<T> componentType, @NonNull Optional<ScAbstractComponent> containingObject) {
+    private T $componentFromElement(@NonNull WebElement webElement, @NonNull Class<T> componentType, @Nullable ScAbstractComponent containingObject) {
         try {
             T component;
-            if (containingObject.isEmpty()) {
+
+            if (containingObject == null) {
                 component = componentType.getDeclaredConstructor().newInstance();
             } else {
-                component = componentType.getDeclaredConstructor(containingObject.get().getClass()).newInstance(containingObject.get());
+                component = componentType.getDeclaredConstructor(containingObject.getClass()).newInstance(containingObject);
             }
             component.setWebElement(webElement);
             component.setCallerComponent(ScNullCheck.requiresNonNull(this.$callerComponent, ScAbstractComponent.class));

@@ -1,6 +1,9 @@
 package org.emwhyware.selentic.regression.test;
 
-import org.emwhyware.selentic.lib.*;
+import org.emwhyware.selentic.lib.ScButton;
+import org.emwhyware.selentic.lib.ScPage;
+import org.emwhyware.selentic.lib.ScWithPage;
+import org.emwhyware.selentic.lib.Selentic;
 import org.emwhyware.selentic.lib.exception.ScComponentWaitException;
 import org.emwhyware.selentic.lib.exception.ScElementNotFoundException;
 import org.emwhyware.selentic.lib.exception.ScWaitTimeoutException;

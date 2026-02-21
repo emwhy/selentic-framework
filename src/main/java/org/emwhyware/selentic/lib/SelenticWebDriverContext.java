@@ -1,6 +1,5 @@
 package org.emwhyware.selentic.lib;
 
-import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.emwhyware.selentic.lib.config.SelelenticConfig;
 import org.openqa.selenium.WebDriver;

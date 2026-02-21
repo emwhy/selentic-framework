@@ -95,10 +95,10 @@ import java.util.regex.Pattern;
  * @see ScPage
  */
 public abstract class ScComponent extends ScAbstractComponent {
-    private Optional<ScSelector> selector = Optional.empty();
+    private @MonotonicNonNull ScSelector selector;
     private @MonotonicNonNull ScAbstractComponent $callerComponent;
     private @MonotonicNonNull WebElement webElement;
-    private Optional<ScComponentRule> rule = Optional.empty();
+    private @MonotonicNonNull ScComponentRule rule;
 
     /**
      * Provides access to the builder which provides methods to build XPath selector objects.
@@ -127,7 +127,7 @@ public abstract class ScComponent extends ScAbstractComponent {
      * @param selector the {@link ScSelector} to use for locating the web element
      */
     final void setSelector(@NonNull ScSelector selector) {
-        this.selector = Optional.of(selector);
+        this.selector = selector;
     }
 
     /**
@@ -177,7 +177,7 @@ public abstract class ScComponent extends ScAbstractComponent {
     private @NonNull WebElement webElement() {
         if (this.webElement == null) {
             final ScAbstractComponent $c = ScNullCheck.requiresNonNull(this.$callerComponent, ScAbstractComponent.class);
-            final Optional<ScSelector> selector = this.selector;
+            final Optional<ScSelector> selector = Optional.ofNullable(this.selector);
 
             if (selector.isPresent() && ($c instanceof ScAbstractPage || selector.get().isAbsolute())) {
                 return Selentic.driver().findElement(selector.get().build());
@@ -228,10 +228,10 @@ public abstract class ScComponent extends ScAbstractComponent {
      * @throws ScComponentRulesException if the element does not match the defined rules
      */
     private void verifyRules(@NonNull WebElement element) {
-        if (this.rule.isEmpty()) {
+        if (this.rule == null) {
             final ScComponentRule componentRule = new ScComponentRule(element);
 
-            this.rule = Optional.of(componentRule);
+            this.rule = componentRule;
             this.rules(componentRule);
             componentRule.verifyRules(this.getClass());
         }
