@@ -33,28 +33,66 @@ import java.util.regex.Pattern;
 import static org.testng.AssertJUnit.assertTrue;
 import static org.testng.AssertJUnit.fail;
 
+/**
+ * Comprehensive regression test suite validating all UI components supported by the
+ * Selentic Framework. This includes:
+ * <ul>
+ *     <li>Textboxes, textareas, date inputs</li>
+ *     <li>Dropdowns and multi-select lists</li>
+ *     <li>Checkboxes and radio buttons</li>
+ *     <li>Buttons and click interactions</li>
+ *     <li>Table row parsing and filtering</li>
+ *     <li>Frames, dialogs, modal dialogs</li>
+ *     <li>Window switching and controller behavior</li>
+ *     <li>Long component lists</li>
+ *     <li>CSV download and parsing</li>
+ *     <li>Wait behavior and animation handling</li>
+ *     <li>Alerts, confirms, prompts</li>
+ *     <li>Drag-and-drop interactions</li>
+ * </ul>
+ *
+ * <p>The suite loads a static HTML test page for deterministic UI behavior.
+ */
 public class ScUiComponentTest extends ScBaseTest {
+
     private static final Logger LOG = ScLogHandler.logger(ScUiComponentTest.class);
 
+    /** Page object wrapper for the main UI component test page. */
     private final ScWithPage<ScUiComponentPage> testPage = ScPage.with(ScUiComponentPage.class);
+
+    /** Page object wrapper for external window test pages. */
     private final ScWithPage<ScExternalPage> testExternalPage = ScPage.with(ScExternalPage.class);
+
+    /** Page object wrapper for drag-and-drop test pages. */
     private final ScWithPage<ScDragAndDropTestPage> dragAndDropTestPage = ScPage.with(ScDragAndDropTestPage.class);
 
-    @BeforeClass 
+    /**
+     * Loads the test HTML file before any tests run.
+     */
+    @BeforeClass
     public void setup() {
         Selentic.open("file://" + System.getProperty("user.dir") + "/build/resources/test/test_file/test.htm");
     }
 
+    /**
+     * Reloads the page after each test to ensure isolation.
+     */
     @AfterMethod(alwaysRun = true)
     public void reload() {
         testPage.inPage(ScPage::reload);
     }
 
+    /**
+     * Shuts down the Selentic driver after all tests complete.
+     */
     @AfterClass(alwaysRun = true)
     public void shutdown() {
         Selentic.quit();
     }
 
+    /**
+     * Validates textbox behavior including reading and updating text.
+     */
     @Test
     public void testTextbox() {
         testPage.inPage(p -> {
@@ -66,6 +104,9 @@ public class ScUiComponentTest extends ScBaseTest {
         });
     }
 
+    /**
+     * Validates textarea behavior including reading and updating text.
+     */
     @Test
     public void testTextarea() {
         testPage.inPage(p -> {
@@ -77,6 +118,9 @@ public class ScUiComponentTest extends ScBaseTest {
         });
     }
 
+    /**
+     * Tests date textbox behavior including formatting and parsing.
+     */
     @Test
     public void testDateTextbox() {
         LocalDate futureDate = LocalDate.now().plusDays(8);
@@ -91,13 +135,16 @@ public class ScUiComponentTest extends ScBaseTest {
         });
     }
 
+    /**
+     * Validates dropdown behavior including option listing, selection, and regex selection.
+     */
     @Test
     public void testDropdown() {
         testPage.inPage(p -> {
             final List<String> options = p.testDropdown().optionTexts();
 
             for (int i = 1; i <= 40; i++) {
-                Assert.assertEquals(options.get(i-1), "TEST " + i);
+                Assert.assertEquals(options.get(i - 1), "TEST " + i);
             }
 
             Assert.assertEquals(p.testDropdown().selectedText(), "TEST 1");
@@ -110,16 +157,18 @@ public class ScUiComponentTest extends ScBaseTest {
 
             Assert.assertEquals(p.testDropdown().selectedText(), "TEST 23");
         });
-
     }
 
+    /**
+     * Validates multi-select list behavior including selection, deselection, clearing, and regex operations.
+     */
     @Test
     public void testMultiSelect() {
         testPage.inPage(p -> {
             final List<String> options = p.testMultiSelect().optionTexts();
 
             for (int i = 1; i <= 40; i++) {
-                Assert.assertEquals(options.get(i-1), "TEST " + i);
+                Assert.assertEquals(options.get(i - 1), "TEST " + i);
             }
 
             Assert.assertTrue(p.testMultiSelect().selectedTexts().isEmpty());
@@ -158,6 +207,9 @@ public class ScUiComponentTest extends ScBaseTest {
         });
     }
 
+    /**
+     * Tests checkbox behavior including selection, deselection, and label text.
+     */
     @Test
     public void testCheckbox() {
         testPage.inPage(p -> {
@@ -175,6 +227,9 @@ public class ScUiComponentTest extends ScBaseTest {
         });
     }
 
+    /**
+     * Tests radio button group behavior including listing and selection.
+     */
     @Test
     public void testRadioButtons() {
         testPage.inPage(p -> {
@@ -194,6 +249,9 @@ public class ScUiComponentTest extends ScBaseTest {
         });
     }
 
+    /**
+     * Tests input button behavior including click and indicator update.
+     */
     @Test
     public void testInputButton() {
         testPage.inPage(p -> {
@@ -205,6 +263,9 @@ public class ScUiComponentTest extends ScBaseTest {
         });
     }
 
+    /**
+     * Tests standard button behavior including click and indicator update.
+     */
     @Test
     public void testButton() {
         testPage.inPage(p -> {
@@ -216,6 +277,9 @@ public class ScUiComponentTest extends ScBaseTest {
         });
     }
 
+    /**
+     * Validates table row behavior including indexing, entry lookup, filtering, and field parsing.
+     */
     @Test
     public void testTableRows() {
         testPage.inPage(p -> {
@@ -241,6 +305,9 @@ public class ScUiComponentTest extends ScBaseTest {
         });
     }
 
+    /**
+     * Tests frame switching and interactions inside the frame.
+     */
     @Test
     public void testFrame() {
         testPage.inPage(p -> {
@@ -260,6 +327,9 @@ public class ScUiComponentTest extends ScBaseTest {
         });
     }
 
+    /**
+     * Tests dialog behavior including opening, editing text, and closing.
+     */
     @Test
     public void testDialog() {
         testPage.inPage(p -> {
@@ -274,9 +344,11 @@ public class ScUiComponentTest extends ScBaseTest {
                 dialog.closeButton().click();
             });
         });
-
     }
 
+    /**
+     * Tests modal dialog behavior including opening, editing text, and closing.
+     */
     @Test
     public void testModalDialog() {
         testPage.inPage(p -> {
@@ -291,40 +363,40 @@ public class ScUiComponentTest extends ScBaseTest {
                 dialog.closeButton().click();
             });
         });
-
     }
 
+    /**
+     * Tests external window handling including:
+     * <ul>
+     *     <li>Exception when switching without a window</li>
+     *     <li>Opening new windows</li>
+     *     <li>Nested window switching</li>
+     *     <li>Controller-based temporary switching</li>
+     *     <li>Closing windows</li>
+     * </ul>
+     */
     @Test
     public void testExternalWindows() {
         testPage.inPage(p -> {
-            // Ensure that calling "inWindow()" without having a window open would cause
-            // exception.
             try {
                 p.inWindow(testExternalPage, p1 -> {
                     fail("Should have thrown an exception");
                 });
                 fail("Should have thrown an exception");
             } catch (ScWindowException ex) {
-                // Expect exception.
                 Assert.assertEquals(ScNullCheck.requiresNonNull(ex.getMessage()), "No window is opened for switching");
             }
 
-            // Open a new window.
             Assert.assertEquals(Selentic.driver().getWindowHandles().size(), 1);
             p.openExternalWindowLink().click();
             p.inWindow(testExternalPage, p1 -> {
                 Assert.assertEquals(Selentic.driver().getWindowHandles().size(), 2);
 
-                // Open another new window.
                 p1.openExternalWindowLink().click();
                 p1.inWindow(testExternalPage, (p2, controller) -> {
                     Assert.assertEquals(controller.windowCount(), 3);
 
-                    // Controller allows temporary switching control to other windows
-                    // without closing them, then return the control back to the original
-                    // window.
                     controller.inOtherWindow(testPage, 0, p3 -> {
-                        // Ensure that the focused window is the root one.
                         Assert.assertEquals(p3.testTableRows().entry("SanityTest 1").serialNumberText().text(), "#TDD987");
                         Assert.assertEquals(p3.testTableRows().entry("SanityTest 2").serialNumberText().text(), "#AEV974");
                         Assert.assertEquals(p3.testTableRows().entry("SanityTest 3").serialNumberText().text(), "#CCA106");
@@ -333,8 +405,6 @@ public class ScUiComponentTest extends ScBaseTest {
                     });
                     Assert.assertEquals(controller.windowCount(), 3);
 
-                    // Assertion on the external window after the control is returned from
-                    // "the other window".
                     Assert.assertEquals(p2.testExternalTextbox().text(), "external textbox text");
 
                     Assert.assertEquals(p2.testExternalTableRows().size(), 3);
@@ -347,12 +417,9 @@ public class ScUiComponentTest extends ScBaseTest {
                     Assert.assertEquals(p2.testExternalTableRows().entry("External SanityTest 2").serialNumberText().text(), "#EX-AEV974");
                     Assert.assertEquals(p2.testExternalTableRows().entry("External SanityTest 3").serialNumberText().text(), "#EX-CCA106");
 
-                    // Close the current window.
                     p2.closeCurrentWindowButton().click();
                 });
 
-                // Ensure that "inWindow" predicate ended properly despite that the window was
-                // closed before its end.
                 Assert.assertEquals(Selentic.driver().getWindowHandles().size(), 2);
 
                 Assert.assertEquals(p1.testExternalTextbox().text(), "external textbox text");
@@ -370,10 +437,12 @@ public class ScUiComponentTest extends ScBaseTest {
 
         });
 
-        // Ensure that at the end of "inWindow", the external window is closed if it wasn't closed before.
         Assert.assertEquals(Selentic.driver().getWindowHandles().size(), 1);
     }
 
+    /**
+     * Tests long component list behavior including iteration, selection, and text entry.
+     */
     @Test
     public void testLongComponentList() {
         testPage.inPage(p -> {
@@ -396,13 +465,17 @@ public class ScUiComponentTest extends ScBaseTest {
             Assert.assertTrue(p.longComponentEntries().entry("Long List Entry 488").checkbox().isSelected());
             Assert.assertEquals(p.longComponentEntries().entry("Long List Entry 302").textbox().text(), "This is a test");
         });
-
     }
 
+    /**
+     * Tests CSV download functionality including filename, extension, raw content,
+     * and parsed CSV structure.
+     */
     @Test
     public void testCsvDownload() {
         testPage.inPage(p -> {
-            final ScDownloadCsvFileParser csvParser = p.testCsvDownloadLink().download().parse(ScDownloadCsvFileParser.class);
+            final ScDownloadCsvFileParser csvParser =
+                    p.testCsvDownloadLink().download().parse(ScDownloadCsvFileParser.class);
 
             Assert.assertEquals(csvParser.baseName(), "test");
             Assert.assertEquals(csvParser.extension(), "csv");
@@ -413,6 +486,9 @@ public class ScUiComponentTest extends ScBaseTest {
         });
     }
 
+    /**
+     * Tests retrieval of an element's own text (excluding child elements).
+     */
     @Test
     public void testOwnText() {
         testPage.inPage(p -> {
@@ -420,10 +496,17 @@ public class ScUiComponentTest extends ScBaseTest {
         });
     }
 
+    /**
+     * Tests wait behavior including:
+     * <ul>
+     *     <li>exists() and isDisplayed() on non-existing elements</li>
+     *     <li>Exceptions thrown when interacting with missing elements</li>
+     *     <li>Timeout behavior of ScWait.waitUntil()</li>
+     * </ul>
+     */
     @Test
     public void testWaitObject() {
         testPage.inPage(p -> {
-            // These methods use SnWait within them.
             Assert.assertFalse(p.testNonExistingLink().exists());
             Assert.assertFalse(p.testNonExistingLink().isDisplayed());
 
@@ -446,14 +529,17 @@ public class ScUiComponentTest extends ScBaseTest {
             }
 
             try {
-                ScWait.waitUntil(10, () -> false, SnSanityTestException::new);
-            } catch (SnSanityTestException ex) {
+                ScWait.waitUntil(10, () -> false, SnRegressionTestException::new);
+            } catch (SnRegressionTestException ex) {
                 // Expected.
             }
-
         });
     }
 
+    /**
+     * Tests animation wait behavior for multiple animation types and ensures
+     * long animations throw a wait exception.
+     */
     @Test
     public void testWaitForAnimation() {
         testPage.inPage(p -> {
@@ -466,11 +552,19 @@ public class ScUiComponentTest extends ScBaseTest {
                 testAnimation(p.animatedBox(), p.animateLongButton());
                 fail("Should not get here because it should throw exception.");
             } catch (ScComponentWaitException ex) {
-
+                // Expected.
             }
         });
     }
 
+    /**
+     * Tests JavaScript alert, confirm, and prompt dialogs including:
+     * <ul>
+     *     <li>Reading alert text</li>
+     *     <li>Accepting/dismissing</li>
+     *     <li>Sending text to prompts</li>
+     * </ul>
+     */
     @Test
     public void testAlert() {
         testPage.inPage(p -> {
@@ -496,7 +590,11 @@ public class ScUiComponentTest extends ScBaseTest {
         });
     }
 
-//    @Test
+    /**
+     * Tests drag-and-drop behavior including moving an item between drop zones.
+     * (Disabled by default in original code.)
+     */
+    // @Test
     public void testDragAndDrop() {
         testPage.inPage(p -> {
 
@@ -518,6 +616,12 @@ public class ScUiComponentTest extends ScBaseTest {
         });
     }
 
+    /**
+     * Helper method for testing animation wait times.
+     *
+     * @param animatedBox the animated component
+     * @param button the button that triggers the animation
+     */
     private void testAnimation(ScAnimatedBox animatedBox, ScButton button) {
         long startTimestamp, endTimestamp;
 
@@ -532,8 +636,11 @@ public class ScUiComponentTest extends ScBaseTest {
         ScWait.sleep(500);
     }
 
-    public class SnSanityTestException extends RuntimeException {
-        SnSanityTestException(Throwable ex) {
+    /**
+     * Custom exception used for regression test wait failures.
+     */
+    public class SnRegressionTestException extends RuntimeException {
+        SnRegressionTestException(Throwable ex) {
             super("Sanity Test Failure", ex);
         }
     }

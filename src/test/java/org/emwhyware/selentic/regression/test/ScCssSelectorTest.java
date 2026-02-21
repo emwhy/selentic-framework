@@ -9,19 +9,35 @@ import org.testng.annotations.Test;
 
 import java.util.List;
 
+/**
+ * Regression test suite for validating CSS Selector support within the Selentic framework.
+ * This class ensures that various CSS locator strategies (IDs, classes, attributes, pseudo-classes,
+ * and combinators) correctly resolve.
+ */
 public class ScCssSelectorTest extends ScBaseTest {
+
+    /** Page object wrapper for the CSS selector test page. */
     private final ScWithPage<ScCssSelectorTestPage> selectorTestPage = ScPage.with(ScCssSelectorTestPage.class);
 
+    /**
+     * Initializes the test environment by navigating to the local HTML test file.
+     */
     @BeforeClass
     public void setup() {
         Selentic.open("file://" + System.getProperty("user.dir") + "/build/resources/test/test_file/selector-test.htm");
     }
 
+    /**
+     * Ensures the browser session is terminated after all tests in this class have executed.
+     */
     @AfterClass(alwaysRun = true)
     public void shutdown() {
         Selentic.quit();
     }
 
+    /**
+     * Verifies locating an element using a CSS ID selector (#id).
+     */
     @Test
     public void testCssSelectorId() {
         selectorTestPage.inPage(p -> {
@@ -32,6 +48,9 @@ public class ScCssSelectorTest extends ScBaseTest {
         });
     }
 
+    /**
+     * Verifies locating multiple elements using a CSS Tag selector.
+     */
     @Test
     public void testCssSelectorTag() {
         selectorTestPage.inPage(p -> {
@@ -41,6 +60,9 @@ public class ScCssSelectorTest extends ScBaseTest {
         });
     }
 
+    /**
+     * Verifies locating elements using CSS Class selectors (.class).
+     */
     @Test
     public void testCssSelectorCssClasses() {
         selectorTestPage.inPage(p -> {
@@ -50,6 +72,15 @@ public class ScCssSelectorTest extends ScBaseTest {
         });
     }
 
+    /**
+     * Verifies various attribute-based selectors:
+     * <ul>
+     *     <li>Starts with: [attr^='val']</li>
+     *     <li>Contains: [attr*='val']</li>
+     *     <li>Ends with: [attr$='val']</li>
+     *     <li>Whole word: [attr~='val']</li>
+     * </ul>
+     */
     @Test
     public void testCssSelectorAttr() {
         selectorTestPage.inPage(p -> {
@@ -65,6 +96,9 @@ public class ScCssSelectorTest extends ScBaseTest {
         });
     }
 
+    /**
+     * Verifies "of-type" pseudo-classes: :nth-of-type, :nth-last-of-type, and :last-of-type.
+     */
     @Test
     public void testCssSelectorNthOfType() {
         selectorTestPage.inPage(p -> {
@@ -80,6 +114,9 @@ public class ScCssSelectorTest extends ScBaseTest {
         });
     }
 
+    /**
+     * Verifies "child" pseudo-classes: :nth-child, :nth-last-child, and :last-child.
+     */
     @Test
     public void testCssSelectorNthChild() {
         selectorTestPage.inPage(p -> {
@@ -93,6 +130,9 @@ public class ScCssSelectorTest extends ScBaseTest {
         });
     }
 
+    /**
+     * Verifies the descendant combinator (space) for selecting nested elements at any depth.
+     */
     @Test
     public void testCssSelectorDescendent() {
         selectorTestPage.inPage(p -> {
@@ -102,6 +142,9 @@ public class ScCssSelectorTest extends ScBaseTest {
         });
     }
 
+    /**
+     * Verifies the child combinator (>) for selecting direct children only.
+     */
     @Test
     public void testCssSelectorChild() {
         selectorTestPage.inPage(p -> {
@@ -111,6 +154,9 @@ public class ScCssSelectorTest extends ScBaseTest {
         });
     }
 
+    /**
+     * Verifies the general sibling combinator (~) for selecting siblings following an element.
+     */
     @Test
     public void testCssSelectorSibling() {
         selectorTestPage.inPage(p -> {
@@ -120,6 +166,9 @@ public class ScCssSelectorTest extends ScBaseTest {
         });
     }
 
+    /**
+     * Verifies the adjacent sibling combinator (+) for selecting the immediate next sibling.
+     */
     @Test
     public void testCssSelectorNextSibling() {
         selectorTestPage.inPage(p -> {
@@ -129,6 +178,9 @@ public class ScCssSelectorTest extends ScBaseTest {
         });
     }
 
+    /**
+     * Verifies the negation pseudo-class (:not) to exclude specific elements from a selection.
+     */
     @Test
     public void testCssSelectorNot() {
         selectorTestPage.inPage(p -> {
@@ -138,6 +190,9 @@ public class ScCssSelectorTest extends ScBaseTest {
         });
     }
 
+    /**
+     * Verifies the handling of raw CSS selector strings passed directly to the locator engine.
+     */
     @Test
     public void testCssSelectorRaw() {
         selectorTestPage.inPage(p -> {
