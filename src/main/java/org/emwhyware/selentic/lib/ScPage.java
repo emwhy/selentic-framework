@@ -2,6 +2,7 @@ package org.emwhyware.selentic.lib;
 
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.emwhyware.selentic.lib.exception.ScUnexpectedPageException;
+import org.emwhyware.selentic.lib.selector.ScXPath;
 import org.emwhyware.selentic.lib.util.ScWait;
 import org.openqa.selenium.Alert;
 import org.openqa.selenium.support.ui.ExpectedConditions;

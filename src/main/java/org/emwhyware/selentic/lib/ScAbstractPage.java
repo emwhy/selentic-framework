@@ -2,6 +2,8 @@ package org.emwhyware.selentic.lib;
 
 import org.emwhyware.selentic.lib.exception.ScUnexpectedPageException;
 import org.emwhyware.selentic.lib.exception.ScWaitTimeoutException;
+import org.emwhyware.selentic.lib.selector.ScPageCssSelectorBuilder;
+import org.emwhyware.selentic.lib.selector.ScPageXPathBuilder;
 import org.emwhyware.selentic.lib.util.ScLogHandler;
 import org.emwhyware.selentic.lib.util.ScNullCheck;
 import org.slf4j.Logger;

@@ -3,7 +3,7 @@ package org.emwhyware.selentic.regression.component;
 import org.emwhyware.selentic.lib.ScComponentCollection;
 import org.emwhyware.selentic.lib.ScFrameContent;
 import org.emwhyware.selentic.lib.ScTextbox;
-import org.emwhyware.selentic.lib.ScXPath;
+import org.emwhyware.selentic.lib.selector.ScXPath;
 
 public class ScSanityTestFrameContent extends ScFrameContent {
     private static final ScXPath TEST_EXTERNAL_TEXTBOX = _xpath.descendant("input", _id().is("test-external-textbox"));

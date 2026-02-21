@@ -5,6 +5,8 @@ import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.emwhyware.selentic.lib.exception.ScComponentCreationException;
 import org.emwhyware.selentic.lib.exception.ScEntryNotFoundException;
+import org.emwhyware.selentic.lib.selector.ScSelector;
+import org.emwhyware.selentic.lib.selector.ScXPath;
 import org.emwhyware.selentic.lib.util.ScNullCheck;
 import org.openqa.selenium.WebElement;
 
@@ -28,6 +30,7 @@ import java.util.stream.StreamSupport;
  * @see ScAbstractPage
  */
 public class ScComponentCollection<T extends ScComponent> implements Iterable<T> {
+    private static final ScSelectorPackageAccessor SELECTOR_ACCESSOR = ScSelectorPackageAccessor.instance();
 
     private @MonotonicNonNull ScSelector selector;
     private @MonotonicNonNull Class<T> componentType;
@@ -95,10 +98,10 @@ public class ScComponentCollection<T extends ScComponent> implements Iterable<T>
         final ScSelector selector = ScNullCheck.requiresNonNull(this.selector, ScSelector.class);
         final ScAbstractComponent $c = ScNullCheck.requiresNonNull(this.$callerComponent, ScAbstractComponent.class);
 
-        if ($c instanceof ScAbstractPage || selector.isAbsolute()) {
-            return Selentic.driver().findElements(selector.build());
+        if ($c instanceof ScAbstractPage || SELECTOR_ACCESSOR.isSelectorAbsolute(selector)) {
+            return Selentic.driver().findElements(SELECTOR_ACCESSOR.buildSelector(selector));
         } else {
-            return ((ScComponent) $c).existingElement().findElements(selector instanceof ScXPath ? ((ScXPath) selector).build(true) : selector.build());
+            return ((ScComponent) $c).existingElement().findElements(selector instanceof ScXPath ? SELECTOR_ACCESSOR.buildSelector(selector, true) : SELECTOR_ACCESSOR.buildSelector(selector));
         }
     }
 

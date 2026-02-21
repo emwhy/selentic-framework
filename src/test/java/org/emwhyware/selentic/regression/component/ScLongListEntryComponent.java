@@ -1,6 +1,7 @@
 package org.emwhyware.selentic.regression.component;
 
 import org.emwhyware.selentic.lib.*;
+import org.emwhyware.selentic.lib.selector.ScCssSelector;
 
 public class ScLongListEntryComponent extends ScComponent {
     private static final ScCssSelector TITLE_TEXT = _cssSelector.descendant(_cssClasses("title"));

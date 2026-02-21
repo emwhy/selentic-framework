@@ -1,6 +1,7 @@
 package org.emwhyware.selentic.regression.page;
 
 import org.emwhyware.selentic.lib.*;
+import org.emwhyware.selentic.lib.selector.ScCssSelector;
 import org.emwhyware.selentic.regression.component.*;
 import org.emwhyware.selentic.regression.component.dialog.ScTestDialog;
 import org.emwhyware.selentic.regression.component.dialog.ScTestModalDialog;

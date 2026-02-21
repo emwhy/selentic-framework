@@ -6,6 +6,7 @@ import org.emwhyware.selentic.lib.config.SelelenticConfig;
 import org.emwhyware.selentic.lib.exception.ScComponentCreationException;
 import org.emwhyware.selentic.lib.exception.ScComponentWaitException;
 import org.emwhyware.selentic.lib.exception.ScElementNotFoundException;
+import org.emwhyware.selentic.lib.selector.*;
 import org.emwhyware.selentic.lib.util.ScLogHandler;
 import org.emwhyware.selentic.lib.util.ScWait;
 import org.openqa.selenium.WebDriver;
@@ -45,6 +46,7 @@ import org.slf4j.Logger;
  */
 public abstract class ScAbstractComponent {
     private static final Logger LOG = ScLogHandler.logger(ScAbstractComponent.class);
+    private static final ScSelectorPackageAccessor SELECTOR_ACCESSOR = ScSelectorPackageAccessor.instance();
 
     protected enum ScWaitCondition {
         ToExist, ToBeDisplayed, ToBeEnabled, ToBeDisabled, ToBeHidden, ToNotExist, ToStopAnimating;
@@ -138,7 +140,7 @@ public abstract class ScAbstractComponent {
      * @return a {@link ScSelectorNotProperty} that represents the negation
      */
     protected static ScSelectorNotProperty _not(@NonNull ScSelectorProperty selectorProperty) {
-        return new ScSelectorNotProperty(selectorProperty);
+        return SELECTOR_ACCESSOR._not(selectorProperty);
     }
 
     /**
@@ -161,7 +163,7 @@ public abstract class ScAbstractComponent {
      * @return a {@link ScSelectorAttributeCondition} for building attribute-based selectors
      */
     protected static ScSelectorAttributeCondition _attr(@NonNull String attribute) {
-        return new ScSelectorAttributeCondition("@", attribute);
+        return SELECTOR_ACCESSOR._attr(attribute);
     }
 
     /**
@@ -184,7 +186,7 @@ public abstract class ScAbstractComponent {
      * @return a {@link ScSelectorCssClassesProperty} for building CSS class-based selectors
      */
     protected static ScSelectorCssClassesProperty _cssClasses(@NonNull String... cssClasses) {
-        return new ScSelectorCssClassesProperty(cssClasses);
+        return SELECTOR_ACCESSOR._cssClasses(cssClasses);
     }
 
     /**
@@ -207,7 +209,7 @@ public abstract class ScAbstractComponent {
      * @return a {@link ScSelectorTagProperty} for building tag-based selectors
      */
     protected static ScSelectorTagProperty _tag(@NonNull String tag) {
-        return new ScSelectorTagProperty(tag);
+        return SELECTOR_ACCESSOR._tag(tag);
     }
 
     /**
@@ -228,7 +230,7 @@ public abstract class ScAbstractComponent {
      * @return a {@link ScSelectorAttributeCondition} for building id-based selectors
      */
     protected static ScSelectorAttributeCondition _id() {
-        return _attr("id");
+        return SELECTOR_ACCESSOR._id();
     }
 
     /**
@@ -251,7 +253,7 @@ public abstract class ScAbstractComponent {
      * @return a {@link ScSelectorIdProperty} for building id-based selectors
      */
     protected static ScSelectorIdProperty _id(@NonNull String id) {
-        return new ScSelectorIdProperty(id);
+        return SELECTOR_ACCESSOR._id(id);
     }
 
     /**
@@ -272,7 +274,7 @@ public abstract class ScAbstractComponent {
      * @return a {@link ScSelectorAttributeCondition} for building name-based selectors
      */
     protected static ScSelectorAttributeCondition _name() {
-        return _attr("name");
+        return SELECTOR_ACCESSOR._name();
     }
 
     /**
@@ -294,7 +296,7 @@ public abstract class ScAbstractComponent {
      * @return a {@link ScSelectorAttributeCondition} for building type-based selectors
      */
     protected static ScSelectorAttributeCondition _type() {
-        return _attr("type");
+        return SELECTOR_ACCESSOR._type();
     }
 
     /**
@@ -317,7 +319,7 @@ public abstract class ScAbstractComponent {
      * @return a {@link ScSelectorTextCondition} for building text-based selectors
      */
     protected static ScSelectorTextCondition _text() {
-        return new ScSelectorTextCondition();
+        return SELECTOR_ACCESSOR._text();
     }
 
     /**
@@ -340,7 +342,7 @@ public abstract class ScAbstractComponent {
      * @return a {@link ScSelectorIndexProperty} for building index-based range selectors
      */
     protected static ScSelectorIndexProperty _indexFrom(int startIndex) {
-        return new ScSelectorIndexProperty(ScSelectorIndexProperty.Conditions.From, startIndex);
+        return SELECTOR_ACCESSOR._indexFrom(startIndex);
     }
 
     /**
@@ -363,7 +365,7 @@ public abstract class ScAbstractComponent {
      * @return a {@link ScSelectorIndexProperty} for building index-based range selectors
      */
     protected static ScSelectorIndexProperty _indexTo(int endIndex) {
-        return new ScSelectorIndexProperty(ScSelectorIndexProperty.Conditions.To, endIndex);
+        return SELECTOR_ACCESSOR._indexTo(endIndex);
     }
 
     /**
@@ -387,7 +389,7 @@ public abstract class ScAbstractComponent {
      * @return a {@link ScSelectorIndexProperty} for building exact index-based selectors
      */
     protected static ScSelectorIndexProperty _indexAt(int index) {
-        return new ScSelectorIndexProperty(ScSelectorIndexProperty.Conditions.At, index);
+        return SELECTOR_ACCESSOR._indexAt(index);
     }
 
     /**
@@ -407,7 +409,7 @@ public abstract class ScAbstractComponent {
      * @return a {@link ScSelectorIndexProperty} for selecting the first element
      */
     protected static ScSelectorIndexProperty _first() {
-        return _indexAt(0);
+        return SELECTOR_ACCESSOR._first();
     }
 
     /**
@@ -428,7 +430,7 @@ public abstract class ScAbstractComponent {
      * @return a {@link ScSelectorIndexProperty} for selecting the last element
      */
     protected static ScSelectorIndexProperty _last() {
-        return new ScSelectorIndexProperty(ScSelectorIndexProperty.Conditions.Last);
+        return SELECTOR_ACCESSOR._last();
     }
 
     /**
@@ -453,7 +455,7 @@ public abstract class ScAbstractComponent {
      * @see ScSelectorNthOfTypeProperty
      */
     protected static ScSelectorNthOfTypeProperty _nthOfType(int index) {
-        return new ScSelectorNthOfTypeProperty(index);
+        return SELECTOR_ACCESSOR._nthOfType(index);
     }
 
     /**
@@ -478,7 +480,7 @@ public abstract class ScAbstractComponent {
      * @see ScSelectorNthLastOfTypeProperty
      */
     protected static ScSelectorNthLastOfTypeProperty _nthLastOfType(int index) {
-        return new ScSelectorNthLastOfTypeProperty(index);
+        return SELECTOR_ACCESSOR._nthLastOfType(index);
     }
 
     /**
@@ -500,7 +502,7 @@ public abstract class ScAbstractComponent {
      * @see ScSelectorFirstOfTypeProperty
      */
     protected static ScSelectorFirstOfTypeProperty _firstOfType() {
-        return new ScSelectorFirstOfTypeProperty();
+        return SELECTOR_ACCESSOR._firstOfType();
     }
 
     /**
@@ -522,7 +524,7 @@ public abstract class ScAbstractComponent {
      * @see ScSelectorLastOfTypeProperty
      */
     protected static ScSelectorLastOfTypeProperty _lastOfType() {
-        return new ScSelectorLastOfTypeProperty();
+        return SELECTOR_ACCESSOR._lastOfType();
     }
 
     /**
@@ -547,7 +549,7 @@ public abstract class ScAbstractComponent {
      * @see ScSelectorNthChildProperty
      */
     protected static ScSelectorNthChildProperty _nthChild(int index) {
-        return new ScSelectorNthChildProperty(index);
+        return SELECTOR_ACCESSOR._nthChild(index);
     }
 
     /**
@@ -572,7 +574,7 @@ public abstract class ScAbstractComponent {
      * @see ScSelectorNthLastChildProperty
      */
     protected static ScSelectorNthLastChildProperty _nthLastChild(int index) {
-        return new ScSelectorNthLastChildProperty(index);
+        return SELECTOR_ACCESSOR._nthLastChild(index);
     }
 
     /**
@@ -594,7 +596,7 @@ public abstract class ScAbstractComponent {
      * @see ScSelectorFirstChildProperty
      */
     protected static ScSelectorFirstChildProperty _firstChild() {
-        return new ScSelectorFirstChildProperty();
+        return SELECTOR_ACCESSOR._firstChild();
     }
 
     /**
@@ -616,7 +618,7 @@ public abstract class ScAbstractComponent {
      * @see ScSelectorLastChildProperty
      */
     protected static ScSelectorLastChildProperty _lastChild() {
-        return new ScSelectorLastChildProperty();
+        return SELECTOR_ACCESSOR._lastChild();
     }
 
     /**

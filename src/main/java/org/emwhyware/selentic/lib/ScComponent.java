@@ -3,6 +3,7 @@ package org.emwhyware.selentic.lib;
 import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.emwhyware.selentic.lib.exception.*;
+import org.emwhyware.selentic.lib.selector.*;
 import org.emwhyware.selentic.lib.util.ScNullCheck;
 import org.emwhyware.selentic.lib.util.ScWait;
 import org.openqa.selenium.NoSuchElementException;
@@ -95,6 +96,7 @@ import java.util.regex.Pattern;
  * @see ScPage
  */
 public abstract class ScComponent extends ScAbstractComponent {
+    private static final ScSelectorPackageAccessor SELECTOR_ACCESSOR = ScSelectorPackageAccessor.instance();
     private @MonotonicNonNull ScSelector selector;
     private @MonotonicNonNull ScAbstractComponent $callerComponent;
     private @MonotonicNonNull WebElement webElement;
@@ -179,10 +181,10 @@ public abstract class ScComponent extends ScAbstractComponent {
             final ScAbstractComponent $c = ScNullCheck.requiresNonNull(this.$callerComponent, ScAbstractComponent.class);
             final Optional<ScSelector> selector = Optional.ofNullable(this.selector);
 
-            if (selector.isPresent() && ($c instanceof ScAbstractPage || selector.get().isAbsolute())) {
-                return Selentic.driver().findElement(selector.get().build());
+            if (selector.isPresent() && ($c instanceof ScAbstractPage || SELECTOR_ACCESSOR.isSelectorAbsolute(selector.get()))) {
+                return Selentic.driver().findElement(SELECTOR_ACCESSOR.buildSelector(selector.get()));
             } else if (selector.isPresent()) {
-                return selector.get() instanceof ScXPath ? ((ScComponent) $c).existingElement().findElement(((ScXPath) selector.get()).build(true)) : ((ScComponent) $c).existingElement().findElement(selector.get().build());
+                return selector.get() instanceof ScXPath ? ((ScComponent) $c).existingElement().findElement(SELECTOR_ACCESSOR.buildSelector(selector.get(), true)) : ((ScComponent) $c).existingElement().findElement(SELECTOR_ACCESSOR.buildSelector(selector.get()));
             } else {
                 throw new ScElementNotFoundException("Selector is not present.");
             }
@@ -339,7 +341,7 @@ public abstract class ScComponent extends ScAbstractComponent {
      * <p>
      * This method can be overridden in subclasses as needed, as sometimes the "isDisplayed" status
      * may depend on other component properties or visibility rules. This method is used in
-     * {@link #waitForComponent(ScWaitCondition)} ()} and {@link #displayedElement()}, affecting their waiting behavior.
+     * {@link #waitForComponent(ScWaitCondition)} and {@link #displayedElement()}, affecting their waiting behavior.
      * 
      *
      * @return true if the element is displayed; false otherwise
@@ -475,7 +477,7 @@ public abstract class ScComponent extends ScAbstractComponent {
      *
      * <p>
      * The string returned by {@code key()} is used as a key value in {@link ScComponentCollection},
-     * so overriding it to return a proper unique value simpplifies getting a component from the collection using
+     * so overriding it to return a proper unique value simplifies getting a component from the collection using
      * {@link ScComponentCollection#entry(String)}.
      * 
      *

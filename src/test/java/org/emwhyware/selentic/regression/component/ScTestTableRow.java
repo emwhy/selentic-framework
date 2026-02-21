@@ -3,7 +3,7 @@ package org.emwhyware.selentic.regression.component;
 import org.emwhyware.selentic.lib.ScComponent;
 import org.emwhyware.selentic.lib.ScComponentRule;
 import org.emwhyware.selentic.lib.ScGenericComponent;
-import org.emwhyware.selentic.lib.ScXPath;
+import org.emwhyware.selentic.lib.selector.ScXPath;
 
 public class ScTestTableRow extends ScComponent {
     private static final ScXPath PRODUCT_NAME_TEXT = _xpath.descendant("td", _cssClasses("product-name"));

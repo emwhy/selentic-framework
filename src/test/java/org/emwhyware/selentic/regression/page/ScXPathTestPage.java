@@ -3,7 +3,7 @@ package org.emwhyware.selentic.regression.page;
 import org.emwhyware.selentic.lib.ScComponentCollection;
 import org.emwhyware.selentic.lib.ScGenericComponent;
 import org.emwhyware.selentic.lib.ScPage;
-import org.emwhyware.selentic.lib.ScXPath;
+import org.emwhyware.selentic.lib.selector.ScXPath;
 
 public class ScXPathTestPage extends ScPage {
     private static final ScXPath XPATH_ID_TEST_TEXT = _xpath.descendant(_id().is("outer-table-1"));

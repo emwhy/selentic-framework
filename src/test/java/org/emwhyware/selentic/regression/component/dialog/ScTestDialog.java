@@ -1,6 +1,10 @@
 package org.emwhyware.selentic.regression.component.dialog;
 
-import org.emwhyware.selentic.lib.*;
+import org.emwhyware.selentic.lib.ScButton;
+import org.emwhyware.selentic.lib.ScComponentRule;
+import org.emwhyware.selentic.lib.ScDialog;
+import org.emwhyware.selentic.lib.ScTextbox;
+import org.emwhyware.selentic.lib.selector.ScXPath;
 
 public class ScTestDialog extends ScDialog {
     private static final ScXPath TEXTBOX = _xpath.descendant("input", _id().is("test-dialog-textbox"));
