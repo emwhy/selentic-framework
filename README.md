@@ -1,4 +1,8 @@
-# Selentic Framework
+![](readme_files/selentic-framework-logo.png "Selentic Framework Logo")
+
+
+
+
 
 Selentic Framework is a test automation framework for writing web UI tests. It is designed based on Component-Object Model design (COM). It aims to help producing test automation codes that are easy to maintain and read while enabling ramping up the test automation development speed. 
 
