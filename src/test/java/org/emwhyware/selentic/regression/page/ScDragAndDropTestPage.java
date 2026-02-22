@@ -1,7 +1,7 @@
 package org.emwhyware.selentic.regression.page;
 
-import org.emwhyware.selentic.lib.ScCssSelector;
 import org.emwhyware.selentic.lib.ScPage;
+import org.emwhyware.selentic.lib.selector.ScCssSelector;
 import org.emwhyware.selentic.regression.component.ScDragAndDropDropZone;
 import org.emwhyware.selentic.regression.component.ScDraggedItem;
 

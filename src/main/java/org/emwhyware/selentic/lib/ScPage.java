@@ -1,6 +1,8 @@
 package org.emwhyware.selentic.lib;
 
+import org.checkerframework.checker.nullness.qual.NonNull;
 import org.emwhyware.selentic.lib.exception.ScUnexpectedPageException;
+import org.emwhyware.selentic.lib.selector.ScXPath;
 import org.emwhyware.selentic.lib.util.ScWait;
 import org.openqa.selenium.Alert;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -96,7 +98,7 @@ public abstract class ScPage extends ScAbstractPage {
      *
      * @see ScWithPage
      */
-    public static <T extends ScPage> ScWithPage<T> with(Class<T> pageType) {
+    public static <T extends ScPage> ScWithPage<T> with(@NonNull Class<T> pageType) {
         return new ScWithPage<>(pageType);
     }
 
@@ -248,7 +250,7 @@ public abstract class ScPage extends ScAbstractPage {
      * @see ScWindow
      * @see ScWindow.ScWindowAction
      */
-    public <T extends ScPage> void inWindow(ScWithPage<T> withPage, ScWindow.ScWindowAction<T> predicate) {
+    public <T extends ScPage> void inWindow(@NonNull ScWithPage<T> withPage, ScWindow.ScWindowAction<T> predicate) {
         new ScWindow().inWindow(withPage, predicate);
     }
 
@@ -301,7 +303,7 @@ public abstract class ScPage extends ScAbstractPage {
      * @see ScWindow
      * @see ScWindow.ScWindowActionWithController
      */
-    public <T extends ScPage> void inWindow(ScWithPage<T> withPage, ScWindow.ScWindowActionWithController<T> predicate) {
+    public <T extends ScPage> void inWindow(@NonNull ScWithPage<T> withPage, ScWindow.ScWindowActionWithController<T> predicate) {
         new ScWindow().inWindow(withPage, predicate);
     }
 
@@ -355,10 +357,13 @@ public abstract class ScPage extends ScAbstractPage {
      * @see ScAlertAction
      * @see Alert
      */
-    public void inAlert(ScAlertAction action) {
+    public void inAlert(@NonNull ScAlertAction action) {
         final WebDriverWait wait = new WebDriverWait(Selentic.driver(), Duration.ofSeconds(1));
         final Alert alert = wait.until(ExpectedConditions.alertIsPresent());
 
+        if (alert == null) {
+            throw new IllegalStateException("Alert is not present.");
+        }
         action.inAlert(alert);
         ScWait.sleep(500);
     }
@@ -401,6 +406,6 @@ public abstract class ScPage extends ScAbstractPage {
          * @see Alert#dismiss()
          * @see Alert#sendKeys(String)
          */
-        void inAlert(Alert alert);
+        void inAlert(@NonNull Alert alert);
     }
 }

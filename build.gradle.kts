@@ -1,9 +1,11 @@
+
 plugins {
     id("java")
+    id("org.checkerframework").version("0.6.61")
 }
 
-group = "selentic-framework"
-version = "release"
+project.group = "selentic-framework"
+project.version = "release"
 
 repositories {
     mavenCentral()
@@ -11,6 +13,13 @@ repositories {
 
 java {
     withJavadocJar()
+}
+
+checkerFramework {
+    this.checkers = listOf(
+        "org.checkerframework.checker.nullness.NullnessChecker",
+        "org.checkerframework.checker.optional.OptionalChecker"
+    )
 }
 
 dependencies {

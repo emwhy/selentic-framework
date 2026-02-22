@@ -1,9 +1,12 @@
 package org.emwhyware.selentic.lib;
 
-import org.emwhyware.selentic.lib.config.SelelenticConfig;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
+import org.emwhyware.selentic.lib.config.SelenticConfig;
 import org.emwhyware.selentic.lib.exception.ScComponentCreationException;
 import org.emwhyware.selentic.lib.exception.ScComponentWaitException;
 import org.emwhyware.selentic.lib.exception.ScElementNotFoundException;
+import org.emwhyware.selentic.lib.selector.*;
 import org.emwhyware.selentic.lib.util.ScLogHandler;
 import org.emwhyware.selentic.lib.util.ScWait;
 import org.openqa.selenium.WebDriver;
@@ -43,6 +46,7 @@ import org.slf4j.Logger;
  */
 public abstract class ScAbstractComponent {
     private static final Logger LOG = ScLogHandler.logger(ScAbstractComponent.class);
+    private static final ScSelectorPackageAccessor SELECTOR_ACCESSOR = ScSelectorPackageAccessor.instance();
 
     protected enum ScWaitCondition {
         ToExist, ToBeDisplayed, ToBeEnabled, ToBeDisabled, ToBeHidden, ToNotExist, ToStopAnimating;
@@ -57,14 +61,14 @@ public abstract class ScAbstractComponent {
      *
      *
      * <p>
-     * The default wait timeout is as defined in {@link SelelenticConfig}. It can be changed only for this component
+     * The default wait timeout is as defined in {@link SelenticConfig}. It can be changed only for this component
      * by overriding this method and providing another value.
      *
      *
      * @return the wait timeout in milliseconds
      */
     protected long waitTimeout() {
-        return SelelenticConfig.config().waitTimeoutMilliseconds();
+        return SelenticConfig.config().waitTimeoutMilliseconds();
     }
 
     /**
@@ -76,7 +80,7 @@ public abstract class ScAbstractComponent {
      *
      * @throws ScComponentWaitException if the element does not meet the condition within the timeout period
      */
-    protected final void waitForComponent(ScComponent component, ScWaitCondition waitType) {
+    protected final void waitForComponent(@NonNull ScComponent component, @NonNull ScWaitCondition waitType) {
         switch (waitType) {
             case ToExist -> {
                 ScWait.waitUntil(waitTimeout(), component::exists, ex -> new ScComponentWaitException("Component does not exist.", ex));
@@ -102,14 +106,16 @@ public abstract class ScAbstractComponent {
             }
             case ToStopAnimating -> {
                 ScWait.waitUntil(waitTimeout(), component::isDisplayed, ex -> new ScComponentWaitException("Component is not displayed.", ex));
-                ScWait.waitUntil(waitTimeout(), () -> (Boolean) Selentic.executeScript(
-                                """
-                                    let e = arguments[0];
-                                    return !e.getAnimations().some(a => a.playState === 'running' || a.playState === 'pending');
-                                """,
-                                this
-                        ),
-                        ex -> new ScComponentWaitException("Component is still animating.", ex)
+                ScWait.waitUntil(waitTimeout(), () -> {
+                    final Boolean returned = (Boolean) Selentic.executeScript(
+                            """
+                                        let e = arguments[0];
+                                        return !e.getAnimations().some(a => a.playState === 'running' || a.playState === 'pending');
+                                    """,
+                            this
+                    );
+                    return returned != null && returned;
+                }, ex -> new ScComponentWaitException("Component is still animating.", ex)
                 );
             }
         }
@@ -133,8 +139,8 @@ public abstract class ScAbstractComponent {
      * @param selectorProperty the selector property to negate
      * @return a {@link ScSelectorNotProperty} that represents the negation
      */
-    protected static ScSelectorNotProperty _not(ScSelectorProperty selectorProperty) {
-        return new ScSelectorNotProperty(selectorProperty);
+    protected static ScSelectorNotProperty _not(@NonNull ScSelectorProperty selectorProperty) {
+        return SELECTOR_ACCESSOR._not(selectorProperty);
     }
 
     /**
@@ -156,8 +162,8 @@ public abstract class ScAbstractComponent {
      * @param attribute the name of the HTML attribute
      * @return a {@link ScSelectorAttributeCondition} for building attribute-based selectors
      */
-    protected static ScSelectorAttributeCondition _attr(String attribute) {
-        return new ScSelectorAttributeCondition("@", attribute);
+    protected static ScSelectorAttributeCondition _attr(@NonNull String attribute) {
+        return SELECTOR_ACCESSOR._attr(attribute);
     }
 
     /**
@@ -179,8 +185,8 @@ public abstract class ScAbstractComponent {
      * @param cssClasses one or more CSS class names to match
      * @return a {@link ScSelectorCssClassesProperty} for building CSS class-based selectors
      */
-    protected static ScSelectorCssClassesProperty _cssClasses(String... cssClasses) {
-        return new ScSelectorCssClassesProperty(cssClasses);
+    protected static ScSelectorCssClassesProperty _cssClasses(@NonNull String... cssClasses) {
+        return SELECTOR_ACCESSOR._cssClasses(cssClasses);
     }
 
     /**
@@ -202,8 +208,8 @@ public abstract class ScAbstractComponent {
      * @param tag the HTML tag name to match
      * @return a {@link ScSelectorTagProperty} for building tag-based selectors
      */
-    protected static ScSelectorTagProperty _tag(String tag) {
-        return new ScSelectorTagProperty(tag);
+    protected static ScSelectorTagProperty _tag(@NonNull String tag) {
+        return SELECTOR_ACCESSOR._tag(tag);
     }
 
     /**
@@ -224,7 +230,7 @@ public abstract class ScAbstractComponent {
      * @return a {@link ScSelectorAttributeCondition} for building id-based selectors
      */
     protected static ScSelectorAttributeCondition _id() {
-        return _attr("id");
+        return SELECTOR_ACCESSOR._id();
     }
 
     /**
@@ -246,8 +252,8 @@ public abstract class ScAbstractComponent {
      * @param id the id attribute value to match
      * @return a {@link ScSelectorIdProperty} for building id-based selectors
      */
-    protected static ScSelectorIdProperty _id(String id) {
-        return new ScSelectorIdProperty(id);
+    protected static ScSelectorIdProperty _id(@NonNull String id) {
+        return SELECTOR_ACCESSOR._id(id);
     }
 
     /**
@@ -268,7 +274,7 @@ public abstract class ScAbstractComponent {
      * @return a {@link ScSelectorAttributeCondition} for building name-based selectors
      */
     protected static ScSelectorAttributeCondition _name() {
-        return _attr("name");
+        return SELECTOR_ACCESSOR._name();
     }
 
     /**
@@ -290,7 +296,7 @@ public abstract class ScAbstractComponent {
      * @return a {@link ScSelectorAttributeCondition} for building type-based selectors
      */
     protected static ScSelectorAttributeCondition _type() {
-        return _attr("type");
+        return SELECTOR_ACCESSOR._type();
     }
 
     /**
@@ -313,7 +319,7 @@ public abstract class ScAbstractComponent {
      * @return a {@link ScSelectorTextCondition} for building text-based selectors
      */
     protected static ScSelectorTextCondition _text() {
-        return new ScSelectorTextCondition();
+        return SELECTOR_ACCESSOR._text();
     }
 
     /**
@@ -336,7 +342,7 @@ public abstract class ScAbstractComponent {
      * @return a {@link ScSelectorIndexProperty} for building index-based range selectors
      */
     protected static ScSelectorIndexProperty _indexFrom(int startIndex) {
-        return new ScSelectorIndexProperty(ScSelectorIndexProperty.Conditions.From, startIndex);
+        return SELECTOR_ACCESSOR._indexFrom(startIndex);
     }
 
     /**
@@ -359,7 +365,7 @@ public abstract class ScAbstractComponent {
      * @return a {@link ScSelectorIndexProperty} for building index-based range selectors
      */
     protected static ScSelectorIndexProperty _indexTo(int endIndex) {
-        return new ScSelectorIndexProperty(ScSelectorIndexProperty.Conditions.To, endIndex);
+        return SELECTOR_ACCESSOR._indexTo(endIndex);
     }
 
     /**
@@ -373,24 +379,24 @@ public abstract class ScAbstractComponent {
      * <p>
      * <strong>Example:</strong>
      * <pre>{@code
-     * _indexAt(0)     // Matches the first element
-     * _indexAt(5)     // Matches the sixth element
-     * _indexAt(10)    // Matches the eleventh element
+     * _indexOf(0)     // Matches the first element
+     * _indexOf(5)     // Matches the sixth element
+     * _indexOf(10)    // Matches the eleventh element
      * }</pre>
      * 
      *
      * @param index the index of the element to match (0-based)
      * @return a {@link ScSelectorIndexProperty} for building exact index-based selectors
      */
-    protected static ScSelectorIndexProperty _indexAt(int index) {
-        return new ScSelectorIndexProperty(ScSelectorIndexProperty.Conditions.At, index);
+    protected static ScSelectorIndexProperty _indexOf(int index) {
+        return SELECTOR_ACCESSOR._indexOf(index);
     }
 
     /**
      * Creates a selector property for matching the first element. This method is only valid for XPath.
      *
      * <p>
-     * This method is a convenience method equivalent to {@code _indexAt(0)}.
+     * This method is a convenience method equivalent to {@code _indexOf(0)}.
      * 
      *
      * <p>
@@ -403,7 +409,7 @@ public abstract class ScAbstractComponent {
      * @return a {@link ScSelectorIndexProperty} for selecting the first element
      */
     protected static ScSelectorIndexProperty _first() {
-        return _indexAt(0);
+        return SELECTOR_ACCESSOR._first();
     }
 
     /**
@@ -424,7 +430,7 @@ public abstract class ScAbstractComponent {
      * @return a {@link ScSelectorIndexProperty} for selecting the last element
      */
     protected static ScSelectorIndexProperty _last() {
-        return new ScSelectorIndexProperty(ScSelectorIndexProperty.Conditions.Last);
+        return SELECTOR_ACCESSOR._last();
     }
 
     /**
@@ -449,7 +455,7 @@ public abstract class ScAbstractComponent {
      * @see ScSelectorNthOfTypeProperty
      */
     protected static ScSelectorNthOfTypeProperty _nthOfType(int index) {
-        return new ScSelectorNthOfTypeProperty(index);
+        return SELECTOR_ACCESSOR._nthOfType(index);
     }
 
     /**
@@ -474,7 +480,7 @@ public abstract class ScAbstractComponent {
      * @see ScSelectorNthLastOfTypeProperty
      */
     protected static ScSelectorNthLastOfTypeProperty _nthLastOfType(int index) {
-        return new ScSelectorNthLastOfTypeProperty(index);
+        return SELECTOR_ACCESSOR._nthLastOfType(index);
     }
 
     /**
@@ -496,7 +502,7 @@ public abstract class ScAbstractComponent {
      * @see ScSelectorFirstOfTypeProperty
      */
     protected static ScSelectorFirstOfTypeProperty _firstOfType() {
-        return new ScSelectorFirstOfTypeProperty();
+        return SELECTOR_ACCESSOR._firstOfType();
     }
 
     /**
@@ -518,7 +524,7 @@ public abstract class ScAbstractComponent {
      * @see ScSelectorLastOfTypeProperty
      */
     protected static ScSelectorLastOfTypeProperty _lastOfType() {
-        return new ScSelectorLastOfTypeProperty();
+        return SELECTOR_ACCESSOR._lastOfType();
     }
 
     /**
@@ -543,7 +549,7 @@ public abstract class ScAbstractComponent {
      * @see ScSelectorNthChildProperty
      */
     protected static ScSelectorNthChildProperty _nthChild(int index) {
-        return new ScSelectorNthChildProperty(index);
+        return SELECTOR_ACCESSOR._nthChild(index);
     }
 
     /**
@@ -568,7 +574,7 @@ public abstract class ScAbstractComponent {
      * @see ScSelectorNthLastChildProperty
      */
     protected static ScSelectorNthLastChildProperty _nthLastChild(int index) {
-        return new ScSelectorNthLastChildProperty(index);
+        return SELECTOR_ACCESSOR._nthLastChild(index);
     }
 
     /**
@@ -590,7 +596,7 @@ public abstract class ScAbstractComponent {
      * @see ScSelectorFirstChildProperty
      */
     protected static ScSelectorFirstChildProperty _firstChild() {
-        return new ScSelectorFirstChildProperty();
+        return SELECTOR_ACCESSOR._firstChild();
     }
 
     /**
@@ -612,7 +618,7 @@ public abstract class ScAbstractComponent {
      * @see ScSelectorLastChildProperty
      */
     protected static ScSelectorLastChildProperty _lastChild() {
-        return new ScSelectorLastChildProperty();
+        return SELECTOR_ACCESSOR._lastChild();
     }
 
     /**
@@ -634,7 +640,7 @@ public abstract class ScAbstractComponent {
      * @param selector the {@link ScSelector} for locating the component
      * @return a {@link ScGenericComponent} wrapping the located element
      */
-    protected ScGenericComponent $genericComponent(ScSelector selector) {
+    protected ScGenericComponent $genericComponent(@NonNull ScSelector selector) {
         return $component(selector, ScGenericComponent.class);
     }
 
@@ -660,7 +666,7 @@ public abstract class ScAbstractComponent {
      * @param selector the {@link ScSelector} for locating the textbox
      * @return a {@link ScTextbox} component for text input interaction
      */
-    protected ScTextbox $textbox(ScSelector selector) {
+    protected ScTextbox $textbox(@NonNull ScSelector selector) {
         return $component(selector, ScTextbox.class);
     }
 
@@ -686,7 +692,7 @@ public abstract class ScAbstractComponent {
      * @param selector the {@link ScSelector} for locating the checkbox
      * @return a {@link ScCheckbox} component for checkbox interaction
      */
-    protected ScCheckbox $checkbox(ScSelector selector) {
+    protected ScCheckbox $checkbox(@NonNull ScSelector selector) {
         return $component(selector, ScCheckbox.class);
     }
 
@@ -712,7 +718,7 @@ public abstract class ScAbstractComponent {
      * @param selector the {@link ScSelector} for locating the dropdown
      * @return a {@link ScDropdown} component for dropdown selection
      */
-    protected ScDropdown $dropdown(ScSelector selector) {
+    protected ScDropdown $dropdown(@NonNull ScSelector selector) {
         return $component(selector, ScDropdown.class);
     }
 
@@ -738,7 +744,7 @@ public abstract class ScAbstractComponent {
      * @param selector the {@link ScSelector} for locating the multi-select
      * @return a {@link ScMultiSelect} component for multi-select interaction
      */
-    protected ScMultiSelect $multiSelect(ScSelector selector) {
+    protected ScMultiSelect $multiSelect(@NonNull ScSelector selector) {
         return $component(selector, ScMultiSelect.class);
     }
 
@@ -764,7 +770,7 @@ public abstract class ScAbstractComponent {
      * @param selector the {@link ScSelector} for locating the link
      * @return a {@link ScLink} component for link interaction
      */
-    protected ScLink $link(ScSelector selector) {
+    protected ScLink $link(@NonNull ScSelector selector) {
         return $component(selector, ScLink.class);
     }
 
@@ -790,7 +796,7 @@ public abstract class ScAbstractComponent {
      * @param selector the {@link ScSelector} for locating the link
      * @return a {@link ScButton} component for button interaction
      */
-    protected ScButton $button(ScSelector selector) {
+    protected ScButton $button(@NonNull ScSelector selector) {
         return $component(selector, ScButton.class);
     }
 
@@ -816,7 +822,7 @@ public abstract class ScAbstractComponent {
      * @param selector the {@link ScSelector} for locating the image
      * @return a {@link ScImage} component for image interaction
      */
-    protected ScImage $image(ScSelector selector) {
+    protected ScImage $image(@NonNull ScSelector selector) {
         return $component(selector, ScImage.class);
     }
 
@@ -843,27 +849,9 @@ public abstract class ScAbstractComponent {
      * @param selector the {@link ScSelector} for locating the radio buttons
      * @return a {@link ScRadioButtonGroup} for managing radio button groups
      */
-    protected ScRadioButtonGroup<ScRadioButton> $radioButtons(ScSelector selector) {
+    protected ScRadioButtonGroup<ScRadioButton> $radioButtons(@NonNull ScSelector selector) {
         return $$components(selector, ScRadioButton.class, ScRadioButtonGroup.class);
     }
-
-    /**
-     * Hook method for waiting for component or page display.
-     *
-     * <p>
-     * This method is called by the framework to wait for a component or page to be displayed.
-     * Subclasses can override this method to implement custom waiting logic specific to their needs.
-     * 
-     *
-     * <p>
-     * By default, this method does nothing. Subclasses should override it to define what needs to be
-     * waited for before the component/page is considered ready for interaction.
-     * 
-     *
-     * @see ScComponent#waitForDisplayed()
-     * @see ScAbstractPage#waitForComponent(ScComponent)
-     */
-//    protected void waitForDisplayed() {}
 
     /**
      * Creates a component instance of the specified type with the given selector.
@@ -899,7 +887,7 @@ public abstract class ScAbstractComponent {
      *
      * @see #$component(ScSelector, Class, ScAbstractComponent)
      */
-    protected <T extends ScComponent> T $component(ScSelector selector, Class<T> componentType) {
+    protected <T extends ScComponent> T $component(@NonNull ScSelector selector, @NonNull Class<T> componentType) {
         return $component(selector, componentType, null);
     }
 
@@ -929,7 +917,7 @@ public abstract class ScAbstractComponent {
      *
      * @see #$component(ScSelector, Class)
      */
-    protected <T extends ScComponent> T $component(ScSelector selector, Class<T> componentType, ScAbstractComponent containingObject) {
+    protected <T extends ScComponent> T $component(@NonNull ScSelector selector, @NonNull Class<T> componentType, @Nullable ScAbstractComponent containingObject) {
         try {
             T $component;
 
@@ -980,7 +968,7 @@ public abstract class ScAbstractComponent {
      * @see #$$components(ScSelector, Class, ScAbstractComponent)
      * @see #$$components(ScSelector, Class, Class)
      */
-    protected <T extends ScComponent> ScComponentCollection<T> $$components(ScSelector selector, Class<T> componentType) {
+    protected <T extends ScComponent> ScComponentCollection<T> $$components(@NonNull ScSelector selector, @NonNull Class<T> componentType) {
         ScComponentCollection<T> $$components = new ScComponentCollection<>();
 
         $$components.setSelector(selector);
@@ -1024,7 +1012,7 @@ public abstract class ScAbstractComponent {
      * @see #$$components(ScSelector, Class)
      * @see #$$components(ScSelector, Class, Class)
      */
-    protected <T extends ScComponent> ScComponentCollection<T> $$components(ScSelector selector, Class<T> componentType, ScAbstractComponent containingObject) {
+    protected <T extends ScComponent> ScComponentCollection<T> $$components(@NonNull ScSelector selector, @NonNull Class<T> componentType, ScAbstractComponent containingObject) {
         ScComponentCollection<T> $$components = new ScComponentCollection<>();
 
         $$components.setSelector(selector);
@@ -1076,7 +1064,7 @@ public abstract class ScAbstractComponent {
      * @see #$$components(ScSelector, Class)
      * @see #$$components(ScSelector, Class, ScAbstractComponent)
      */
-    protected <T extends ScComponent, R extends ScComponentCollection<T>> R $$components(ScSelector selector, Class<T> componentType, Class<R> componentCollectionType) {
+    protected <T extends ScComponent, R extends ScComponentCollection<T>> R $$components(@NonNull ScSelector selector, @NonNull Class<T> componentType, @NonNull Class<R> componentCollectionType) {
         try {
             R $$components;
 
@@ -1131,7 +1119,7 @@ public abstract class ScAbstractComponent {
      *
      * @see #$frame(ScSelector, Class, ScAbstractComponent, ScFrameAction)
      */
-    protected <T extends ScFrameContent> void $frame(ScSelector frameSelector, Class<T> frameContentType, ScFrameAction<T> predicate) {
+    protected <T extends ScFrameContent> void $frame(@NonNull ScSelector frameSelector, @NonNull Class<T> frameContentType, @NonNull ScFrameAction<T> predicate) {
         $frame(frameSelector, frameContentType, null, predicate);
     }
 
@@ -1166,7 +1154,7 @@ public abstract class ScAbstractComponent {
      *
      * @see #$frame(ScSelector, Class, ScFrameAction)
      */
-    protected <T extends ScFrameContent> void $frame(ScSelector frameSelector, Class<T> frameContentType, ScAbstractComponent containingObject, ScFrameAction<T> predicate) {
+    protected <T extends ScFrameContent> void $frame(@NonNull ScSelector frameSelector, @NonNull Class<T> frameContentType, @Nullable ScAbstractComponent containingObject, @NonNull ScFrameAction<T> predicate) {
         final WebDriver webDriver = Selentic.driver();
         final ScFrame $frame = this.$component(frameSelector, ScFrame.class);
         T $frameContent;
@@ -1236,7 +1224,7 @@ public abstract class ScAbstractComponent {
      *
      * @see #$dialog(ScSelector, Class, ScAbstractComponent, ScDialogAction)
      */
-    protected <T extends ScDialog> void $dialog(ScSelector selector, Class<T> componentType, ScDialogAction<T> predicate) {
+    protected <T extends ScDialog> void $dialog(@NonNull ScSelector selector, @NonNull Class<T> componentType, @NonNull ScDialogAction<T> predicate) {
         $dialog(selector, componentType, null, predicate);
     }
 
@@ -1269,7 +1257,7 @@ public abstract class ScAbstractComponent {
      *
      * @see #$dialog(ScSelector, Class, ScDialogAction)
      */
-    protected <T extends ScDialog> void $dialog(ScSelector selector, Class<T> componentType, ScAbstractComponent containingObject, ScDialogAction<T> predicate) {
+    protected <T extends ScDialog> void $dialog(@NonNull ScSelector selector, @NonNull Class<T> componentType, @Nullable ScAbstractComponent containingObject, @NonNull ScDialogAction<T> predicate) {
         final T $dialog = containingObject == null ? this.$component(selector, componentType) : this.$component(selector, componentType, containingObject);
 
         $dialog.waitForDisplayedDialog();

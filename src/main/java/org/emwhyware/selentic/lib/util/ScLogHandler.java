@@ -5,21 +5,23 @@ import ch.qos.logback.classic.LoggerContext;
 import ch.qos.logback.classic.encoder.PatternLayoutEncoder;
 import ch.qos.logback.classic.spi.ILoggingEvent;
 import ch.qos.logback.core.FileAppender;
-import org.emwhyware.selentic.lib.config.SelelenticConfig;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
+import org.emwhyware.selentic.lib.config.SelenticConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
 
 public final class ScLogHandler {
-    private static File logDirectory;
+    private static @Nullable File logDirectory;
 
     // By putting this in static, ensure that setting up log starts before anything else.
     static {
         ScInitializer.init();
     }
 
-    public static Logger logger(Class<?> loggedClass) {
+    public static Logger logger(@NonNull Class<?> loggedClass) {
         return LoggerFactory.getLogger(loggedClass);
     }
 
@@ -30,12 +32,12 @@ public final class ScLogHandler {
         final ch.qos.logback.classic.Logger rootLogger = (ch.qos.logback.classic.Logger) LoggerFactory.getLogger(ch.qos.logback.classic.Logger.ROOT_LOGGER_NAME);
         final ch.qos.logback.classic.Logger apacheHttpLogger = (ch.qos.logback.classic.Logger) LoggerFactory.getLogger("org.apache.hc");
         final ch.qos.logback.classic.Logger selenticLogger = (ch.qos.logback.classic.Logger) LoggerFactory.getLogger("org.emwhyware.selentic");
-        final SelelenticConfig selelenticConfig = SelelenticConfig.config();
+        final SelenticConfig selenticConfig = SelenticConfig.config();
 
         // Set the log level at the root level.
-        rootLogger.setLevel(selelenticConfig.rootLogLevel());
+        rootLogger.setLevel(selenticConfig.rootLogLevel());
         // Set the log level for all Selentic Framework packages.
-        selenticLogger.setLevel(selelenticConfig.selenticLogLevel());
+        selenticLogger.setLevel(selenticConfig.selenticLogLevel());
         // Turn down Apache HC logging because they are particularly annoying.
         apacheHttpLogger.setLevel(Level.WARN);
 
@@ -69,11 +71,11 @@ public final class ScLogHandler {
         return fileAppender;
     }
 
-    static void setLogDirectory(File logDirectory) {
+    static void setLogDirectory(@NonNull File logDirectory) {
         ScLogHandler.logDirectory = logDirectory;
     }
 
-    public static File logDirectory() {
+    public static @Nullable File logDirectory() {
         return logDirectory;
     }
 

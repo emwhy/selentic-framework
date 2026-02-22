@@ -2,7 +2,10 @@ package org.emwhyware.selentic.lib;
 
 import org.emwhyware.selentic.lib.exception.ScUnexpectedPageException;
 import org.emwhyware.selentic.lib.exception.ScWaitTimeoutException;
+import org.emwhyware.selentic.lib.selector.ScPageCssSelectorBuilder;
+import org.emwhyware.selentic.lib.selector.ScPageXPathBuilder;
 import org.emwhyware.selentic.lib.util.ScLogHandler;
+import org.emwhyware.selentic.lib.util.ScNullCheck;
 import org.slf4j.Logger;
 
 import static org.emwhyware.selentic.lib.util.ScWait.waitUntil;
@@ -74,9 +77,9 @@ public abstract class ScAbstractPage extends ScAbstractComponent {
                 return readyState != null && readyState.equals("complete");
             });
             this.waitForDisplayedPage();
-            LOGGER.debug("Page URL: {}", Selentic.driver().getCurrentUrl());
+            LOGGER.debug("Page URL: {}", ScNullCheck.requiresNonNull(Selentic.driver().getCurrentUrl()));
         } catch (Throwable th) {
-            throw new ScUnexpectedPageException(this.getClass().getCanonicalName(), th);
+            throw new ScUnexpectedPageException(ScNullCheck.requiresNonNull(this.getClass().getCanonicalName()), th);
         }
     }
 

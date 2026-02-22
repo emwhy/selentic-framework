@@ -1,9 +1,9 @@
 package org.emwhyware.selentic.regression.page;
 
 import org.emwhyware.selentic.lib.ScComponentCollection;
-import org.emwhyware.selentic.lib.ScCssSelector;
 import org.emwhyware.selentic.lib.ScGenericComponent;
 import org.emwhyware.selentic.lib.ScPage;
+import org.emwhyware.selentic.lib.selector.ScCssSelector;
 
 public class ScCssSelectorTestPage extends ScPage {
     private static final ScCssSelector CSS_SELECTOR_ID_TEST_TEXT = _cssSelector.descendant(_id("outer-table-1"));

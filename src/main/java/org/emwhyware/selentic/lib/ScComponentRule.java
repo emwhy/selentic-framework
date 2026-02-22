@@ -1,12 +1,13 @@
 package org.emwhyware.selentic.lib;
 
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.emwhyware.selentic.lib.exception.ScComponentRulesException;
 import org.openqa.selenium.WebElement;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
 import java.util.regex.Pattern;
 
 /**
@@ -67,7 +68,7 @@ public class ScComponentRule {
      *
      * @param element the {@link WebElement} to validate with rules
      */
-    ScComponentRule(WebElement element) {
+    ScComponentRule(@NonNull WebElement element) {
         this.element = element;
     }
 
@@ -87,7 +88,7 @@ public class ScComponentRule {
      * @see #any()
      *
      */
-    <T extends ScComponent> void verifyRules(Class<T> componentType) {
+    <T extends ScComponent> void verifyRules(@NonNull Class<T> componentType) {
         if (this.ruleResults.isEmpty()) {
             throw new ScComponentRulesException(componentType);
         } else {
@@ -134,7 +135,7 @@ public class ScComponentRule {
      * @param attr the name of the HTML attribute to validate
      * @return a {@link ScRuleCondition} for the specified attribute
      */
-    public ScRuleCondition attr(String attr) {
+    public ScRuleCondition attr(@NonNull String attr) {
         return new ScRuleCondition("'" + attr + "' attribute", this.element.getDomAttribute(attr));
     }
 
@@ -251,8 +252,8 @@ public class ScComponentRule {
      *
      */
     public class ScRuleCondition {
-        private final String valueType;
-        private final Optional<String> actualValue;
+        private final @NonNull String valueType;
+        private final @Nullable String actualValue;
 
         /**
          * Constructs a rule condition with a value type and actual value.
@@ -260,9 +261,9 @@ public class ScComponentRule {
          * @param valueType description of the value being tested (e.g., "tag", "attribute")
          * @param actualValue the actual value from the element
          */
-        private ScRuleCondition(String valueType, String actualValue) {
+        private ScRuleCondition(@NonNull String valueType, @Nullable String actualValue) {
             this.valueType = valueType;
-            this.actualValue = Optional.ofNullable(actualValue);
+            this.actualValue = actualValue;
         }
 
         /**
@@ -311,7 +312,7 @@ public class ScComponentRule {
          *
          * @param expected the unexpected value
          */
-        public void isNot(String expected) {
+        public void isNot(@NonNull String expected) {
             ScComponentRule.this.ruleResults.add(new ScRuleResult(valueType, ScRuleType.IsNot, actualValue, expected));
         }
 
@@ -324,7 +325,7 @@ public class ScComponentRule {
          *
          * @param expected one or more acceptable values
          */
-        public void isOneOf(String... expected) {
+        public void isOneOf(@NonNull String... expected) {
             ScComponentRule.this.ruleResults.add(new ScRuleResult(valueType, ScRuleType.IsOneOf, actualValue, expected));
         }
 
@@ -337,7 +338,7 @@ public class ScComponentRule {
          *
          * @param expected the substring that must not be present
          */
-        public void doesNotContain(String expected) {
+        public void doesNotContain(@NonNull String expected) {
             ScComponentRule.this.ruleResults.add(new ScRuleResult(valueType, ScRuleType.DoesNotContain, actualValue, expected));
         }
 
@@ -350,7 +351,7 @@ public class ScComponentRule {
          *
          * @param expected the substring that must be present
          */
-        public void contains(String expected) {
+        public void contains(@NonNull String expected) {
             ScComponentRule.this.ruleResults.add(new ScRuleResult(valueType, ScRuleType.Contains, actualValue, expected));
         }
 
@@ -363,7 +364,7 @@ public class ScComponentRule {
          *
          * @param expected the required prefix
          */
-        public void startsWith(String expected) {
+        public void startsWith(@NonNull String expected) {
             ScComponentRule.this.ruleResults.add(new ScRuleResult(valueType, ScRuleType.StartsWith, actualValue, expected));
         }
 
@@ -376,7 +377,7 @@ public class ScComponentRule {
          *
          * @param expected the required suffix
          */
-        public void endsWith(String expected) {
+        public void endsWith(@NonNull String expected) {
             ScComponentRule.this.ruleResults.add(new ScRuleResult(valueType, ScRuleType.EndsWith, actualValue, expected));
         }
 
@@ -389,7 +390,7 @@ public class ScComponentRule {
          *
          * @param regexPattern the regex pattern the value must match
          */
-        public void matches(String regexPattern) {
+        public void matches(@NonNull String regexPattern) {
             ScComponentRule.this.ruleResults.add(new ScRuleResult(valueType, ScRuleType.Matches, actualValue, regexPattern));
         }
     }
@@ -426,22 +427,15 @@ public class ScComponentRule {
      *
      */
     public class ScCssClassRuleCondition {
-        private final Optional<String[]> actualCssClasses;
-
-        /**
-         * Constructs a CSS class rule condition with no CSS classes.
-         */
-        private ScCssClassRuleCondition() {
-            this.actualCssClasses = Optional.empty();
-        }
+        private final @NonNull String[] actualCssClasses;
 
         /**
          * Constructs a CSS class rule condition with the provided CSS classes.
          *
          * @param actualCssClasses the CSS classes to validate
          */
-        private ScCssClassRuleCondition(String... actualCssClasses) {
-            this.actualCssClasses = Optional.of(actualCssClasses);
+        private ScCssClassRuleCondition(@NonNull String... actualCssClasses) {
+            this.actualCssClasses = actualCssClasses;
         }
 
         /**
@@ -476,7 +470,7 @@ public class ScComponentRule {
          *
          * @param expectedCssClass the CSS class that must be present
          */
-        public void has(String expectedCssClass) {
+        public void has(@NonNull String expectedCssClass) {
             ScComponentRule.this.ruleResults.add(new ScCssClassRunResult(ScCssClassRuleType.Has, actualCssClasses, new String[] { expectedCssClass }));
         }
 
@@ -489,7 +483,7 @@ public class ScComponentRule {
          *
          * @param expectedCssClass the CSS class that must not be present
          */
-        public void doesNotHave(String expectedCssClass) {
+        public void doesNotHave(@NonNull String expectedCssClass) {
             ScComponentRule.this.ruleResults.add(new ScCssClassRunResult(ScCssClassRuleType.DoesNotHave, actualCssClasses, new String[] { expectedCssClass }));
         }
 
@@ -502,7 +496,7 @@ public class ScComponentRule {
          *
          * @param expectedCssClasses all CSS classes that must be present
          */
-        public void hasAllOf(String... expectedCssClasses) {
+        public void hasAllOf(@NonNull String... expectedCssClasses) {
             ScComponentRule.this.ruleResults.add(new ScCssClassRunResult(ScCssClassRuleType.HasAllOf, actualCssClasses, expectedCssClasses));
         }
 
@@ -515,7 +509,7 @@ public class ScComponentRule {
          *
          * @param expectedCssClasses one or more CSS classes where at least one must be present
          */
-        public void hasAnyOf(String... expectedCssClasses) {
+        public void hasAnyOf(@NonNull String... expectedCssClasses) {
             ScComponentRule.this.ruleResults.add(new ScCssClassRunResult(ScCssClassRuleType.HasAnyOf, actualCssClasses, expectedCssClasses));
         }
 
@@ -528,7 +522,7 @@ public class ScComponentRule {
          *
          * @param expectedCssClasses CSS classes that must not be present
          */
-        public void hasNoneOf(String... expectedCssClasses) {
+        public void hasNoneOf(@NonNull String... expectedCssClasses) {
             ScComponentRule.this.ruleResults.add(new ScCssClassRunResult(ScCssClassRuleType.HasNoneOf, actualCssClasses, expectedCssClasses));
         }
     }
@@ -628,12 +622,7 @@ public class ScComponentRule {
     private abstract class ScAbstractRunResult {
         private boolean result = false;
 
-        /**
-         * Sets the result of the rule verification.
-         *
-         * @param result true if the rule passed, false if it failed
-         */
-        void setResult(boolean result) {
+        ScAbstractRunResult(boolean result) {
             this.result = result;
         }
 
@@ -663,22 +652,22 @@ public class ScComponentRule {
      * 
      */
     private class ScRuleResult extends ScAbstractRunResult {
-        private final String valueType;
-        private final Optional<String> actualValue;
-        private final ScRuleType ruleType;
-        private final String[] expectedValues;
+        private final @NonNull String valueType;
+        private final @Nullable String actualValue;
+        private final @NonNull ScRuleType ruleType;
+        private final @NonNull String[] expectedValues;
 
         /**
          * Constructs a rule result for an "Any" type rule.
          *
          * @param ruleType the type of rule
          */
-        private ScRuleResult(ScRuleType ruleType) {
+        private ScRuleResult(@NonNull ScRuleType ruleType) {
+            super(ruleType == ScRuleType.Any);
             this.valueType = "";
-            this.actualValue = Optional.empty();
+            this.actualValue = null;
             this.ruleType = ruleType;
             this.expectedValues = new String[] {};
-            this.setResult(ruleType == ScRuleType.Any);
         }
 
         /**
@@ -688,7 +677,7 @@ public class ScComponentRule {
          * @param ruleType the type of rule
          * @param actualValue the actual value from the element
          */
-        private ScRuleResult(String valueType, ScRuleType ruleType, Optional<String> actualValue) {
+        private ScRuleResult(@NonNull String valueType, @NonNull ScRuleType ruleType, @Nullable String actualValue) {
             this(valueType, ruleType, actualValue, new String[] {});
         }
 
@@ -704,27 +693,38 @@ public class ScComponentRule {
          * @param actualValue the actual value from the element
          * @param expectedValues the expected values for the rule
          */
-        private ScRuleResult(String valueType, ScRuleType ruleType, Optional<String> actualValue, String... expectedValues) {
+        private ScRuleResult(@NonNull String valueType, @NonNull ScRuleType ruleType, @Nullable String actualValue, @NonNull String... expectedValues) {
+            super(computeResult(ruleType, actualValue, expectedValues));
             this.valueType = valueType;
             this.actualValue = actualValue;
             this.ruleType = ruleType;
             this.expectedValues = expectedValues;
+        }
 
-            if (actualValue.isEmpty()) {
-                this.setResult(this.ruleType == ScRuleType.IsAbsent);
+        /**
+         * Compute result.
+         * @param ruleType the type of CSS class rule
+         * @param actualValue the actual value from the element
+         * @param expectedValues the expected values for the rule
+         * @return result true or false
+         */
+        private static boolean computeResult(@NonNull ScRuleType ruleType, @Nullable String actualValue, @NonNull String[] expectedValues) {
+            if (actualValue == null) {
+                return ruleType == ScRuleType.IsAbsent;
             } else {
-                switch (this.ruleType) {
-                    case IsPresent -> this.setResult(true);
-                    case IsAbsent -> this.setResult(false);
-                    case Is -> this.setResult(expectedValues[0].equals(actualValue.get()));
-                    case IsNot -> this.setResult(!expectedValues[0].equals(actualValue.get()));
-                    case IsOneOf -> this.setResult(Arrays.stream(expectedValues).toList().contains(actualValue.get()));
-                    case Contains -> this.setResult(expectedValues[0].contains(actualValue.get()));
-                    case DoesNotContain -> this.setResult(!expectedValues[0].contains(actualValue.get()));
-                    case StartsWith -> this.setResult(expectedValues[0].startsWith(actualValue.get()));
-                    case EndsWith -> this.setResult(expectedValues[0].endsWith(actualValue.get()));
-                    case Matches -> this.setResult(Pattern.matches(expectedValues[0], actualValue.get()));
-                }
+                return switch (ruleType) {
+                    case IsPresent -> true;
+                    case IsAbsent -> false;
+                    case Is -> expectedValues[0].equals(actualValue);
+                    case IsNot -> !expectedValues[0].equals(actualValue);
+                    case IsOneOf -> Arrays.stream(expectedValues).toList().contains(actualValue);
+                    case Contains -> expectedValues[0].contains(actualValue);
+                    case DoesNotContain -> !expectedValues[0].contains(actualValue);
+                    case StartsWith -> expectedValues[0].startsWith(actualValue);
+                    case EndsWith -> expectedValues[0].endsWith(actualValue);
+                    case Matches -> Pattern.matches(expectedValues[0], actualValue);
+                    default -> false;
+                };
             }
         }
 
@@ -739,7 +739,7 @@ public class ScComponentRule {
 
             if (this.ruleType == ScRuleType.Any) {
               return "";
-            } else if (actualValue.isEmpty()) {
+            } else if (actualValue == null) {
                 switch (this.ruleType) {
                     case IsPresent -> errorText += " is present, but it is absent.";
                     case IsAbsent -> errorText = "";
@@ -756,14 +756,14 @@ public class ScComponentRule {
                 switch (this.ruleType) {
                     case IsPresent -> errorText = "";
                     case IsAbsent -> errorText += " is absent, but it is present.";
-                    case Is -> errorText += " is " + listToString(expectedValues) + ", but it is not. (actual: '" + actualValue.get() + "')";
-                    case IsNot -> errorText += " is not " + listToString(expectedValues) + ", but it is. (actual: '" + actualValue.get() + "')";
-                    case IsOneOf -> errorText += " is one of " + listToString(expectedValues) + ", but it is not. (actual: '" + actualValue.get() + "')";
-                    case Contains -> errorText += " contains " + listToString(expectedValues) + ", but it does not. (actual: '" + actualValue.get() + "')";
-                    case DoesNotContain -> errorText += " does not contain " + listToString(expectedValues) + ", but it does. (actual: '" + actualValue.get() + "')";
-                    case StartsWith -> errorText += " starts with " + listToString(expectedValues) + ", but it does not. (actual: '" + actualValue.get() + "')";
-                    case EndsWith -> errorText += " ends with " + listToString(expectedValues) + ", but it does not. (actual: '" + actualValue.get() + "')";
-                    case Matches -> errorText += " matches pattern " + listToString(expectedValues) + ", but it does not. (actual: '" + actualValue.get() + "')";
+                    case Is -> errorText += " is " + listToString(expectedValues) + ", but it is not. (actual: '" + actualValue + "')";
+                    case IsNot -> errorText += " is not " + listToString(expectedValues) + ", but it is. (actual: '" + actualValue + "')";
+                    case IsOneOf -> errorText += " is one of " + listToString(expectedValues) + ", but it is not. (actual: '" + actualValue + "')";
+                    case Contains -> errorText += " contains " + listToString(expectedValues) + ", but it does not. (actual: '" + actualValue + "')";
+                    case DoesNotContain -> errorText += " does not contain " + listToString(expectedValues) + ", but it does. (actual: '" + actualValue + "')";
+                    case StartsWith -> errorText += " starts with " + listToString(expectedValues) + ", but it does not. (actual: '" + actualValue + "')";
+                    case EndsWith -> errorText += " ends with " + listToString(expectedValues) + ", but it does not. (actual: '" + actualValue + "')";
+                    case Matches -> errorText += " matches pattern " + listToString(expectedValues) + ", but it does not. (actual: '" + actualValue + "')";
                 }
             }
 
@@ -780,9 +780,9 @@ public class ScComponentRule {
      * 
      */
     private class ScCssClassRunResult extends ScAbstractRunResult {
-        private final ScCssClassRuleType ruleType;
-        private final Optional<String[]> actualCssValues;
-        private final String[] expectedCssValues;
+        private final @NonNull ScCssClassRuleType ruleType;
+        private final @NonNull String[] actualCssValues;
+        private final @NonNull String[] expectedCssValues;
 
         /**
          * Constructs a CSS class rule result with a rule type and actual classes.
@@ -790,7 +790,7 @@ public class ScComponentRule {
          * @param ruleType the type of CSS class rule
          * @param actualCssValues the actual CSS classes from the element
          */
-        private ScCssClassRunResult(ScCssClassRuleType ruleType, Optional<String[]> actualCssValues) {
+        private ScCssClassRunResult(@NonNull ScCssClassRuleType ruleType, @NonNull String[] actualCssValues) {
             this(ruleType, actualCssValues, new String[] {});
         }
 
@@ -805,24 +805,37 @@ public class ScComponentRule {
          * @param actualCssValues the actual CSS classes from the element
          * @param expectedCssValues the expected CSS classes for the rule
          */
-        private ScCssClassRunResult(ScCssClassRuleType ruleType, Optional<String[]> actualCssValues, String[] expectedCssValues) {
+        private ScCssClassRunResult(@NonNull ScCssClassRuleType ruleType, @NonNull String[] actualCssValues, @NonNull String[] expectedCssValues) {
+            super(computeResult(ruleType, actualCssValues, expectedCssValues));
             this.ruleType = ruleType;
             this.actualCssValues = actualCssValues;
             this.expectedCssValues = expectedCssValues;
+        }
 
-            if (actualCssValues.isEmpty()) {
-                this.setResult(ruleType == ScCssClassRuleType.IsAbsent);
-            } else {
-                switch (ruleType) {
-                    case ScCssClassRuleType.IsPresent -> this.setResult(true);
-                    case ScCssClassRuleType.IsAbsent -> this.setResult(false);
-                    case ScCssClassRuleType.Has -> this.setResult(Arrays.stream(actualCssValues.get()).toList().contains(expectedCssValues[0]));
-                    case ScCssClassRuleType.DoesNotHave -> this.setResult(!Arrays.stream(actualCssValues.get()).toList().contains(expectedCssValues[0]));
-                    case ScCssClassRuleType.HasAllOf -> this.setResult(Arrays.stream(expectedCssValues).allMatch(v -> Arrays.stream(actualCssValues.get()).toList().contains(v)));
-                    case ScCssClassRuleType.HasAnyOf -> this.setResult(Arrays.stream(expectedCssValues).anyMatch(v -> Arrays.stream(actualCssValues.get()).toList().contains(v)));
-                    case ScCssClassRuleType.HasNoneOf -> this.setResult(Arrays.stream(expectedCssValues).noneMatch(v -> Arrays.stream(actualCssValues.get()).toList().contains(v)));
-                }
-            }
+        /**
+         * Compute result.
+         * @param ruleType the type of CSS class rule
+         * @param actualCssValues the actual CSS classes from the element
+         * @param expectedCssValues the expected CSS classes for the rule
+         * @return result true or false
+         */
+        private static boolean computeResult(@NonNull ScCssClassRuleType ruleType, @NonNull String[] actualCssValues, @NonNull String[] expectedCssValues) {
+//            if (actualCssValues == null) {
+//                return ruleType == ScCssClassRuleType.IsAbsent;
+//            } else {
+                return switch (ruleType) {
+                    case ScCssClassRuleType.IsPresent -> true;
+                    case ScCssClassRuleType.IsAbsent -> false;
+                    case ScCssClassRuleType.Has -> Arrays.stream(actualCssValues).toList().contains(expectedCssValues[0]);
+                    case ScCssClassRuleType.DoesNotHave -> !Arrays.stream(actualCssValues).toList().contains(expectedCssValues[0]);
+                    case ScCssClassRuleType.HasAllOf ->
+                            Arrays.stream(expectedCssValues).allMatch(v -> Arrays.stream(actualCssValues).toList().contains(v));
+                    case ScCssClassRuleType.HasAnyOf ->
+                            Arrays.stream(expectedCssValues).anyMatch(v -> Arrays.stream(actualCssValues).toList().contains(v));
+                    case ScCssClassRuleType.HasNoneOf ->
+                            Arrays.stream(expectedCssValues).noneMatch(v -> Arrays.stream(actualCssValues).toList().contains(v));
+                };
+//            }
         }
 
         /**
@@ -837,7 +850,7 @@ public class ScComponentRule {
             } else {
                 String errorText = "Expected that CSS class ";
 
-                if (actualCssValues.isEmpty()) {
+                if (actualCssValues == null) {
                     switch (ruleType) {
                         case ScCssClassRuleType.IsPresent -> errorText += " is present, but it is absent.";
                         case ScCssClassRuleType.IsAbsent -> errorText = "";
@@ -850,12 +863,12 @@ public class ScComponentRule {
                 } else {
                     switch (ruleType) {
                         case ScCssClassRuleType.IsPresent -> errorText = "";
-                        case ScCssClassRuleType.IsAbsent -> errorText += " is absent, but it is present (actual: " + listToString(actualCssValues.get()) + ").";
-                        case ScCssClassRuleType.Has -> errorText += " has " + listToString(expectedCssValues) + ", but it is missing the class (actual: " + listToString(actualCssValues.get()) + ").";
-                        case ScCssClassRuleType.DoesNotHave -> errorText += " does not have " + listToString(expectedCssValues) + ", but it is missing the class (actual: " + listToString(actualCssValues.get()) + ").";
-                        case ScCssClassRuleType.HasAllOf -> errorText += " has all of " + listToString(expectedCssValues) + ", but it is missing one or more classes (actual: " + listToString(actualCssValues.get()) + ").";
-                        case ScCssClassRuleType.HasAnyOf -> errorText += " has any of " + listToString(expectedCssValues) + ", but it has none of classes (actual: " + listToString(actualCssValues.get()) + ").";
-                        case ScCssClassRuleType.HasNoneOf -> errorText += " has none of " + listToString(expectedCssValues) + ", but it has one or more classes (actual: " + listToString(actualCssValues.get()) + ").";
+                        case ScCssClassRuleType.IsAbsent -> errorText += " is absent, but it is present (actual: " + listToString(actualCssValues) + ").";
+                        case ScCssClassRuleType.Has -> errorText += " has " + listToString(expectedCssValues) + ", but it is missing the class (actual: " + listToString(actualCssValues) + ").";
+                        case ScCssClassRuleType.DoesNotHave -> errorText += " does not have " + listToString(expectedCssValues) + ", but it is missing the class (actual: " + listToString(actualCssValues) + ").";
+                        case ScCssClassRuleType.HasAllOf -> errorText += " has all of " + listToString(expectedCssValues) + ", but it is missing one or more classes (actual: " + listToString(actualCssValues) + ").";
+                        case ScCssClassRuleType.HasAnyOf -> errorText += " has any of " + listToString(expectedCssValues) + ", but it has none of classes (actual: " + listToString(actualCssValues) + ").";
+                        case ScCssClassRuleType.HasNoneOf -> errorText += " has none of " + listToString(expectedCssValues) + ", but it has one or more classes (actual: " + listToString(actualCssValues) + ").";
                     }
                 }
 
@@ -875,7 +888,7 @@ public class ScComponentRule {
      * @param values the string array to convert
      * @return the formatted string with each value wrapped in single quotes and separated by commas
      */
-    private static String listToString(String[] values) {
+    private static String listToString(@NonNull String[] values) {
         return "'" + String.join("', '", values) + "'";
     }
 }

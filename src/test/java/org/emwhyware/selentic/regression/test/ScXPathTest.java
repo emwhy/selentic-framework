@@ -9,29 +9,48 @@ import org.testng.annotations.Test;
 
 import java.util.List;
 
-public class ScXPathTest {
+/**
+ * Regression test suite for validating XPath locator support within the Selentic framework.
+ * This class ensures that complex XPath expressions, including axes (sibling, preceding, following)
+ * and string functions, correctly resolve.
+ */
+public class ScXPathTest extends ScBaseTest {
+
+    /** Page object wrapper for the XPath selector test page. */
     private final ScWithPage<ScXPathTestPage> selectorTestPage = ScPage.with(ScXPathTestPage.class);
 
+    /**
+     * Initializes the test environment by navigating to the local HTML test file.
+     */
     @BeforeClass
     public void setup() {
         Selentic.open("file://" + System.getProperty("user.dir") + "/build/resources/test/test_file/selector-test.htm");
     }
 
+    /**
+     * Ensures the browser session is terminated after all tests in this class have executed.
+     */
     @AfterClass(alwaysRun = true)
     public void shutdown() {
         Selentic.quit();
     }
 
+    /**
+     * Verifies locating an element using an ID attribute via XPath (//*[@id='...']).
+     */
     @Test
     public void testXPathId() {
         selectorTestPage.inPage(p -> {
             final ScGenericComponent component = p.xPathIdTestText();
 
             Assert.assertTrue(component.isDisplayed());
-            Assert.assertEquals(component.id().orElse(null), "outer-table-1");
+            Assert.assertEquals(component.id().orElse(""), "outer-table-1");
         });
     }
 
+    /**
+     * Verifies locating multiple elements using a Tag name via XPath.
+     */
     @Test
     public void testXPathTag() {
         selectorTestPage.inPage(p -> {
@@ -41,6 +60,9 @@ public class ScXPathTest {
         });
     }
 
+    /**
+     * Verifies locating elements with CSS classes in XPath.
+     */
     @Test
     public void testXPathXPathClasses() {
         selectorTestPage.inPage(p -> {
@@ -50,6 +72,15 @@ public class ScXPathTest {
         });
     }
 
+    /**
+     * Verifies various attribute matching strategies in XPath:
+     * <ul>
+     *     <li>Exact match: [@attr='val']</li>
+     *     <li>Starts with: starts-with(@attr, 'val')</li>
+     *     <li>Contains: contains(@attr, 'val')</li>
+     *     <li>Ends with: substring(@attr, string-length(@attr) - ...)</li>
+     * </ul>
+     */
     @Test
     public void testXPathAttr() {
         selectorTestPage.inPage(p -> {
@@ -67,15 +98,30 @@ public class ScXPathTest {
         });
     }
 
+    /**
+     * Verifies positional indexing in XPath, including [n], position(), and last() functions.
+     */
     @Test
     public void testXPathIndex() {
         selectorTestPage.inPage(p -> {
             final ScComponentCollection<ScGenericComponent> components = p.xPathIndexTestTexts();
+            final ScGenericComponent componentFirst = p.xPathFirstText();
+            final ScGenericComponent componentLast = p.xPathLastText();
 
             Assert.assertEquals(components.texts(), List.of("Quaternary Delta", "Pentary Epsilon", "Hexary Zeta", "Septary Eta", "Octary Theta", "Nonary Iota", "Decary Kappa"));
+            Assert.assertEquals(componentFirst.text(), "Primary Alpha");
+            Assert.assertEquals(componentLast.text(), "Node Mu");
         });
     }
 
+    /**
+     * Verifies locating elements based on their inner text using:
+     * <ul>
+     *     <li>text()='val'</li>
+     *     <li>contains(text(), 'val')</li>
+     *     <li>starts-with(text(), 'val')</li>
+     * </ul>
+     */
     @Test
     public void testXPathText() {
         selectorTestPage.inPage(p -> {
@@ -93,6 +139,9 @@ public class ScXPathTest {
         });
     }
 
+    /**
+     * Verifies the descendant axis (// or /descendent::) for finding nested elements.
+     */
     @Test
     public void testXPathDescendent() {
         selectorTestPage.inPage(p -> {
@@ -102,6 +151,9 @@ public class ScXPathTest {
         });
     }
 
+    /**
+     * Verifies the child axis (/ or /child::) for finding direct child elements.
+     */
     @Test
     public void testXPathChild() {
         selectorTestPage.inPage(p -> {
@@ -111,6 +163,9 @@ public class ScXPathTest {
         });
     }
 
+    /**
+     * Verifies the following-sibling (/following-sibling::) axis.
+     */
     @Test
     public void testXPathSibling() {
         selectorTestPage.inPage(p -> {
@@ -120,6 +175,9 @@ public class ScXPathTest {
         });
     }
 
+    /**
+     * Verifies the preceding-sibling (/preceding-sibling::) axis.
+     */
     @Test
     public void testXPathPrecedingSibling() {
         selectorTestPage.inPage(p -> {
@@ -129,6 +187,9 @@ public class ScXPathTest {
         });
     }
 
+    /**
+     * Verifies the following (/following::) axis.
+     */
     @Test
     public void testXPathFollowing() {
         selectorTestPage.inPage(p -> {
@@ -138,6 +199,9 @@ public class ScXPathTest {
         });
     }
 
+    /**
+     * Verifies the preceding (/preceding::) axis.
+     */
     @Test
     public void testXPathPreceding() {
         selectorTestPage.inPage(p -> {
@@ -147,6 +211,9 @@ public class ScXPathTest {
         });
     }
 
+    /**
+     * Verifies the use of the not() function to exclude specific nodes.
+     */
     @Test
     public void testXPathNot() {
         selectorTestPage.inPage(p -> {
@@ -156,6 +223,9 @@ public class ScXPathTest {
         });
     }
 
+    /**
+     * Verifies that raw XPath strings are correctly processed by the underlying engine.
+     */
     @Test
     public void testXPathRaw() {
         selectorTestPage.inPage(p -> {

@@ -1,5 +1,8 @@
 package org.emwhyware.selentic.lib;
 
+import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.emwhyware.selentic.lib.config.SelenticConfig;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.edge.EdgeDriver;
@@ -8,14 +11,45 @@ import org.openqa.selenium.safari.SafariDriver;
 import org.openqa.selenium.support.events.EventFiringDecorator;
 import org.openqa.selenium.support.events.WebDriverListener;
 
-import java.util.Optional;
-
 public final class SelenticWebDriverContext {
     private final ScWebDriverOptions webDriverOptions = new ScWebDriverOptions();
-    private WebDriver driver;
-    private Optional<WebDriverListener> webDriverListener = Optional.empty();
+    private @NonNull ScBrowser browser = SelenticConfig.config().browser();
+    private @MonotonicNonNull WebDriver driver;
+    private @MonotonicNonNull WebDriverListener webDriverListener;
 
     SelenticWebDriverContext() {}
+
+    /**
+     * Allows setting browser. This overrides values set in {@link SelenticConfig}.
+     * <p>
+     * Changing the browser must be called before starting the web driver by calling {@link Selentic#driver()},
+     * {@link Selentic#open(String)}, or {@link Selentic#open()}.
+     * <p>
+     * In multiple threaded execution, browser can be set per thread. It is possible to run different browser in
+     * each thread.
+     *
+     * @param browser browser type
+     *
+     * @see Selentic#driver()
+     * @see Selentic#open(String)
+     * @see Selentic#open()
+     */
+    synchronized void setBrowser(@NonNull ScBrowser browser) {
+        this.browser = browser;
+    }
+
+    /**
+     * Returns the selected browser for this thread context.
+     * <p>
+     * The default value is set in {@link SelenticConfig}, but it can be changed by calling {@link #setBrowser(ScBrowser)}.
+     *
+     * @return currently selected browser type
+     *
+     * @see #setBrowser(ScBrowser)
+     */
+    synchronized @NonNull ScBrowser browser() {
+        return this.browser;
+    }
 
     /**
      * Returns the WebDriver instance for the current thread using the specified browser.
@@ -49,25 +83,30 @@ public final class SelenticWebDriverContext {
      * </ul>
      *
      *
-     * @param browser the {@link ScBrowser} type to use for creating the WebDriver
      * @return the {@link WebDriver} instance for the current thread with the specified browser
      * @see Selentic#driver()
      * @see ScBrowser
      */
-    synchronized WebDriver driver(ScBrowser browser) {
+    synchronized @NonNull WebDriver driver() {
         if (this.driver == null) {
-            WebDriver driver = null;
-
-            switch (browser) {
-                case Chrome -> driver = new ChromeDriver(webDriverOptions.chromeOptions());
-                case Firefox -> driver = new FirefoxDriver(webDriverOptions.firefoxOptions());
-                case Safari -> driver = new SafariDriver();
-                case Edge -> driver = new EdgeDriver(webDriverOptions.edgeOptions());
+            if (SelenticConfig.config().isHeadless()) {
+                Selentic.enableHeadless();
             }
+            // Set preferences.
+            webDriverOptions.chromeOptions().setExperimentalOption("prefs", webDriverOptions.chromePrefs());
+            webDriverOptions.edgeOptions().setExperimentalOption("prefs", webDriverOptions.edgePrefs());
+            webDriverOptions.firefoxOptions().addPreference("browser.helperApps.neverAsk.saveToDisk", String.join(",", webDriverOptions.firefoxNeverAskToSaveMimeTypes()));
+
+            WebDriver driver = switch (browser) {
+                case Chrome -> new ChromeDriver(webDriverOptions.chromeOptions());
+                case Edge -> new EdgeDriver(webDriverOptions.edgeOptions());
+                case Firefox -> new FirefoxDriver(webDriverOptions.firefoxOptions());
+                case Safari -> new SafariDriver(webDriverOptions.safariOptions());
+            };
 
             // Add listener class, if available.
-            if (webDriverListener.isPresent()) {
-                driver = new EventFiringDecorator<>(webDriverListener.get()).decorate(driver);
+            if (webDriverListener != null) {
+                driver = new EventFiringDecorator<>(webDriverListener).decorate(driver);
             }
             this.driver = driver;
             return driver;
@@ -87,7 +126,7 @@ public final class SelenticWebDriverContext {
      *
      * <p>
      * <strong>Important:</strong> This method must be called BEFORE calling {@link Selentic#driver()} or
-     * {@link #driver(ScBrowser)} to ensure the options are applied to the new ChromeDriver instance.
+     * {@link #driver()} to ensure the options are applied to the new ChromeDriver instance.
      *
      *
      * <p>
@@ -111,10 +150,8 @@ public final class SelenticWebDriverContext {
      * @see #withFirefoxOptions(ScWebDriverOptions.FirefoxOptionSetup)
      * @see #withEdgeOptions(ScWebDriverOptions.EdgeOptionSetup)
      */
-    synchronized void withChromeOptions(ScWebDriverOptions.ChromeOptionSetup optionSetup) {
+    synchronized void withChromeOptions(ScWebDriverOptions.@NonNull ChromeOptionSetup optionSetup) {
         optionSetup.options(webDriverOptions.chromeOptions(), webDriverOptions.chromePrefs());
-
-        webDriverOptions.chromeOptions().setExperimentalOption("pref", webDriverOptions.chromePrefs());
     }
 
     /**
@@ -128,7 +165,7 @@ public final class SelenticWebDriverContext {
      *
      * <p>
      * <strong>Important:</strong> This method must be called BEFORE calling {@link Selentic#driver()} or
-     * {@link #driver(ScBrowser)} to ensure the options are applied to the new FirefoxDriver instance.
+     * {@link #driver()} to ensure the options are applied to the new FirefoxDriver instance.
      *
      *
      * <p>
@@ -148,8 +185,8 @@ public final class SelenticWebDriverContext {
      * @see #withChromeOptions(ScWebDriverOptions.ChromeOptionSetup)
      * @see #withEdgeOptions(ScWebDriverOptions.EdgeOptionSetup)
      */
-    synchronized void withFirefoxOptions(ScWebDriverOptions.FirefoxOptionSetup optionSetup) {
-        optionSetup.options(webDriverOptions.firefoxOptions());
+    synchronized void withFirefoxOptions(ScWebDriverOptions.@NonNull FirefoxOptionSetup optionSetup) {
+        optionSetup.options(webDriverOptions.firefoxOptions(), webDriverOptions.firefoxNeverAskToSaveMimeTypes());
     }
 
     /**
@@ -163,7 +200,7 @@ public final class SelenticWebDriverContext {
      *
      * <p>
      * <strong>Important:</strong> This method must be called BEFORE calling {@link Selentic#driver()} or
-     * {@link #driver(ScBrowser)} to ensure the options are applied to the new EdgeDriver instance.
+     * {@link #driver()} to ensure the options are applied to the new EdgeDriver instance.
      *
      *
      * <p>
@@ -184,10 +221,8 @@ public final class SelenticWebDriverContext {
      * @see #withChromeOptions(ScWebDriverOptions.ChromeOptionSetup)
      * @see #withFirefoxOptions(ScWebDriverOptions.FirefoxOptionSetup)
      */
-    synchronized void withEdgeOptions(ScWebDriverOptions.EdgeOptionSetup optionSetup) {
+    synchronized void withEdgeOptions(ScWebDriverOptions.@NonNull EdgeOptionSetup optionSetup) {
         optionSetup.options(webDriverOptions.edgeOptions(), webDriverOptions.edgePrefs());
-
-        webDriverOptions.edgeOptions().setExperimentalOption("pref", webDriverOptions.edgeOptions());
     }
 
     /**
@@ -201,7 +236,7 @@ public final class SelenticWebDriverContext {
      *
      * <p>
      * <strong>Important:</strong> This method must be called BEFORE calling {@link Selentic#driver()} or
-     * {@link #driver(ScBrowser)} to ensure the options are applied to the new SafariDriver instance.
+     * {@link #driver()} to ensure the options are applied to the new SafariDriver instance.
      *
      *
      * <p>
@@ -215,7 +250,7 @@ public final class SelenticWebDriverContext {
      * @see #withChromeOptions(ScWebDriverOptions.ChromeOptionSetup)
      * @see #withFirefoxOptions(ScWebDriverOptions.FirefoxOptionSetup)
      */
-    synchronized void withSafariOptions(ScWebDriverOptions.SafariOptionSetup optionSetup) {
+    synchronized void withSafariOptions(ScWebDriverOptions.@NonNull SafariOptionSetup optionSetup) {
         optionSetup.options(webDriverOptions.safariOptions());
     }
 
@@ -254,8 +289,8 @@ public final class SelenticWebDriverContext {
      * @see WebDriverListener
      * @see Selentic#driver()
      */
-    synchronized void setWebDriverListener(WebDriverListener listener) {
-        this.webDriverListener = Optional.of(listener);
+    synchronized void setWebDriverListener(@NonNull WebDriverListener listener) {
+        this.webDriverListener = listener;
     }
 
 }

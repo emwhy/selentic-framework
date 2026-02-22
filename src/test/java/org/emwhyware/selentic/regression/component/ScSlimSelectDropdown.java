@@ -1,7 +1,10 @@
 package org.emwhyware.selentic.regression.component;
 
-import org.emwhyware.selentic.lib.*;
-import org.emwhyware.selentic.lib.util.ScWait;
+import org.emwhyware.selentic.lib.ScComponent;
+import org.emwhyware.selentic.lib.ScComponentCollection;
+import org.emwhyware.selentic.lib.ScComponentRule;
+import org.emwhyware.selentic.lib.ScGenericComponent;
+import org.emwhyware.selentic.lib.selector.ScCssSelector;
 
 public class ScSlimSelectDropdown extends ScComponent {
     private static final ScCssSelector ARROW_BUTTON = _cssSelector.descendant("svg", _cssClasses("ss-arrow"));

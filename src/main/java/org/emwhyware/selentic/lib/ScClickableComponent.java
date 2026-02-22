@@ -1,6 +1,6 @@
 package org.emwhyware.selentic.lib;
 
-import org.emwhyware.selentic.lib.config.SelelenticConfig;
+import org.emwhyware.selentic.lib.config.SelenticConfig;
 import org.emwhyware.selentic.lib.exception.ScComponentWaitException;
 import org.openqa.selenium.WebElement;
 
@@ -33,7 +33,7 @@ import org.openqa.selenium.WebElement;
  * <p>
  * All click operations follow this sequence:
  * <ol>
- *   <li>Wait for element to exist and be enabled (using default timeout from {@link SelelenticConfig})</li>
+ *   <li>Wait for element to exist and be enabled (using default timeout from {@link SelenticConfig})</li>
  *   <li>Scroll element into view</li>
  *   <li>Perform the click action</li>
  * </ol>

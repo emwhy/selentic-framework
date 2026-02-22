@@ -167,7 +167,7 @@
 
                 document.getElementById(id + '-indicator').innerHTML = 'Clicked!'
             }
-            function openSanityTestDialog() {
+            function openTestDialog() {
                 document.getElementById('test-dialog').style.display = 'inline';
             }
             function closeTestDialog() {
@@ -326,7 +326,7 @@
                             Button (Input)
                         </td>
                         <td class="element-content">
-                            <input type="button" id="test-input-button" value="SanityTest Input Button" onclick="clickButton(this)"/> <span id="test-input-button-indicator"></span>
+                            <input type="button" id="test-input-button" value="Test Input Button" onclick="clickButton(this)"/> <span id="test-input-button-indicator"></span>
                         </td>
                     </tr>
                     <tr>
@@ -334,7 +334,7 @@
                             Button (&lt;button&gt; tag)
                         </td>
                         <td class="element-content">
-                            <button id="test-button" onclick="clickButton(this)">SanityTest Button</button> <span id="test-button-indicator"></span>
+                            <button id="test-button" onclick="clickButton(this)">Test Button</button> <span id="test-button-indicator"></span>
                         </td>
                     </tr>
                     <tr>
@@ -354,21 +354,21 @@
                                 </thead>
                                 <tbody>
                                     <tr class="data">
-                                        <td class="product-name">SanityTest 1</td>
+                                        <td class="product-name">Test 1</td>
                                         <td class="serial-number">#TDD987</td>
                                         <td class="product-type">Type 1</td>
                                         <td class="built-date">1/4/2024</td>
                                         <td class="price">$99.99</td>
                                     </tr>
                                     <tr class="data">
-                                        <td class="product-name">SanityTest 2</td>
+                                        <td class="product-name">Test 2</td>
                                         <td class="serial-number">#AEV974</td>
                                         <td class="product-type">Type 2</td>
                                         <td class="built-date">9/23/2021</td>
                                         <td class="price">$10.98</td>
                                     </tr>
                                     <tr class="data">
-                                        <td class="product-name">SanityTest 3</td>
+                                        <td class="product-name">Test 3</td>
                                         <td class="serial-number">#CCA106</td>
                                         <td class="product-type">Type 1</td>
                                         <td class="built-date">10/5/2011</td>
@@ -383,7 +383,7 @@
                             Custom Dialog
                         </td>
                         <td class="element-content">
-                            <button id="open-test-dialog-button" onclick="openSanityTestDialog()">Open Dialog</button>
+                            <button id="open-test-dialog-button" onclick="openTestDialog()">Open Dialog</button>
                         </td>
                     </tr>
                     <tr>
@@ -925,7 +925,7 @@
                             CSV Download
                         </td>
                         <td class="element-content">
-                            <a id="test-csv-download-link" href="test.csv">SanityTest CSV File</a>
+                            <a id="test-csv-download-link" href="test.csv">Test CSV File</a>
                         </td>
                     </tr>
                     <tr>
@@ -1102,7 +1102,7 @@
             <div id="test-dialog">
                 <div class="dialog-bg"></div>
                 <div class="dialog-content">
-                    <div class="header">SanityTest Dialog</div>
+                    <div class="header">Test Dialog</div>
                     <div class="body">
                         <input type="text" id="test-dialog-textbox" value="test dialog text" />
                     </div>

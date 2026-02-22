@@ -1,5 +1,7 @@
 package org.emwhyware.selentic.lib;
 
+import java.util.Optional;
+
 /**
  * An abstract component class representing selectable form elements.
  *
@@ -24,11 +26,12 @@ public abstract class ScSelectableComponent extends ScFormComponent {
     @Override
     public String text() {
         final ScGenericComponent $parentComponent = $component(_xpath.parent(), ScGenericComponent.class);
+        final Optional<String> id = this.id();
 
         if ($parentComponent.tag().equals("label")) {
             return $parentComponent.text();
-        } else if (this.id().isPresent()){
-            final ScGenericComponent $label = $component(_xpath.page("label", _attr("for").is(this.id().get())), ScGenericComponent.class);
+        } else if (id.isPresent()) {
+            final ScGenericComponent $label = $component(_xpath.page("label", _attr("for").is(id.get())), ScGenericComponent.class);
 
             if ($label.exists()) {
                 return $label.text();

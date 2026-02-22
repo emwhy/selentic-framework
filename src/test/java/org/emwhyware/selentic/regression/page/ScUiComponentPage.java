@@ -1,6 +1,7 @@
 package org.emwhyware.selentic.regression.page;
 
 import org.emwhyware.selentic.lib.*;
+import org.emwhyware.selentic.lib.selector.ScCssSelector;
 import org.emwhyware.selentic.regression.component.*;
 import org.emwhyware.selentic.regression.component.dialog.ScTestDialog;
 import org.emwhyware.selentic.regression.component.dialog.ScTestModalDialog;
@@ -94,11 +95,11 @@ public class ScUiComponentPage extends ScPage {
         return $component(TEST_BUTTON_INDICATOR_TEXT, ScGenericComponent.class);
     }
 
-    public ScButton openSanityTestDialogButton() {
+    public ScButton openTestDialogButton() {
         return $component(OPEN_TEST_DIALOG_BUTTON, ScButton.class);
     }
 
-    public ScButton openSanityTestModalDialogButton() {
+    public ScButton openTestModalDialogButton() {
         return $component(OPEN_TEST_MODAL_DIALOG_BUTTON, ScButton.class);
     }
 
@@ -167,15 +168,15 @@ public class ScUiComponentPage extends ScPage {
     }
 
 
-    public void inSanityTestInnerFrame(ScFrameAction<ScSanityTestFrameContent> predicate) {
-        $frame(TEST_IFRAME, ScSanityTestFrameContent.class, predicate);
+    public void inTestInnerFrame(ScFrameAction<ScTestFrameContent> predicate) {
+        $frame(TEST_IFRAME, ScTestFrameContent.class, predicate);
     }
 
-    public void inSanityTestDialog(ScDialogAction<ScTestDialog> predicate) {
+    public void inTestDialog(ScDialogAction<ScTestDialog> predicate) {
         $dialog(TEST_DIALOG, ScTestDialog.class, predicate);
     }
 
-    public void inSanityTestModalDialog(ScDialogAction<ScTestModalDialog> predicate) {
+    public void inTestModalDialog(ScDialogAction<ScTestModalDialog> predicate) {
         $dialog(TEST_MODAL_DIALOG, ScTestModalDialog.class, predicate);
     }
 

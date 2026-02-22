@@ -1,6 +1,10 @@
 package org.emwhyware.selentic.lib;
 
+import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
+import org.checkerframework.checker.nullness.qual.NonNull;
 import org.emwhyware.selentic.lib.exception.*;
+import org.emwhyware.selentic.lib.selector.*;
+import org.emwhyware.selentic.lib.util.ScNullCheck;
 import org.emwhyware.selentic.lib.util.ScWait;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.StaleElementReferenceException;
@@ -92,10 +96,11 @@ import java.util.regex.Pattern;
  * @see ScPage
  */
 public abstract class ScComponent extends ScAbstractComponent {
-    private Optional<ScSelector> selector = Optional.empty();
-    private ScAbstractComponent $callerComponent;
-    private WebElement webElement;
-    private Optional<ScComponentRule> rule = Optional.empty();
+    private static final ScSelectorPackageAccessor SELECTOR_ACCESSOR = ScSelectorPackageAccessor.instance();
+    private @MonotonicNonNull ScSelector selector;
+    private @MonotonicNonNull ScAbstractComponent $callerComponent;
+    private @MonotonicNonNull WebElement webElement;
+    private @MonotonicNonNull ScComponentRule rule;
 
     /**
      * Provides access to the builder which provides methods to build XPath selector objects.
@@ -123,8 +128,8 @@ public abstract class ScComponent extends ScAbstractComponent {
      *
      * @param selector the {@link ScSelector} to use for locating the web element
      */
-    final void setSelector(ScSelector selector) {
-        this.selector = Optional.of(selector);
+    final void setSelector(@NonNull ScSelector selector) {
+        this.selector = selector;
     }
 
     /**
@@ -133,7 +138,9 @@ public abstract class ScComponent extends ScAbstractComponent {
      * @return the {@link ScAbstractPage} that owns this component
      */
     final protected ScAbstractPage ownerPage() {
-        return $callerComponent instanceof ScAbstractPage ? (ScAbstractPage) $callerComponent : ((ScComponent) $callerComponent).ownerPage();
+        final ScAbstractComponent $c = ScNullCheck.requiresNonNull(this.$callerComponent, ScAbstractComponent.class);
+
+        return $c instanceof ScAbstractPage ? (ScAbstractPage) $c : ((ScComponent) $c).ownerPage();
     }
 
     /**
@@ -141,7 +148,7 @@ public abstract class ScComponent extends ScAbstractComponent {
      *
      * @param webElement the {@link WebElement} to be wrapped by this component
      */
-    final void setWebElement(WebElement webElement) {
+    final void setWebElement(@NonNull WebElement webElement) {
         this.webElement = webElement;
     }
 
@@ -150,7 +157,7 @@ public abstract class ScComponent extends ScAbstractComponent {
      *
      * @param $componentOrPage a calling component or page.
      */
-    final void setCallerComponent(ScAbstractComponent $componentOrPage) {
+    final void setCallerComponent(@NonNull ScAbstractComponent $componentOrPage) {
         this.$callerComponent = $componentOrPage;
     }
 
@@ -169,12 +176,15 @@ public abstract class ScComponent extends ScAbstractComponent {
      * @return the {@link WebElement} represented by this component
      * @throws ScElementNotFoundException if the selector is not present or element cannot be found
      */
-    private WebElement webElement() {
+    private @NonNull WebElement webElement() {
         if (this.webElement == null) {
-            if (this.selector.isPresent() && (this.$callerComponent instanceof ScAbstractPage || this.selector.get().isAbsolute())) {
-                return Selentic.driver().findElement(selector.get().build());
-            } else if (this.selector.isPresent()) {
-                return selector.get() instanceof ScXPath ? ((ScComponent) this.$callerComponent).existingElement().findElement(((ScXPath) selector.get()).build(true)) : ((ScComponent) this.$callerComponent).existingElement().findElement(selector.get().build());
+            final ScAbstractComponent $c = ScNullCheck.requiresNonNull(this.$callerComponent, ScAbstractComponent.class);
+            final Optional<ScSelector> selector = Optional.ofNullable(this.selector);
+
+            if (selector.isPresent() && ($c instanceof ScAbstractPage || SELECTOR_ACCESSOR.isSelectorAbsolute(selector.get()))) {
+                return Selentic.driver().findElement(SELECTOR_ACCESSOR.buildSelector(selector.get()));
+            } else if (selector.isPresent()) {
+                return selector.get() instanceof ScXPath ? ((ScComponent) $c).existingElement().findElement(SELECTOR_ACCESSOR.buildSelector(selector.get(), true)) : ((ScComponent) $c).existingElement().findElement(SELECTOR_ACCESSOR.buildSelector(selector.get()));
             } else {
                 throw new ScElementNotFoundException("Selector is not present.");
             }
@@ -219,11 +229,11 @@ public abstract class ScComponent extends ScAbstractComponent {
      * @param element the {@link WebElement} to verify
      * @throws ScComponentRulesException if the element does not match the defined rules
      */
-    private void verifyRules(WebElement element) {
-        if (this.rule.isEmpty()) {
+    private void verifyRules(@NonNull WebElement element) {
+        if (this.rule == null) {
             final ScComponentRule componentRule = new ScComponentRule(element);
 
-            this.rule = Optional.of(componentRule);
+            this.rule = componentRule;
             this.rules(componentRule);
             componentRule.verifyRules(this.getClass());
         }
@@ -239,7 +249,7 @@ public abstract class ScComponent extends ScAbstractComponent {
      * @return the {@link WebElement} that exists in the DOM
      * @throws ScElementNotFoundException if the element does not exist or becomes stale
      */
-    protected final WebElement existingElement() {
+    protected final @NonNull WebElement existingElement() {
         try {
             WebElement element;
 
@@ -262,7 +272,7 @@ public abstract class ScComponent extends ScAbstractComponent {
      * @return the {@link WebElement} that is currently displayed
      * @throws ScElementNotFoundException if the element is not displayed or becomes stale
      */
-    protected final WebElement displayedElement() {
+    protected final @NonNull WebElement displayedElement() {
         try {
             this.waitForComponent(ScWaitCondition.ToBeDisplayed);
             return webElement();
@@ -281,7 +291,7 @@ public abstract class ScComponent extends ScAbstractComponent {
      *
      * @return the {@link WebElement} after scrolling it into view
      */
-    protected final WebElement scrolledElement() {
+    protected final @NonNull WebElement scrolledElement() {
         return this.scrolledElement(scrollOptions());
     }
 
@@ -297,7 +307,7 @@ public abstract class ScComponent extends ScAbstractComponent {
      * @param options the {@link ScScrollOptions} specifying scroll behavior
      * @return the {@link WebElement} after scrolling it into view
      */
-    protected final WebElement scrolledElement(ScScrollOptions options) {
+    protected final @NonNull WebElement scrolledElement(@NonNull ScScrollOptions options) {
         final WebElement e = displayedElement();
 
         Selentic.executeScript("arguments[0].scrollIntoView(arguments[1])", this, options.toString());
@@ -331,7 +341,7 @@ public abstract class ScComponent extends ScAbstractComponent {
      * <p>
      * This method can be overridden in subclasses as needed, as sometimes the "isDisplayed" status
      * may depend on other component properties or visibility rules. This method is used in
-     * {@link #waitForComponent(ScWaitCondition)} ()} and {@link #displayedElement()}, affecting their waiting behavior.
+     * {@link #waitForComponent(ScWaitCondition)} and {@link #displayedElement()}, affecting their waiting behavior.
      * 
      *
      * @return true if the element is displayed; false otherwise
@@ -391,9 +401,7 @@ public abstract class ScComponent extends ScAbstractComponent {
      * @throws ScElementNotFoundException if the element is not displayed
      */
     protected void doubleClick() {
-        final Actions actions = new Actions(Selentic.driver());
-
-        actions.doubleClick(this.scrolledElement()).perform();
+        this.actions().doubleClick(this.scrolledElement()).build().perform();
     }
 
     /**
@@ -410,9 +418,7 @@ public abstract class ScComponent extends ScAbstractComponent {
      * @throws ScElementNotFoundException if the element is not displayed
      */
     protected void clickAt(int x, int y) {
-        final Actions actions = new Actions(Selentic.driver());
-
-        actions.moveToElement(this.scrolledElement(), x, y).click().perform();
+        this.actions().moveToElement(this.scrolledElement(), x, y).click().build().perform();
     }
 
     /**
@@ -429,9 +435,7 @@ public abstract class ScComponent extends ScAbstractComponent {
      * @throws ScElementNotFoundException if the element is not displayed
      */
     protected void doubleClickAt(int x, int y) {
-        final Actions actions = new Actions(Selentic.driver());
-
-        actions.moveToElement(this.scrolledElement(), x, y).doubleClick().perform();
+        this.actions().moveToElement(this.scrolledElement(), x, y).doubleClick().build().perform();
     }
 
     /**
@@ -443,8 +447,9 @@ public abstract class ScComponent extends ScAbstractComponent {
      * 
      */
     protected void focus() {
-        new Actions(Selentic.driver())
+        this.actions()
                 .moveToElement(this.scrolledElement())
+                .build()
                 .perform();
     }
 
@@ -467,7 +472,7 @@ public abstract class ScComponent extends ScAbstractComponent {
      *
      * <p>
      * The string returned by {@code key()} is used as a key value in {@link ScComponentCollection},
-     * so overriding it to return a proper unique value simpplifies getting a component from the collection using
+     * so overriding it to return a proper unique value simplifies getting a component from the collection using
      * {@link ScComponentCollection#entry(String)}.
      * 
      *
@@ -500,7 +505,9 @@ public abstract class ScComponent extends ScAbstractComponent {
      * @return the inner HTML content of this component
      */
     protected final String innerHtml() {
-        return this.existingElement().getAttribute("innerHTML");
+        final String innerHtml = this.existingElement().getAttribute("innerHTML");
+
+        return innerHtml == null ? "" : innerHtml;
     }
 
     /**
@@ -528,7 +535,9 @@ public abstract class ScComponent extends ScAbstractComponent {
      * @return the inner text content of this component
      */
     protected final String innerText() {
-        return this.existingElement().getAttribute("innerText");
+        final String innerText = this.existingElement().getAttribute("innerText");
+
+        return innerText == null ? "" : innerText;
     }
 
     /**
@@ -556,7 +565,7 @@ public abstract class ScComponent extends ScAbstractComponent {
      * @param name the name of the attribute to retrieve
      * @return an {@link Optional} containing the attribute value, or empty if not present
      */
-    public Optional<String> attr(String name) {
+    public Optional<String> attr(@NonNull String name) {
         String a;
 
         return (a = this.existingElement().getDomAttribute(name)) == null ? Optional.empty() : Optional.of(a);
@@ -672,7 +681,7 @@ public abstract class ScComponent extends ScAbstractComponent {
      *
      * @param $genericComponent a {@link ScGenericComponent} to click
      */
-    protected final void clickGenericComponent(ScGenericComponent $genericComponent) {
+    protected final void clickGenericComponent(@NonNull ScGenericComponent $genericComponent) {
         $genericComponent.click();
     }
 
@@ -707,7 +716,7 @@ public abstract class ScComponent extends ScAbstractComponent {
          * @return the extracted text content without HTML markup
          * @throws ScInvalidHtmlException if the HTML cannot be properly parsed
          */
-        private static String removeHtml(String originalHtmlText) {
+        private static String removeHtml(@NonNull String originalHtmlText) {
             Matcher matcher;
             String resultText = originalHtmlText.replaceAll("\\s+", " ");
 

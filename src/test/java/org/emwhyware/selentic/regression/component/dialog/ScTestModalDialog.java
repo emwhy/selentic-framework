@@ -1,6 +1,10 @@
 package org.emwhyware.selentic.regression.component.dialog;
 
-import org.emwhyware.selentic.lib.*;
+import org.emwhyware.selentic.lib.ScButton;
+import org.emwhyware.selentic.lib.ScComponentRule;
+import org.emwhyware.selentic.lib.ScDialog;
+import org.emwhyware.selentic.lib.ScTextbox;
+import org.emwhyware.selentic.lib.selector.ScXPath;
 
 public class ScTestModalDialog extends ScDialog {
     private static final ScXPath TEXTBOX = _xpath.descendant("input", _id().is("test-modal-dialog-textbox"));
@@ -12,6 +16,11 @@ public class ScTestModalDialog extends ScDialog {
         rule.id().is("test-modal-dialog");
     }
 
-    public final ScTextbox textbox = $component(TEXTBOX, ScTextbox.class);
-    public final ScButton closeButton = $component(CLOSE_BUTTON, ScButton.class);
+    public ScTextbox textbox() {
+        return $component(TEXTBOX, ScTextbox.class);
+    }
+
+    public ScButton closeButton() {
+        return $component(CLOSE_BUTTON, ScButton.class);
+    }
 }

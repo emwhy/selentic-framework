@@ -1,13 +1,12 @@
 package org.emwhyware.selentic.lib;
 
-import org.emwhyware.selentic.lib.config.SelelenticConfig;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
+import org.emwhyware.selentic.lib.config.SelenticConfig;
 import org.emwhyware.selentic.lib.util.ScLogHandler;
+import org.emwhyware.selentic.lib.util.ScNullCheck;
 import org.openqa.selenium.*;
-import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.edge.EdgeDriver;
-import org.openqa.selenium.firefox.FirefoxDriver;
-import org.openqa.selenium.safari.SafariDriver;
-import org.openqa.selenium.support.events.EventFiringDecorator;
+import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.events.WebDriverListener;
 import org.slf4j.Logger;
 
@@ -15,19 +14,19 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Optional;
 
 /**
- * {@code Selentic} is the central gateway class for the Selentic Framework, providing access to
- * WebDriver instances and browser automation functionality.
- *
+ * {@code Selentic} is the central gateway class for the Selentic Framework, providing access to context that has
+ * WebDriver instances and web driver options.
  * <p>
- * <strong>Etymology:</strong> "Selentic" is a medieval term for a strip of land between two furrows.
- * Why it works: It evokes a clear, defined path or "strip." In a modular web component architecture,
- * you are testing individual "strips" (components) that make up the whole field (the page).
- * 
+ * The context ({@link SelenticWebDriverContext}) exists separately for each thread if running in multi-thread run, making
+ * it possible to run different configuration for each thread (like running different browsers in each thread).
+ * <p>
+ * Any changes to options must be done before calling the web driver for the first time in a thread. Changes after the
+ * web driver is created will be ignored.
+ * <p>
+ * Many of typically recommended options for each browser type is already set up. It's possible to add more options.
  *
  * <h2>Core Responsibilities</h2>
  * <ul>
@@ -57,10 +56,11 @@ import java.util.Optional;
  * @see ScWebDriverOptions
  * @see WebDriver
  * @see WebDriverListener
+ * @see SelenticWebDriverContext
  */
 public final class Selentic {
     private static final Logger LOG = ScLogHandler.logger(Selentic.class);
-    private static final ThreadLocal<SelenticWebDriverContext> CONTEXT = ThreadLocal.withInitial(SelenticWebDriverContext::new);
+    private static final ThreadLocal<@Nullable SelenticWebDriverContext> CONTEXT = ThreadLocal.withInitial(SelenticWebDriverContext::new);
 
     /**
      * Private constructor to prevent instantiation of this utility class.
@@ -70,13 +70,69 @@ public final class Selentic {
     }
 
     /**
+     * Allows setting browser. This overrides values set in {@link SelenticConfig}.
+     * <p>
+     * Changing the browser must be called before starting the web driver by calling {@link Selentic#driver()},
+     * {@link Selentic#open(String)}, or {@link Selentic#open()}.
+     * <p>
+     * In multiple threaded execution, browser can be set per thread. It is possible to run different browser in
+     * each thread.
+     *
+     * @param browser browser type
+     *
+     * @see Selentic#driver()
+     * @see Selentic#open(String)
+     * @see Selentic#open()
+     */
+    public synchronized static void setBrowser(ScBrowser browser) {
+        context().setBrowser(browser);
+    }
+
+    /**
+     * Returns the selected browser for current thread context.
+     * <p>
+     * The default value is set in {@link SelenticConfig}, but it can be changed by calling {@link #setBrowser(ScBrowser)}.
+     *
+     * @return currently selected browser type
+     *
+     * @see #setBrowser(ScBrowser)
+     */
+    public synchronized static ScBrowser browser() {
+        return context().browser();
+    }
+
+    /**
+     * Enable headless mode for all browser types.
+     */
+    public synchronized static void enableHeadless() {
+        withChromeOptions((options, prefs) -> {
+            options.addArguments("--headless=new");
+        });
+        withEdgeOptions(((options, prefs) -> {
+            options.addArguments("--headless=new");
+        }));
+        withFirefoxOptions((options, mimeTypes) -> {
+            options.addArguments("--headless");
+        });
+        withSafariOptions(options -> {
+            options.setCapability("webkit:headless", true);
+        });
+    }
+
+    /**
      * Returns the WebDriver instance for the current thread using the default browser from configuration.
      *
      * <p>
      * This method retrieves or creates a WebDriver instance for the calling thread. If no driver exists
-     * for the current thread, a new one is created using the browser configured in {@link SelelenticConfig}.
+     * for the current thread, a new one is created using the browser configured in {@link SelenticConfig}.
      * The WebDriver instance is reused for subsequent calls from the same thread.
-     * 
+     *
+     * <p>
+     * Generally, the accessing the driver directly should be limited when implementing tests, pages, and components.
+     * The Selentic Frame implements many cases where the WebDriver class is often directly accessed, such as
+     * window switching ({@link ScWindow}, frame switching ({@link ScFrame}, {@link ScFrameContent}),
+     * JavaScript execution ({@link #executeScript(String, Object...)}, {@link #executeAsyncScript(String, Object...)}), accessing {@link Actions}
+     * object ({@link ScComponent#actions()}), handling {@link Alert} ({@link ScPage#inAlert(ScPage.ScAlertAction)}), etc.
      *
      * <p>
      * <strong>Thread Safety:</strong> This method is synchronized to ensure thread-safe access. Each thread
@@ -85,56 +141,24 @@ public final class Selentic {
      *
      * <p>
      * <strong>Browser Selection:</strong> The browser type is determined by the configuration setting
-     * {@code browser} in the {@code selentic.conf} file. The default is Chrome.
+     * {@code browser} in the {@code selentic.conf} file. The default is Chrome. It can also be set in code using
+     * {@link #setBrowser(ScBrowser)} before the web driver starts.
      * 
-     *     *
+     *
      * @return the {@link WebDriver} instance for the current thread
-     * @see #driver(ScBrowser)
-     * @see SelelenticConfig#browser()
+     * @see #driver()
+     * @see SelenticConfig#browser()
+     * @see #setBrowser(ScBrowser)
+     * @see ScWindow
+     * @see ScFrame
+     * @see ScFrameContent
+     * @see #executeScript(String, Object...)
+     * @see #executeAsyncScript(String, Object...)
+     * @see ScComponent#actions()
+     * @see ScPage#inAlert(ScPage.ScAlertAction)
      */
     public static synchronized WebDriver driver() {
-        return CONTEXT.get().driver(SelelenticConfig.config().browser());
-    }
-
-    /**
-     * Returns the WebDriver instance for the current thread using the specified browser.
-     *
-     * <p>
-     * This method retrieves or creates a WebDriver instance for the calling thread with the specified
-     * browser type. If a driver already exists for the current thread and browser combination, it is
-     * reused. Otherwise, a new WebDriver instance is created and initialized with the appropriate
-     * browser options.
-     * 
-     *
-     * <p>
-     * <strong>Thread Safety:</strong> This method is synchronized to ensure thread-safe access.
-     * Multiple threads can safely call this method concurrently, each receiving their own driver instance.
-     * 
-     *
-     * <p>
-     * <strong>WebDriver Listener Support:</strong> If a custom {@link WebDriverListener} has been set via
-     * {@link #setWebDriverListener(WebDriverListener)}, the WebDriver will be wrapped with an
-     * {@link EventFiringDecorator} to capture WebDriver events.
-     * 
-     *
-     * <p>
-     * <strong>Browser Options:</strong> Each browser is initialized with default options. These can be
-     * customized before calling this method using the {@code withXxxOptions()} methods:
-     * <ul>
-     *   <li>{@link #withChromeOptions(ScWebDriverOptions.ChromeOptionSetup)}</li>
-     *   <li>{@link #withFirefoxOptions(ScWebDriverOptions.FirefoxOptionSetup)}</li>
-     *   <li>{@link #withEdgeOptions(ScWebDriverOptions.EdgeOptionSetup)}</li>
-     *   <li>{@link #withSafariOptions(ScWebDriverOptions.SafariOptionSetup)}</li>
-     * </ul>
-     *
-     *
-     * @param browser the {@link ScBrowser} type to use for creating the WebDriver
-     * @return the {@link WebDriver} instance for the current thread with the specified browser
-     * @see #driver()
-     * @see ScBrowser
-     */
-    public static synchronized WebDriver driver(ScBrowser browser) {
-        return CONTEXT.get().driver(browser);
+        return context().driver();
     }
 
     /**
@@ -148,32 +172,39 @@ public final class Selentic {
      *
      * <p>
      * <strong>Important:</strong> This method must be called BEFORE calling {@link #driver()} or
-     * {@link #driver(ScBrowser)} to ensure the options are applied to the new ChromeDriver instance.
-     * 
+     * {@link #driver()} to ensure the options are applied to the new ChromeDriver instance.
      *
      * <p>
-     * <strong>Common Chrome Options:</strong>
+     * The following commonly used options are set by default.
+     * <p>
+     * <strong>Predefined Chrome Options:</strong>
      * <pre>{@code
-     * Selentic.withChromeOptions((options, prefs) -> {
-     *     options.addArguments("--headless");                           // Run in headless mode
-     *     options.addArguments("--disable-gpu");                        // Disable GPU acceleration
-     *     options.addArguments("--no-sandbox");                         // Bypass OS security model
-     *     options.addArguments("--disable-dev-shm-usage");              // Overcome limited resource problems
-     *     options.addArguments("--disable-blink-features=AutomationControlled");
-     *     prefs.put("download.prompt_for_download", false);            // Auto-download files
-     *     prefs.put("profile.default_content_settings.popups", 0);     // Block popups
-     * });
+     *         chromePrefs.put("download.default_directory", downloadDirectory.getAbsolutePath());
+     *         chromePrefs.put("download.prompt_for_download", false);
+     *         chromePrefs.put("download.directory_upgrade", true);
+     *         chromePrefs.put("plugins.always_open_pdf_externally", true);
+     *         chromePrefs.put("profile.default_content_settings.popups", 0);
+     *         chromePrefs.put("profile.default_content_setting_values.notifications", 2);
+     *         chromePrefs.put("profile.default_content_setting_values.automatic_downloads", 1);
+     *         chromePrefs.put("browser.show_hub_popup_on_download_start", false);
+     *         chromeOptions.addArguments("--disable-dev-shm-usage");
+     *         chromeOptions.addArguments("--disable-extensions");
+     *         chromeOptions.addArguments("--disable-gpu");
+     *         chromeOptions.addArguments("--no-sandbox");
+     *         chromeOptions.addArguments("--disable-search-engine-choice-screen");
+     *         chromeOptions.addArguments("--disable-features=DownloadBubble,DownloadBubbleV2");
+     *         chromeOptions.addArguments("--disable-popup-blocking");
      * }</pre>
      *
      *
      * @param optionSetup a {@link ScWebDriverOptions.ChromeOptionSetup} functional interface that receives
      *                   the Chrome options and preferences for configuration
-     * @see ScWebDriverOptions.ChromeOptionSetup
      * @see #withFirefoxOptions(ScWebDriverOptions.FirefoxOptionSetup)
      * @see #withEdgeOptions(ScWebDriverOptions.EdgeOptionSetup)
+     * @see #enableHeadless()
      */
-    public static synchronized void withChromeOptions(ScWebDriverOptions.ChromeOptionSetup optionSetup) {
-        CONTEXT.get().withChromeOptions(optionSetup);
+    public static synchronized void withChromeOptions(ScWebDriverOptions.@NonNull ChromeOptionSetup optionSetup) {
+        context().withChromeOptions(optionSetup);
     }
 
     /**
@@ -187,28 +218,68 @@ public final class Selentic {
      *
      * <p>
      * <strong>Important:</strong> This method must be called BEFORE calling {@link #driver()} or
-     * {@link #driver(ScBrowser)} to ensure the options are applied to the new FirefoxDriver instance.
-     * 
+     * {@link #driver()} to ensure the options are applied to the new FirefoxDriver instance.
      *
      * <p>
-     * <strong>Common Firefox Options:</strong>
+     * The following commonly used options are set by default.
+     * <p>
+     * <strong>Predefined Firefox Options:</strong>
      * <pre>{@code
-     * Selentic.withFirefoxOptions(options -> {
-     *     options.addArguments("--headless");                           // Run in headless mode
-     *     options.addPreference("browser.download.folderList", 2);     // Use custom download folder
-     *     options.addPreference("browser.helperApps.neverAsk.saveToDisk", "application/pdf");
-     * });
+     *         // Mime types to never ask to save.
+     *         firefoxNeverAskToSaveMimeTypes.add("application/zip");
+     *         firefoxNeverAskToSaveMimeTypes.add("application/pdf");
+     *         firefoxNeverAskToSaveMimeTypes.add("application/x-zip-compressed");
+     *         firefoxNeverAskToSaveMimeTypes.add("multipart/x-zip");
+     *         firefoxNeverAskToSaveMimeTypes.add("application/x-rar-compressed");
+     *         firefoxNeverAskToSaveMimeTypes.add("application/msword");
+     *         firefoxNeverAskToSaveMimeTypes.add("application/vnd.ms-word.document.macroEnabled.12");
+     *         firefoxNeverAskToSaveMimeTypes.add("application/vnd.openxmlformats-officedocument.wordprocessingml.document");
+     *         firefoxNeverAskToSaveMimeTypes.add("application/vnd.ms-excel");
+     *         firefoxNeverAskToSaveMimeTypes.add("application/rtf");
+     *         firefoxNeverAskToSaveMimeTypes.add("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+     *         firefoxNeverAskToSaveMimeTypes.add("application/vnd.ms-excel");
+     *         firefoxNeverAskToSaveMimeTypes.add("application/vnd.ms-word.document.macroEnabled.12");
+     *         firefoxNeverAskToSaveMimeTypes.add("application/xls");
+     *         firefoxNeverAskToSaveMimeTypes.add("text/csv");
+     *         firefoxNeverAskToSaveMimeTypes.add("application/vnd.ms-excel.sheet.binary.macroEnabled.12");
+     *         firefoxNeverAskToSaveMimeTypes.add("text/plain");
+     *         firefoxNeverAskToSaveMimeTypes.add("text/csv/xls/xlsb");
+     *         firefoxNeverAskToSaveMimeTypes.add("application/csv");
+     *         firefoxNeverAskToSaveMimeTypes.add("application/download");
+     *         firefoxNeverAskToSaveMimeTypes.add("application/vnd.openxmlformats-officedocument.presentationml.presentation");
+     *         firefoxNeverAskToSaveMimeTypes.add("application/octet-stream");
+     *
+     *         // Firefox options.
+     *         firefoxOptions.addPreference("browser.helperApps.alwaysAsk.force", false);
+     *         firefoxOptions.addPreference("browser.download.dir", downloadDirectory.getAbsolutePath());
+     *         firefoxOptions.addPreference("browser.download.always_ask_before_handling_new_types", false);
+     *         firefoxOptions.addPreference("browser.download.panel.shown", false);
+     *         firefoxOptions.addPreference("browser.download.folderList", 2);
+     *         firefoxOptions.addPreference("browser.download.useDownloadDir", true);
+     *         firefoxOptions.addPreference("browser.download.forbid_open_with", true);
+     *         firefoxOptions.addPreference("browser.download.alwaysOpenPanel", false);
+     *         firefoxOptions.addPreference("browser.download.viewableInternally.enabledTypes", "");
+     *         firefoxOptions.addPreference("browser.download.manager.showWhenStarting", false);
+     *         firefoxOptions.addPreference("browser.download.manager.alertOnEXEOpen", false);
+     *         firefoxOptions.addPreference("browser.download.manager.focusWhenStarting", false);
+     *         firefoxOptions.addPreference("browser.download.manager.alertOnEXEOpen", false);
+     *         firefoxOptions.addPreference("browser.download.manager.closeWhenDone", true);
+     *         firefoxOptions.addPreference("browser.download.manager.showAlertOnComplete", false);
+     *         firefoxOptions.addPreference("browser.download.manager.useWindow", false);
+     *         firefoxOptions.addPreference("services.sync.prefs.sync.browser.download.manager.showWhenStarting", false);
+     *         firefoxOptions.addPreference("pdfjs.disabled", true);
+     *         firefoxOptions.setAcceptInsecureCerts(true);
      * }</pre>
      *
      *
      * @param optionSetup a {@link ScWebDriverOptions.FirefoxOptionSetup} functional interface that receives
      *                   the Firefox options for configuration
-     * @see ScWebDriverOptions.FirefoxOptionSetup
      * @see #withChromeOptions(ScWebDriverOptions.ChromeOptionSetup)
      * @see #withEdgeOptions(ScWebDriverOptions.EdgeOptionSetup)
+     * @see #enableHeadless()
      */
-    public static synchronized void withFirefoxOptions(ScWebDriverOptions.FirefoxOptionSetup optionSetup) {
-        CONTEXT.get().withFirefoxOptions(optionSetup);
+    public static synchronized void withFirefoxOptions(ScWebDriverOptions.@NonNull FirefoxOptionSetup optionSetup) {
+        context().withFirefoxOptions(optionSetup);
     }
 
     /**
@@ -222,29 +293,40 @@ public final class Selentic {
      *
      * <p>
      * <strong>Important:</strong> This method must be called BEFORE calling {@link #driver()} or
-     * {@link #driver(ScBrowser)} to ensure the options are applied to the new EdgeDriver instance.
-     * 
+     * {@link #driver()} to ensure the options are applied to the new EdgeDriver instance.
      *
      * <p>
-     * <strong>Common Edge Options:</strong>
+     * The following commonly used options are set by default.
+     * <p>
+     * <p>
+     * <strong>Predefined Edge Options:</strong>
      * <pre>{@code
-     * Selentic.withEdgeOptions((options, prefs) -> {
-     *     options.addArguments("--headless");                           // Run in headless mode
-     *     options.addArguments("--disable-gpu");                        // Disable GPU acceleration
-     *     options.addArguments("--no-sandbox");                         // Bypass OS security model
-     *     prefs.put("download.prompt_for_download", false);            // Auto-download files
-     * });
+     *         edgePrefs.put("download.default_directory", downloadDirectory.getAbsolutePath());
+     *         edgePrefs.put("download.prompt_for_download", false);
+     *         edgePrefs.put("download.directory_upgrade", true);
+     *         edgePrefs.put("plugins.always_open_pdf_externally", true);
+     *         edgePrefs.put("profile.default_content_settings.popups", 0);
+     *         edgePrefs.put("profile.default_content_setting_values.notifications", 2);
+     *         edgePrefs.put("profile.default_content_setting_values.automatic_downloads", 1);
+     *         edgePrefs.put("browser.show_hub_popup_on_download_start", false);
+     *         edgeOptions.addArguments("--disable-dev-shm-usage");
+     *         edgeOptions.addArguments("--disable-extensions");
+     *         edgeOptions.addArguments("--disable-gpu");
+     *         edgeOptions.addArguments("--no-sandbox");
+     *         edgeOptions.addArguments("--disable-search-engine-choice-screen");
+     *         edgeOptions.addArguments("--disable-features=DownloadBubble,DownloadBubbleV2");
+     *         edgeOptions.addArguments("--disable-popup-blocking");
      * }</pre>
      *
      *
      * @param optionSetup a {@link ScWebDriverOptions.EdgeOptionSetup} functional interface that receives
      *                   the Edge options and preferences for configuration
-     * @see ScWebDriverOptions.EdgeOptionSetup
      * @see #withChromeOptions(ScWebDriverOptions.ChromeOptionSetup)
      * @see #withFirefoxOptions(ScWebDriverOptions.FirefoxOptionSetup)
+     * @see #enableHeadless()
      */
-    public static synchronized void withEdgeOptions(ScWebDriverOptions.EdgeOptionSetup optionSetup) {
-        CONTEXT.get().withEdgeOptions(optionSetup);
+    public static synchronized void withEdgeOptions(ScWebDriverOptions.@NonNull EdgeOptionSetup optionSetup) {
+        context().withEdgeOptions(optionSetup);
     }
 
     /**
@@ -258,7 +340,7 @@ public final class Selentic {
      *
      * <p>
      * <strong>Important:</strong> This method must be called BEFORE calling {@link #driver()} or
-     * {@link #driver(ScBrowser)} to ensure the options are applied to the new SafariDriver instance.
+     * {@link #driver()} to ensure the options are applied to the new SafariDriver instance.
      * 
      *
      * <p>
@@ -268,12 +350,12 @@ public final class Selentic {
      *
      * @param optionSetup a {@link ScWebDriverOptions.SafariOptionSetup} functional interface that receives
      *                   the Safari options for configuration
-     * @see ScWebDriverOptions.SafariOptionSetup
      * @see #withChromeOptions(ScWebDriverOptions.ChromeOptionSetup)
      * @see #withFirefoxOptions(ScWebDriverOptions.FirefoxOptionSetup)
+     * @see #enableHeadless()
      */
-    public static synchronized void withSafariOptions(ScWebDriverOptions.SafariOptionSetup optionSetup) {
-        CONTEXT.get().withSafariOptions(optionSetup);
+    public static synchronized void withSafariOptions(ScWebDriverOptions.@NonNull SafariOptionSetup optionSetup) {
+        context().withSafariOptions(optionSetup);
     }
 
     /**
@@ -311,15 +393,15 @@ public final class Selentic {
      * @see WebDriverListener
      * @see #driver()
      */
-    public static void setWebDriverListener(WebDriverListener listener) {
-        CONTEXT.get().setWebDriverListener(listener);
+    public static void setWebDriverListener(@NonNull WebDriverListener listener) {
+        context().setWebDriverListener(listener);
     }
 
     /**
      * Navigates to the specified URL.
      *
      * <p>
-     * This method is a convenience wrapper around {@link WebDriver#get(String)} that navigates the
+     * This method starts the web driver, then navigates the
      * current browser to the specified URL.
      * 
      *
@@ -334,7 +416,7 @@ public final class Selentic {
      * @see #open()
      * @see #driver()
      */
-    public static void open(String url) {
+    public static void open(@NonNull String url) {
         driver().get(url);
     }
 
@@ -342,7 +424,7 @@ public final class Selentic {
      * Navigates to a blank page.
      *
      * <p>
-     * This method navigates the current browser to about:blank, which is useful for clearing the browser
+     * This method starts the web driver, then navigates the current browser to about:blank, which is useful for clearing the browser
      * state or initializing a clean slate before test execution.
      * 
      *
@@ -367,7 +449,9 @@ public final class Selentic {
      * This method terminates the WebDriver session for the calling thread, closes all associated browser
      * windows and tabs, and removes the driver from the thread-local storage. After calling this method,
      * a new WebDriver instance will be created the next time {@link #driver()} is called.
-     * 
+     * <p>
+     * To ensure WebDriver state and thread integrity, it is highly recommended to call this method rather than
+     * calling {@link WebDriver#quit()} directly by accessing the web driver object.
      *
      * <p>
      * <strong>Thread Safety:</strong> This method is synchronized to ensure thread-safe access to the
@@ -377,8 +461,11 @@ public final class Selentic {
      * @see #driver()
      */
     public static synchronized void quit() {
-        driver().quit();
-        CONTEXT.remove();
+        try {
+            driver().quit();
+        } finally {
+            CONTEXT.remove();
+        }
     }
 
     /**
@@ -412,7 +499,7 @@ public final class Selentic {
      * @see #executeAsyncScript(String, Object...)
      * @see JavascriptExecutor
      */
-    public static Object executeScript(String script, Object... params) {
+    public static @Nullable Object executeScript(@NonNull String script, @NonNull Object... params) {
         final JavascriptExecutor executor = (JavascriptExecutor) driver();
         final Object[] objects = Arrays.stream(params).map(o -> o instanceof ScComponent ? ((ScComponent) o).existingElement() : o).toArray();
 
@@ -441,11 +528,11 @@ public final class Selentic {
      * @param script the asynchronous JavaScript code to execute
      * @param params variable number of parameters to pass to the script;
      *              {@link ScComponent} instances are converted to {@link WebElement}
-     * @return the result of asynchronous JavaScript execution as a String, or null if no value is returned
+     * @return the result of asynchronous JavaScript execution, or null if no value is returned
      * @see #executeScript(String, Object...)
      * @see JavascriptExecutor
      */
-    public static String executeAsyncScript(String script, Object... params) {
+    public static @Nullable Object executeAsyncScript(@NonNull String script, @NonNull Object... params) {
         final JavascriptExecutor executor = (JavascriptExecutor) driver();
         final List<Object> objects = Arrays.stream(params).map(o -> o instanceof ScComponent ? ((ScComponent) o).existingElement() : o).toList();
 
@@ -531,7 +618,7 @@ public final class Selentic {
      * @see ScLogHandler#screenshotDirectory()
      * @see TakesScreenshot
      */
-    public static void screenshot(String screenshotName) {
+    public static void screenshot(@NonNull String screenshotName) {
         if (!screenshotName.isEmpty()) {
             screenshotName = "-" + screenshotName;
         }
@@ -546,5 +633,13 @@ public final class Selentic {
         } catch (IOException ex) {
             LOG.error("Error while taking screenshot." , ex);
         }
+    }
+
+    /**
+     * Get context for this thread.
+     * @return a context
+     */
+    private static @NonNull SelenticWebDriverContext context() {
+        return ScNullCheck.requiresNonNull(CONTEXT.get(), SelenticWebDriverContext.class);
     }
 }

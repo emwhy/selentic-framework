@@ -1,11 +1,13 @@
 package org.emwhyware.selentic.lib.exception;
 
+import org.checkerframework.checker.nullness.qual.NonNull;
+
 public class ScElementNotFoundException extends RuntimeException {
-    public ScElementNotFoundException(String text, Throwable th) {
+    public ScElementNotFoundException(@NonNull String text, @NonNull Throwable th) {
         super(text, th);
     }
 
-    public ScElementNotFoundException(String text) {
+    public ScElementNotFoundException(@NonNull String text) {
         super(text);
     }
 }

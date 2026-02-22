@@ -1,6 +1,7 @@
 package org.emwhyware.selentic.regression.page;
 
 import org.emwhyware.selentic.lib.*;
+import org.emwhyware.selentic.lib.selector.ScXPath;
 import org.emwhyware.selentic.regression.component.ScTestTableRow;
 
 public class ScExternalPage extends ScPage {

@@ -3,7 +3,7 @@ package org.emwhyware.selentic.regression.component;
 import org.emwhyware.selentic.lib.ScComponent;
 import org.emwhyware.selentic.lib.ScComponentRule;
 import org.emwhyware.selentic.lib.ScGenericComponent;
-import org.emwhyware.selentic.lib.ScXPath;
+import org.emwhyware.selentic.lib.selector.ScXPath;
 
 public class ScTestTableRow extends ScComponent {
     private static final ScXPath PRODUCT_NAME_TEXT = _xpath.descendant("td", _cssClasses("product-name"));
@@ -19,16 +19,26 @@ public class ScTestTableRow extends ScComponent {
 
     @Override
     public String text() {
-        return productNameText.text();
+        return productNameText().text();
     }
 
-    public final ScGenericComponent productNameText = $genericComponent(PRODUCT_NAME_TEXT);
+    public ScGenericComponent productNameText() {
+        return $genericComponent(PRODUCT_NAME_TEXT);
+    }
 
-    public final ScGenericComponent serialNumberText = $genericComponent(SERIAL_NUMBER_TEXT);
+    public ScGenericComponent serialNumberText() {
+        return $genericComponent(SERIAL_NUMBER_TEXT);
+    }
 
-    public final ScGenericComponent productTypeText = $genericComponent(PRODUCT_TYPE_TEXT);
+    public ScGenericComponent productTypeText() {
+        return $genericComponent(PRODUCT_TYPE_TEXT);
+    }
 
-    public final ScGenericComponent builtDateText = $genericComponent(BUILT_DATE_TEXT);
+    public ScGenericComponent builtDateText() {
+        return $genericComponent(BUILT_DATE_TEXT);
+    }
 
-    public final ScGenericComponent priceAmountText = $genericComponent(PRICE_AMOUNT_TEXT);
+    public ScGenericComponent priceAmountText() {
+        return $genericComponent(PRICE_AMOUNT_TEXT);
+    }
 }

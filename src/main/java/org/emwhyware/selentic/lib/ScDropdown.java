@@ -1,5 +1,6 @@
 package org.emwhyware.selentic.lib;
 
+import org.checkerframework.checker.nullness.qual.NonNull;
 import org.emwhyware.selentic.lib.exception.ScEntryNotFoundException;
 import org.openqa.selenium.support.ui.Select;
 
@@ -15,13 +16,13 @@ public class ScDropdown extends ScFormComponent {
         rule.attr("multiple").isAbsent();
     }
 
-    public void select(String text) {
+    public void select(@NonNull String text) {
         final Select select = new Select(this.scrolledElement());
 
         select.selectByVisibleText(text);
     }
 
-    public void select(Pattern pattern) {
+    public void select(@NonNull Pattern pattern) {
         final Optional<String> matchedOption = optionTexts().stream().filter(option -> pattern.matcher(option).matches()).findFirst();
 
         if (matchedOption.isPresent()) {

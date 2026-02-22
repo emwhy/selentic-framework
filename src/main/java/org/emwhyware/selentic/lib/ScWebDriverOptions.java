@@ -1,5 +1,6 @@
 package org.emwhyware.selentic.lib;
 
+import org.checkerframework.checker.nullness.qual.NonNull;
 import org.emwhyware.selentic.lib.util.ScLogHandler;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.edge.EdgeOptions;
@@ -7,13 +8,16 @@ import org.openqa.selenium.firefox.FirefoxOptions;
 import org.openqa.selenium.safari.SafariOptions;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public final class ScWebDriverOptions {
     private final ChromeOptions chromeOptions = new ChromeOptions();
     private final Map<String, Object> chromePrefs = new HashMap<>();
     private final FirefoxOptions firefoxOptions = new FirefoxOptions();
+    private final List<String> firefoxNeverAskToSaveMimeTypes = new ArrayList<>();
     private final EdgeOptions edgeOptions = new EdgeOptions();
     private final Map<String, Object> edgePrefs = new HashMap<>();
     private final SafariOptions safariOptions = new SafariOptions();
@@ -22,25 +26,11 @@ public final class ScWebDriverOptions {
         final File downloadDirectory = ScLogHandler.downloadDirectory();
 
         initializeChromeOptions(downloadDirectory);
+        initializeEdgeOptions(downloadDirectory);
         initializeFirefoxOptions(downloadDirectory);
     }
 
-    private void initializeChromeOptions(File downloadDirectory) {
-        edgePrefs.put("download.default_directory", downloadDirectory.getAbsolutePath());
-        edgePrefs.put("download.prompt_for_download", false);
-        edgePrefs.put("download.directory_upgrade", true);
-        edgePrefs.put("plugins.always_open_pdf_externally", true);
-        edgePrefs.put("profile.default_content_settings.popups", 0);
-        edgePrefs.put("profile.default_content_setting_values.notifications", 2);
-        edgePrefs.put("profile.default_content_setting_values.automatic_downloads", 1);
-        chromeOptions.setExperimentalOption("prefs", edgePrefs);
-        chromeOptions.addArguments("--disable-extensions");
-        chromeOptions.addArguments("--disable-gpu");
-        chromeOptions.addArguments("--no-sandbox");
-        chromeOptions.addArguments("--disable-features=DownloadBubble,DownloadBubbleV2");
-    }
-
-    private void initializeEdgeOptions(File downloadDirectory) {
+    private void initializeChromeOptions(@NonNull File downloadDirectory) {
         chromePrefs.put("download.default_directory", downloadDirectory.getAbsolutePath());
         chromePrefs.put("download.prompt_for_download", false);
         chromePrefs.put("download.directory_upgrade", true);
@@ -48,21 +38,68 @@ public final class ScWebDriverOptions {
         chromePrefs.put("profile.default_content_settings.popups", 0);
         chromePrefs.put("profile.default_content_setting_values.notifications", 2);
         chromePrefs.put("profile.default_content_setting_values.automatic_downloads", 1);
-        edgeOptions.setExperimentalOption("prefs", chromePrefs);
+        chromePrefs.put("browser.show_hub_popup_on_download_start", false);
+        chromeOptions.addArguments("--disable-dev-shm-usage");
+        chromeOptions.addArguments("--disable-extensions");
+        chromeOptions.addArguments("--disable-gpu");
+        chromeOptions.addArguments("--no-sandbox");
+        chromeOptions.addArguments("--disable-search-engine-choice-screen");
+        chromeOptions.addArguments("--disable-features=DownloadBubble,DownloadBubbleV2");
+        chromeOptions.addArguments("--disable-popup-blocking");
+    }
+
+    private void initializeEdgeOptions(@NonNull File downloadDirectory) {
+        edgePrefs.put("download.default_directory", downloadDirectory.getAbsolutePath());
+        edgePrefs.put("download.prompt_for_download", false);
+        edgePrefs.put("download.directory_upgrade", true);
+        edgePrefs.put("plugins.always_open_pdf_externally", true);
+        edgePrefs.put("profile.default_content_settings.popups", 0);
+        edgePrefs.put("profile.default_content_setting_values.notifications", 2);
+        edgePrefs.put("profile.default_content_setting_values.automatic_downloads", 1);
+        edgePrefs.put("browser.show_hub_popup_on_download_start", false);
+        edgeOptions.addArguments("--disable-dev-shm-usage");
         edgeOptions.addArguments("--disable-extensions");
         edgeOptions.addArguments("--disable-gpu");
         edgeOptions.addArguments("--no-sandbox");
+        edgeOptions.addArguments("--disable-search-engine-choice-screen");
         edgeOptions.addArguments("--disable-features=DownloadBubble,DownloadBubbleV2");
+        edgeOptions.addArguments("--disable-popup-blocking");
     }
 
-    private void initializeFirefoxOptions(File downloadDirectory) {
-        firefoxOptions.addPreference("browser.helperApps.neverAsk.saveToDisk", "text/comma-separated-values,application/vnd.ms-excel,application/msword,application/csv,application/ris,text/csv,image/png,application/pdf,text/plain,application/zip,application/x-zip,application/x-zip-compressed,application/download,application/octet-stream");
+    private void initializeFirefoxOptions(@NonNull File downloadDirectory) {
+        // Firefox never to ask to save mime types.
+        firefoxNeverAskToSaveMimeTypes.add("application/zip");
+        firefoxNeverAskToSaveMimeTypes.add("application/pdf");
+        firefoxNeverAskToSaveMimeTypes.add("application/x-zip-compressed");
+        firefoxNeverAskToSaveMimeTypes.add("multipart/x-zip");
+        firefoxNeverAskToSaveMimeTypes.add("application/x-rar-compressed");
+        firefoxNeverAskToSaveMimeTypes.add("application/msword");
+        firefoxNeverAskToSaveMimeTypes.add("application/vnd.ms-word.document.macroEnabled.12");
+        firefoxNeverAskToSaveMimeTypes.add("application/vnd.openxmlformats-officedocument.wordprocessingml.document");
+        firefoxNeverAskToSaveMimeTypes.add("application/vnd.ms-excel");
+        firefoxNeverAskToSaveMimeTypes.add("application/rtf");
+        firefoxNeverAskToSaveMimeTypes.add("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+        firefoxNeverAskToSaveMimeTypes.add("application/vnd.ms-excel");
+        firefoxNeverAskToSaveMimeTypes.add("application/vnd.ms-word.document.macroEnabled.12");
+        firefoxNeverAskToSaveMimeTypes.add("application/xls");
+        firefoxNeverAskToSaveMimeTypes.add("text/csv");
+        firefoxNeverAskToSaveMimeTypes.add("application/vnd.ms-excel.sheet.binary.macroEnabled.12");
+        firefoxNeverAskToSaveMimeTypes.add("text/plain");
+        firefoxNeverAskToSaveMimeTypes.add("text/csv/xls/xlsb");
+        firefoxNeverAskToSaveMimeTypes.add("application/csv");
+        firefoxNeverAskToSaveMimeTypes.add("application/download");
+        firefoxNeverAskToSaveMimeTypes.add("application/vnd.openxmlformats-officedocument.presentationml.presentation");
+        firefoxNeverAskToSaveMimeTypes.add("application/octet-stream");
+
         firefoxOptions.addPreference("browser.helperApps.alwaysAsk.force", false);
         firefoxOptions.addPreference("browser.download.dir", downloadDirectory.getAbsolutePath());
-        firefoxOptions.addPreference("browser.download.panel.shown", true);
+        firefoxOptions.addPreference("browser.download.always_ask_before_handling_new_types", false);
+        firefoxOptions.addPreference("browser.download.panel.shown", false);
         firefoxOptions.addPreference("browser.download.folderList", 2);
         firefoxOptions.addPreference("browser.download.useDownloadDir", true);
+        firefoxOptions.addPreference("browser.download.forbid_open_with", true);
         firefoxOptions.addPreference("browser.download.alwaysOpenPanel", false);
+        firefoxOptions.addPreference("browser.download.viewableInternally.enabledTypes", "");
         firefoxOptions.addPreference("browser.download.manager.showWhenStarting", false);
         firefoxOptions.addPreference("browser.download.manager.alertOnEXEOpen", false);
         firefoxOptions.addPreference("browser.download.manager.focusWhenStarting", false);
@@ -72,7 +109,6 @@ public final class ScWebDriverOptions {
         firefoxOptions.addPreference("browser.download.manager.useWindow", false);
         firefoxOptions.addPreference("services.sync.prefs.sync.browser.download.manager.showWhenStarting", false);
         firefoxOptions.addPreference("pdfjs.disabled", true);
-
         firefoxOptions.setAcceptInsecureCerts(true);
     }
 
@@ -86,6 +122,10 @@ public final class ScWebDriverOptions {
 
     FirefoxOptions firefoxOptions() {
         return firefoxOptions;
+    }
+
+    List<String> firefoxNeverAskToSaveMimeTypes() {
+        return firefoxNeverAskToSaveMimeTypes;
     }
 
     SafariOptions safariOptions() {
@@ -105,7 +145,7 @@ public final class ScWebDriverOptions {
     }
 
     public interface FirefoxOptionSetup {
-        void options(FirefoxOptions options);
+        void options(FirefoxOptions options, List<String> neverSaveToDiskMomeTypes);
     }
 
     public interface EdgeOptionSetup {
