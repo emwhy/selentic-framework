@@ -379,24 +379,24 @@ public abstract class ScAbstractComponent {
      * <p>
      * <strong>Example:</strong>
      * <pre>{@code
-     * _indexAt(0)     // Matches the first element
-     * _indexAt(5)     // Matches the sixth element
-     * _indexAt(10)    // Matches the eleventh element
+     * _indexOf(0)     // Matches the first element
+     * _indexOf(5)     // Matches the sixth element
+     * _indexOf(10)    // Matches the eleventh element
      * }</pre>
      * 
      *
      * @param index the index of the element to match (0-based)
      * @return a {@link ScSelectorIndexProperty} for building exact index-based selectors
      */
-    protected static ScSelectorIndexProperty _indexAt(int index) {
-        return SELECTOR_ACCESSOR._indexAt(index);
+    protected static ScSelectorIndexProperty _indexOf(int index) {
+        return SELECTOR_ACCESSOR._indexOf(index);
     }
 
     /**
      * Creates a selector property for matching the first element. This method is only valid for XPath.
      *
      * <p>
-     * This method is a convenience method equivalent to {@code _indexAt(0)}.
+     * This method is a convenience method equivalent to {@code _indexOf(0)}.
      * 
      *
      * <p>
@@ -852,24 +852,6 @@ public abstract class ScAbstractComponent {
     protected ScRadioButtonGroup<ScRadioButton> $radioButtons(@NonNull ScSelector selector) {
         return $$components(selector, ScRadioButton.class, ScRadioButtonGroup.class);
     }
-
-    /**
-     * Hook method for waiting for component or page display.
-     *
-     * <p>
-     * This method is called by the framework to wait for a component or page to be displayed.
-     * Subclasses can override this method to implement custom waiting logic specific to their needs.
-     * 
-     *
-     * <p>
-     * By default, this method does nothing. Subclasses should override it to define what needs to be
-     * waited for before the component/page is considered ready for interaction.
-     * 
-     *
-     * @see ScComponent#waitForDisplayed()
-     * @see ScAbstractPage#waitForComponent(ScComponent)
-     */
-//    protected void waitForDisplayed() {}
 
     /**
      * Creates a component instance of the specified type with the given selector.

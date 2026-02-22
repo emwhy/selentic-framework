@@ -252,7 +252,7 @@ public class ScUiComponentTest extends ScBaseTest {
     @Test
     public void testInputButton() {
         testPage.inPage(p -> {
-            Assert.assertEquals(p.testInputButton().text(), "SanityTest Input Button");
+            Assert.assertEquals(p.testInputButton().text(), "Test Input Button");
 
             p.testInputButton().click();
 
@@ -266,7 +266,7 @@ public class ScUiComponentTest extends ScBaseTest {
     @Test
     public void testButton() {
         testPage.inPage(p -> {
-            Assert.assertEquals(p.testButton().text(), "SanityTest Button");
+            Assert.assertEquals(p.testButton().text(), "Test Button");
 
             p.testButton().click();
 
@@ -284,17 +284,17 @@ public class ScUiComponentTest extends ScBaseTest {
 
             Assert.assertEquals(p.testTableRows().size(), 3);
 
-            Assert.assertEquals(p.testTableRows().at(0).text(), "SanityTest 1");
-            Assert.assertEquals(p.testTableRows().at(1).text(), "SanityTest 2");
-            Assert.assertEquals(p.testTableRows().at(2).text(), "SanityTest 3");
+            Assert.assertEquals(p.testTableRows().at(0).text(), "Test 1");
+            Assert.assertEquals(p.testTableRows().at(1).text(), "Test 2");
+            Assert.assertEquals(p.testTableRows().at(2).text(), "Test 3");
 
-            Assert.assertEquals(p.testTableRows().entry("SanityTest 1").serialNumberText().text(), "#TDD987");
-            Assert.assertEquals(p.testTableRows().entry("SanityTest 2").serialNumberText().text(), "#AEV974");
-            Assert.assertEquals(p.testTableRows().entry("SanityTest 3").serialNumberText().text(), "#CCA106");
+            Assert.assertEquals(p.testTableRows().entry("Test 1").serialNumberText().text(), "#TDD987");
+            Assert.assertEquals(p.testTableRows().entry("Test 2").serialNumberText().text(), "#AEV974");
+            Assert.assertEquals(p.testTableRows().entry("Test 3").serialNumberText().text(), "#CCA106");
 
             Assert.assertEquals(filteredRow.size(), 2);
-            Assert.assertEquals(filteredRow.get(0).productNameText().text(), "SanityTest 1");
-            Assert.assertEquals(filteredRow.get(1).productNameText().text(), "SanityTest 3");
+            Assert.assertEquals(filteredRow.get(0).productNameText().text(), "Test 1");
+            Assert.assertEquals(filteredRow.get(1).productNameText().text(), "Test 3");
             Assert.assertEquals(filteredRow.get(0).builtDateText().text(), "1/4/2024");
             Assert.assertEquals(filteredRow.get(1).builtDateText().text(), "10/5/2011");
             Assert.assertEquals(filteredRow.get(0).priceAmountText().text(), "$99.99");
@@ -308,18 +308,18 @@ public class ScUiComponentTest extends ScBaseTest {
     @Test
     public void testFrame() {
         testPage.inPage(p -> {
-            p.inSanityTestInnerFrame(frameContent -> {
+            p.inTestInnerFrame(frameContent -> {
                 Assert.assertEquals(frameContent.testExternalTextbox().text(), "external textbox text");
 
                 Assert.assertEquals(frameContent.testExternalTableRows().size(), 3);
 
-                Assert.assertEquals(frameContent.testExternalTableRows().at(0).text(), "External SanityTest 1");
-                Assert.assertEquals(frameContent.testExternalTableRows().at(1).text(), "External SanityTest 2");
-                Assert.assertEquals(frameContent.testExternalTableRows().at(2).text(), "External SanityTest 3");
+                Assert.assertEquals(frameContent.testExternalTableRows().at(0).text(), "External Test 1");
+                Assert.assertEquals(frameContent.testExternalTableRows().at(1).text(), "External Test 2");
+                Assert.assertEquals(frameContent.testExternalTableRows().at(2).text(), "External Test 3");
 
-                Assert.assertEquals(frameContent.testExternalTableRows().entry("External SanityTest 1").serialNumberText().text(), "#EX-TDD987");
-                Assert.assertEquals(frameContent.testExternalTableRows().entry("External SanityTest 2").serialNumberText().text(), "#EX-AEV974");
-                Assert.assertEquals(frameContent.testExternalTableRows().entry("External SanityTest 3").serialNumberText().text(), "#EX-CCA106");
+                Assert.assertEquals(frameContent.testExternalTableRows().entry("External Test 1").serialNumberText().text(), "#EX-TDD987");
+                Assert.assertEquals(frameContent.testExternalTableRows().entry("External Test 2").serialNumberText().text(), "#EX-AEV974");
+                Assert.assertEquals(frameContent.testExternalTableRows().entry("External Test 3").serialNumberText().text(), "#EX-CCA106");
             });
         });
     }
@@ -330,8 +330,8 @@ public class ScUiComponentTest extends ScBaseTest {
     @Test
     public void testDialog() {
         testPage.inPage(p -> {
-            p.openSanityTestDialogButton().click();
-            p.inSanityTestDialog(dialog -> {
+            p.openTestDialogButton().click();
+            p.inTestDialog(dialog -> {
                 Assert.assertEquals(dialog.textbox().text(), "test dialog text");
 
                 dialog.textbox().enterText("Test text in dialog");
@@ -349,8 +349,8 @@ public class ScUiComponentTest extends ScBaseTest {
     @Test
     public void testModalDialog() {
         testPage.inPage(p -> {
-            p.openSanityTestModalDialogButton().click();
-            p.inSanityTestModalDialog(dialog -> {
+            p.openTestModalDialogButton().click();
+            p.inTestModalDialog(dialog -> {
                 Assert.assertEquals(dialog.textbox().text(), "test modal dialog text");
 
                 dialog.textbox().enterText("Test test in modal dialog");
@@ -394,9 +394,9 @@ public class ScUiComponentTest extends ScBaseTest {
                     Assert.assertEquals(controller.windowCount(), 3);
 
                     controller.inOtherWindow(testPage, 0, p3 -> {
-                        Assert.assertEquals(p3.testTableRows().entry("SanityTest 1").serialNumberText().text(), "#TDD987");
-                        Assert.assertEquals(p3.testTableRows().entry("SanityTest 2").serialNumberText().text(), "#AEV974");
-                        Assert.assertEquals(p3.testTableRows().entry("SanityTest 3").serialNumberText().text(), "#CCA106");
+                        Assert.assertEquals(p3.testTableRows().entry("Test 1").serialNumberText().text(), "#TDD987");
+                        Assert.assertEquals(p3.testTableRows().entry("Test 2").serialNumberText().text(), "#AEV974");
+                        Assert.assertEquals(p3.testTableRows().entry("Test 3").serialNumberText().text(), "#CCA106");
 
                         Assert.assertEquals(controller.windowCount(), 3);
                     });
@@ -406,13 +406,13 @@ public class ScUiComponentTest extends ScBaseTest {
 
                     Assert.assertEquals(p2.testExternalTableRows().size(), 3);
 
-                    Assert.assertEquals(p2.testExternalTableRows().at(0).text(), "External SanityTest 1");
-                    Assert.assertEquals(p2.testExternalTableRows().at(1).text(), "External SanityTest 2");
-                    Assert.assertEquals(p2.testExternalTableRows().at(2).text(), "External SanityTest 3");
+                    Assert.assertEquals(p2.testExternalTableRows().at(0).text(), "External Test 1");
+                    Assert.assertEquals(p2.testExternalTableRows().at(1).text(), "External Test 2");
+                    Assert.assertEquals(p2.testExternalTableRows().at(2).text(), "External Test 3");
 
-                    Assert.assertEquals(p2.testExternalTableRows().entry("External SanityTest 1").serialNumberText().text(), "#EX-TDD987");
-                    Assert.assertEquals(p2.testExternalTableRows().entry("External SanityTest 2").serialNumberText().text(), "#EX-AEV974");
-                    Assert.assertEquals(p2.testExternalTableRows().entry("External SanityTest 3").serialNumberText().text(), "#EX-CCA106");
+                    Assert.assertEquals(p2.testExternalTableRows().entry("External Test 1").serialNumberText().text(), "#EX-TDD987");
+                    Assert.assertEquals(p2.testExternalTableRows().entry("External Test 2").serialNumberText().text(), "#EX-AEV974");
+                    Assert.assertEquals(p2.testExternalTableRows().entry("External Test 3").serialNumberText().text(), "#EX-CCA106");
 
                     p2.closeCurrentWindowButton().click();
                 });
@@ -423,13 +423,13 @@ public class ScUiComponentTest extends ScBaseTest {
 
                 Assert.assertEquals(p1.testExternalTableRows().size(), 3);
 
-                Assert.assertEquals(p1.testExternalTableRows().at(0).text(), "External SanityTest 1");
-                Assert.assertEquals(p1.testExternalTableRows().at(1).text(), "External SanityTest 2");
-                Assert.assertEquals(p1.testExternalTableRows().at(2).text(), "External SanityTest 3");
+                Assert.assertEquals(p1.testExternalTableRows().at(0).text(), "External Test 1");
+                Assert.assertEquals(p1.testExternalTableRows().at(1).text(), "External Test 2");
+                Assert.assertEquals(p1.testExternalTableRows().at(2).text(), "External Test 3");
 
-                Assert.assertEquals(p1.testExternalTableRows().entry("External SanityTest 1").serialNumberText().text(), "#EX-TDD987");
-                Assert.assertEquals(p1.testExternalTableRows().entry("External SanityTest 2").serialNumberText().text(), "#EX-AEV974");
-                Assert.assertEquals(p1.testExternalTableRows().entry("External SanityTest 3").serialNumberText().text(), "#EX-CCA106");
+                Assert.assertEquals(p1.testExternalTableRows().entry("External Test 1").serialNumberText().text(), "#EX-TDD987");
+                Assert.assertEquals(p1.testExternalTableRows().entry("External Test 2").serialNumberText().text(), "#EX-AEV974");
+                Assert.assertEquals(p1.testExternalTableRows().entry("External Test 3").serialNumberText().text(), "#EX-CCA106");
             });
 
         });
@@ -649,7 +649,7 @@ public class ScUiComponentTest extends ScBaseTest {
      */
     public class SnRegressionTestException extends RuntimeException {
         SnRegressionTestException(Throwable ex) {
-            super("Sanity Test Failure", ex);
+            super(" Test Failure", ex);
         }
     }
 }

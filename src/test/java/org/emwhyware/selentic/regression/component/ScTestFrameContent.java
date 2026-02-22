@@ -5,7 +5,7 @@ import org.emwhyware.selentic.lib.ScFrameContent;
 import org.emwhyware.selentic.lib.ScTextbox;
 import org.emwhyware.selentic.lib.selector.ScXPath;
 
-public class ScSanityTestFrameContent extends ScFrameContent {
+public class ScTestFrameContent extends ScFrameContent {
     private static final ScXPath TEST_EXTERNAL_TEXTBOX = _xpath.descendant("input", _id().is("test-external-textbox"));
     private static final ScXPath TEST_EXTERNAL_ROWS = _xpath.descendant("table", _id().is("test-external-table")).descendant("tr", _cssClasses("data"));
 

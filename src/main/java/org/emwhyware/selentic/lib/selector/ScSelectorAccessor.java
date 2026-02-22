@@ -279,16 +279,16 @@ public class ScSelectorAccessor {
      * <p>
      * <strong>Example:</strong>
      * <pre>{@code
-     * _indexAt(0)     // Matches the first element
-     * _indexAt(5)     // Matches the sixth element
-     * _indexAt(10)    // Matches the eleventh element
+     * _indexOf(0)     // Matches the first element
+     * _indexOf(5)     // Matches the sixth element
+     * _indexOf(10)    // Matches the eleventh element
      * }</pre>
      *
      *
      * @param index the index of the element to match (0-based)
      * @return a {@link ScSelectorIndexProperty} for building exact index-based selectors
      */
-    protected ScSelectorIndexProperty _indexAt(int index) {
+    protected ScSelectorIndexProperty _indexOf(int index) {
         return new ScSelectorIndexProperty(ScSelectorIndexProperty.Conditions.At, index);
     }
 
@@ -296,7 +296,7 @@ public class ScSelectorAccessor {
      * Creates a selector property for matching the first element. This method is only valid for XPath.
      *
      * <p>
-     * This method is a convenience method equivalent to {@code _indexAt(0)}.
+     * This method is a convenience method equivalent to {@code _indexOf(0)}.
      *
      *
      * <p>
@@ -309,7 +309,7 @@ public class ScSelectorAccessor {
      * @return a {@link ScSelectorIndexProperty} for selecting the first element
      */
     protected ScSelectorIndexProperty _first() {
-        return _indexAt(0);
+        return _indexOf(0);
     }
 
     /**

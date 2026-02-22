@@ -173,20 +173,27 @@ public final class Selentic {
      * <p>
      * <strong>Important:</strong> This method must be called BEFORE calling {@link #driver()} or
      * {@link #driver()} to ensure the options are applied to the new ChromeDriver instance.
-     * 
      *
      * <p>
-     * <strong>Common Chrome Options:</strong>
+     * The following commonly used options are set by default.
+     * <p>
+     * <strong>Predefined Chrome Options:</strong>
      * <pre>{@code
-     * Selentic.withChromeOptions((options, prefs) -> {
-     *     options.addArguments("--headless");                           // Run in headless mode
-     *     options.addArguments("--disable-gpu");                        // Disable GPU acceleration
-     *     options.addArguments("--no-sandbox");                         // Bypass OS security model
-     *     options.addArguments("--disable-dev-shm-usage");              // Overcome limited resource problems
-     *     options.addArguments("--disable-blink-features=AutomationControlled");
-     *     prefs.put("download.prompt_for_download", false);            // Auto-download files
-     *     prefs.put("profile.default_content_settings.popups", 0);     // Block popups
-     * });
+     *         chromePrefs.put("download.default_directory", downloadDirectory.getAbsolutePath());
+     *         chromePrefs.put("download.prompt_for_download", false);
+     *         chromePrefs.put("download.directory_upgrade", true);
+     *         chromePrefs.put("plugins.always_open_pdf_externally", true);
+     *         chromePrefs.put("profile.default_content_settings.popups", 0);
+     *         chromePrefs.put("profile.default_content_setting_values.notifications", 2);
+     *         chromePrefs.put("profile.default_content_setting_values.automatic_downloads", 1);
+     *         chromePrefs.put("browser.show_hub_popup_on_download_start", false);
+     *         chromeOptions.addArguments("--disable-dev-shm-usage");
+     *         chromeOptions.addArguments("--disable-extensions");
+     *         chromeOptions.addArguments("--disable-gpu");
+     *         chromeOptions.addArguments("--no-sandbox");
+     *         chromeOptions.addArguments("--disable-search-engine-choice-screen");
+     *         chromeOptions.addArguments("--disable-features=DownloadBubble,DownloadBubbleV2");
+     *         chromeOptions.addArguments("--disable-popup-blocking");
      * }</pre>
      *
      *
@@ -212,16 +219,56 @@ public final class Selentic {
      * <p>
      * <strong>Important:</strong> This method must be called BEFORE calling {@link #driver()} or
      * {@link #driver()} to ensure the options are applied to the new FirefoxDriver instance.
-     * 
      *
      * <p>
-     * <strong>Common Firefox Options:</strong>
+     * The following commonly used options are set by default.
+     * <p>
+     * <strong>Predefined Firefox Options:</strong>
      * <pre>{@code
-     * Selentic.withFirefoxOptions(options -> {
-     *     options.addArguments("--headless");                           // Run in headless mode
-     *     options.addPreference("browser.download.folderList", 2);     // Use custom download folder
-     *     options.addPreference("browser.helperApps.neverAsk.saveToDisk", "application/pdf");
-     * });
+     *         // Mime types to never ask to save.
+     *         firefoxNeverAskToSaveMimeTypes.add("application/zip");
+     *         firefoxNeverAskToSaveMimeTypes.add("application/pdf");
+     *         firefoxNeverAskToSaveMimeTypes.add("application/x-zip-compressed");
+     *         firefoxNeverAskToSaveMimeTypes.add("multipart/x-zip");
+     *         firefoxNeverAskToSaveMimeTypes.add("application/x-rar-compressed");
+     *         firefoxNeverAskToSaveMimeTypes.add("application/msword");
+     *         firefoxNeverAskToSaveMimeTypes.add("application/vnd.ms-word.document.macroEnabled.12");
+     *         firefoxNeverAskToSaveMimeTypes.add("application/vnd.openxmlformats-officedocument.wordprocessingml.document");
+     *         firefoxNeverAskToSaveMimeTypes.add("application/vnd.ms-excel");
+     *         firefoxNeverAskToSaveMimeTypes.add("application/rtf");
+     *         firefoxNeverAskToSaveMimeTypes.add("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+     *         firefoxNeverAskToSaveMimeTypes.add("application/vnd.ms-excel");
+     *         firefoxNeverAskToSaveMimeTypes.add("application/vnd.ms-word.document.macroEnabled.12");
+     *         firefoxNeverAskToSaveMimeTypes.add("application/xls");
+     *         firefoxNeverAskToSaveMimeTypes.add("text/csv");
+     *         firefoxNeverAskToSaveMimeTypes.add("application/vnd.ms-excel.sheet.binary.macroEnabled.12");
+     *         firefoxNeverAskToSaveMimeTypes.add("text/plain");
+     *         firefoxNeverAskToSaveMimeTypes.add("text/csv/xls/xlsb");
+     *         firefoxNeverAskToSaveMimeTypes.add("application/csv");
+     *         firefoxNeverAskToSaveMimeTypes.add("application/download");
+     *         firefoxNeverAskToSaveMimeTypes.add("application/vnd.openxmlformats-officedocument.presentationml.presentation");
+     *         firefoxNeverAskToSaveMimeTypes.add("application/octet-stream");
+     *
+     *         // Firefox options.
+     *         firefoxOptions.addPreference("browser.helperApps.alwaysAsk.force", false);
+     *         firefoxOptions.addPreference("browser.download.dir", downloadDirectory.getAbsolutePath());
+     *         firefoxOptions.addPreference("browser.download.always_ask_before_handling_new_types", false);
+     *         firefoxOptions.addPreference("browser.download.panel.shown", false);
+     *         firefoxOptions.addPreference("browser.download.folderList", 2);
+     *         firefoxOptions.addPreference("browser.download.useDownloadDir", true);
+     *         firefoxOptions.addPreference("browser.download.forbid_open_with", true);
+     *         firefoxOptions.addPreference("browser.download.alwaysOpenPanel", false);
+     *         firefoxOptions.addPreference("browser.download.viewableInternally.enabledTypes", "");
+     *         firefoxOptions.addPreference("browser.download.manager.showWhenStarting", false);
+     *         firefoxOptions.addPreference("browser.download.manager.alertOnEXEOpen", false);
+     *         firefoxOptions.addPreference("browser.download.manager.focusWhenStarting", false);
+     *         firefoxOptions.addPreference("browser.download.manager.alertOnEXEOpen", false);
+     *         firefoxOptions.addPreference("browser.download.manager.closeWhenDone", true);
+     *         firefoxOptions.addPreference("browser.download.manager.showAlertOnComplete", false);
+     *         firefoxOptions.addPreference("browser.download.manager.useWindow", false);
+     *         firefoxOptions.addPreference("services.sync.prefs.sync.browser.download.manager.showWhenStarting", false);
+     *         firefoxOptions.addPreference("pdfjs.disabled", true);
+     *         firefoxOptions.setAcceptInsecureCerts(true);
      * }</pre>
      *
      *
@@ -247,17 +294,28 @@ public final class Selentic {
      * <p>
      * <strong>Important:</strong> This method must be called BEFORE calling {@link #driver()} or
      * {@link #driver()} to ensure the options are applied to the new EdgeDriver instance.
-     * 
      *
      * <p>
-     * <strong>Common Edge Options:</strong>
+     * The following commonly used options are set by default.
+     * <p>
+     * <p>
+     * <strong>Predefined Edge Options:</strong>
      * <pre>{@code
-     * Selentic.withEdgeOptions((options, prefs) -> {
-     *     options.addArguments("--headless");                           // Run in headless mode
-     *     options.addArguments("--disable-gpu");                        // Disable GPU acceleration
-     *     options.addArguments("--no-sandbox");                         // Bypass OS security model
-     *     prefs.put("download.prompt_for_download", false);            // Auto-download files
-     * });
+     *         edgePrefs.put("download.default_directory", downloadDirectory.getAbsolutePath());
+     *         edgePrefs.put("download.prompt_for_download", false);
+     *         edgePrefs.put("download.directory_upgrade", true);
+     *         edgePrefs.put("plugins.always_open_pdf_externally", true);
+     *         edgePrefs.put("profile.default_content_settings.popups", 0);
+     *         edgePrefs.put("profile.default_content_setting_values.notifications", 2);
+     *         edgePrefs.put("profile.default_content_setting_values.automatic_downloads", 1);
+     *         edgePrefs.put("browser.show_hub_popup_on_download_start", false);
+     *         edgeOptions.addArguments("--disable-dev-shm-usage");
+     *         edgeOptions.addArguments("--disable-extensions");
+     *         edgeOptions.addArguments("--disable-gpu");
+     *         edgeOptions.addArguments("--no-sandbox");
+     *         edgeOptions.addArguments("--disable-search-engine-choice-screen");
+     *         edgeOptions.addArguments("--disable-features=DownloadBubble,DownloadBubbleV2");
+     *         edgeOptions.addArguments("--disable-popup-blocking");
      * }</pre>
      *
      *

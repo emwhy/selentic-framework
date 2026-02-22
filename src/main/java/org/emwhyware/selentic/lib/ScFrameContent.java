@@ -6,7 +6,7 @@ package org.emwhyware.selentic.lib;
  * <pre>{@code
  *
  *     // A frame content class resembles a page class, since it is basically a page.
- *     public class ScSanityTestFrameContent extends ScFrameContent {
+ *     public class ScTestFrameContent extends ScFrameContent {
  *         private static final ScXPath TEST_EXTERNAL_TEXTBOX = _xpath.descendant("input", _id().is("test-external-textbox"));
  *         private static final ScXPath TEST_EXTERNAL_ROWS = _xpath.descendant("table", _id().is("test-external-table")).descendant("tr", _cssClasses("data"));
  *
@@ -29,8 +29,8 @@ package org.emwhyware.selentic.lib;
  *     // In a page object, a frame is defined like this.
  *     private static final ScCssSelector TEST_IFRAME = _cssSelector.descendant(_id("test-iframe"));
  *
- *     public void inSanityTestInnerFrame(ScFrameAction&lt;ScSanityTestFrameContent&gt; predicate) {
- *         $frame(TEST_IFRAME, ScSanityTestFrameContent.class, predicate);
+ *     public void inTestInnerFrame(ScFrameAction&lt;ScTestFrameContent&gt; predicate) {
+ *         $frame(TEST_IFRAME, ScTestFrameContent.class, predicate);
  *     }
  *
  *     ....
@@ -38,18 +38,18 @@ package org.emwhyware.selentic.lib;
  *     // In a test method.
  *     // The action within frame is inside the predicate method.
  *     testPage.inPage(p -> {
- *         p.inSanityTestInnerFrame(frameContent -> {
+ *         p.inTestInnerFrame(frameContent -> {
  *             Assert.assertEquals(frameContent.testExternalTextbox().text(), "external textbox text");
  *
  *             Assert.assertEquals(frameContent.testExternalTableRows().size(), 3);
  *
- *             Assert.assertEquals(frameContent.testExternalTableRows().at(0).text(), "External SanityTest 1");
- *             Assert.assertEquals(frameContent.testExternalTableRows().at(1).text(), "External SanityTest 2");
- *             Assert.assertEquals(frameContent.testExternalTableRows().at(2).text(), "External SanityTest 3");
+ *             Assert.assertEquals(frameContent.testExternalTableRows().at(0).text(), "External Test 1");
+ *             Assert.assertEquals(frameContent.testExternalTableRows().at(1).text(), "External Test 2");
+ *             Assert.assertEquals(frameContent.testExternalTableRows().at(2).text(), "External Test 3");
  *
- *             Assert.assertEquals(frameContent.testExternalTableRows().entry("External SanityTest 1").serialNumberText.text(), "#EX-TDD987");
- *             Assert.assertEquals(frameContent.testExternalTableRows().entry("External SanityTest 2").serialNumberText.text(), "#EX-AEV974");
- *             Assert.assertEquals(frameContent.testExternalTableRows().entry("External SanityTest 3").serialNumberText.text(), "#EX-CCA106");
+ *             Assert.assertEquals(frameContent.testExternalTableRows().entry("External Test 1").serialNumberText.text(), "#EX-TDD987");
+ *             Assert.assertEquals(frameContent.testExternalTableRows().entry("External Test 2").serialNumberText.text(), "#EX-AEV974");
+ *             Assert.assertEquals(frameContent.testExternalTableRows().entry("External Test 3").serialNumberText.text(), "#EX-CCA106");
  *         });
  *     });
  *
