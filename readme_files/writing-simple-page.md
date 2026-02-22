@@ -77,8 +77,8 @@ public class ScExampleTest {
 }
 ```
 
-- The pages being used is defined at the top using **ScWithPage** class. This gives access to the page content by using **inPage()** method.
-- When entering **inPage()** method, the page waits for the page to load without additional code. If **waitForDisplayed** of the page is overridden, that would also be executed.
+- The pages being used is defined at the top using **ScWithPage** class. This gives access to the page content by using **inPage()** method that uses the lambda expression.
+- When entering **inPage()** method, the page waits for the page to load without additional code. If **waitForDisplayedPage** of the page is overridden, that would also be executed.
 - Because components are defined with respective component type, only relevant methods are available, like *click* for button and *enterText* for textbox.
 - Before actions take place (i.e., click, enterText), the framework automatically checks for component's existence, ensure that it is displayed, check to ensure it is enabled (if needed), then scroll to the component.
   This is to keep the test code focused only on actions, without cluttering it up with other code like checking for displayed or scrolling to component.

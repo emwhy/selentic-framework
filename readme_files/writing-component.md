@@ -1,6 +1,6 @@
 [< Return to README](../README.md)
 
-## Writing a Component Class
+## Writing a Component
 
 The previous example only contained simple components. But the example below adds a dropdown.
 
