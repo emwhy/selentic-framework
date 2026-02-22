@@ -2,7 +2,7 @@ package org.emwhyware.selentic.lib;
 
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
-import org.emwhyware.selentic.lib.config.SelelenticConfig;
+import org.emwhyware.selentic.lib.config.SelenticConfig;
 import org.emwhyware.selentic.lib.exception.ScComponentCreationException;
 import org.emwhyware.selentic.lib.exception.ScComponentWaitException;
 import org.emwhyware.selentic.lib.exception.ScElementNotFoundException;
@@ -61,14 +61,14 @@ public abstract class ScAbstractComponent {
      *
      *
      * <p>
-     * The default wait timeout is as defined in {@link SelelenticConfig}. It can be changed only for this component
+     * The default wait timeout is as defined in {@link SelenticConfig}. It can be changed only for this component
      * by overriding this method and providing another value.
      *
      *
      * @return the wait timeout in milliseconds
      */
     protected long waitTimeout() {
-        return SelelenticConfig.config().waitTimeoutMilliseconds();
+        return SelenticConfig.config().waitTimeoutMilliseconds();
     }
 
     /**

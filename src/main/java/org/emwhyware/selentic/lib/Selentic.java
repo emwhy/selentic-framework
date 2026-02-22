@@ -2,7 +2,7 @@ package org.emwhyware.selentic.lib;
 
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
-import org.emwhyware.selentic.lib.config.SelelenticConfig;
+import org.emwhyware.selentic.lib.config.SelenticConfig;
 import org.emwhyware.selentic.lib.util.ScLogHandler;
 import org.emwhyware.selentic.lib.util.ScNullCheck;
 import org.openqa.selenium.*;
@@ -70,11 +70,35 @@ public final class Selentic {
     }
 
     /**
-     * Allows setting a browser and override config value during run time.
+     * Allows setting browser. This overrides values set in {@link SelenticConfig}.
+     * <p>
+     * Changing the browser must be called before starting the web driver by calling {@link Selentic#driver()},
+     * {@link Selentic#open(String)}, or {@link Selentic#open()}.
+     * <p>
+     * In multiple threaded execution, browser can be set per thread. It is possible to run different browser in
+     * each thread.
+     *
      * @param browser browser type
+     *
+     * @see Selentic#driver()
+     * @see Selentic#open(String)
+     * @see Selentic#open()
      */
     public synchronized static void setBrowser(ScBrowser browser) {
         context().setBrowser(browser);
+    }
+
+    /**
+     * Returns the selected browser for current thread context.
+     * <p>
+     * The default value is set in {@link SelenticConfig}, but it can be changed by calling {@link #setBrowser(ScBrowser)}.
+     *
+     * @return currently selected browser type
+     *
+     * @see #setBrowser(ScBrowser)
+     */
+    public synchronized static ScBrowser browser() {
+        return context().browser();
     }
 
     /**
@@ -87,7 +111,7 @@ public final class Selentic {
         withEdgeOptions(((options, prefs) -> {
             options.addArguments("--headless=new");
         }));
-        withFirefoxOptions(options -> {
+        withFirefoxOptions((options, mimeTypes) -> {
             options.addArguments("--headless");
         });
         withSafariOptions(options -> {
@@ -100,7 +124,7 @@ public final class Selentic {
      *
      * <p>
      * This method retrieves or creates a WebDriver instance for the calling thread. If no driver exists
-     * for the current thread, a new one is created using the browser configured in {@link SelelenticConfig}.
+     * for the current thread, a new one is created using the browser configured in {@link SelenticConfig}.
      * The WebDriver instance is reused for subsequent calls from the same thread.
      *
      * <p>
@@ -123,7 +147,7 @@ public final class Selentic {
      *
      * @return the {@link WebDriver} instance for the current thread
      * @see #driver()
-     * @see SelelenticConfig#browser()
+     * @see SelenticConfig#browser()
      * @see #setBrowser(ScBrowser)
      * @see ScWindow
      * @see ScFrame

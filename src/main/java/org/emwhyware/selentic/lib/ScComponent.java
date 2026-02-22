@@ -401,9 +401,7 @@ public abstract class ScComponent extends ScAbstractComponent {
      * @throws ScElementNotFoundException if the element is not displayed
      */
     protected void doubleClick() {
-        final Actions actions = new Actions(Selentic.driver());
-
-        actions.doubleClick(this.scrolledElement()).perform();
+        this.actions().doubleClick(this.scrolledElement()).build().perform();
     }
 
     /**
@@ -420,9 +418,7 @@ public abstract class ScComponent extends ScAbstractComponent {
      * @throws ScElementNotFoundException if the element is not displayed
      */
     protected void clickAt(int x, int y) {
-        final Actions actions = new Actions(Selentic.driver());
-
-        actions.moveToElement(this.scrolledElement(), x, y).click().perform();
+        this.actions().moveToElement(this.scrolledElement(), x, y).click().build().perform();
     }
 
     /**
@@ -439,9 +435,7 @@ public abstract class ScComponent extends ScAbstractComponent {
      * @throws ScElementNotFoundException if the element is not displayed
      */
     protected void doubleClickAt(int x, int y) {
-        final Actions actions = new Actions(Selentic.driver());
-
-        actions.moveToElement(this.scrolledElement(), x, y).doubleClick().perform();
+        this.actions().moveToElement(this.scrolledElement(), x, y).doubleClick().build().perform();
     }
 
     /**
@@ -455,6 +449,7 @@ public abstract class ScComponent extends ScAbstractComponent {
     protected void focus() {
         this.actions()
                 .moveToElement(this.scrolledElement())
+                .build()
                 .perform();
     }
 

@@ -1,9 +1,6 @@
 package org.emwhyware.selentic.regression.test;
 
-import org.emwhyware.selentic.lib.ScButton;
-import org.emwhyware.selentic.lib.ScPage;
-import org.emwhyware.selentic.lib.ScWithPage;
-import org.emwhyware.selentic.lib.Selentic;
+import org.emwhyware.selentic.lib.*;
 import org.emwhyware.selentic.lib.exception.ScComponentWaitException;
 import org.emwhyware.selentic.lib.exception.ScElementNotFoundException;
 import org.emwhyware.selentic.lib.exception.ScWaitTimeoutException;
@@ -473,17 +470,20 @@ public class ScUiComponentTest extends ScBaseTest {
      */
     @Test
     public void testCsvDownload() {
-        testPage.inPage(p -> {
-            final ScDownloadCsvFileParser csvParser =
-                    p.testCsvDownloadLink().download().parse(ScDownloadCsvFileParser.class);
+        if (Selentic.browser() == ScBrowser.Firefox) {
+            fail("This test fails on Firefox because it fails to get MIME-TYPE for local file download. Skipping.");
+        } else {
+            testPage.inPage(p -> {
+                final ScDownloadCsvFileParser csvParser = p.testCsvDownloadLink().download().parse(ScDownloadCsvFileParser.class);
 
-            Assert.assertEquals(csvParser.baseName(), "test");
-            Assert.assertEquals(csvParser.extension(), "csv");
-            Assert.assertEquals(csvParser.contentText(), "\"1\", \"test\", \"This is a test content.\"");
-            Assert.assertEquals(csvParser.csvContents().getFirst().getFirst(), "1");
-            Assert.assertEquals(csvParser.csvContents().getFirst().get(1), "test");
-            Assert.assertEquals(csvParser.csvContents().getFirst().get(2), "This is a test content.");
-        });
+                Assert.assertEquals(csvParser.baseName(), "test");
+                Assert.assertEquals(csvParser.extension(), "csv");
+                Assert.assertEquals(csvParser.contentText(), "\"1\", \"test\", \"This is a test content.\"");
+                Assert.assertEquals(csvParser.csvContents().getFirst().getFirst(), "1");
+                Assert.assertEquals(csvParser.csvContents().getFirst().get(1), "test");
+                Assert.assertEquals(csvParser.csvContents().getFirst().get(2), "This is a test content.");
+            });
+        }
     }
 
     /**
@@ -506,6 +506,14 @@ public class ScUiComponentTest extends ScBaseTest {
      */
     @Test
     public void testWaitObject() {
+        long startTimestamp = System.currentTimeMillis();
+        long endTimeStamp = 0;
+
+        ScWait.sleep(5000);
+        endTimeStamp = System.currentTimeMillis();
+        Assert.assertTrue(endTimeStamp - startTimestamp > 4900);
+        Assert.assertTrue(endTimeStamp - startTimestamp < 5100);
+
         testPage.inPage(p -> {
             Assert.assertFalse(p.testNonExistingLink().exists());
             Assert.assertFalse(p.testNonExistingLink().isDisplayed());
@@ -514,7 +522,7 @@ public class ScUiComponentTest extends ScBaseTest {
                 p.testNonExistingLink().text();
             } catch (ScElementNotFoundException ex) {
                 // Expected.
-            }
+           }
 
             try {
                 p.testNonExistingLink().click();

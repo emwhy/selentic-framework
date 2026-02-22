@@ -8,13 +8,16 @@ import org.openqa.selenium.firefox.FirefoxOptions;
 import org.openqa.selenium.safari.SafariOptions;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public final class ScWebDriverOptions {
     private final ChromeOptions chromeOptions = new ChromeOptions();
     private final Map<String, Object> chromePrefs = new HashMap<>();
     private final FirefoxOptions firefoxOptions = new FirefoxOptions();
+    private final List<String> firefoxNeverAskToSaveMimeTypes = new ArrayList<>();
     private final EdgeOptions edgeOptions = new EdgeOptions();
     private final Map<String, Object> edgePrefs = new HashMap<>();
     private final SafariOptions safariOptions = new SafariOptions();
@@ -64,13 +67,39 @@ public final class ScWebDriverOptions {
     }
 
     private void initializeFirefoxOptions(@NonNull File downloadDirectory) {
-        firefoxOptions.addPreference("browser.helperApps.neverAsk.saveToDisk", "text/comma-separated-values,application/vnd.ms-excel,application/msword,application/csv,application/ris,text/csv,image/png,application/pdf,text/plain,application/zip,application/x-zip,application/x-zip-compressed,application/download,application/octet-stream");
+        // Firefox never to ask to save mime types.
+        firefoxNeverAskToSaveMimeTypes.add("application/zip");
+        firefoxNeverAskToSaveMimeTypes.add("application/pdf");
+        firefoxNeverAskToSaveMimeTypes.add("application/x-zip-compressed");
+        firefoxNeverAskToSaveMimeTypes.add("multipart/x-zip");
+        firefoxNeverAskToSaveMimeTypes.add("application/x-rar-compressed");
+        firefoxNeverAskToSaveMimeTypes.add("application/msword");
+        firefoxNeverAskToSaveMimeTypes.add("application/vnd.ms-word.document.macroEnabled.12");
+        firefoxNeverAskToSaveMimeTypes.add("application/vnd.openxmlformats-officedocument.wordprocessingml.document");
+        firefoxNeverAskToSaveMimeTypes.add("application/vnd.ms-excel");
+        firefoxNeverAskToSaveMimeTypes.add("application/rtf");
+        firefoxNeverAskToSaveMimeTypes.add("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+        firefoxNeverAskToSaveMimeTypes.add("application/vnd.ms-excel");
+        firefoxNeverAskToSaveMimeTypes.add("application/vnd.ms-word.document.macroEnabled.12");
+        firefoxNeverAskToSaveMimeTypes.add("application/xls");
+        firefoxNeverAskToSaveMimeTypes.add("text/csv");
+        firefoxNeverAskToSaveMimeTypes.add("application/vnd.ms-excel.sheet.binary.macroEnabled.12");
+        firefoxNeverAskToSaveMimeTypes.add("text/plain");
+        firefoxNeverAskToSaveMimeTypes.add("text/csv/xls/xlsb");
+        firefoxNeverAskToSaveMimeTypes.add("application/csv");
+        firefoxNeverAskToSaveMimeTypes.add("application/download");
+        firefoxNeverAskToSaveMimeTypes.add("application/vnd.openxmlformats-officedocument.presentationml.presentation");
+        firefoxNeverAskToSaveMimeTypes.add("application/octet-stream");
+
         firefoxOptions.addPreference("browser.helperApps.alwaysAsk.force", false);
         firefoxOptions.addPreference("browser.download.dir", downloadDirectory.getAbsolutePath());
-        firefoxOptions.addPreference("browser.download.panel.shown", true);
+        firefoxOptions.addPreference("browser.download.always_ask_before_handling_new_types", false);
+        firefoxOptions.addPreference("browser.download.panel.shown", false);
         firefoxOptions.addPreference("browser.download.folderList", 2);
         firefoxOptions.addPreference("browser.download.useDownloadDir", true);
+        firefoxOptions.addPreference("browser.download.forbid_open_with", true);
         firefoxOptions.addPreference("browser.download.alwaysOpenPanel", false);
+        firefoxOptions.addPreference("browser.download.viewableInternally.enabledTypes", "");
         firefoxOptions.addPreference("browser.download.manager.showWhenStarting", false);
         firefoxOptions.addPreference("browser.download.manager.alertOnEXEOpen", false);
         firefoxOptions.addPreference("browser.download.manager.focusWhenStarting", false);
@@ -80,7 +109,6 @@ public final class ScWebDriverOptions {
         firefoxOptions.addPreference("browser.download.manager.useWindow", false);
         firefoxOptions.addPreference("services.sync.prefs.sync.browser.download.manager.showWhenStarting", false);
         firefoxOptions.addPreference("pdfjs.disabled", true);
-
         firefoxOptions.setAcceptInsecureCerts(true);
     }
 
@@ -94,6 +122,10 @@ public final class ScWebDriverOptions {
 
     FirefoxOptions firefoxOptions() {
         return firefoxOptions;
+    }
+
+    List<String> firefoxNeverAskToSaveMimeTypes() {
+        return firefoxNeverAskToSaveMimeTypes;
     }
 
     SafariOptions safariOptions() {
@@ -113,7 +145,7 @@ public final class ScWebDriverOptions {
     }
 
     public interface FirefoxOptionSetup {
-        void options(FirefoxOptions options);
+        void options(FirefoxOptions options, List<String> neverSaveToDiskMomeTypes);
     }
 
     public interface EdgeOptionSetup {

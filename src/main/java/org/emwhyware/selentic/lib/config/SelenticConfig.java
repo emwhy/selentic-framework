@@ -75,9 +75,9 @@ import java.io.File;
  * @see ScBrowser
  * @see ch.qos.logback.classic.Level
  */
-public class SelelenticConfig {
-    private static final Logger LOG = ScLogHandler.logger(SelelenticConfig.class);
-    private static final SelelenticConfig GLOBAL_CONFIG = new SelelenticConfig();
+public class SelenticConfig {
+    private static final Logger LOG = ScLogHandler.logger(SelenticConfig.class);
+    private static final SelenticConfig GLOBAL_CONFIG = new SelenticConfig();
 
     private ScBrowser browser = ScBrowser.Chrome;
     private boolean headless = false;
@@ -97,7 +97,7 @@ public class SelelenticConfig {
      *
      * @return the global {@code SelenticConfig} singleton instance
      */
-    public static SelelenticConfig config() {
+    public static SelenticConfig config() {
         return GLOBAL_CONFIG;
     }
 
@@ -118,7 +118,7 @@ public class SelelenticConfig {
      * 
      */
     @SuppressWarnings("nullness")
-    private SelelenticConfig() {
+    private SelenticConfig() {
         try {
             final Config config = ConfigFactory.load("selentic.conf");
 

@@ -2,7 +2,7 @@ package org.emwhyware.selentic.lib.util;
 
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
-import org.emwhyware.selentic.lib.config.SelelenticConfig;
+import org.emwhyware.selentic.lib.config.SelenticConfig;
 import org.emwhyware.selentic.lib.exception.ScWaitTimeoutException;
 
 /**
@@ -57,13 +57,17 @@ public class ScWait {
     public static void sleep(long durationMilliseconds) {
         final ScWait wait = new ScWait(durationMilliseconds);
 
-        wait.doWaitTrue(() -> true);
+        try {
+            wait.doWaitTrue(() -> false);
+        } catch (ScWaitTimeoutException ex) {
+            // Do nothing.
+        }
     }
 
     /**
      * Waits until the specified condition becomes true using the default timeout.
      * <p>
-     * The default timeout is retrieved from {@link SelelenticConfig#waitTimeoutMilliseconds()}.
+     * The default timeout is retrieved from {@link SelenticConfig#waitTimeoutMilliseconds()}.
      * If the condition is not satisfied within the timeout period, a {@link ScWaitTimeoutException}
      * is thrown.
      * 
@@ -73,13 +77,13 @@ public class ScWait {
      * @throws NullPointerException if waitTrueCondition is null
      */
     public static void waitUntil(@NonNull ScWaitTrueCondition waitTrueCondition) {
-        waitUntil(SelelenticConfig.config().waitTimeoutMilliseconds(), waitTrueCondition);
+        waitUntil(SelenticConfig.config().waitTimeoutMilliseconds(), waitTrueCondition);
     }
 
     /**
      * Waits until the specified condition becomes true using the default timeout with custom exception handling.
      * <p>
-     * The default timeout is retrieved from {@link SelelenticConfig#waitTimeoutMilliseconds()}.
+     * The default timeout is retrieved from {@link SelenticConfig#waitTimeoutMilliseconds()}.
      * If the timeout is exceeded, the {@code onTimeout} handler is invoked to determine the exception to throw.
      * 
      *
@@ -89,7 +93,7 @@ public class ScWait {
      * @throws NullPointerException if waitTrueCondition is null
      */
     public static void waitUntil(@NonNull ScWaitTrueCondition waitTrueCondition, ScOnTimeout onTimeout) {
-        waitUntil(SelelenticConfig.config().waitTimeoutMilliseconds(), waitTrueCondition, onTimeout);
+        waitUntil(SelenticConfig.config().waitTimeoutMilliseconds(), waitTrueCondition, onTimeout);
     }
 
     /**
@@ -131,7 +135,7 @@ public class ScWait {
     /**
      * Waits until a non-null value is returned from the specified condition using the default timeout.
      * <p>
-     * The default timeout is retrieved from {@link SelelenticConfig#waitTimeoutMilliseconds()}.
+     * The default timeout is retrieved from {@link SelenticConfig#waitTimeoutMilliseconds()}.
      * This method is useful for waiting until an element or object is available before proceeding.
      * 
      *
@@ -142,7 +146,7 @@ public class ScWait {
      * @throws NullPointerException if waitPresenceCondition is null
      */
     public static <T> @NonNull T waitUntilNonNull(@NonNull ScWaitNonNullCondition<T> waitPresenceCondition) {
-        return ScWait.waitUntilNonNull(SelelenticConfig.config().waitTimeoutMilliseconds(), waitPresenceCondition);
+        return ScWait.waitUntilNonNull(SelenticConfig.config().waitTimeoutMilliseconds(), waitPresenceCondition);
     }
 
     /**
@@ -172,7 +176,7 @@ public class ScWait {
     private ScWait(long durationMilliseconds) {
         this.startTimestamp = System.currentTimeMillis();
         this.durationMilliseconds = durationMilliseconds;
-        this.intervalMilliseconds = durationMilliseconds < 20000 ? 5 : 10;
+        this.intervalMilliseconds = durationMilliseconds < 20000 ? durationMilliseconds/5 : durationMilliseconds/10;
     }
 
     /**
@@ -220,7 +224,7 @@ public class ScWait {
                     }
                 }
             }
-            threadSleep((this.intervalMilliseconds));
+            threadSleep();
         }
     }
 
@@ -240,7 +244,7 @@ public class ScWait {
             if (isTimedOut()) {
                 throw new ScWaitTimeoutException(this.durationMilliseconds);
             }
-            threadSleep((this.intervalMilliseconds));
+            threadSleep();
         }
         return (@NonNull T) value;
     }
@@ -250,10 +254,8 @@ public class ScWait {
      * <p>
      * If the thread is interrupted during sleep, the interrupt status is restored on the current thread.
      * 
-     *
-     * @param intervalMilliseconds the duration to sleep in milliseconds
      */
-    private void threadSleep(long intervalMilliseconds) {
+    private void threadSleep() {
         try {
             Thread.sleep(this.intervalMilliseconds);
         } catch (InterruptedException e) {

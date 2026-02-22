@@ -2,7 +2,7 @@ package org.emwhyware.selentic.lib;
 
 import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
 import org.checkerframework.checker.nullness.qual.NonNull;
-import org.emwhyware.selentic.lib.config.SelelenticConfig;
+import org.emwhyware.selentic.lib.config.SelenticConfig;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.edge.EdgeDriver;
@@ -13,14 +13,42 @@ import org.openqa.selenium.support.events.WebDriverListener;
 
 public final class SelenticWebDriverContext {
     private final ScWebDriverOptions webDriverOptions = new ScWebDriverOptions();
-    private @NonNull ScBrowser browser = SelelenticConfig.config().browser();
+    private @NonNull ScBrowser browser = SelenticConfig.config().browser();
     private @MonotonicNonNull WebDriver driver;
     private @MonotonicNonNull WebDriverListener webDriverListener;
 
     SelenticWebDriverContext() {}
 
+    /**
+     * Allows setting browser. This overrides values set in {@link SelenticConfig}.
+     * <p>
+     * Changing the browser must be called before starting the web driver by calling {@link Selentic#driver()},
+     * {@link Selentic#open(String)}, or {@link Selentic#open()}.
+     * <p>
+     * In multiple threaded execution, browser can be set per thread. It is possible to run different browser in
+     * each thread.
+     *
+     * @param browser browser type
+     *
+     * @see Selentic#driver()
+     * @see Selentic#open(String)
+     * @see Selentic#open()
+     */
     synchronized void setBrowser(@NonNull ScBrowser browser) {
         this.browser = browser;
+    }
+
+    /**
+     * Returns the selected browser for this thread context.
+     * <p>
+     * The default value is set in {@link SelenticConfig}, but it can be changed by calling {@link #setBrowser(ScBrowser)}.
+     *
+     * @return currently selected browser type
+     *
+     * @see #setBrowser(ScBrowser)
+     */
+    synchronized @NonNull ScBrowser browser() {
+        return this.browser;
     }
 
     /**
@@ -61,12 +89,13 @@ public final class SelenticWebDriverContext {
      */
     synchronized @NonNull WebDriver driver() {
         if (this.driver == null) {
-            if (SelelenticConfig.config().isHeadless()) {
+            if (SelenticConfig.config().isHeadless()) {
                 Selentic.enableHeadless();
             }
             // Set preferences.
             webDriverOptions.chromeOptions().setExperimentalOption("prefs", webDriverOptions.chromePrefs());
             webDriverOptions.edgeOptions().setExperimentalOption("prefs", webDriverOptions.edgePrefs());
+            webDriverOptions.firefoxOptions().addPreference("browser.helperApps.neverAsk.saveToDisk", String.join(",", webDriverOptions.firefoxNeverAskToSaveMimeTypes()));
 
             WebDriver driver = switch (browser) {
                 case Chrome -> new ChromeDriver(webDriverOptions.chromeOptions());
@@ -157,7 +186,7 @@ public final class SelenticWebDriverContext {
      * @see #withEdgeOptions(ScWebDriverOptions.EdgeOptionSetup)
      */
     synchronized void withFirefoxOptions(ScWebDriverOptions.@NonNull FirefoxOptionSetup optionSetup) {
-        optionSetup.options(webDriverOptions.firefoxOptions());
+        optionSetup.options(webDriverOptions.firefoxOptions(), webDriverOptions.firefoxNeverAskToSaveMimeTypes());
     }
 
     /**

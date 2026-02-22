@@ -1,7 +1,7 @@
 package org.emwhyware.selentic.lib.util;
 
 import org.apache.commons.io.FileUtils;
-import org.emwhyware.selentic.lib.config.SelelenticConfig;
+import org.emwhyware.selentic.lib.config.SelenticConfig;
 import org.emwhyware.selentic.lib.exception.ScInitializationException;
 import org.slf4j.Logger;
 
@@ -15,7 +15,7 @@ final class ScInitializer {
     private static final Logger LOG = ScLogHandler.logger(ScInitializer.class);
 
     static void init() {
-        final SelelenticConfig config = SelelenticConfig.config();
+        final SelenticConfig config = SelenticConfig.config();
         final File logsDir = config.logRootDir();
         final File currentLogDir = new File(logsDir.getAbsolutePath() + "/log-" + LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy_MM_dd-HH_mm_ss_SSS")));
         final long keepLogDuration = 60 * 1000 * config.keepLogDurationMinutes();
