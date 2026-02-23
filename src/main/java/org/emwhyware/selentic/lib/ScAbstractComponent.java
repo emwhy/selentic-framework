@@ -106,16 +106,7 @@ public abstract class ScAbstractComponent {
             }
             case ToStopAnimating -> {
                 ScWait.waitUntil(waitTimeout(), component::isDisplayed, ex -> new ScComponentWaitException("Component is not displayed.", ex));
-                ScWait.waitUntil(waitTimeout(), () -> {
-                    final Boolean returned = (Boolean) Selentic.executeScript(
-                            """
-                                        let e = arguments[0];
-                                        return !e.getAnimations().some(a => a.playState === 'running' || a.playState === 'pending');
-                                    """,
-                            this
-                    );
-                    return returned != null && returned;
-                }, ex -> new ScComponentWaitException("Component is still animating.", ex)
+                ScWait.waitUntil(waitTimeout(), () -> !component.isAnimating(), ex -> new ScComponentWaitException("Component is still animating.", ex)
                 );
             }
         }
