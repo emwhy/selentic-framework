@@ -23,4 +23,5 @@ public final class ScXPathFollowing extends ScXPath {
     protected String nodeText() {
         return "/following::";
     }
+
 }

@@ -106,16 +106,7 @@ public abstract class ScAbstractComponent {
             }
             case ToStopAnimating -> {
                 ScWait.waitUntil(waitTimeout(), component::isDisplayed, ex -> new ScComponentWaitException("Component is not displayed.", ex));
-                ScWait.waitUntil(waitTimeout(), () -> {
-                    final Boolean returned = (Boolean) Selentic.executeScript(
-                            """
-                                        let e = arguments[0];
-                                        return !e.getAnimations().some(a => a.playState === 'running' || a.playState === 'pending');
-                                    """,
-                            this
-                    );
-                    return returned != null && returned;
-                }, ex -> new ScComponentWaitException("Component is still animating.", ex)
+                ScWait.waitUntil(waitTimeout(), () -> !component.isAnimating(), ex -> new ScComponentWaitException("Component is still animating.", ex)
                 );
             }
         }
@@ -619,6 +610,29 @@ public abstract class ScAbstractComponent {
      */
     protected static ScSelectorLastChildProperty _lastChild() {
         return SELECTOR_ACCESSOR._lastChild();
+    }
+
+
+    /**
+     * This method defines a boundary component to a list of components.
+     *
+     * <p>The method generates XPath, <b>[following:: ...]</b>. The XPath naming is not very clear what it does,
+     * so the method implementation makes it more legible and clear.
+     * <p>
+     * The parameter {@link ScSelector} must be of the page level. It would fail if a relative path is passed.
+     *
+     * <p>
+     * <strong>Example:</strong>
+     * <pre>{@code
+     * _xpath.descendant("div", _boundary(_xpath.descendant("div", _id().is("lower-boundary"))); // List of components, up to the given component.
+     * }</pre>
+     * @param xpath {@link ScXPath} class that contains XPath to the lower boundary of the list.
+     * @return a new {@code ScSelectorBoundaryProperty} object
+     * @see ScXPath
+     * @see ScSelectorBoundaryProperty
+     */
+    protected static ScSelectorBoundaryProperty _boundary(ScXPath xpath) {
+        return SELECTOR_ACCESSOR._boundary(xpath);
     }
 
     /**

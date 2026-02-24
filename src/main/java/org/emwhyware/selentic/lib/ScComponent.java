@@ -351,6 +351,22 @@ public abstract class ScComponent extends ScAbstractComponent {
     }
 
     /**
+     * Returns true if the component is currently animating on the page.
+     *
+     * @return true if the element is animating; false otherwise
+     */
+    public boolean isAnimating() {
+        final Boolean returned = (Boolean) Selentic.executeScript(
+                """
+                            let e = arguments[0];
+                            return !e.getAnimations().some(a => a.playState === 'running' || a.playState === 'pending');
+                        """,
+                this
+        );
+        return !(returned != null && returned);
+    }
+
+    /**
      * Waits for this component to meet the condition.
      *
      * <p>

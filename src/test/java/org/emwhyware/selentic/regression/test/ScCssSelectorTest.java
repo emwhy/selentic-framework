@@ -56,7 +56,7 @@ public class ScCssSelectorTest extends ScBaseTest {
         selectorTestPage.inPage(p -> {
             final ScComponentCollection<ScGenericComponent> components = p.cssSelectorTagTestTexts();
 
-            Assert.assertEquals(components.texts(), List.of("Main Data Grid", "Auxiliary Reference"));
+            Assert.assertEquals(components.texts(), List.of("Main Data Grid", "Auxiliary Reference", "Between Elements"));
         });
     }
 
@@ -108,8 +108,8 @@ public class ScCssSelectorTest extends ScBaseTest {
             final ScGenericComponent componentLastOfTypeNested = p.cssSelectorLastOfTypeNestedTestText();
 
             Assert.assertEquals(componentNthOfType.text(), "Auxiliary Reference");
-            Assert.assertEquals(componentNthLastOfType.text(), "Main Data Grid");
-            Assert.assertEquals(componentLastOfType.text(), "System Logs Backup Status");
+            Assert.assertEquals(componentNthLastOfType.text(), "Auxiliary Reference");
+            Assert.assertEquals(componentLastOfType.text(), "Between Elements");
             Assert.assertEquals(componentLastOfTypeNested.text(), "Backup Status");
         });
     }
@@ -125,8 +125,8 @@ public class ScCssSelectorTest extends ScBaseTest {
             final ScGenericComponent componentLastChild = p.cssSelectorLastChildTestText();
 
             Assert.assertEquals(componentNthChild.text(), "Main Data Grid");
-            Assert.assertEquals(componentNthLastChild.text(), "Auxiliary Reference");
-            Assert.assertEquals(componentLastChild.text(), "System Logs Backup Status");
+            Assert.assertEquals(componentNthLastChild.text(), "Between Elements");
+            Assert.assertEquals(componentLastChild.text(), "End");
         });
     }
 
@@ -186,7 +186,7 @@ public class ScCssSelectorTest extends ScBaseTest {
         selectorTestPage.inPage(p -> {
             final ScComponentCollection<ScGenericComponent> components = p.cssSelectorNotTestTexts();
 
-            Assert.assertEquals(components.stream().map(c -> c.id().orElse("")).toList(), List.of("outer-table-1", "outer-table-2"));
+            Assert.assertEquals(components.stream().map(c -> c.id().orElse("")).toList(), List.of("outer-table-1", "outer-table-2", "test-between-elements-table"));
         });
     }
 
@@ -198,7 +198,7 @@ public class ScCssSelectorTest extends ScBaseTest {
         selectorTestPage.inPage(p -> {
             final ScComponentCollection<ScGenericComponent> components = p.cssSelectorRawTestTexts();
 
-            Assert.assertEquals(components.texts(), List.of("Main Data Grid", "Auxiliary Reference"));
+            Assert.assertEquals(components.texts(), List.of("Main Data Grid", "Auxiliary Reference", "Between Elements"));
         });
     }
 }
