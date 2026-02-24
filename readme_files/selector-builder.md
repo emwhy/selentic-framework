@@ -75,4 +75,6 @@ But if text based implementation of XPath is more desired, or the builder is mis
     private static final ScXPath XPATH_NOT_TEST_TEXTS = _xpath.descendant("body").child(_not(_id().isPresent()));
     private static final ScXPath XPATH_RAW_TEST_TEXTS = _xpath.raw("//body/h2");
 
+    private static final ScXPath XPATH_BOUNDARY_TEST_TEXTS = _xpath.descendant("tr", _id().is("test-between-elements-title-row1")).following("tr").child("td", _indexOf(0), _boundary(_xpath.descendant("tr", _id().is("test-between-elements-title-row2"))));
+
 ```
