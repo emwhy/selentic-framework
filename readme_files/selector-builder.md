@@ -16,13 +16,14 @@ The features are limited by CSS selector's capability (i.e., no backtracking in 
 
 But if text based implementation of CSS selectors is more desired, or the builder is missing feature for certain CSS selector features, **_cssSelector.raw("CSS selector text")** method can be used.
 
+#### Selector
 - **descendant(...)**: Selects all elements B that are inside element A, no matter how deeply nested they are (children, grandchildren, etc.).
 - **child(...)**: Selects only the direct children of element A. It only looks one level down the hierarchy.
 - **sibling(...)**: General Sibling or Subsequent-sibling combinator. It selects all elements B that follow element A and share the same parent, even if they aren't right next to each other.
 - **nextSibling(...)**: Adjacent Sibling combinator. It selects element B only if it immediately follows element A and they share the same parent.
 - **page(...)**: Look for the component from the entire page scope rather than relative scope from the current component context.
 
-
+#### Properties
 - **_not(...)**: The negation selector. It selects everything except the element inside the parentheses.
 - **_attr(...)**: Targets any element where a specific attribute matches a value.
 - **_cssClasses(...)**: Targets elements that have these specific CSS classes applied.
@@ -71,6 +72,7 @@ Many commonly used XPath are implemented in builder, but not everything is imple
 
 But if text based implementation of XPath is more desired, or the builder is missing feature for certain XPath features, **_xpath.raw("XPath text")** method can be used.
 
+#### Selector
 - **descendant(...)**: Selects all children, grandchildren, and so on, regardless of depth.
 - **child(...)**: Selects only the immediate children of the current node.
 - **sibling(...)**: Selects all siblings after the current node that share the same parent.
@@ -80,7 +82,7 @@ But if text based implementation of XPath is more desired, or the builder is mis
 - **parent()**: Selects the single immediate parent of the current node.
 - **page(...)**: Look for the component from the entire page scope rather than relative scope from the current component context.
 
-
+#### Properties
 - **_not(...)**: Excludes specific nodes or attributes.
 - **_attr(...)**: Targets any attribute and its specific value.
 - **_cssClasses(...)**: Selects the element with specified CSS selectors.
