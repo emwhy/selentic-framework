@@ -201,7 +201,7 @@ public sealed abstract class ScCssSelector extends ScSelector permits ScCssSelec
      * @return a new {@code ScCssSelector} object representing the descendant selector
      * @see ScCssSelectorDescendant
      */
-    public ScCssSelector descendant(@NonNull ScCssSelectorPropertyType... selectorProperties) {
+    public ScCssSelectorDescendant descendant(@NonNull ScCssSelectorPropertyType... selectorProperties) {
         return new ScCssSelectorDescendant(this, selectorProperties);
     }
 
@@ -218,7 +218,7 @@ public sealed abstract class ScCssSelector extends ScSelector permits ScCssSelec
      * @return a new {@code ScCssSelector} object representing the child selector
      * @see ScCssSelectorChild
      */
-    public ScCssSelector child(@NonNull ScCssSelectorPropertyType... selectorProperties) {
+    public ScCssSelectorChild child(@NonNull ScCssSelectorPropertyType... selectorProperties) {
         return new ScCssSelectorChild(this, selectorProperties);
     }
 
@@ -235,7 +235,7 @@ public sealed abstract class ScCssSelector extends ScSelector permits ScCssSelec
      * @return a new {@code ScCssSelector} object representing the sibling selector
      * @see ScCssSelectorSibling
      */
-    public ScCssSelector sibling(@NonNull ScCssSelectorPropertyType... selectorProperties) {
+    public ScCssSelectorSibling sibling(@NonNull ScCssSelectorPropertyType... selectorProperties) {
         return new ScCssSelectorSibling(this, selectorProperties);
     }
 
@@ -252,7 +252,7 @@ public sealed abstract class ScCssSelector extends ScSelector permits ScCssSelec
      * @return a new {@code ScCssSelector} object representing the next sibling selector
      * @see ScCssSelectorNextSibling
      */
-    public ScCssSelector nextSibling(@NonNull ScCssSelectorPropertyType... selectorProperties) {
+    public ScCssSelectorNextSibling nextSibling(@NonNull ScCssSelectorPropertyType... selectorProperties) {
         return new ScCssSelectorNextSibling(this, selectorProperties);
     }
 
@@ -268,7 +268,7 @@ public sealed abstract class ScCssSelector extends ScSelector permits ScCssSelec
      * @return a new {@code ScCssSelector} object representing the page-level selector
      * @see ScCssSelectorPage
      */
-    public ScCssSelector page(@NonNull ScCssSelectorPropertyType... selectorProperties) {
+    public ScCssSelectorPage page(@NonNull ScCssSelectorPropertyType... selectorProperties) {
         return new ScCssSelectorPage(selectorProperties);
     }
 
@@ -287,7 +287,7 @@ public sealed abstract class ScCssSelector extends ScSelector permits ScCssSelec
      * @return a new {@code ScCssSelector} object representing the descendant selector
      * @see ScCssSelectorDescendant
      */
-    public ScCssSelector descendant(@NonNull String tag, @NonNull ScCssSelectorPropertyType... selectorProperties) {
+    public ScCssSelectorDescendant descendant(@NonNull String tag, @NonNull ScCssSelectorPropertyType... selectorProperties) {
         return new ScCssSelectorDescendant(this, tag, selectorProperties);
     }
 
@@ -305,7 +305,7 @@ public sealed abstract class ScCssSelector extends ScSelector permits ScCssSelec
      * @return a new {@code ScCssSelector} object representing the child selector
      * @see ScCssSelectorChild
      */
-    public ScCssSelector child(@NonNull String tag, @NonNull ScCssSelectorPropertyType... selectorProperties) {
+    public ScCssSelectorChild child(@NonNull String tag, @NonNull ScCssSelectorPropertyType... selectorProperties) {
         return new ScCssSelectorChild(this, tag, selectorProperties);
     }
 
@@ -323,7 +323,7 @@ public sealed abstract class ScCssSelector extends ScSelector permits ScCssSelec
      * @return a new {@code ScCssSelector} object representing the sibling selector
      * @see ScCssSelectorSibling
      */
-    public ScCssSelector sibling(@NonNull String tag, @NonNull ScCssSelectorPropertyType... selectorProperties) {
+    public ScCssSelectorSibling sibling(@NonNull String tag, @NonNull ScCssSelectorPropertyType... selectorProperties) {
         return new ScCssSelectorSibling(this, tag, selectorProperties);
     }
 
@@ -341,7 +341,7 @@ public sealed abstract class ScCssSelector extends ScSelector permits ScCssSelec
      * @return a new {@code ScCssSelector} object representing the next sibling selector
      * @see ScCssSelectorNextSibling
      */
-    public ScCssSelector nextSibling(@NonNull String tag, @NonNull ScCssSelectorPropertyType... selectorProperties) {
+    public ScCssSelectorNextSibling nextSibling(@NonNull String tag, @NonNull ScCssSelectorPropertyType... selectorProperties) {
         return new ScCssSelectorNextSibling(this, tag, selectorProperties);
     }
 
@@ -358,7 +358,7 @@ public sealed abstract class ScCssSelector extends ScSelector permits ScCssSelec
      * @return a new {@code ScCssSelector} object representing the page-level selector
      * @see ScCssSelectorPage
      */
-    public ScCssSelector page(@NonNull String tag, @NonNull ScCssSelectorPropertyType... selectorProperties) {
+    public ScCssSelectorPage page(@NonNull String tag, @NonNull ScCssSelectorPropertyType... selectorProperties) {
         return new ScCssSelectorPage(tag, selectorProperties);
     }
 }

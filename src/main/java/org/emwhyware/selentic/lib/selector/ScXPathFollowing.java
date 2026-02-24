@@ -23,4 +23,9 @@ public final class ScXPathFollowing extends ScXPath {
     protected String nodeText() {
         return "/following::";
     }
+
+    public ScXPathLimitedBy limitedBy(@NonNull ScXPath xpath) {
+        return new ScXPathLimitedBy(this, xpath);
+    }
+
 }

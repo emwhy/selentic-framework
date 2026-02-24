@@ -58,7 +58,7 @@ import java.util.Arrays;
  * @see ScXPathParent
  * @see ScXPathSibling
  */
-public sealed abstract class ScXPath extends ScSelector permits ScXPathChild, ScXPathDescendant, ScXPathFollowing, ScXPathPage, ScXPathParent, ScXPathPreceding, ScXPathPrecedingSibling, ScXPathRaw, ScXPathSibling {
+public sealed abstract class ScXPath extends ScSelector permits ScXPathChild, ScXPathDescendant, ScXPathFollowing, ScXPathPage, ScXPathParent, ScXPathPreceding, ScXPathPrecedingSibling, ScXPathRaw, ScXPathSibling, ScXPathLimitedBy {
     private static final Logger LOG = ScLogHandler.logger(ScXPath.class);
     private final String tag;
     private final ScXpathPropertyType[] selectorProperties;
@@ -155,7 +155,7 @@ public sealed abstract class ScXPath extends ScSelector permits ScXPathChild, Sc
     public String toString() {
         if (!isCached()) {
             // A parent node contains no properties. Skipping validation.
-            if (!(this instanceof ScXPathParent)) {
+            if (!(this instanceof ScXPathParent) && !(this instanceof ScXPathLimitedBy)) {
                 validateSelector(this.tag, this.selectorProperties);
             }
             setCache((priorSelectorNode().map(Object::toString).orElse("")) + nodeText() + tag + String.join("", Arrays.stream(selectorProperties).map(p -> p.build(ScSelectorPropertyType.Types.XPath)).toList()));
@@ -225,7 +225,7 @@ public sealed abstract class ScXPath extends ScSelector permits ScXPathChild, Sc
      * @return a new {@code ScXPath} object representing the descendant selector
      * @see ScXPathDescendant
      */
-    public ScXPath descendant(@NonNull String tag, @NonNull ScXpathPropertyType... selectorProperties) {
+    public ScXPathDescendant descendant(@NonNull String tag, @NonNull ScXpathPropertyType... selectorProperties) {
         return new ScXPathDescendant(this, tag, selectorProperties);
     }
 
@@ -243,7 +243,7 @@ public sealed abstract class ScXPath extends ScSelector permits ScXPathChild, Sc
      * @return a new {@code ScXPath} object representing the child selector
      * @see ScXPathChild
      */
-    public ScXPath child(@NonNull String tag, @NonNull ScXpathPropertyType... selectorProperties) {
+    public ScXPathChild child(@NonNull String tag, @NonNull ScXpathPropertyType... selectorProperties) {
         return new ScXPathChild(this, tag, selectorProperties);
     }
 
@@ -260,7 +260,7 @@ public sealed abstract class ScXPath extends ScSelector permits ScXPathChild, Sc
      * @return a new {@code ScXPath} object representing the sibling selector
      * @see ScXPathSibling
      */
-    public ScXPath sibling(@NonNull String tag, @NonNull ScXpathPropertyType... selectorProperties) {
+    public ScXPathSibling sibling(@NonNull String tag, @NonNull ScXpathPropertyType... selectorProperties) {
         return new ScXPathSibling(this, tag, selectorProperties);
     }
 
@@ -277,7 +277,7 @@ public sealed abstract class ScXPath extends ScSelector permits ScXPathChild, Sc
      * @return a new {@code ScXPath} object representing the preceding sibling selector
      * @see ScXPathPrecedingSibling
      */
-    public ScXPath precedingSibling(@NonNull String tag, @NonNull ScXpathPropertyType... selectorProperties) {
+    public ScXPathPrecedingSibling precedingSibling(@NonNull String tag, @NonNull ScXpathPropertyType... selectorProperties) {
         return new ScXPathPrecedingSibling(this, tag, selectorProperties);
     }
 
@@ -295,7 +295,7 @@ public sealed abstract class ScXPath extends ScSelector permits ScXPathChild, Sc
      * @return a new {@code ScXPath} object representing the following selector
      * @see ScXPathFollowing
      */
-    public ScXPath following(@NonNull String tag, @NonNull ScXpathPropertyType... selectorProperties) {
+    public ScXPathFollowing following(@NonNull String tag, @NonNull ScXpathPropertyType... selectorProperties) {
         return new ScXPathFollowing(this, tag, selectorProperties);
     }
 
@@ -313,7 +313,7 @@ public sealed abstract class ScXPath extends ScSelector permits ScXPathChild, Sc
      * @return a new {@code ScXPath} object representing the preceding selector
      * @see ScXPathPreceding
      */
-    public ScXPath preceding(@NonNull String tag, @NonNull ScXpathPropertyType... selectorProperties) {
+    public ScXPathPreceding preceding(@NonNull String tag, @NonNull ScXpathPropertyType... selectorProperties) {
         return new ScXPathPreceding(this, tag, selectorProperties);
     }
 
@@ -331,7 +331,7 @@ public sealed abstract class ScXPath extends ScSelector permits ScXPathChild, Sc
      * @return a new {@code ScXPath} object representing the descendant selector
      * @see ScXPathDescendant
      */
-    public ScXPath descendant(@NonNull ScXpathPropertyType... selectorProperties) {
+    public ScXPathDescendant descendant(@NonNull ScXpathPropertyType... selectorProperties) {
         return new ScXPathDescendant(this, selectorProperties);
     }
 
@@ -348,7 +348,7 @@ public sealed abstract class ScXPath extends ScSelector permits ScXPathChild, Sc
      * @return a new {@code ScXPath} object representing the child selector
      * @see ScXPathChild
      */
-    public ScXPath child(@NonNull ScXpathPropertyType... selectorProperties) {
+    public ScXPathChild child(@NonNull ScXpathPropertyType... selectorProperties) {
         return new ScXPathChild(this, selectorProperties);
     }
 
@@ -364,7 +364,7 @@ public sealed abstract class ScXPath extends ScSelector permits ScXPathChild, Sc
      * @return a new {@code ScXPath} object representing the sibling selector
      * @see ScXPathSibling
      */
-    public ScXPath sibling(@NonNull ScXpathPropertyType... selectorProperties) {
+    public ScXPathSibling sibling(@NonNull ScXpathPropertyType... selectorProperties) {
         return new ScXPathSibling(this, selectorProperties);
     }
 
@@ -380,7 +380,7 @@ public sealed abstract class ScXPath extends ScSelector permits ScXPathChild, Sc
      * @return a new {@code ScXPath} object representing the preceding sibling selector
      * @see ScXPathPrecedingSibling
      */
-    public ScXPath precedingSibling(@NonNull ScXpathPropertyType... selectorProperties) {
+    public ScXPathPrecedingSibling precedingSibling(@NonNull ScXpathPropertyType... selectorProperties) {
         return new ScXPathPrecedingSibling(this, selectorProperties);
     }
 
@@ -397,7 +397,7 @@ public sealed abstract class ScXPath extends ScSelector permits ScXPathChild, Sc
      * @return a new {@code ScXPath} object representing the following selector
      * @see ScXPathFollowing
      */
-    public ScXPath following(@NonNull ScXpathPropertyType... selectorProperties) {
+    public ScXPathFollowing following(@NonNull ScXpathPropertyType... selectorProperties) {
         return new ScXPathFollowing(this, selectorProperties);
     }
 
@@ -414,7 +414,7 @@ public sealed abstract class ScXPath extends ScSelector permits ScXPathChild, Sc
      * @return a new {@code ScXPath} object representing the preceding selector
      * @see ScXPathPreceding
      */
-    public ScXPath preceding(@NonNull ScXpathPropertyType... selectorProperties) {
+    public ScXPathPreceding preceding(@NonNull ScXpathPropertyType... selectorProperties) {
         return new ScXPathPreceding(this, selectorProperties);
     }
 
@@ -428,7 +428,7 @@ public sealed abstract class ScXPath extends ScSelector permits ScXPathChild, Sc
      * @return a new {@code ScXPath} object representing the parent selector
      * @see ScXPathParent
      */
-    public ScXPath parent() {
+    public ScXPathParent parent() {
         return new ScXPathParent(this);
     }
 
@@ -446,7 +446,7 @@ public sealed abstract class ScXPath extends ScSelector permits ScXPathChild, Sc
      * @return a new {@code ScXPath} object representing the page-level selector
      * @see ScXPathPage
      */
-    public ScXPath page(@NonNull String tag, @NonNull ScXpathPropertyType... selectorProperties) {
+    public ScXPathPage page(@NonNull String tag, @NonNull ScXpathPropertyType... selectorProperties) {
         return new ScXPathPage(tag, selectorProperties);
     }
 
@@ -463,7 +463,7 @@ public sealed abstract class ScXPath extends ScSelector permits ScXPathChild, Sc
      * @return a new {@code ScXPath} object representing the page-level selector
      * @see ScXPathPage
      */
-    public ScXPath page(@NonNull ScXpathPropertyType... selectorProperties) {
+    public ScXPathPage page(@NonNull ScXpathPropertyType... selectorProperties) {
         return new ScXPathPage(selectorProperties);
     }
 }

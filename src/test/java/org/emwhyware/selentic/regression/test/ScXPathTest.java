@@ -1,6 +1,7 @@
 package org.emwhyware.selentic.regression.test;
 
 import org.emwhyware.selentic.lib.*;
+import org.emwhyware.selentic.regression.component.ScXPathSelectorTestTable;
 import org.emwhyware.selentic.regression.page.ScXPathTestPage;
 import org.testng.Assert;
 import org.testng.annotations.AfterClass;
@@ -56,7 +57,7 @@ public class ScXPathTest extends ScBaseTest {
         selectorTestPage.inPage(p -> {
             final ScComponentCollection<ScGenericComponent> components = p.xPathTagTestTexts();
 
-            Assert.assertEquals(components.texts(), List.of("Main Data Grid", "Auxiliary Reference"));
+            Assert.assertEquals(components.texts(), List.of("Main Data Grid", "Auxiliary Reference", "Between Elements"));
         });
     }
 
@@ -195,7 +196,7 @@ public class ScXPathTest extends ScBaseTest {
         selectorTestPage.inPage(p -> {
             final ScComponentCollection<ScGenericComponent> components = p.xPathFollowingTestTexts();
 
-            Assert.assertEquals(components.texts(), List.of("Septary Eta", "Octary Theta", "Error Code", "Nonary Iota", "Decary Kappa", "Unit Lambda", "Node Mu", "Throughput", "System Logs"));
+            Assert.assertEquals(components.texts(), List.of("Septary Eta", "Octary Theta", "Error Code", "Nonary Iota", "Decary Kappa", "Unit Lambda", "Node Mu", "Throughput", "System Logs", "Title 1", "C1-1", "C1-2", "C1-3", "C1-4", "C1-5", "Title 2", "C2-1", "C2-2", "C2-3", "C2-4", "C2-5", "Title 3", "C3-1", "C3-2", "C3-3", "C3-4", "C3-5", "End"));
         });
     }
 
@@ -211,6 +212,18 @@ public class ScXPathTest extends ScBaseTest {
         });
     }
 
+    @Test
+    public void testXPathLimitedBy() {
+        selectorTestPage.inPage(p -> {
+            final ScComponentCollection<ScGenericComponent> components = p.xPathLimitedByTestTexts();
+            final ScXPathSelectorTestTable table = p.xPathSelectorTable();
+
+            Assert.assertEquals(components.texts(), List.of("C1-1", "C1-2", "C1-3", "C1-4", "C1-5"));
+            Assert.assertEquals(table.xPathLimitedByTestTexts().texts(), List.of("C1-3", "C1-4", "C1-5"));
+        });
+
+    }
+
     /**
      * Verifies the use of the not() function to exclude specific nodes.
      */
@@ -219,7 +232,7 @@ public class ScXPathTest extends ScBaseTest {
         selectorTestPage.inPage(p -> {
             final ScComponentCollection<ScGenericComponent> components = p.xPathNotTestTexts();
 
-            Assert.assertEquals(components.texts(), List.of("Main Data Grid", "Auxiliary Reference"));
+            Assert.assertEquals(components.texts(), List.of("Main Data Grid", "Auxiliary Reference", "Between Elements"));
         });
     }
 
@@ -231,7 +244,7 @@ public class ScXPathTest extends ScBaseTest {
         selectorTestPage.inPage(p -> {
             final ScComponentCollection<ScGenericComponent> components = p.xPathRawTestTexts();
 
-            Assert.assertEquals(components.texts(), List.of("Main Data Grid", "Auxiliary Reference"));
+            Assert.assertEquals(components.texts(), List.of("Main Data Grid", "Auxiliary Reference", "Between Elements"));
         });
     }
 }

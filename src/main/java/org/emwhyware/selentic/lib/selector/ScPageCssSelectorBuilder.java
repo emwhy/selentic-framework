@@ -30,9 +30,9 @@ public final class ScPageCssSelectorBuilder extends ScSelectorBuilder {
      *                           objects to define the selector criteria.
      * @return The updated {@link ScCssSelector} instance.
      */
-    public ScCssSelector descendant(@NonNull ScCssSelectorPropertyType... selectorProperties) {
+    public ScCssSelectorDescendant descendant(@NonNull ScCssSelectorPropertyType... selectorProperties) {
         this.setSelector(new ScCssSelectorDescendant(selectorProperties));
-        return (ScCssSelector) this.selector();
+        return (ScCssSelectorDescendant) this.selector();
     }
 
     /**
@@ -43,8 +43,8 @@ public final class ScPageCssSelectorBuilder extends ScSelectorBuilder {
      *                           objects to define the selector criteria.
      * @return The updated {@link ScCssSelector} instance.
      */
-    public ScCssSelector descendant(@NonNull String tag, @NonNull ScCssSelectorPropertyType... selectorProperties) {
+    public ScCssSelectorDescendant descendant(@NonNull String tag, @NonNull ScCssSelectorPropertyType... selectorProperties) {
         this.setSelector(new ScCssSelectorDescendant(tag, selectorProperties));
-        return (ScCssSelector) this.selector();
+        return (ScCssSelectorDescendant) this.selector();
     }
 }

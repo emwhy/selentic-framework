@@ -23,4 +23,9 @@ public final class ScXPathChild extends ScXPath {
     protected String nodeText() {
         return "/child::";
     }
+
+    public ScXPathLimitedBy limitedBy(@NonNull ScXPath xpath) {
+        return new ScXPathLimitedBy(this, xpath);
+    }
+
 }

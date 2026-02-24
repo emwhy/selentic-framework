@@ -34,9 +34,9 @@ public final class ScPageXPathBuilder extends ScSelectorBuilder {
      * @param selectorProperties Optional properties or attributes used to filter the tag.
      * @return The updated {@link ScXPath} instance.
      */
-    public ScXPath descendant(@NonNull String tag, @NonNull ScXpathPropertyType... selectorProperties) {
+    public ScXPathPage descendant(@NonNull String tag, @NonNull ScXpathPropertyType... selectorProperties) {
         this.setSelector(new ScXPathPage(tag, selectorProperties));
-        return (ScXPath) this.selector();
+        return (ScXPathPage) this.selector();
     }
 
 
@@ -50,8 +50,8 @@ public final class ScPageXPathBuilder extends ScSelectorBuilder {
      * @param selectorProperties Optional properties or attributes used to filter the tag.
      * @return The updated {@link ScXPath} instance.
      */
-    public ScXPath descendant(@NonNull ScXpathPropertyType... selectorProperties) {
+    public ScXPathPage descendant(@NonNull ScXpathPropertyType... selectorProperties) {
         this.setSelector(new ScXPathPage(selectorProperties));
-        return (ScXPath) this.selector();
+        return (ScXPathPage) this.selector();
     }
 }

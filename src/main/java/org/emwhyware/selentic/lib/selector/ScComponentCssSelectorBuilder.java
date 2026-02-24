@@ -29,9 +29,9 @@ public final class ScComponentCssSelectorBuilder extends ScSelectorBuilder {
      * @param selectorProperties One or more properties used to define the descendant relationship.
      * @return The updated {@link ScCssSelector} instance.
      */
-    public ScCssSelector descendant(@NonNull ScCssSelectorPropertyType... selectorProperties) {
+    public ScCssSelectorDescendant descendant(@NonNull ScCssSelectorPropertyType... selectorProperties) {
         this.setSelector(new ScCssSelectorDescendant(selectorProperties));
-        return (ScCssSelector) this.selector();
+        return (ScCssSelectorDescendant) this.selector();
     }
 
     /**
@@ -40,9 +40,9 @@ public final class ScComponentCssSelectorBuilder extends ScSelectorBuilder {
      * @param selectorProperties One or more properties used to define the page selector.
      * @return The updated {@link ScCssSelector} instance.
      */
-    public ScCssSelector page(@NonNull ScCssSelectorPropertyType... selectorProperties) {
+    public ScCssSelectorPage page(@NonNull ScCssSelectorPropertyType... selectorProperties) {
         this.setSelector(new ScCssSelectorPage(selectorProperties));
-        return (ScCssSelector) this.selector();
+        return (ScCssSelectorPage) this.selector();
     }
 
 
@@ -53,9 +53,9 @@ public final class ScComponentCssSelectorBuilder extends ScSelectorBuilder {
      * @param selectorProperties One or more properties used to define the descendant relationship.
      * @return The updated {@link ScCssSelector} instance.
      */
-    public ScCssSelector descendant(@NonNull String tag, @NonNull ScCssSelectorPropertyType... selectorProperties) {
+    public ScCssSelectorDescendant descendant(@NonNull String tag, @NonNull ScCssSelectorPropertyType... selectorProperties) {
         this.setSelector(new ScCssSelectorDescendant(tag, selectorProperties));
-        return (ScCssSelector) this.selector();
+        return (ScCssSelectorDescendant) this.selector();
     }
 
     /**
@@ -65,8 +65,8 @@ public final class ScComponentCssSelectorBuilder extends ScSelectorBuilder {
      * @param selectorProperties One or more properties used to define the page selector.
      * @return The updated {@link ScCssSelector} instance.
      */
-    public ScCssSelector page(@NonNull String tag, @NonNull ScCssSelectorPropertyType... selectorProperties) {
+    public ScCssSelectorPage page(@NonNull String tag, @NonNull ScCssSelectorPropertyType... selectorProperties) {
         this.setSelector(new ScCssSelectorPage(tag, selectorProperties));
-        return (ScCssSelector) this.selector();
+        return (ScCssSelectorPage) this.selector();
     }
 }
