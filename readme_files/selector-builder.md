@@ -16,6 +16,31 @@ The features are limited by CSS selector's capability (i.e., no backtracking in 
 
 But if text based implementation of CSS selectors is more desired, or the builder is missing feature for certain CSS selector features, **_cssSelector.raw("CSS selector text")** method can be used.
 
+- **descendant(...)**: Selects all elements B that are inside element A, no matter how deeply nested they are (children, grandchildren, etc.).
+- **child(...)**: Selects only the direct children of element A. It only looks one level down the hierarchy.
+- **sibling(...)**: General Sibling or Subsequent-sibling combinator. It selects all elements B that follow element A and share the same parent, even if they aren't right next to each other.
+- **nextSibling(...)**: Adjacent Sibling combinator. It selects element B only if it immediately follows element A and they share the same parent.
+- **page(...)**: Look for the component from the entire page scope rather than relative scope from the current component context.
+
+
+- **_not(...)**: The negation selector. It selects everything except the element inside the parentheses.
+- **_attr(...)**: Targets any element where a specific attribute matches a value.
+- **_cssClasses(...)**: Targets elements that have these specific CSS classes applied.
+- **_tag(...)**: Targets elements by their HTML tag name.
+- **_id()**: Targets an element with a specific unique ID. It allows equality, containment, starts with, ends with.
+- ****_id(...)**: Targets an element with a specific unique ID. 
+- **_name()**: Targets an element with a "name" attribute.
+- **_type()**: Targets an element with a "type" attribute.
+- **_nthOfType(...)**: Selects the element of a specific tag (e.g., the 2nd <p>).
+- **_nthLastOfType(...)**: Same as nth-of-type, but starts counting from the bottom.
+- **_firstOfType()**: Selects the first instance of that specific tag.
+- **_lastOfType()**: Selects the last instance of that specific tag.
+- **_nthChild(...)**: Selects the nth child of its parent, regardless of type.
+- **_nthLastChild(...)**: Same as nth-child, but starts counting from the bottom.
+- **_firstChild()**: Selects the very first child of a parent.
+- **_lastChild()**: Selects the very last child of a parent.
+
+#### Examples
 ```java
     private static final ScCssSelector CSS_SELECTOR_ID_TEST_TEXT = _cssSelector.descendant(_id("outer-table-1"));
     private static final ScCssSelector CSS_SELECTOR_TAG_TEST_TEXTS = _cssSelector.descendant("h2");
@@ -44,8 +69,33 @@ But if text based implementation of CSS selectors is more desired, or the builde
 
 Many commonly used XPath are implemented in builder, but not everything is implemented in the builder.
 
-But if text based implementation of XPath is more desired, or the builder is missing feature for certain XPath features, **__xpath.raw("XPath text")** method can be used.
+But if text based implementation of XPath is more desired, or the builder is missing feature for certain XPath features, **_xpath.raw("XPath text")** method can be used.
 
+- **descendant(...)**: Selects all children, grandchildren, and so on, regardless of depth.
+- **child(...)**: Selects only the immediate children of the current node.
+- **sibling(...)**: Selects all siblings after the current node that share the same parent.
+- **precedingSibling(...)**: Selects all siblings before the current node that share the same parent.
+- **following(...)**: Selects everything in the document after the closing tag of the current node, excluding its own descendants. It looks further down the entire page.
+- **preceding(...)**: Selects everything in the document that comes before the opening tag of the current node, excluding its ancestors.
+- **parent()**: Selects the single immediate parent of the current node.
+- **page(...)**: Look for the component from the entire page scope rather than relative scope from the current component context.
+
+
+- **_not(...)**: Excludes specific nodes or attributes.
+- **_attr(...)**: Targets any attribute and its specific value.
+- **_cssClasses(...)**: Selects the element with specified CSS selectors.
+- **_id(...)**: Selects the element with the unique ID.
+- **_name()**: A shortcut for the "name" attribute, common in forms.
+- **_type()**: Targets the "type" attribute (used for inputs/buttons).
+- **_text()**: Selects the element with text.
+- **_indexFrom(...)**: Select the elements from the index.
+- **_indexTo(...)**: Select the elements up to the index.
+- **_indexOf(...)**: Select the nth element.
+- **_first()**: Selects the very first match in the document.
+- **_last()**: Selects the final match.
+- **_boundary(...)**: Specifies the lower boundary element of a list of elements.
+
+#### Examples
 ```java
     private static final ScXPath XPATH_ID_TEST_TEXT = _xpath.descendant(_id().is("outer-table-1"));
     private static final ScXPath XPATH_TAG_TEST_TEXTS = _xpath.descendant("h2");
