@@ -28,10 +28,10 @@ But if text based implementation of CSS selectors is more desired, or the builde
 - **_cssClasses(...)**: Targets elements that have these specific CSS classes applied.
 - **_tag(...)**: Targets elements by their HTML tag name.
 - **_id()**: Targets an element with a specific unique ID. It allows equality, containment, starts with, ends with.
-- ****_id(...)**: Targets an element with a specific unique ID. 
+- **_id(...)**: Targets an element with a specific unique ID. 
 - **_name()**: Targets an element with a "name" attribute.
 - **_type()**: Targets an element with a "type" attribute.
-- **_nthOfType(...)**: Selects the element of a specific tag (e.g., the 2nd <p>).
+- **_nthOfType(...)**: Selects the element of a specific tag.
 - **_nthLastOfType(...)**: Same as nth-of-type, but starts counting from the bottom.
 - **_firstOfType()**: Selects the first instance of that specific tag.
 - **_lastOfType()**: Selects the last instance of that specific tag.
