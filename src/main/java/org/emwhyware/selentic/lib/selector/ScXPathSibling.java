@@ -23,23 +23,4 @@ public final class ScXPathSibling extends ScXPath {
     protected String nodeText() {
         return "/following-sibling::";
     }
-
-    /**
-     * This method defines a boundary component to a list of components.
-     *
-     * <p>The method generates XPath, <b>[following:: ...]</b>. The XPath naming is not very clear what it does,
-     * so the method implementation makes it more legible and clear.
-     * <p>
-     * The parameter {@link ScSelector} must be of the page level. It would fail if a relative path is passed.
-     *
-     *
-     * @param xpath {@link ScXPath} class that contains XPath to the lower boundary of the list.
-     * @return a new {@code ScXPath} object representing the preceding selector
-     * @see ScXPathBoundary
-     * @see ScXPath
-     */
-    public ScXPathBoundary boundary(@NonNull ScXPath xpath) {
-        return new ScXPathBoundary(this, xpath);
-    }
-
 }

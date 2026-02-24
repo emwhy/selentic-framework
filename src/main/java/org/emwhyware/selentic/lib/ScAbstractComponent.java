@@ -612,6 +612,29 @@ public abstract class ScAbstractComponent {
         return SELECTOR_ACCESSOR._lastChild();
     }
 
+
+    /**
+     * This method defines a boundary component to a list of components.
+     *
+     * <p>The method generates XPath, <b>[following:: ...]</b>. The XPath naming is not very clear what it does,
+     * so the method implementation makes it more legible and clear.
+     * <p>
+     * The parameter {@link ScSelector} must be of the page level. It would fail if a relative path is passed.
+     *
+     * <p>
+     * <strong>Example:</strong>
+     * <pre>{@code
+     * _xpath.descendant("div", _boundary(_xpath.descendant("div", _id().is("lower-boundary"))); // List of components, up to the given component.
+     * }</pre>
+     * @param xpath {@link ScXPath} class that contains XPath to the lower boundary of the list.
+     * @return a new {@code ScSelectorBoundaryProperty} object
+     * @see ScXPath
+     * @see ScSelectorBoundaryProperty
+     */
+    protected static ScSelectorBoundaryProperty _boundary(ScXPath xpath) {
+        return SELECTOR_ACCESSOR._boundary(xpath);
+    }
+
     /**
      * Creates a generic component with the specified selector.
      *
