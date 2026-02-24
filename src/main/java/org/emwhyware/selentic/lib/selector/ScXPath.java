@@ -58,7 +58,7 @@ import java.util.Arrays;
  * @see ScXPathParent
  * @see ScXPathSibling
  */
-public sealed abstract class ScXPath extends ScSelector permits ScXPathChild, ScXPathDescendant, ScXPathFollowing, ScXPathPage, ScXPathParent, ScXPathPreceding, ScXPathPrecedingSibling, ScXPathRaw, ScXPathSibling, ScXPathLimitedBy {
+public sealed abstract class ScXPath extends ScSelector permits ScXPathChild, ScXPathDescendant, ScXPathFollowing, ScXPathPage, ScXPathParent, ScXPathPreceding, ScXPathPrecedingSibling, ScXPathRaw, ScXPathSibling, ScXPathBoundary {
     private static final Logger LOG = ScLogHandler.logger(ScXPath.class);
     private final String tag;
     private final ScXpathPropertyType[] selectorProperties;
@@ -155,7 +155,7 @@ public sealed abstract class ScXPath extends ScSelector permits ScXPathChild, Sc
     public String toString() {
         if (!isCached()) {
             // A parent node contains no properties. Skipping validation.
-            if (!(this instanceof ScXPathParent) && !(this instanceof ScXPathLimitedBy)) {
+            if (!(this instanceof ScXPathParent) && !(this instanceof ScXPathBoundary)) {
                 validateSelector(this.tag, this.selectorProperties);
             }
             setCache((priorSelectorNode().map(Object::toString).orElse("")) + nodeText() + tag + String.join("", Arrays.stream(selectorProperties).map(p -> p.build(ScSelectorPropertyType.Types.XPath)).toList()));
@@ -316,7 +316,6 @@ public sealed abstract class ScXPath extends ScSelector permits ScXPathChild, Sc
     public ScXPathPreceding preceding(@NonNull String tag, @NonNull ScXpathPropertyType... selectorProperties) {
         return new ScXPathPreceding(this, tag, selectorProperties);
     }
-
 
     /**
      * Creates a new {@code ScXPath} selector representing a descendant relationship to an element

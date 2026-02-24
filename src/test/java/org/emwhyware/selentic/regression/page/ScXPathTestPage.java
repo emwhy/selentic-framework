@@ -34,7 +34,7 @@ public class ScXPathTestPage extends ScPage {
     private static final ScXPath XPATH_CHILD_TEST_TEXTS = _xpath.descendant(_id().is("outer-table-2")).child("tbody").child("tr").child("td");
     private static final ScXPath XPATH_NOT_TEST_TEXTS = _xpath.descendant("body").child(_not(_id().isPresent()));
     private static final ScXPath XPATH_RAW_TEST_TEXTS = _xpath.raw("//body/h2");
-    private static final ScXPath XPATH_LIMITED_BY_TEST_TEXTS = _xpath.descendant("tr", _id().is("test-between-elements-title-row1")).following("tr").child("td", _indexOf(0)).limitedBy(_xpath.descendant("tr", _id().is("test-between-elements-title-row2")).child("td"));
+    private static final ScXPath XPATH_BOUNDARY_TEST_TEXTS = _xpath.descendant("tr", _id().is("test-between-elements-title-row1")).following("tr").child("td", _indexOf(0)).boundary(_xpath.descendant("tr", _id().is("test-between-elements-title-row2")).child("td"));
 
     private static final ScXPath XPATH_SELECTOR_TEST_TABLE = _xpath.descendant("table", _id().is("test-between-elements-table"));
 
@@ -126,8 +126,8 @@ public class ScXPathTestPage extends ScPage {
         return $$components(XPATH_CHILD_TEST_TEXTS, ScGenericComponent.class);
     }
 
-    public ScComponentCollection<ScGenericComponent> xPathLimitedByTestTexts() {
-        return $$components(XPATH_LIMITED_BY_TEST_TEXTS, ScGenericComponent.class);
+    public ScComponentCollection<ScGenericComponent> xPathBoundaryTestTexts() {
+        return $$components(XPATH_BOUNDARY_TEST_TEXTS, ScGenericComponent.class);
     }
 
     public ScComponentCollection<ScGenericComponent> xPathNotTestTexts() {

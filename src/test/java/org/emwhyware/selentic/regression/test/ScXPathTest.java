@@ -212,14 +212,17 @@ public class ScXPathTest extends ScBaseTest {
         });
     }
 
+    /**
+     * Verifies that the boundary works.
+     */
     @Test
-    public void testXPathLimitedBy() {
+    public void testXPathBoundary() {
         selectorTestPage.inPage(p -> {
-            final ScComponentCollection<ScGenericComponent> components = p.xPathLimitedByTestTexts();
+            final ScComponentCollection<ScGenericComponent> components = p.xPathBoundaryTestTexts();
             final ScXPathSelectorTestTable table = p.xPathSelectorTable();
 
             Assert.assertEquals(components.texts(), List.of("C1-1", "C1-2", "C1-3", "C1-4", "C1-5"));
-            Assert.assertEquals(table.xPathLimitedByTestTexts().texts(), List.of("C1-3", "C1-4", "C1-5"));
+            Assert.assertEquals(table.xPathBoundaryTestTexts().texts(), List.of("C1-3", "C1-4", "C1-5"));
         });
 
     }
