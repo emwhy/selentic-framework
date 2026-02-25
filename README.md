@@ -11,6 +11,9 @@ Causing more technical debt to maintain unstable, inconsistent, complicated, har
 This framework was designed and developed to help ensuring the test automation code remains easily readable and consistent without being unstable and flaky. 
 Being able to maintain and manage test automation code efficiently is crucial to the success of any test automation project.
 
+This framework is new. But the design concept is not new. I have utilized the similar concept in multiple test automation projects to successes for over a decade. 
+The framework is accumulations and evolution of ideas from the years of my experiences building multiple test automation framework.
+
 Selentic Framework utilizes ***Selenium*** and is written in ***Java*** (Developed on Java 21). 
 
 ## Feature Highlights

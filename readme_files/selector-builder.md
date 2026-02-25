@@ -1,20 +1,27 @@
 [< Return to README](../README.md)
 ## Using Selector Builders
-Selentic Framework contains selector builders to help writing selectors. It provides implementation to help writing 
-selectors in fluent and consistent ways and lessen common mistakes,
 
-Using the builder, both CSS selectors and XPath are written in very similar syntax. That makes utilizing both CSS Selectors and XPath in a same project much more fluent.
+### Benefits
+
+The Selector builder's goal is to make selectors fluent, easy and faster to develop and easy to maintain. 
+
+- Take advantage of standard code syntax highlighting of IDE, making selectors easy to read.
+- Less prone to syntax mistakes when writing selectors (like missing brackets and parentheses).
+- XPath and CSS selector implementations are very similar and consistent, making it easy to use them interchangeably as needed.
+- A long selector no longer needs to use text concatenation, which is not always easy to read.
+
+### Usage
 
 By using **_cssSelector** or **_xpath** property, accessible inside a page (extended from **ScPage** class) or a component class (extended from **ScComponent** class), you can build selectors as shown below. Selector
 related methods are prefixed by underscore ("_") to keep them easy to find in method selection in an editor, and see in code. 
 
-### Css Selector
+### CSS Selector
 
-Many commonly used CSS selectors are implemented in builder. Unlike when using a string to implement CSS selector, you can take full advantage of color coding and suggestion of many IDE.
+Many commonly used CSS selectors are implemented in builder. 
 
 The features are limited by CSS selector's capability (i.e., no backtracking in CSS selectors). 
 
-But if text based implementation of CSS selectors is more desired, or the builder is missing feature for certain CSS selector features, **_cssSelector.raw("CSS selector text")** method can be used.
+If text based implementation of CSS selectors is more desired, or the builder is missing feature for certain CSS selector features, **_cssSelector.raw("CSS selector text")** method can be used.
 
 #### Selector
 - **descendant(...)**: Selects all elements B that are inside element A, no matter how deeply nested they are (children, grandchildren, etc.).
@@ -68,9 +75,11 @@ But if text based implementation of CSS selectors is more desired, or the builde
 
 ### XPath
 
-Many commonly used XPath are implemented in builder, but not everything is implemented in the builder.
+Writing XPath can get cumbersome and complex. The selector builder makes selectors more manageable and readable than straight text implementation of XPath.
 
-But if text based implementation of XPath is more desired, or the builder is missing feature for certain XPath features, **_xpath.raw("XPath text")** method can be used.
+Many commonly used XPath are implemented in builder. 
+
+If text based implementation of XPath is more desired, or the builder is missing feature for certain XPath features, **_xpath.raw("XPath text")** method can be used.
 
 #### Selector
 - **descendant(...)**: Selects all children, grandchildren, and so on, regardless of depth.
