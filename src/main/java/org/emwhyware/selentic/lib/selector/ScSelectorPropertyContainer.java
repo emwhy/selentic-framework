@@ -1,25 +1,22 @@
 package org.emwhyware.selentic.lib.selector;
 
 import org.checkerframework.checker.nullness.qual.NonNull;
-import org.emwhyware.selentic.lib.ScSelectorPackageAccessor;
-import org.openqa.selenium.By;
 
 /**
- * Gives access to some selector related classes in this package to outside this package. This helps to organize the selector
- * related classes better by allowing them to be neatly in their own package.
+ * The base class that contain list of selector properties.
  * <p>
- * It only exposes necessary methods, allowing to keep some methods and constructors hidden to help keeping the integrity
- * of the code that utilizes this framework. By extending this class, classes from another packages can gain access to
- * included methods and ability to instantiate protected classes.
+ * These methods create instances of selector properties to be used to build selectors.
  *
- * @see ScSelectorPackageAccessor
+ * @see org.emwhyware.selentic.lib.ScAbstractComponent
+ * @see ScXPath
+ * @see ScCssSelector
  */
-public class ScSelectorAccessor {
+public class ScSelectorPropertyContainer {
 
     /**
      * Protected constructor.
      */
-    protected ScSelectorAccessor() {}
+    protected ScSelectorPropertyContainer() {}
 
     /**
      * Creates a negation of the provided selector property.
@@ -39,7 +36,7 @@ public class ScSelectorAccessor {
      * @param selectorProperty the selector property to negate
      * @return a {@link ScSelectorNotProperty} that represents the negation
      */
-    protected ScSelectorNotProperty _not(@NonNull ScSelectorProperty selectorProperty) {
+    protected static ScSelectorNotProperty _not(@NonNull ScSelectorProperty selectorProperty) {
         return new ScSelectorNotProperty(selectorProperty);
     }
 
@@ -62,7 +59,7 @@ public class ScSelectorAccessor {
      * @param attribute the name of the HTML attribute
      * @return a {@link ScSelectorAttributeCondition} for building attribute-based selectors
      */
-    protected ScSelectorAttributeCondition _attr(@NonNull String attribute) {
+    protected static ScSelectorAttributeCondition _attr(@NonNull String attribute) {
         return new ScSelectorAttributeCondition("@", attribute);
     }
 
@@ -85,7 +82,7 @@ public class ScSelectorAccessor {
      * @param cssClasses one or more CSS class names to match
      * @return a {@link ScSelectorCssClassesProperty} for building CSS class-based selectors
      */
-    protected ScSelectorCssClassesProperty _cssClasses(@NonNull String... cssClasses) {
+    protected static ScSelectorCssClassesProperty _cssClasses(@NonNull String... cssClasses) {
         return new ScSelectorCssClassesProperty(cssClasses);
     }
 
@@ -108,7 +105,7 @@ public class ScSelectorAccessor {
      * @param tag the HTML tag name to match
      * @return a {@link ScSelectorTagProperty} for building tag-based selectors
      */
-    protected ScSelectorTagProperty _tag(@NonNull String tag) {
+    protected static ScSelectorTagProperty _tag(@NonNull String tag) {
         return new ScSelectorTagProperty(tag);
     }
 
@@ -129,7 +126,7 @@ public class ScSelectorAccessor {
      *
      * @return a {@link ScSelectorAttributeCondition} for building id-based selectors
      */
-    protected ScSelectorAttributeCondition _id() {
+    protected static ScSelectorAttributeCondition _id() {
         return _attr("id");
     }
 
@@ -152,7 +149,7 @@ public class ScSelectorAccessor {
      * @param id the id attribute value to match
      * @return a {@link ScSelectorIdProperty} for building id-based selectors
      */
-    protected ScSelectorIdProperty _id(@NonNull String id) {
+    protected static ScSelectorIdProperty _id(@NonNull String id) {
         return new ScSelectorIdProperty(id);
     }
 
@@ -173,7 +170,7 @@ public class ScSelectorAccessor {
      *
      * @return a {@link ScSelectorAttributeCondition} for building name-based selectors
      */
-    protected ScSelectorAttributeCondition _name() {
+    protected static ScSelectorAttributeCondition _name() {
         return _attr("name");
     }
 
@@ -195,7 +192,7 @@ public class ScSelectorAccessor {
      *
      * @return a {@link ScSelectorAttributeCondition} for building type-based selectors
      */
-    protected ScSelectorAttributeCondition _type() {
+    protected static ScSelectorAttributeCondition _type() {
         return _attr("type");
     }
 
@@ -218,7 +215,7 @@ public class ScSelectorAccessor {
      *
      * @return a {@link ScSelectorTextCondition} for building text-based selectors
      */
-    protected ScSelectorTextCondition _text() {
+    protected static ScSelectorTextCondition _text() {
         return new ScSelectorTextCondition();
     }
 
@@ -241,7 +238,7 @@ public class ScSelectorAccessor {
      * @param startIndex the starting index (0-based)
      * @return a {@link ScSelectorIndexProperty} for building index-based range selectors
      */
-    protected ScSelectorIndexProperty _indexFrom(int startIndex) {
+    protected static ScSelectorIndexProperty _indexFrom(int startIndex) {
         return new ScSelectorIndexProperty(ScSelectorIndexProperty.Conditions.From, startIndex);
     }
 
@@ -264,7 +261,7 @@ public class ScSelectorAccessor {
      * @param endIndex the ending index (0-based, inclusive)
      * @return a {@link ScSelectorIndexProperty} for building index-based range selectors
      */
-    protected ScSelectorIndexProperty _indexTo(int endIndex) {
+    protected static ScSelectorIndexProperty _indexTo(int endIndex) {
         return new ScSelectorIndexProperty(ScSelectorIndexProperty.Conditions.To, endIndex);
     }
 
@@ -288,7 +285,7 @@ public class ScSelectorAccessor {
      * @param index the index of the element to match (0-based)
      * @return a {@link ScSelectorIndexProperty} for building exact index-based selectors
      */
-    protected ScSelectorIndexProperty _indexOf(int index) {
+    protected static ScSelectorIndexProperty _indexOf(int index) {
         return new ScSelectorIndexProperty(ScSelectorIndexProperty.Conditions.At, index);
     }
 
@@ -308,7 +305,7 @@ public class ScSelectorAccessor {
      *
      * @return a {@link ScSelectorIndexProperty} for selecting the first element
      */
-    protected ScSelectorIndexProperty _first() {
+    protected static ScSelectorIndexProperty _first() {
         return _indexOf(0);
     }
 
@@ -329,7 +326,7 @@ public class ScSelectorAccessor {
      *
      * @return a {@link ScSelectorIndexProperty} for selecting the last element
      */
-    protected ScSelectorIndexProperty _last() {
+    protected static ScSelectorIndexProperty _last() {
         return new ScSelectorIndexProperty(ScSelectorIndexProperty.Conditions.Last);
     }
 
@@ -354,7 +351,7 @@ public class ScSelectorAccessor {
      * @return a {@link ScSelectorNthOfTypeProperty} for building nth-of-type selectors
      * @see ScSelectorNthOfTypeProperty
      */
-    protected ScSelectorNthOfTypeProperty _nthOfType(int index) {
+    protected static ScSelectorNthOfTypeProperty _nthOfType(int index) {
         return new ScSelectorNthOfTypeProperty(index);
     }
 
@@ -379,7 +376,7 @@ public class ScSelectorAccessor {
      * @return a {@link ScSelectorNthLastOfTypeProperty} for building nth-last-of-type selectors
      * @see ScSelectorNthLastOfTypeProperty
      */
-    protected ScSelectorNthLastOfTypeProperty _nthLastOfType(int index) {
+    protected static ScSelectorNthLastOfTypeProperty _nthLastOfType(int index) {
         return new ScSelectorNthLastOfTypeProperty(index);
     }
 
@@ -401,7 +398,7 @@ public class ScSelectorAccessor {
      * @return a {@link ScSelectorFirstOfTypeProperty} for building first-of-type selectors
      * @see ScSelectorFirstOfTypeProperty
      */
-    protected ScSelectorFirstOfTypeProperty _firstOfType() {
+    protected static ScSelectorFirstOfTypeProperty _firstOfType() {
         return new ScSelectorFirstOfTypeProperty();
     }
 
@@ -423,7 +420,7 @@ public class ScSelectorAccessor {
      * @return a {@link ScSelectorLastOfTypeProperty} for building last-of-type selectors
      * @see ScSelectorLastOfTypeProperty
      */
-    protected ScSelectorLastOfTypeProperty _lastOfType() {
+    protected static ScSelectorLastOfTypeProperty _lastOfType() {
         return new ScSelectorLastOfTypeProperty();
     }
 
@@ -448,7 +445,7 @@ public class ScSelectorAccessor {
      * @return a {@link ScSelectorNthChildProperty} for building nth-child selectors
      * @see ScSelectorNthChildProperty
      */
-    protected ScSelectorNthChildProperty _nthChild(int index) {
+    protected static ScSelectorNthChildProperty _nthChild(int index) {
         return new ScSelectorNthChildProperty(index);
     }
 
@@ -473,7 +470,7 @@ public class ScSelectorAccessor {
      * @return a {@link ScSelectorNthLastChildProperty} for building nth-last-child selectors
      * @see ScSelectorNthLastChildProperty
      */
-    protected ScSelectorNthLastChildProperty _nthLastChild(int index) {
+    protected static ScSelectorNthLastChildProperty _nthLastChild(int index) {
         return new ScSelectorNthLastChildProperty(index);
     }
 
@@ -495,7 +492,7 @@ public class ScSelectorAccessor {
      * @return a {@link ScSelectorFirstChildProperty} for building first-child selectors
      * @see ScSelectorFirstChildProperty
      */
-    protected ScSelectorFirstChildProperty _firstChild() {
+    protected static ScSelectorFirstChildProperty _firstChild() {
         return new ScSelectorFirstChildProperty();
     }
 
@@ -516,7 +513,7 @@ public class ScSelectorAccessor {
      * @return a new {@code ScSelectorBoundaryProperty} object
      * @see ScXPath
      */
-    protected ScSelectorBoundaryProperty _boundary(ScXPath xpath) {
+    protected static ScSelectorBoundaryProperty _boundary(ScXPath xpath) {
         return new ScSelectorBoundaryProperty(xpath);
     }
 
@@ -538,35 +535,8 @@ public class ScSelectorAccessor {
      * @return a {@link ScSelectorLastChildProperty} for building last-child selectors
      * @see ScSelectorLastChildProperty
      */
-    protected ScSelectorLastChildProperty _lastChild() {
+    protected static ScSelectorLastChildProperty _lastChild() {
         return new ScSelectorLastChildProperty();
     }
 
-    /**
-     * Check if a selector is absolute.
-     * @param selector selector
-     * @return true if the selector is absolute
-     */
-    protected boolean isSelectorAbsolute(@NonNull ScSelector selector) {
-        return selector.isAbsolute();
-    }
-
-    /**
-     * builds selector {@link By} object.
-     * @param selector selector
-     * @return {@link By} object
-     */
-    protected By buildSelector(@NonNull ScSelector selector) {
-        return selector.build();
-    }
-
-    /**
-     * builds selector {@link By} object.
-     * @param selector selector
-     * @param withPrefix Boolean value to describe if it should have prefix
-     * @return {@link By} object
-     */
-    protected By buildSelector(@NonNull ScSelector selector, boolean withPrefix) {
-        return ((ScXPath) selector).build(withPrefix);
-    }
 }

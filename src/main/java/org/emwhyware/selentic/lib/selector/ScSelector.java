@@ -69,7 +69,7 @@ public abstract sealed class ScSelector permits ScCssSelector, ScXPath {
      *
      * @return true if selector should look at the entire page
      */
-    protected boolean isAbsolute() {
+    public final boolean isAbsolute() {
         return priorSelectorNode == null ? this instanceof ScCssSelectorPage || this instanceof ScXPathPage : priorSelectorNode.isAbsolute();
     }
 
@@ -113,5 +113,5 @@ public abstract sealed class ScSelector permits ScCssSelector, ScXPath {
      *
      * @return a {@link By} locator constructed from this selector and its chain
      */
-    protected abstract By build();
+    public abstract By build();
 }

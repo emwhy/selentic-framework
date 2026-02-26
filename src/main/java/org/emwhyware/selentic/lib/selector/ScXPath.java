@@ -179,33 +179,11 @@ public sealed abstract class ScXPath extends ScSelector permits ScXPathChild, Sc
     /**
      * Builds a Selenium {@link By} locator using the XPath expression represented by this selector.
      *
-     * <p>This method calls {@link #build(boolean)} with {@code false}, creating a relative XPath
-     * locator without a "current node" prefix.
-     * 
-     *
      * @return a {@link By} object using XPath locator strategy with no prefix
-     * @see #build(boolean)
      */
     @Override
-    protected By build() {
-        return build(false);
-    }
-
-    /**
-     * Builds a Selenium {@link By} locator with an optional prefix applied to the XPath expression.
-     *
-     * <p>When {@code withPrefix} is {@code true}, a "." prefix is added to the XPath expression,
-     * indicating a relative XPath starting from the current node. When {@code false}, the XPath
-     * is relative to the document root or the context node.
-     * 
-     *
-     * @param withPrefix {@code true} to add a "current node" prefix (".") to the XPath expression;
-     *                  {@code false} for an absolute or document-relative XPath
-     * @return a {@link By} object configured with the complete prefixed XPath expression
-     * @see By#xpath(String)
-     */
-    protected By build(boolean withPrefix) {
-        final String s = (withPrefix ? "." : "") + toString();
+    public final By build() {
+        final String s = "." + toString();
 
         LOG.debug("XPath: \"{}\"", s);
         return By.xpath(s);
