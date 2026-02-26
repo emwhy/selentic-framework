@@ -96,7 +96,6 @@ import java.util.regex.Pattern;
  * @see ScPage
  */
 public abstract class ScComponent extends ScAbstractComponent {
-    private static final ScSelectorPackageAccessor SELECTOR_ACCESSOR = ScSelectorPackageAccessor.instance();
     private @MonotonicNonNull ScSelector selector;
     private @MonotonicNonNull ScAbstractComponent $callerComponent;
     private @MonotonicNonNull WebElement webElement;
@@ -181,10 +180,10 @@ public abstract class ScComponent extends ScAbstractComponent {
             final ScAbstractComponent $c = ScNullCheck.requiresNonNull(this.$callerComponent, ScAbstractComponent.class);
             final Optional<ScSelector> selector = Optional.ofNullable(this.selector);
 
-            if (selector.isPresent() && ($c instanceof ScAbstractPage || SELECTOR_ACCESSOR.isSelectorAbsolute(selector.get()))) {
-                return Selentic.driver().findElement(SELECTOR_ACCESSOR.buildSelector(selector.get()));
+            if (selector.isPresent() && ($c instanceof ScAbstractPage || selector.get().isAbsolute())) {
+                return Selentic.driver().findElement(selector.get().build());
             } else if (selector.isPresent()) {
-                return selector.get() instanceof ScXPath ? ((ScComponent) $c).existingElement().findElement(SELECTOR_ACCESSOR.buildSelector(selector.get(), true)) : ((ScComponent) $c).existingElement().findElement(SELECTOR_ACCESSOR.buildSelector(selector.get()));
+                return ((ScComponent) $c).existingElement().findElement(selector.get().build());
             } else {
                 throw new ScElementNotFoundException("Selector is not present.");
             }

@@ -2,7 +2,6 @@ package org.emwhyware.selentic.lib.selector;
 
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.emwhyware.selentic.lib.util.ScLogHandler;
-import org.openqa.selenium.By;
 import org.slf4j.Logger;
 
 /**
@@ -21,13 +20,13 @@ public final class ScCssSelectorRaw extends ScCssSelector {
     }
 
     @Override
+    public String toString() {
+        return this.selectorText;
+    }
+
+    @Override
     protected String nodeText() {
         return "";
     }
 
-    @Override
-    protected By build() {
-        LOG.debug("Selector CSS Selector: {}", this.selectorText);
-        return By.cssSelector(this.selectorText);
-    }
 }

@@ -181,7 +181,7 @@ public sealed abstract class ScCssSelector extends ScSelector permits ScCssSelec
      * @see By#cssSelector(String)
      */
     @Override
-    protected By build() {
+    public final By build() {
         final String s = toString();
 
         LOG.debug("CSS Selector: \"{}\"", s);
