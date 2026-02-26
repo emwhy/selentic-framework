@@ -52,6 +52,7 @@ The Component Object Model design pattern is often implemented using a Page Obje
 
 ## Setting up Selentic Framework
 
+- Ensure that your project is setup with ***Java 21*** or higher.
 - Download the latest **selentic-framework.jar** file from https://github.com/emwhy/selentic-framework/releases/. The javadoc for the framework is packaged in  ***selentic-framework-javadoc.jar***. When configured, the documentation can be shown right from IDE (such as IntelliJ).
 - Move the file to appropriate location in a project directory (i.e., ./lib).
 - There are additional packages that Selentic Framework depends on. Add reference to these packages. If you are working with Gradle, add dependencies to **build.gradle.kts** file.
@@ -64,7 +65,7 @@ dependencies {
     implementation("com.typesafe:config:1.4.+")
 }
 ```
-- **selentic-framework-jar** can be added like this.
+- **selentic-framework-jar** can be added to the dependency like this.
 ```
     implementation(files("lib/selentic-framework.jar"));
 ```
