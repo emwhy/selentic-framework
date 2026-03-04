@@ -1,0 +1,40 @@
+package org.emw.selentic.lib;
+
+import org.checkerframework.checker.nullness.qual.NonNull;
+
+/**
+ * Extending this component adds a quick way to drag a component to a target component.
+ *
+ */
+public abstract class ScDraggableComponent extends ScClickableComponent {
+
+    public ScDragAction drag() {
+        return new ScDragAction(this);
+    }
+
+    public class ScDragAction {
+        private final ScComponent draggedComponent;
+
+        private ScDragAction(@NonNull ScComponent draggedComponent) {
+            this.draggedComponent = draggedComponent;
+        }
+
+        public void to(@NonNull ScComponent targetComponent) {
+            ScDraggableComponent.this.actions()
+                    .moveToElement(this.draggedComponent.scrolledElement())
+                    .clickAndHold()
+                    .moveToElement(targetComponent.scrolledElement())
+                    .release()
+                    .build().perform();
+        }
+
+        public void to(@NonNull ScComponent targetComponent, int offsetX, int offsetY) {
+            ScDraggableComponent.this.actions()
+                    .moveToElement(this.draggedComponent.scrolledElement())
+                    .clickAndHold()
+                    .moveToElement(targetComponent.scrolledElement(), offsetX, offsetY)
+                    .release()
+                    .build().perform();
+        }
+    }
+}

@@ -1,0 +1,91 @@
+package org.emw.selentic.lib;
+
+import org.emw.selentic.lib.exception.ScUnexpectedPageException;
+import org.emw.selentic.lib.exception.ScWaitTimeoutException;
+import org.emw.selentic.lib.selector.ScPageCssSelectorBuilder;
+import org.emw.selentic.lib.selector.ScPageXPathBuilder;
+import org.emw.selentic.lib.util.ScLogHandler;
+import org.emw.selentic.lib.util.ScNullCheck;
+import org.slf4j.Logger;
+
+import static org.emw.selentic.lib.util.ScWait.waitUntil;
+
+/**
+ * {@code ScAbstractPage} is the abstract base class for all page classes.
+ * All page classes must extend from {@code ScAbstractPage} when defined.
+ *
+ * @see ScComponent
+ * @see ScAbstractComponent
+ * @see ScPage
+ */
+public abstract class ScAbstractPage extends ScAbstractComponent {
+    private static final Logger LOGGER = ScLogHandler.logger(ScAbstractPage.class);
+
+    /**
+     * Provides access to the builder which provides methods to build XPath selector objects for page-level elements.
+     *
+     * @see ScPageXPathBuilder
+     */
+    protected static final ScPageXPathBuilder _xpath = new ScPageXPathBuilder();
+
+    /**
+     * Provides access to the builder which provides methods to build CSS selector objects for page-level elements.
+     *
+     * @see ScPageCssSelectorBuilder
+     */
+    protected static final ScPageCssSelectorBuilder _cssSelector = new ScPageCssSelectorBuilder();
+
+    /**
+     * Waits for a specific component to be displayed on the page.
+     *
+     * <p>
+     * This is a convenience method that waits for the component to become visible. It can be used
+     * to ensure that a critical component is displayed before proceeding with test actions.
+     * 
+     *
+     * <p>
+     * This method is typically called within the {@link #waitForDisplayed()} method to wait for
+     * key components that indicate the page has fully loaded.
+     * 
+     *
+     * <p>
+     * <strong>Example:</strong>
+     * <pre>{@code
+     * @Override
+     * protected void waitForDisplayed() {
+     *     waitForComponent(usernameField);
+     *     waitForComponent(passwordField);
+     * }
+     * }</pre>
+     * 
+     *
+     * @param c the {@link ScComponent} to wait for
+     * @throws ScWaitTimeoutException if the component does not become displayed within the timeout period
+     */
+
+    /**
+     * Waits for the page to be fully loaded and ready for interaction.
+     *
+     * @throws ScUnexpectedPageException if an error occurs while waiting for the page to load,
+     *                                    or if the page does not load within the timeout period
+     */
+    final void waitForPage() {
+        try {
+            waitUntil(() -> {
+                final String readyState = String.valueOf(Selentic.executeScript("return document.readyState"));
+
+                return readyState != null && readyState.equals("complete");
+            });
+            this.waitForDisplayedPage();
+            LOGGER.debug("Page URL: {}", ScNullCheck.requiresNonNull(Selentic.driver().getCurrentUrl()));
+        } catch (Throwable th) {
+            throw new ScUnexpectedPageException(ScNullCheck.requiresNonNull(this.getClass().getCanonicalName()), th);
+        }
+    }
+
+    /**
+     * Can be overridden to allow additional wait for the page.
+     */
+    protected void waitForDisplayedPage() {
+    }
+}

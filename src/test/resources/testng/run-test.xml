@@ -3,10 +3,10 @@
 
     <test name="Selentic Framework Test Classes">
         <classes>
-            <class name="org.emwhyware.selentic.regression.test.ScCssSelectorTest"/>
-            <class name="org.emwhyware.selentic.regression.test.ScXPathTest"/>
-            <class name="org.emwhyware.selentic.regression.test.ScUiComponentTest"/>
-            <class name="org.emwhyware.selentic.regression.test.ScUserDefinedComponentTest"/>
+            <class name="org.emw.selentic.regression.test.ScCssSelectorTest"/>
+            <class name="org.emw.selentic.regression.test.ScXPathTest"/>
+            <class name="org.emw.selentic.regression.test.ScUiComponentTest"/>
+            <class name="org.emw.selentic.regression.test.ScUserDefinedComponentTest"/>
         </classes>
     </test>
 </suite>
