@@ -13,7 +13,6 @@ import org.emw.selentic.lib.ScAbstractComponent;
  * @see ScCssSelector
  */
 public class ScSelectorPropertyContainer {
-
     /**
      * Protected constructor.
      */
@@ -42,6 +41,36 @@ public class ScSelectorPropertyContainer {
     }
 
     /**
+     * Create a selector condition for aria attributes
+     * <p>
+     * <strong>Example:</strong>
+     * <pre>{@code
+     * _aria().autoComplete().isPresent();
+     * }</pre>
+     *
+     * @return aria attributes
+     */
+    protected static ScSelectorAriaAttributes _aria() {
+        return new ScSelectorAriaAttributes();
+    }
+
+    /**
+     * Creates a selector condition for role attributes.
+     *
+     * <p>
+     * <strong>Example:</strong>
+     * <pre>{@code
+     * _role().is("combobox");
+     * }</pre>
+     *
+     *
+     * @return a {@link ScSelectorAttributeCondition} for building attribute-based selectors
+     */
+    protected static ScSelectorAttributeCondition _role() {
+        return _attr("role");
+    }
+
+    /**
      * Creates a selector condition for matching HTML attributes.
      *
      * <p>
@@ -53,7 +82,6 @@ public class ScSelectorPropertyContainer {
      * <strong>Example:</strong>
      * <pre>{@code
      * _attr("data-testid").is("submit-button")
-     * _attr("aria-label").contains("search")
      * }</pre>
      *
      *
@@ -539,5 +567,4 @@ public class ScSelectorPropertyContainer {
     protected static ScSelectorLastChildProperty _lastChild() {
         return new ScSelectorLastChildProperty();
     }
-
 }

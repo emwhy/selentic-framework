@@ -1,13 +1,12 @@
 [< Return to README](../README.md)
 ## Using Selector Builders
 
-### Benefits
+### Highlights
 
-The Selector builder's goal is to make selectors fluent, easy and faster to develop and easy to maintain. 
-
-- Take advantage of standard code syntax highlighting of IDE, making selectors easy to read.
+- Fluently written.
+- Part of code syntax rather than being strings, which can take advantage of standard code syntax highlighting of IDE, making selectors easy to read.
 - Less prone to syntax mistakes when writing selectors (like missing brackets and parentheses).
-- XPath and CSS selector implementations are very similar and consistent, making it easy to use them interchangeably as needed.
+- XPath and CSS selector implementations are similar and consistent, making it easy to use them interchangeably as needed.
 - A long selector no longer needs to use text concatenation, which is not always easy to read.
 
 ### Usage
@@ -47,7 +46,53 @@ If text based implementation of CSS selectors is more desired, or the builder is
 - **_nthLastChild(...)**: Same as nth-child, but starts counting from the bottom.
 - **_firstChild()**: Selects the very first child of a parent.
 - **_lastChild()**: Selects the very last child of a parent.
-
+- **_role()**: Selects "role" attribute.
+- **_aria()**: Gives access to aria related attributes.
+  - **_aria().autoComplete()**
+  - **_aria().checked()**
+  - **_aria().current()**
+  - **_aria().disabled()**
+  - **_aria().errorMessage()**
+  - **_aria().expanded()**
+  - **_aria().hasPopup()**
+  - **_aria().hidden()**
+  - **_aria().invalid()**
+  - **_aria().label()**
+  - **_aria().level()**
+  - **_aria().modal()**
+  - **_aria().multiLine()**
+  - **_aria().multiSelectable()**
+  - **_aria().orientation()**
+  - **_aria().placeholder()**
+  - **_aria().pressed()**
+  - **_aria().readOnly()**
+  - **_aria().required()**
+  - **_aria().selected()**
+  - **_aria().sort()**
+  - **_aria().valueMax()**
+  - **_aria().valueMin()**
+  - **_aria().valueNow()**
+  - **_aria().valueText()**
+  - **_aria().live()**
+  - **_aria().relevant()**
+  - **_aria().atomic()**
+  - **_aria().busy()**
+  - **_aria().activeDescendant()**
+  - **_aria().colCount()**
+  - **_aria().colIndex()**
+  - **_aria().colSpan()**
+  - **_aria().controls()**
+  - **_aria().describedBy()**
+  - **_aria().details()**
+  - **_aria().flowTo()**
+  - **_aria().labelledBy()**
+  - **_aria().owns()**
+  - **_aria().posInSet()**
+  - **_aria().rowCount()**
+  - **_aria().rowIndex()**
+  - **_aria().rowSpan()**
+  - **_aria().setSize()**
+  
 #### Examples
 ```java
     private static final ScCssSelector CSS_SELECTOR_ID_TEST_TEXT = _cssSelector.descendant(_id("outer-table-1"));
@@ -105,7 +150,53 @@ If text based implementation of XPath is more desired, or the builder is missing
 - **_first()**: Selects the very first match in the document.
 - **_last()**: Selects the final match.
 - **_boundary(...)**: Specifies the lower boundary element of a list of elements.
-
+- **_role()**: Selects "role" attribute.
+- **_aria()**: Gives access to aria related attributes.
+    - **_aria().autoComplete()**
+    - **_aria().checked()**
+    - **_aria().current()**
+    - **_aria().disabled()**
+    - **_aria().errorMessage()**
+    - **_aria().expanded()**
+    - **_aria().hasPopup()**
+    - **_aria().hidden()**
+    - **_aria().invalid()**
+    - **_aria().label()**
+    - **_aria().level()**
+    - **_aria().modal()**
+    - **_aria().multiLine()**
+    - **_aria().multiSelectable()**
+    - **_aria().orientation()**
+    - **_aria().placeholder()**
+    - **_aria().pressed()**
+    - **_aria().readOnly()**
+    - **_aria().required()**
+    - **_aria().selected()**
+    - **_aria().sort()**
+    - **_aria().valueMax()**
+    - **_aria().valueMin()**
+    - **_aria().valueNow()**
+    - **_aria().valueText()**
+    - **_aria().live()**
+    - **_aria().relevant()**
+    - **_aria().atomic()**
+    - **_aria().busy()**
+    - **_aria().activeDescendant()**
+    - **_aria().colCount()**
+    - **_aria().colIndex()**
+    - **_aria().colSpan()**
+    - **_aria().controls()**
+    - **_aria().describedBy()**
+    - **_aria().details()**
+    - **_aria().flowTo()**
+    - **_aria().labelledBy()**
+    - **_aria().owns()**
+    - **_aria().posInSet()**
+    - **_aria().rowCount()**
+    - **_aria().rowIndex()**
+    - **_aria().rowSpan()**
+    - **_aria().setSize()**
+  
 #### Examples
 ```java
     private static final ScXPath XPATH_ID_TEST_TEXT = _xpath.descendant(_id().is("outer-table-1"));

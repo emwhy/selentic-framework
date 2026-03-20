@@ -18,11 +18,11 @@ Selentic Framework utilizes ***Selenium*** and is written in ***Java*** (Develop
 
 ## Feature Highlights
 
-- The Component Object Model design allows custom components that are reusable, minimizing re-writing the code to do same or similar actions or copying-and-pasting, allowing less code to maintain.
-- It was designed to provides library to code in strongly pattern based design that are consistent throughout. It makes the codes more predictable, legible, and easy to maintain while making it easier to spot any abnormality that could cause unexpected behaviors.
-- It implements automatic wait allows the code to focus on actions and assertions rather than timing, while allowing custom waits for those more difficult cases.
-- It isolates actions on page, frame, external windows, dialog, etc. using lambda expression, making it easy to spot where actions are implemented.
-- It includes selector builder. This allows both CSS selector and XPath to be implemented in consistent syntax while utilizing code highlighting and code suggestions of IDE. 
+- **Component Object Model**:  Allows custom components that are reusable, minimizing re-writing the code to do same or similar actions or copying-and-pasting, while keeping each class file small, allowing less code to maintain.
+- **Pattern Based Design**: The framework encourages consistently written code throughout. It makes the codes more predictable, legible, and easy to maintain while making it easier to spot any abnormality that could cause unexpected behaviors.
+- **Automatic Wait**: Allows the code to focus on actions and assertions rather than timing, while allowing custom waits for those more difficult cases.
+- **Window, Frame, Page, Dialog Action Isolation**: Use of lambda expression isolates actions on page, frame, external windows, dialog, etc. using lambda expression, making it clear where the actions are.
+- **[Selector Builder](readme_files/selector-builder.md)**: Fluent, consistent syntax to implement both XPath and CSS selectors behaves more like a part of the language rather than separate technology. 
 
 ## Component Object Model
 
